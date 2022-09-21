@@ -3,10 +3,6 @@ ifndef::snippets[]
 endif::[]
 
 = 💊 My Tamin API Document
-:doctype: book
-:source-highlighter: highlightjs
-:toclevels: 2
-:icons: font
 
 == Health
 === 테스트

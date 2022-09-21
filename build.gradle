@@ -51,8 +51,12 @@ asciidoctor {
     configurations 'asciidoctorExt'
     dependsOn test
     attributes \
-    'build-gradle': file('build.gradle'),
-            'toc': 'left'
+        'build-gradle': file('build.gradle'),
+            'doctype': 'book',
+            'source-highlighter': 'highlightjs',
+            'toc': 'left',
+            'toclevels': 2,
+            'icons': 'font'
 }
 
 bootJar {
