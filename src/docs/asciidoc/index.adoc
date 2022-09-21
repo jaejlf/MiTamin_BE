@@ -6,5 +6,3 @@ endif::[]
 
 == Health
 === 테스트
-operation::health/helloDocs[snippets='http-request,http-response']
-operation::health/helloDocs[snippets='response-fields']

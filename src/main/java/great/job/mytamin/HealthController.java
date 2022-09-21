@@ -14,11 +14,4 @@ public class HealthController {
         return "💪💪 마이타민 프로젝트 건강한 상태 💪💪";
     }
 
-    @GetMapping("/health/hello")
-    public Map<String, String> helloDocs() {
-        Map<String, String> map = new HashMap<>();
-        map.put("hello", "docs");
-        return map;
-    }
-
 }
