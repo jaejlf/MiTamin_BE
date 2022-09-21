@@ -29,7 +29,7 @@ public class CommonControllerTest {
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .apply(documentationConfiguration(restDoc)
                         .operationPreprocessors()
-                        .withRequestDefaults(modifyUris().host("FILLing-GOOD-URL").removePort(), prettyPrint())
+                        .withRequestDefaults(modifyUris().host("MY-TAMIN-URL").removePort(), prettyPrint())
                         .withResponseDefaults(prettyPrint())
                 )
                 .build();
