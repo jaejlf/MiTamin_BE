@@ -50,6 +50,9 @@ asciidoctor {
     inputs.dir snippetsDir
     configurations 'asciidoctorExt'
     dependsOn test
+    attributes \
+    'build-gradle': file('build.gradle'),
+            'toc': 'left'
 }
 
 bootJar {
