@@ -3,3 +3,15 @@ os: linux
 files:
   - source: /
     destination: /home/ec2-user/app/mytamin
+
+hooks:
+  ApplicationStart:
+    - location: run_new.sh
+      timeout: 180
+      runas: ec2-user
+    - location: health_check.sh
+      timeout: 180
+      runas: ec2-user
+    - location: switch.sh
+      timeout: 180
+      runas: ec2-user
