@@ -1,4 +1,4 @@
-package great.job.mytamin;
+package great.job.mytamin.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
