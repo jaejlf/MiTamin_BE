@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 
 application-secret.yml
+/BOOT-INF/
 
 ### STS ###
 .apt_generated
