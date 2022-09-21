@@ -10,13 +10,13 @@ import lombok.Data;
 public class ErrorResponse {
 
     private int statusCode;
-    private String errName;
+    private String errorName;
     private String message;
 
-    public static ErrorResponse error(int statusCode, String errName, String message) {
+    public static ErrorResponse of(int statusCode, String errorName, String message) {
         return ErrorResponse.builder()
                 .statusCode(statusCode)
-                .errName(errName)
+                .errorName(errorName)
                 .message(message)
                 .build();
     }

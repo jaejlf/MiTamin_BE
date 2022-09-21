@@ -6,13 +6,14 @@ import great.job.mytamin.dto.request.LoginRequest;
 import great.job.mytamin.dto.request.SignUpRequest;
 import great.job.mytamin.dto.response.TokenResponse;
 import great.job.mytamin.dto.response.UserResponse;
+import great.job.mytamin.exception.MytaminException;
 import great.job.mytamin.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static great.job.mytamin.exception.ErrorMessage.PASSWORD_ERROR;
+import static great.job.mytamin.exception.ErrorMap.PASSWORD_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +56,7 @@ public class UserService {
     //올바른 비밀번호인지 체크
     private void checkPasswordMatching(String requestPw, String realPw) {
         if (!passwordEncoder.matches(requestPw, realPw)) {
-            throw new IllegalArgumentException(PASSWORD_ERROR.getMsg());
+            throw new MytaminException(PASSWORD_ERROR);
         }
     }
 
