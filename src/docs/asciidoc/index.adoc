@@ -7,16 +7,16 @@ endif::[]
 == Auth
 === 회원 가입
 * 마이타민 섭취 시간(mytaminHour, mytaminMin) 데이터는 필수 요청값이 아니다.
-    ** 유저가 '건너뛰기'를 선택했을 경우 email, password, nickname 값만 넣어 요청한다. (이 경우 mytaminHour, mytaminMin의 초기값은 null이다.)
+    ** 유저가 '건너뛰기'를 선택했을 경우 email, password, nickname 값만 넣어 요청한다. +
+       (-> 이 경우 mytaminHour, mytaminMin의 초기값은 null)
     ** 마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.
 
 operation::auth/signup[snippets='http-request,http-response']
 operation::auth/signup[snippets='request-fields,response-fields']
 
 ==== Exception response
-회원 가입 요청 전 아래의 예외 상황들에 대해 미리 처리가 되었다고 가정한다. (가급적 발생하지 않아야 할 오류)
-
-cf. EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$")과 다를 경우
+* 회원 가입 요청 전 아래의 예외 상황들에 대해 미리 처리가 되었다고 가정한다. (가급적 발생하지 않아야 할 오류)
+* EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$")과 다를 경우
 
 include::{snippets}/auth/signup_EMAIL_PATTERN_ERROR/http-response.adoc[]
 include::{snippets}/auth/signup_NICKNAME_DUPLICATE_ERROR/http-response.adoc[]
@@ -37,3 +37,17 @@ operation::auth/checkEmailDuplication[snippets='path-parameters,response-fields'
 === 닉네임 중복 체크
 operation::auth/checkNicknameDuplication[snippets='http-request,http-response']
 operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fields']
+
+=== 토큰 재발급
+* 새로 발급한 accessToken과 기존의 refreshToken을 리턴한다.
+    ** refreshToken의 만료 기간이 2일 이내로 남았을 경우 refreshToken 또한 새로 발급한다.
+* 만약 403 응답(= refreshToken 만료)일 경우에는 재로그인하도록 한다.
+
+operation::auth/reissue[snippets='http-request,http-response']
+operation::auth/reissue[snippets='request-fields,response-fields']
+
+==== Exception response
+* INVALID_TOKEN_ERROR : DB에 저장된 refresh 토큰과 일치하지 않는 경우 (= refreshToken 자체가 잘못 되었거나 만료된 경우)
+
+include::{snippets}/auth/reissue_INVALID_TOKEN_ERROR/http-response.adoc[]
+include::{snippets}/auth/reissue_USER_NOT_FOUND_ERROR/http-response.adoc[]
