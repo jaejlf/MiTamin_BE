@@ -2,16 +2,30 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/app/mytamin
+    destination: /home/ec2-user/app/mytamin/zip
 
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
+
+# 8080 배포
 hooks:
   ApplicationStart:
-    - location: run_new.sh
-      timeout: 180
+    - location: deploy.sh
+      timeout: 60
       runas: ec2-user
-    - location: health_check.sh
-      timeout: 180
-      runas: ec2-user
-    - location: switch.sh
-      timeout: 180
-      runas: ec2-user
+
+# 무중단 배포
+#hooks:
+#  ApplicationStart:
+#    - location: run_new.sh
+#      timeout: 180
+#      runas: ec2-user
+#    - location: health_check.sh
+#      timeout: 180
+#      runas: ec2-user
+#    - location: switch.sh
+#      timeout: 180
+#      runas: ec2-user
