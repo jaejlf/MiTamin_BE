@@ -16,8 +16,8 @@ public class UserResponse {
     String nickname;
     String profileImgUrl;
     String beMyMessage;
-    int mytaminHour;
-    int mytaminMin;
+    String mytaminHour;
+    String mytaminMin;
 
     public static UserResponse of(User user) {
         return UserResponse.builder()

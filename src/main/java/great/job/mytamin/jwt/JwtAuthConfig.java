@@ -15,7 +15,7 @@ public class JwtAuthConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtAuthInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/auth/**", "/health");
+                .excludePathPatterns("/auth/**", "/health", "/docs/**");
     }
 
 }
