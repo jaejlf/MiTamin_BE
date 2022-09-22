@@ -2,10 +2,8 @@ package great.job.mytamin.jwt;
 
 import great.job.mytamin.Service.CustomUserDetailsService;
 import great.job.mytamin.Service.RedisService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import great.job.mytamin.exception.MytaminException;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
+
+import static great.job.mytamin.exception.ErrorMap.INVALID_TOKEN_ERROR;
 
 @RequiredArgsConstructor
 @Component
@@ -47,7 +47,7 @@ public class JwtTokenProvider {
 
     public String createRefreshToken(String email) {
         String refreshToken = createToken(email, refreshTokenValidTime);
-        redisService.setValues("mytamin-" + email, refreshToken, Duration.ofMillis(refreshTokenValidTime));
+        redisService.setValues(email, refreshToken, Duration.ofMillis(refreshTokenValidTime));
         return refreshToken;
     }
 
@@ -83,8 +83,10 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
+        } catch (ExpiredJwtException e) { //만료된 토큰은 인터셉터에서 처리하도록
             return false;
+        } catch (Exception e) {
+            throw new MytaminException(INVALID_TOKEN_ERROR); // 잘못된 토큰의 경우 에러 발생
         }
     }
 
