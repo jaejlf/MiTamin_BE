@@ -13,6 +13,6 @@ public class SignUpRequest {
     @NotBlank String email;
     @NotBlank String password;
     @NotBlank String nickname;
-    int mytaminHour;
-    int mytaminMin;
+    String mytaminHour;
+    String mytaminMin;
 }

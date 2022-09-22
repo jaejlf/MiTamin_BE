@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,13 +24,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Email
     @Column(length = 100, nullable = false, unique = true)
     private String email;
 
     @Column(length = 300, nullable = false)
     private String password;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = false, unique = true)
     private String nickname;
 
     @Column(length = 300)
@@ -35,11 +40,13 @@ public class User implements UserDetails {
     @Column(length = 300)
     private String beMyMessage = "";
 
-    //마이타민 섭취 알림 시간 (건너뛸 경우 null)
-    private int mytaminHour;
-    private int mytaminMin;
+    /*
+    마이타민 섭취 알림 시간
+    */
+    private String mytaminHour;
+    private String mytaminMin;
 
-    public User(String email, String encodedPw, String nickname, int mytaminHour, int mytaminMin) {
+    public User(String email, String encodedPw, String nickname, String mytaminHour, String mytaminMin) {
         this.email = email;
         this.password = encodedPw;
         this.nickname = nickname;
@@ -52,7 +59,9 @@ public class User implements UserDetails {
     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities;
     }
 
     @Override
