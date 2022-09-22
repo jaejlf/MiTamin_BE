@@ -4,5 +4,36 @@ endif::[]
 
 = 💊 My Tamin API Document
 
-== Health
-=== 테스트
+== Auth
+=== 회원 가입
+* 마이타민 섭취 시간(mytaminHour, mytaminMin) 데이터는 필수 요청값이 아니다.
+    ** 유저가 '건너뛰기'를 선택했을 경우 email, password, nickname 값만 넣어 요청한다. (이 경우 mytaminHour, mytaminMin의 초기값은 null이다.)
+    ** 마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.
+
+operation::auth/signup[snippets='http-request,http-response']
+operation::auth/signup[snippets='request-fields,response-fields']
+
+==== Exception response
+회원 가입 요청 전 아래의 예외 상황들에 대해 미리 처리가 되었다고 가정한다. (가급적 발생하지 않아야 할 오류)
+
+cf. EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$")과 다를 경우
+
+include::{snippets}/auth/signup_EMAIL_PATTERN_ERROR/http-response.adoc[]
+include::{snippets}/auth/signup_NICKNAME_DUPLICATE_ERROR/http-response.adoc[]
+include::{snippets}/auth/signup_USER_ALREADY_EXIST_ERROR/http-response.adoc[]
+
+=== 기본 로그인
+operation::auth/defaultLogin[snippets='http-request,http-response']
+operation::auth/defaultLogin[snippets='request-fields,response-fields']
+
+==== Exception response
+include::{snippets}/auth/defaultLogin_PASSWORD_MISMATCH_ERROR/http-response.adoc[]
+include::{snippets}/auth/defaultLogin_USER_NOT_FOUND_ERROR/http-response.adoc[]
+
+=== 이메일 중복 체크
+operation::auth/checkEmailDuplication[snippets='http-request,http-response']
+operation::auth/checkEmailDuplication[snippets='path-parameters,response-fields']
+
+=== 닉네임 중복 체크
+operation::auth/checkNicknameDuplication[snippets='http-request,http-response']
+operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fields']
