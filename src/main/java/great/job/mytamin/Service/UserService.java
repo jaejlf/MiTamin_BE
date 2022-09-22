@@ -3,6 +3,7 @@ package great.job.mytamin.Service;
 import great.job.mytamin.Repository.UserRepository;
 import great.job.mytamin.domain.User;
 import great.job.mytamin.dto.request.LoginRequest;
+import great.job.mytamin.dto.request.ReissueRequest;
 import great.job.mytamin.dto.request.SignUpRequest;
 import great.job.mytamin.dto.response.TokenResponse;
 import great.job.mytamin.dto.response.UserResponse;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +28,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
 
     /*
     회원가입
@@ -82,6 +85,30 @@ public class UserService {
     @Transactional(readOnly = true)
     public boolean checkNicknameDuplication(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    /*
+    토큰 재발급
+    */
+    @Transactional
+    public TokenResponse tokenReIssue(ReissueRequest reissueRequest) {
+        String email = reissueRequest.getEmail();
+        String refreshToken = reissueRequest.getRefreshToken();
+        User user = getUserByEmail(email);
+
+        //DB에 저장된 refresh 토큰과 일치하는지 체크
+        if (!Objects.equals(redisService.getValues(user.getEmail()), refreshToken)) {
+            throw new MytaminException(INVALID_TOKEN_ERROR);
+        }
+
+        //토큰 만료 기간이 2일 이내로 남았을 경우 refresh token도 재발급
+        Long remainTime = jwtTokenProvider.calValidTime(refreshToken);
+        if (remainTime <= 172800000) {
+            refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+        }
+        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
+
+        return TokenResponse.of(accessToken, refreshToken);
     }
 
     // 올바른 비밀번호인지 체크

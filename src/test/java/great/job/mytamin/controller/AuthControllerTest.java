@@ -2,6 +2,7 @@ package great.job.mytamin.controller;
 
 import great.job.mytamin.Service.UserService;
 import great.job.mytamin.dto.request.LoginRequest;
+import great.job.mytamin.dto.request.ReissueRequest;
 import great.job.mytamin.dto.request.SignUpRequest;
 import great.job.mytamin.dto.response.TokenResponse;
 import great.job.mytamin.dto.response.UserResponse;
@@ -106,6 +107,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorName").value("EMAIL_PATTERN_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
@@ -144,6 +146,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorName").value("USER_ALREADY_EXIST_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
@@ -182,6 +185,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
@@ -260,6 +264,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorName").value("USER_NOT_FOUND_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
@@ -292,6 +297,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorName").value("PASSWORD_MISMATCH_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
@@ -360,5 +366,114 @@ class AuthControllerTest extends CommonControllerTest {
                         ))
                 );
     }
-    
+
+    @Nested
+    @DisplayName("토큰 재발급")
+    class ReissueTest {
+
+        @DisplayName("성공")
+        @Test
+        void reissue(TestInfo testInfo) throws Exception {
+            //given
+            ReissueRequest tokenRequest = new ReissueRequest(
+                    "mytamin@naver.com",
+                    "{{REFRESH_TOKEN}}"
+            );
+            given(userService.tokenReIssue(any())).willReturn(new TokenResponse(
+                    "{{ACCESS_TOKEN}}",
+                    "{{REFRESH_TOKEN}}"
+            ));
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/auth/reissue")
+                    .content(objectMapper.writeValueAsString(tokenRequest))
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("data").exists())
+                    .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
+                            requestFields(
+                                    fieldWithPath("email").description("*이메일"),
+                                    fieldWithPath("refreshToken").description("*리프레쉬 토큰")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지"),
+                                    fieldWithPath("data.accessToken").description("액세스 토큰 (유효 기간 : 30일)"),
+                                    fieldWithPath("data.refreshToken").description("리프레쉬 토큰 (유효 기간 : 180일)")
+                            ))
+                    );
+        }
+
+        @DisplayName("가입되지 않은 유저")
+        @Test
+        void reissue_USER_NOT_FOUND_ERROR(TestInfo testInfo) throws Exception {
+            //given
+            ReissueRequest tokenRequest = new ReissueRequest(
+                    "mytamin@naver.com",
+                    "{{REFRESH_TOKEN}}"
+            );
+            given(userService.tokenReIssue(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/auth/reissue")
+                    .content(objectMapper.writeValueAsString(tokenRequest))
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorName").value("USER_NOT_FOUND_ERROR"))
+                    .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
+                            requestFields(
+                                    fieldWithPath("email").description("*이메일"),
+                                    fieldWithPath("refreshToken").description("*리프레쉬 토큰")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+        @DisplayName("DB에 저장된 토큰과 불일치")
+        @Test
+        void reissue_INVALID_TOKEN_ERROR(TestInfo testInfo) throws Exception {
+            //given
+            ReissueRequest tokenRequest = new ReissueRequest(
+                    "mytamin@naver.com",
+                    "{{REFRESH_TOKEN}}"
+            );
+            given(userService.tokenReIssue(any())).willThrow(new MytaminException(INVALID_TOKEN_ERROR));
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/auth/reissue")
+                    .content(objectMapper.writeValueAsString(tokenRequest))
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isForbidden())
+                    .andExpect(jsonPath("errorName").value("INVALID_TOKEN_ERROR"))
+                    .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
+                            requestFields(
+                                    fieldWithPath("email").description("*이메일"),
+                                    fieldWithPath("refreshToken").description("*리프레쉬 토큰")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+    }
+
 }

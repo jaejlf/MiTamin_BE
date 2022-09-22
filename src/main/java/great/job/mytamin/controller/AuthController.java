@@ -2,6 +2,7 @@ package great.job.mytamin.controller;
 
 import great.job.mytamin.Service.UserService;
 import great.job.mytamin.dto.request.LoginRequest;
+import great.job.mytamin.dto.request.ReissueRequest;
 import great.job.mytamin.dto.request.SignUpRequest;
 import great.job.mytamin.dto.response.ResultResponse;
 import great.job.mytamin.dto.response.TokenResponse;
@@ -48,6 +49,14 @@ public class AuthController {
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("닉네임 중복 체크", userService.checkNicknameDuplication(nickname)));
+    }
+
+    @GetMapping("/reissue")
+    public ResponseEntity<Object> tokenReIssue(@RequestBody ReissueRequest reissueRequest) {
+        TokenResponse tokenResponse = userService.tokenReIssue(reissueRequest);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("토큰 재발급", tokenResponse));
     }
 
 }
