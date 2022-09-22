@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private String nickname;
 
     @Column(length = 300)
-    private String profileImgUrl;
+    private String profileImgUrl = "";
 
     @Column(length = 300)
     private String beMyMessage = "";

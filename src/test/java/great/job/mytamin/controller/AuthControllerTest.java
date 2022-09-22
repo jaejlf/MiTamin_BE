@@ -20,8 +20,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -76,7 +76,7 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.email").description("이메일"),
                                     fieldWithPath("data.nickname").description("닉네임"),
-                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL (초기값 = null)"),
+                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL (초기값 = \"\")"),
                                     fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지 (초기값 = \"\")"),
                                     fieldWithPath("data.mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("data.mytaminMin").description("마이타민 섭취 시간 MM")
@@ -235,8 +235,8 @@ class AuthControllerTest extends CommonControllerTest {
                             responseFields(
                                     fieldWithPath("statusCode").description("상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
-                                    fieldWithPath("data.accessToken").description("액세스 토큰"),
-                                    fieldWithPath("data.refreshToken").description("리프레쉬 토큰")
+                                    fieldWithPath("data.accessToken").description("액세스 토큰 (유효 기간 : 30일)"),
+                                    fieldWithPath("data.refreshToken").description("리프레쉬 토큰 (유효 기간 : 180일)")
                             ))
                     );
         }
@@ -338,7 +338,7 @@ class AuthControllerTest extends CommonControllerTest {
     @Test
     void checkNicknameDuplication(TestInfo testInfo) throws Exception {
         //given
-        String nickname = "강철멘탈";
+        String nickname = "mental-zzang";
         given(userService.checkNicknameDuplication(any())).willReturn(true);
 
         //when
