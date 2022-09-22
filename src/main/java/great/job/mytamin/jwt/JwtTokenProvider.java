@@ -90,4 +90,10 @@ public class JwtTokenProvider {
         }
     }
 
+    public Long calValidTime(String jwtToken) {
+        Date now = new Date();
+        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+        return claims.getBody().getExpiration().getTime() - now.getTime();
+    }
+
 }
