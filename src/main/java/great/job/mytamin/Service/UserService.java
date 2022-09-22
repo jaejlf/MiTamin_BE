@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static great.job.mytamin.exception.ErrorMap.PASSWORD_ERROR;
+import static great.job.mytamin.exception.ErrorMap.PASSWORD_MISMATCH_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class UserService {
     //올바른 비밀번호인지 체크
     private void checkPasswordMatching(String requestPw, String realPw) {
         if (!passwordEncoder.matches(requestPw, realPw)) {
-            throw new MytaminException(PASSWORD_ERROR);
+            throw new MytaminException(PASSWORD_MISMATCH_ERROR);
         }
     }
 
