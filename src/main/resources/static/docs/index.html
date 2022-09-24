@@ -460,6 +460,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <h1 id="_my_tamin_api_document" class="sect0">💊 My Tamin API Document</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+업데이트 내역
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>2022.09.23.금 : 회원가입/로그인/이메일, 닉네임 중복 체크 API 구현</p>
+</li>
+<li>
+<p>2022.09.24.토 : 회원가입 API &#8594; PASSWORD_PATTERN_ERROR 추가 (*비밀번호 패턴 서버 측과 일치하는지 체크)</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_auth">Auth</h2>
 <div class="sectionbody">
@@ -489,12 +516,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/signup HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 158
+Content-Length: 150
 Host: MY-TAMIN-URL
 
 {
   "email" : "mytamin@naver.com",
-  "password" : "{{ENCODED_PASSWORD}}",
+  "password" : "password1234",
   "nickname" : "강철멘탈",
   "mytaminHour" : "22",
   "mytaminMin" : "00"
@@ -629,7 +656,7 @@ Content-Length: 252
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response">Exception response</h4>
+<h4 id="_exception_response">Exception Response</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -637,6 +664,9 @@ Content-Length: 252
 </li>
 <li>
 <p>EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^<span class="_a-z0-9-">(.[_a-z0-9-]</span>)*@(?:\w+\.)\w$")과 다를 경우</p>
+</li>
+<li>
+<p>PASSWORD_PATTERN_ERROR : 비밀번호가 정해진 패턴("^(?=.*[0-9])(?=.*[A-Za-z]).{8,30}$")과 다를 경우</p>
 </li>
 </ul>
 </div>
@@ -650,6 +680,19 @@ Content-Length: 124
   "statusCode" : 400,
   "errorName" : "EMAIL_PATTERN_ERROR",
   "message" : "잘못된 형식의 이메일입니다."
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 161
+
+{
+  "statusCode" : 400,
+  "errorName" : "PASSWORD_PATTERN_ERROR",
+  "message" : "비밀번호는 영문, 숫자를 포함한 8 ~ 30자리여야 합니다."
 }</code></pre>
 </div>
 </div>
@@ -689,12 +732,12 @@ Content-Length: 123
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/default/login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 73
+Content-Length: 69
 Host: MY-TAMIN-URL
 
 {
   "email" : "mytamin@naver.com",
-  "password" : "{{RAW_PASSWORD}}"
+  "password" : "password1234"
 }</code></pre>
 </div>
 </div>
@@ -787,7 +830,7 @@ Content-Length: 164
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_2">Exception response</h4>
+<h4 id="_exception_response_2">Exception Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
@@ -1108,7 +1151,7 @@ Content-Length: 164
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_3">Exception response</h4>
+<h4 id="_exception_response_3">Exception Response</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1150,7 +1193,7 @@ Content-Length: 122
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-09-23 04:54:38 +0900
+Last updated 2022-09-25 01:17:27 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -4,6 +4,13 @@ endif::[]
 
 = 💊 My Tamin API Document
 
+NOTE: 업데이트 내역
+
+* 2022.09.23.금 : 회원가입/로그인/이메일, 닉네임 중복 체크 API 구현
+* 2022.09.24.토 : 회원가입 API -> PASSWORD_PATTERN_ERROR 추가 (*비밀번호 패턴 서버 측과 일치하는지 체크)
+
+'''
+
 == Auth
 === 회원 가입
 * 마이타민 섭취 시간(mytaminHour, mytaminMin) 데이터는 필수 요청값이 아니다.
@@ -14,11 +21,13 @@ endif::[]
 operation::auth/signup[snippets='http-request,http-response']
 operation::auth/signup[snippets='request-fields,response-fields']
 
-==== Exception response
+==== Exception Response
 * 회원 가입 요청 전 아래의 예외 상황들에 대해 미리 처리가 되었다고 가정한다. (가급적 발생하지 않아야 할 오류)
 * EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$")과 다를 경우
+* PASSWORD_PATTERN_ERROR : 비밀번호가 정해진 패턴("^(?=.\*[0-9])(?=.*[A-Za-z]).{8,30}$")과 다를 경우
 
 include::{snippets}/auth/signup_EMAIL_PATTERN_ERROR/http-response.adoc[]
+include::{snippets}/auth/signup_PASSWORD_PATTERN_ERROR/http-response.adoc[]
 include::{snippets}/auth/signup_NICKNAME_DUPLICATE_ERROR/http-response.adoc[]
 include::{snippets}/auth/signup_USER_ALREADY_EXIST_ERROR/http-response.adoc[]
 
@@ -26,7 +35,7 @@ include::{snippets}/auth/signup_USER_ALREADY_EXIST_ERROR/http-response.adoc[]
 operation::auth/defaultLogin[snippets='http-request,http-response']
 operation::auth/defaultLogin[snippets='request-fields,response-fields']
 
-==== Exception response
+==== Exception Response
 include::{snippets}/auth/defaultLogin_PASSWORD_MISMATCH_ERROR/http-response.adoc[]
 include::{snippets}/auth/defaultLogin_USER_NOT_FOUND_ERROR/http-response.adoc[]
 
@@ -46,7 +55,7 @@ operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fiel
 operation::auth/reissue[snippets='http-request,http-response']
 operation::auth/reissue[snippets='request-fields,response-fields']
 
-==== Exception response
+==== Exception Response
 * INVALID_TOKEN_ERROR : DB에 저장된 refresh 토큰과 일치하지 않는 경우 (= refreshToken 자체가 잘못 되었거나 만료된 경우)
 
 include::{snippets}/auth/reissue_INVALID_TOKEN_ERROR/http-response.adoc[]
