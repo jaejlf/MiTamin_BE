@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .anyRequest().permitAll() //필터는 모든 요청 허용하도록
+                .anyRequest().permitAll() // 필터는 모든 요청 허용하도록
                 .and()
                 .addFilterBefore(new JwtFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
