@@ -35,17 +35,23 @@ public class UserService {
     @Transactional
     public UserResponse signup(SignUpRequest signUpRequest) {
 
-        // 이메일 & 닉네임 유효성 체크 & 중복 체크
+        // 유효성 체크
         String email = signUpRequest.getEmail();
         String nickname = signUpRequest.getNickname();
+        String password = signUpRequest.getPassword();
+
+        // 1. 이메일, 비밀번호 패턴 체크
         validateEmailPattern(email);
+        validatePasswordPattern(password);
+
+        // 2. 이메일, 닉네임 중복 체크
         if (checkEmailDuplication(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
         if (checkNicknameDuplication(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
 
         // 새로운 유저 저장
         User user = new User(
                 email,
-                passwordEncoder.encode(signUpRequest.getPassword()),
+                passwordEncoder.encode(password),
                 nickname,
                 signUpRequest.getMytaminHour(),
                 signUpRequest.getMytaminMin()
@@ -120,12 +126,20 @@ public class UserService {
         return customUserDetailsService.loadUserByUsername(email);
     }
 
-    // 이메일 형식 체크
+    // 이메일 패턴 체크
     private void validateEmailPattern(String email) {
-        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"; // XXX@XXX.XXX
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(email);
         if (!m.matches()) throw new MytaminException(EMAIL_PATTERN_ERROR);
+    }
+
+    // 비밀번호 패턴 체크
+    private void validatePasswordPattern(String password) {
+        String regex = "^(?=.*[0-9])(?=.*[A-Za-z]).{8,30}$"; // 영문, 숫자를 포함한 8 ~ 30자리
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(password);
+        if (!m.matches() || password.contains(" ")) throw new MytaminException(PASSWORD_PATTERN_ERROR);
     }
 
 }

@@ -47,7 +47,7 @@ class AuthControllerTest extends CommonControllerTest {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "mytamin@naver.com",
-                    "{{ENCODED_PASSWORD}}",
+                    "password1234",
                     "강철멘탈",
                     "22",
                     "00"
@@ -91,7 +91,7 @@ class AuthControllerTest extends CommonControllerTest {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "XXX email pattern XXX",
-                    "{{ENCODED_PASSWORD}}",
+                    "password1234",
                     "강철멘탈",
                     "22",
                     "00"
@@ -124,13 +124,52 @@ class AuthControllerTest extends CommonControllerTest {
                     );
         }
 
+        @DisplayName("비밀번호 형식 오류")
+        @Test
+        void signup_PASSWORD_PATTERN_ERROR(TestInfo testInfo) throws Exception {
+            //given
+            SignUpRequest signUpRequest = new SignUpRequest(
+                    "mytamin@naver.com",
+                    "0000",
+                    "강철멘탈",
+                    "22",
+                    "00"
+            );
+            given(userService.signup(any())).willThrow(new MytaminException(PASSWORD_PATTERN_ERROR));
+
+            //when
+            ResultActions actions = mockMvc.perform(post("/auth/signup")
+                    .content(objectMapper.writeValueAsString(signUpRequest))
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorName").value("PASSWORD_PATTERN_ERROR"))
+                    .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
+                            requestFields(
+                                    fieldWithPath("email").description("*이메일"),
+                                    fieldWithPath("password").description("*비밀번호"),
+                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
+                                    fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
         @DisplayName("이미 가입된 유저")
         @Test
         void signup_USER_ALREADY_EXIST_ERROR(TestInfo testInfo) throws Exception {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "mytamin@naver.com",
-                    "{{ENCODED_PASSWORD}}",
+                    "password1234",
                     "강철멘탈",
                     "22",
                     "00"
@@ -169,7 +208,7 @@ class AuthControllerTest extends CommonControllerTest {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "mytamin@naver.com",
-                    "{{ENCODED_PASSWORD}}",
+                    "password1234",
                     "강철멘탈",
                     "22",
                     "00"
@@ -214,7 +253,7 @@ class AuthControllerTest extends CommonControllerTest {
             //given
             LoginRequest loginRequest = new LoginRequest(
                     "mytamin@naver.com",
-                    "{{RAW_PASSWORD}}"
+                    "password1234"
             );
             given(userService.defaultLogin(any())).willReturn(new TokenResponse(
                     "{{ACCESS_TOKEN}}",
@@ -251,7 +290,7 @@ class AuthControllerTest extends CommonControllerTest {
             //given
             LoginRequest loginRequest = new LoginRequest(
                     "mytamin@naver.com",
-                    "{{RAW_PASSWORD}}"
+                    "password1234"
             );
             given(userService.defaultLogin(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
@@ -284,7 +323,7 @@ class AuthControllerTest extends CommonControllerTest {
             //given
             LoginRequest loginRequest = new LoginRequest(
                     "mytamin@naver.com",
-                    "{{RAW_PASSWORD}}"
+                    "XXX password XXX"
             );
             given(userService.defaultLogin(any())).willThrow(new MytaminException(PASSWORD_MISMATCH_ERROR));
 
