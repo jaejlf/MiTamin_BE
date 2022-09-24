@@ -1,4 +1,4 @@
-package great.job.mytamin.Service;
+package great.job.mytamin.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

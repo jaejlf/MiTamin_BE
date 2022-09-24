@@ -1,6 +1,6 @@
-package great.job.mytamin.Service;
+package great.job.mytamin.service;
 
-import great.job.mytamin.Repository.UserRepository;
+import great.job.mytamin.repository.UserRepository;
 import great.job.mytamin.domain.User;
 import great.job.mytamin.dto.request.LoginRequest;
 import great.job.mytamin.dto.request.ReissueRequest;

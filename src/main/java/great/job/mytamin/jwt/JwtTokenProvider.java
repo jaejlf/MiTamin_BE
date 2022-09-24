@@ -1,6 +1,6 @@
 package great.job.mytamin.jwt;
 
-import great.job.mytamin.Service.CustomUserDetailsService;
+import great.job.mytamin.service.CustomUserDetailsService;
 import great.job.mytamin.domain.User;
 import great.job.mytamin.exception.MytaminException;
 import io.jsonwebtoken.*;
@@ -38,7 +38,7 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    //JWT 토큰 생성
+    // JWT 토큰 생성
     public String createAccessToken(String email) {
         return createToken(email, accessTokenValidTime);
     }
@@ -60,28 +60,28 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    //JWT 토큰에서 인증 정보 조회
+    // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthetication(String token) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    //토큰에서 회원 정보 추출
+    // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    //Request의 Header에서 token 값을 가져온다 => "X-AUTH-TOKEN" : "TOKEN값"
+    // Request의 Header에서 token 값을 가져온다 => "X-AUTH-TOKEN" : "TOKEN값"
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("X-AUTH-TOKEN");
     }
 
-    //토큰의 유효성 + 만료일자 확인
+    // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (ExpiredJwtException e) { //만료된 토큰은 인터셉터에서 처리하도록
+        } catch (ExpiredJwtException e) { // 만료된 토큰은 인터셉터에서 처리하도록
             return false;
         } catch (Exception e) {
             throw new MytaminException(INVALID_TOKEN_ERROR); // 잘못된 토큰의 경우 에러 발생

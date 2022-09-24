@@ -1,6 +1,6 @@
-package great.job.mytamin.Service;
+package great.job.mytamin.service;
 
-import great.job.mytamin.Repository.UserRepository;
+import great.job.mytamin.repository.UserRepository;
 import great.job.mytamin.domain.User;
 import great.job.mytamin.exception.MytaminException;
 import lombok.RequiredArgsConstructor;

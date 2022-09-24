@@ -1,6 +1,6 @@
 package great.job.mytamin.controller;
 
-import great.job.mytamin.Service.RedisService;
+import great.job.mytamin.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

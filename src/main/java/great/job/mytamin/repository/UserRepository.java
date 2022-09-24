@@ -1,4 +1,4 @@
-package great.job.mytamin.Repository;
+package great.job.mytamin.repository;
 
 import great.job.mytamin.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

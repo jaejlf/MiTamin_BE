@@ -1,6 +1,6 @@
 package great.job.mytamin.controller;
 
-import great.job.mytamin.Service.UserService;
+import great.job.mytamin.service.UserService;
 import great.job.mytamin.dto.request.LoginRequest;
 import great.job.mytamin.dto.request.ReissueRequest;
 import great.job.mytamin.dto.request.SignUpRequest;
