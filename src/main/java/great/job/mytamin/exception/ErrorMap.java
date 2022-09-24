@@ -14,6 +14,7 @@ public enum ErrorMap {
 
     // Auth
     EMAIL_PATTERN_ERROR(HttpStatus.BAD_REQUEST, "EMAIL_PATTERN_ERROR", "잘못된 형식의 이메일입니다."),
+    PASSWORD_PATTERN_ERROR(HttpStatus.BAD_REQUEST, "PASSWORD_PATTERN_ERROR", "비밀번호는 영문, 숫자를 포함한 8 ~ 30자리여야 합니다."),
     USER_ALREADY_EXIST_ERROR(HttpStatus.CONFLICT, "USER_ALREADY_EXIST_ERROR", "이미 가입된 유저입니다."),
     NICKNAME_DUPLICATE_ERROR(HttpStatus.CONFLICT, "NICKNAME_DUPLICATE_ERROR", "이미 사용 중인 닉네임입니다."),
 
