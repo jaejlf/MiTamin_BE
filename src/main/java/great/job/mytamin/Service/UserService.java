@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,7 +63,7 @@ public class UserService {
         checkPasswordMatching(loginRequest.getPassword(), user.getPassword());
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user);
 
         return TokenResponse.of(accessToken, refreshToken);
     }
@@ -74,9 +73,7 @@ public class UserService {
     */
     @Transactional(readOnly = true)
     public boolean checkEmailDuplication(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            return true;
-        } else return false;
+        return userRepository.findByEmail(email).isPresent();
     }
 
     /*
@@ -96,15 +93,15 @@ public class UserService {
         String refreshToken = reissueRequest.getRefreshToken();
         User user = getUserByEmail(email);
 
-        //DB에 저장된 refresh 토큰과 일치하는지 체크
-        if (!Objects.equals(redisService.getValues(user.getEmail()), refreshToken)) {
+        //DB에 저장된 refreshToken과 일치하는지 체크
+        if (!user.getRefreshToken().equals(refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
 
-        //토큰 만료 기간이 2일 이내로 남았을 경우 refresh token도 재발급
+        //토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
         Long remainTime = jwtTokenProvider.calValidTime(refreshToken);
         if (remainTime <= 172800000) {
-            refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+            refreshToken = jwtTokenProvider.createRefreshToken(user);
         }
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
 
