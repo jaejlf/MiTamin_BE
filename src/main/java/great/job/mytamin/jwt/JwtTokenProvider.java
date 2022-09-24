@@ -76,21 +76,22 @@ public class JwtTokenProvider {
         return request.getHeader("X-AUTH-TOKEN");
     }
 
-    // 토큰의 유효성 + 만료일자 확인
-    public boolean validateToken(String jwtToken) {
+    // 토큰 유효성 체크 + 만료 기간 확인
+    public boolean validateToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (ExpiredJwtException e) { // 만료된 토큰은 인터셉터에서 처리하도록
+        } catch (ExpiredJwtException e) { // 만료된 토큰
             return false;
-        } catch (Exception e) {
-            throw new MytaminException(INVALID_TOKEN_ERROR); // 잘못된 토큰의 경우 에러 발생
+        } catch (Exception e) { // 잘못된 토큰
+            throw new MytaminException(INVALID_TOKEN_ERROR);
         }
     }
 
-    public Long calValidTime(String jwtToken) {
+    // 토큰 만료 기간 계산
+    public Long calValidTime(String token) {
         Date now = new Date();
-        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         return claims.getBody().getExpiration().getTime() - now.getTime();
     }
 

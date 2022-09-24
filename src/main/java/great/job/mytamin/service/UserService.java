@@ -99,12 +99,17 @@ public class UserService {
         String refreshToken = reissueRequest.getRefreshToken();
         User user = getUserByEmail(email);
 
-        //DB에 저장된 refreshToken과 일치하는지 체크
+        // DB에 저장된 refreshToken과 일치하는지 체크
         if (!user.getRefreshToken().equals(refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
 
-        //토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
+        // 리프레쉬 유효성 체크
+        if(!jwtTokenProvider.validateToken(refreshToken)) {
+            throw new MytaminException(INVALID_TOKEN_ERROR);
+        }
+        
+        // 토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
         Long remainTime = jwtTokenProvider.calValidTime(refreshToken);
         if (remainTime <= 172800000) {
             refreshToken = jwtTokenProvider.createRefreshToken(user);
