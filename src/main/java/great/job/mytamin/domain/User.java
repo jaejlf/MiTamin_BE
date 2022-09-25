@@ -27,13 +27,13 @@ public class User implements UserDetails {
     private Long userId;
 
     @Email
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(length = 300, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 300, nullable = false, unique = true)
     private String nickname;
 
     @Column(length = 300)
