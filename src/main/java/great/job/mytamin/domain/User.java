@@ -12,7 +12,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -55,6 +57,7 @@ public class User implements UserDetails {
         this.nickname = nickname;
         this.mytaminHour = mytaminHour;
         this.mytaminMin = mytaminMin;
+        this.roles = Collections.singletonList("ROLE_USER");
     }
 
     /*
@@ -67,11 +70,14 @@ public class User implements UserDetails {
     /*
     UserDetails Method
     */
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return authorities;
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
