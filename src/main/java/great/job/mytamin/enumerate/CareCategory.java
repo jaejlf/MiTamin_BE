@@ -1,8 +1,11 @@
 package great.job.mytamin.enumerate;
 
 
+import great.job.mytamin.exception.MytaminException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import static great.job.mytamin.exception.ErrorMap.INVALID_CATEGORY_CODE_ERROR;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,6 +20,17 @@ public enum CareCategory {
     ETC(7, "기타");
 
     private final int code;
-    private final String message;
+    private final String msg;
+
+    public static String getMsgToCode(int code) {
+        if (code == 1) return ACCOMPLISHED.getMsg();
+        else if (code == 2) return DID_WELL.getMsg();
+        else if (code == 3) return TRYING.getMsg();
+        else if (code == 4) return POSITIVE_CHANGE.getMsg();
+        else if (code == 5) return THOUGHTS.getMsg();
+        else if (code == 6) return ME_FROM_THE_PAST.getMsg();
+        else if (code == 7) return ETC.getMsg();
+        else throw new MytaminException(INVALID_CATEGORY_CODE_ERROR);
+    }
 
 }

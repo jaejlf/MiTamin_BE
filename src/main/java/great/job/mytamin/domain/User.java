@@ -52,10 +52,10 @@ public class User implements UserDetails {
     private String mytaminMin;
 
     /*
-    행동 1, 2 실천 시간
+    행동 1 : 숨 고르기, 행동 2 : 감각 깨우기 실천 시간
     */
-    private LocalDateTime breathTime; // 숨 고르기
-    private LocalDateTime senseTime;  // 감각 깨우기
+    private LocalDateTime breathTime = LocalDateTime.of(1999, 1, 1, 0, 0);
+    private LocalDateTime senseTime = LocalDateTime.of(1999, 1, 1, 0, 0);
     
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore

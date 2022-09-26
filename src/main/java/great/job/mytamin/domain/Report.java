@@ -1,11 +1,11 @@
 package great.job.mytamin.domain;
 
-import great.job.mytamin.enumerate.MentalCondition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,9 +17,10 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
 
-    @Enumerated(EnumType.STRING)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
     @Column(nullable = false)
-    private MentalCondition mentalCondition;
+    private String mentalCondition;
 
     @Column(length = 100, nullable = false)
     private String feelingTag;
@@ -27,7 +28,14 @@ public class Report {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String todayReport;
 
-    @OneToOne(mappedBy="report")
+    @OneToOne(mappedBy = "report")
     private Mytamin mytamin;
+
+    public Report(String mentalCondition, String feelingTag, String todayReport, Mytamin mytamin) {
+        this.mentalCondition = mentalCondition;
+        this.feelingTag = feelingTag;
+        this.todayReport = todayReport;
+        this.mytamin = mytamin;
+    }
 
 }

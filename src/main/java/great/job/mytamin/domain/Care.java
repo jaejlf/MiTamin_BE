@@ -1,11 +1,11 @@
 package great.job.mytamin.domain;
 
-import great.job.mytamin.enumerate.CareCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,17 +17,25 @@ public class Care {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long careId;
 
-    @Enumerated(EnumType.STRING)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
     @Column(nullable = false)
-    private CareCategory careCategory;
+    private String careCategory;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String careMessage1;
+    private String careMsg1;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String careMessage2;
+    private String careMsg2;
 
-    @OneToOne(mappedBy="report")
+    @OneToOne(mappedBy = "report")
     private Mytamin mytamin;
+
+    public Care(String careCategory, String careMsg1, String careMsg2, Mytamin mytamin) {
+        this.careCategory = careCategory;
+        this.careMsg1 = careMsg1;
+        this.careMsg2 = careMsg2;
+        this.mytamin = mytamin;
+    }
 
 }
