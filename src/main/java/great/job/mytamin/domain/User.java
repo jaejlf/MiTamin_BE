@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Getter
@@ -46,7 +46,7 @@ public class User implements UserDetails {
     private String refreshToken = "";
 
     /*
-    마이타민 섭취 알림 시간
+    마이타민 섭취 지정 시간
     */
     private String mytaminHour;
     private String mytaminMin;
@@ -59,7 +59,7 @@ public class User implements UserDetails {
     
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
-    private Set<Mytamin> mytaminList = new HashSet<>();
+    private Set<Mytamin> mytaminSet = new HashSet<>();
 
     public User(String email, String encodedPw, String nickname, String mytaminHour, String mytaminMin) {
         this.email = email;
@@ -70,11 +70,16 @@ public class User implements UserDetails {
         this.roles = Collections.singletonList("ROLE_USER");
     }
 
-    /*
-    refreshToken 업데이트
-    */
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateBreathTime() {
+        this.breathTime = LocalDateTime.now();
+    }
+
+    public void updateSenseTime() {
+        this.senseTime = LocalDateTime.now();
     }
 
     /*
