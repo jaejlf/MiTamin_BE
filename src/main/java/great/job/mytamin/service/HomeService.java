@@ -96,10 +96,14 @@ public class HomeService {
 
         // pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
         start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 19, 0);
+        end = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 11, 59);
+        if (timeService.isInRange(now, start, end)) return "푹 쉬고 내일 만나요";
+
+        start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 0, 0);
         end = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
         if (timeService.isInRange(now, start, end)) return "푹 쉬고 내일 만나요";
 
-        return "임시임시임시 메세지입니다";
+        return "임시 메세지입니다";
     }
 
 }
