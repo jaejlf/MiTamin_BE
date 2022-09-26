@@ -99,7 +99,7 @@ public class HomeService {
         end = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
         if (timeService.isInRange(now, start, end)) return "푹 쉬고 내일 만나요";
 
-        return "";
+        return "임시임시임시 메세지입니다";
     }
 
 }
