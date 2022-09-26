@@ -10,11 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
@@ -51,6 +51,16 @@ public class User implements UserDetails {
     private String mytaminHour;
     private String mytaminMin;
 
+    /*
+    행동 1, 2 실천 시간
+    */
+    private LocalDateTime breathTime; // 숨 고르기
+    private LocalDateTime senseTime;  // 감각 깨우기
+    
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private Set<Mytamin> mytaminList = new HashSet<>();
+
     public User(String email, String encodedPw, String nickname, String mytaminHour, String mytaminMin) {
         this.email = email;
         this.password = encodedPw;
@@ -70,7 +80,7 @@ public class User implements UserDetails {
     /*
     UserDetails Method
     */
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = EAGER)
     private List<String> roles = new ArrayList<>();
 
     @Override

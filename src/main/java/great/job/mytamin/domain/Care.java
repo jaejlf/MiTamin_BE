@@ -27,4 +27,7 @@ public class Care {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String careMessage2;
 
+    @OneToOne(mappedBy="report")
+    private Mytamin mytamin;
+
 }

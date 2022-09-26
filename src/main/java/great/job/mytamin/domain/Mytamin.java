@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -22,5 +21,17 @@ public class Mytamin {
 
     private LocalDateTime ateMytaminAt;
     private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @OneToOne
+    @JoinColumn(name = "reportId")
+    private Report report;
+
+    @OneToOne
+    @JoinColumn(name = "careId")
+    private Care care;
     
 }

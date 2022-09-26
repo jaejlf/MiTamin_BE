@@ -27,4 +27,7 @@ public class Report {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String todayReport;
 
+    @OneToOne(mappedBy="report")
+    private Mytamin mytamin;
+
 }
