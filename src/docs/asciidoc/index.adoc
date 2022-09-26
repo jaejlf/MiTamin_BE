@@ -8,6 +8,7 @@ NOTE: 업데이트 내역
 
 * 2022.09.23.금 : 회원가입/로그인/이메일, 닉네임 중복 체크 API 구현
 * 2022.09.24.토 : 회원가입 API -> PASSWORD_PATTERN_ERROR 추가 (*비밀번호 패턴 서버 측과 일치하는지 체크)
+* 2022.09.26.월 : 홈 화면 관련 API 구현 (세부 로직 구현 전이지만, 업데이트 후에도 response는 동일할 예정임)
 
 '''
 
@@ -60,3 +61,34 @@ operation::auth/reissue[snippets='request-fields,response-fields']
 
 include::{snippets}/auth/reissue_INVALID_TOKEN_ERROR/http-response.adoc[]
 include::{snippets}/auth/reissue_USER_NOT_FOUND_ERROR/http-response.adoc[]
+
+== Home
+=== 웰컴 메세지
+* 시간에 따른 웰컴 메시지를 리턴한다.
+       ** am 5:00 ~ am 11:59 : 오늘도 힘차게 시작해볼까요 ?
+       ** pm 12:00 ~ pm 18:59 : 어떤 하루를 보내고 계신가요 ?
+       ** pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
+* (추후 업데이트 예정) 마이타민 섭취 여부에 따른 메세지 구현 전
+
+operation::home/welcome[snippets='http-request,http-response']
+operation::home/welcome[snippets='request-headers,response-fields']
+
+=== 숨 고르기 완료
+* 유저가 '숨 고르기' 행동을 완료했다면 해당 API를 요청한다.
+
+operation::home/completeBreath[snippets='http-request,http-response']
+operation::home/completeBreath[snippets='request-headers,response-fields']
+
+=== 감각 깨우기 완료
+* 유저가 '감각 깨우기' 행동을 완료했다면 해당 API를 요청한다.
+
+operation::home/completeSense[snippets='http-request,http-response']
+operation::home/completeSense[snippets='request-headers,response-fields']
+
+=== 행동 완료 상태
+* 1 ~ 4번 행동에 대해 유저가 행동을 완료했다면 true, 완료하지 않았다면 false를 리턴한다.
+* (추후 업데이트 예정) 임시적으로 reportIsDone, careIdDone의 경우 항상 false를 리턴한다.
+
+operation::home/getProgressStatus[snippets='http-request,http-response']
+operation::home/getProgressStatus[snippets='request-headers,response-fields']
+
