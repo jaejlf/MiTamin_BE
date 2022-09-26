@@ -11,12 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ActionResponse {
 
-    private String message;
     private String updatedTime;
 
     public static ActionResponse of(String updatedTime) {
         return ActionResponse.builder()
-                .message("최종 업데이트 시간")
                 .updatedTime(updatedTime)
                 .build();
     }

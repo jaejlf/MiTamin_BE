@@ -24,7 +24,7 @@ public class HomeController {
     public ResponseEntity<Object> welcome(@AuthenticationPrincipal User user) {
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("웰컴 멘트", homeService.welcome(user)));
+                .body(ResultResponse.ok("웰컴 메세지", homeService.welcome(user)));
     }
 
     @GetMapping("/progress/status")

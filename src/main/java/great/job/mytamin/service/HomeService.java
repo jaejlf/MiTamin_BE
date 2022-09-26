@@ -84,7 +84,7 @@ public class HomeService {
         LocalDateTime start, end;
         LocalDateTime now = LocalDateTime.now();
 
-        // am 5:00 ~ 11:59 : 오늘도 힘차게 시작해볼까요 ?
+        // am 5:00 ~ am 11:59 : 오늘도 힘차게 시작해볼까요 ?
         start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 5, 0);
         end = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 11, 59);
         if (timeService.isInRange(now, start, end)) return "오늘도 힘차게 시작해볼까요 ?";
@@ -94,6 +94,7 @@ public class HomeService {
         end = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 18, 59);
         if (timeService.isInRange(now, start, end)) return "어떤 하루를 보내고 계신가요 ?";
 
+        // pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
         start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 19, 0);
         end = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
         if (timeService.isInRange(now, start, end)) return "푹 쉬고 내일 만나요";
