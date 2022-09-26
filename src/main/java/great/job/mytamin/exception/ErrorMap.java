@@ -25,8 +25,8 @@ public enum ErrorMap {
     // Mytamin
     INVALID_CATEGORY_CODE_ERROR(HttpStatus.BAD_REQUEST, "INVALID_CATEGORY_CODE_ERROR", "카테고리 코드는 1 ~ 7 사이의 값이어야 합니다."),
     INVALID_CONDITION_CODE_ERROR(HttpStatus.BAD_REQUEST, "INVALID_CONDITION_CODE_ERROR", "마음 컨디션 코드는 1 ~ 5 사이의 값이어야 합니다."),
-    REPORT_ALREADY_DONE(HttpStatus.BAD_REQUEST, "REPORT_ALREADY_DONE", "오늘의 '하루 진단하기'를 이미 완료했습니다."),
-    CARE_ALREADY_DONE(HttpStatus.BAD_REQUEST, "CARE_ALREADY_DONE", "오늘의 '칭찬 처방하기'를 이미 완료했습니다.");
+    REPORT_ALREADY_DONE(HttpStatus.CONFLICT, "REPORT_ALREADY_DONE", "오늘의 '하루 진단하기'를 이미 완료했습니다."),
+    CARE_ALREADY_DONE(HttpStatus.CONFLICT, "CARE_ALREADY_DONE", "오늘의 '칭찬 처방하기'를 이미 완료했습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorName;
