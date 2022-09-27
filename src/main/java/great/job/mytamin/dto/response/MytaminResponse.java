@@ -13,22 +13,44 @@ import lombok.NoArgsConstructor;
 public class MytaminResponse {
 
     String takeAt;
+    boolean canEdit;
+    int memtalConditionCode;
     String feelingTag;
     String mentalConditionMsg;
     String todayReport;
     String careMsg1;
     String careMsg2;
-    boolean canEdit;
 
-    public static MytaminResponse of(Mytamin mytamin, boolean canEdit) {
+    public static MytaminResponse of(Mytamin mytamin, int memtalConditionCode, boolean canEdit) {
         return MytaminResponse.builder()
                 .takeAt(mytamin.getTakeAt())
-                .feelingTag(mytamin.getReport().getFeelingTag())
+                .canEdit(canEdit)
+                .memtalConditionCode(memtalConditionCode)
+                .feelingTag("# " + mytamin.getReport().getFeelingTag())
                 .mentalConditionMsg("기분이 " + mytamin.getReport().getMentalCondition())
-                .todayReport(mytamin.getReport().getTodayReport())
+                .todayReport( mytamin.getReport().getTodayReport())
                 .careMsg1(mytamin.getCare().getCareMsg1())
                 .careMsg2(mytamin.getCare().getCareMsg2())
+                .build();
+    }
+
+    public static MytaminResponse withReport(Mytamin mytamin, int memtalConditionCode, boolean canEdit) {
+        return MytaminResponse.builder()
+                .takeAt(mytamin.getTakeAt())
                 .canEdit(canEdit)
+                .memtalConditionCode(memtalConditionCode)
+                .feelingTag("# " + mytamin.getReport().getFeelingTag())
+                .mentalConditionMsg("기분이 " + mytamin.getReport().getMentalCondition())
+                .todayReport( mytamin.getReport().getTodayReport())
+                .build();
+    }
+
+    public static MytaminResponse withCare(Mytamin mytamin, boolean canEdit) {
+        return MytaminResponse.builder()
+                .takeAt(mytamin.getTakeAt())
+                .canEdit(canEdit)
+                .careMsg1(mytamin.getCare().getCareMsg1())
+                .careMsg2(mytamin.getCare().getCareMsg2())
                 .build();
     }
 

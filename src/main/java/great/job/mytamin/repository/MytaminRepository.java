@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MytaminRepository extends JpaRepository<Mytamin, Long> {
     Mytamin findByTakeAtAndUser(String takeMytaminAtStr, User user);
+    Mytamin findFirstByUserOrderByMytaminIdDesc(User user);
 }

@@ -28,4 +28,12 @@ public enum MentalCondition {
         else throw new MytaminException(INVALID_CONDITION_CODE_ERROR);
     }
 
+    public static int getCodeToMsg(String msg) {
+        if (msg.equals(VERY_BAD.getMsg())) return VERY_BAD.getCode();
+        else if (msg.equals(BAD.getMsg())) return BAD.getCode();
+        else if (msg.equals(SO_SO.getMsg())) return SO_SO.getCode();
+        else if (msg.equals(GOOD.getMsg())) return GOOD.getCode();
+        else return VERY_GOOD.getCode();
+    }
+
 }

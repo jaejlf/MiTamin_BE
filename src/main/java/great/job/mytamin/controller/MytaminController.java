@@ -8,12 +8,10 @@ import great.job.mytamin.service.MytaminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +34,13 @@ public class MytaminController {
         return ResponseEntity
                 .status(CREATED)
                 .body(ResultResponse.create("칭찬 처방하기", mytaminService.careToday(user, careRequest)));
+    }
+
+    @GetMapping("/latest")
+    public ResponseEntity<Object> getLatestMytamin(@AuthenticationPrincipal User user) {
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("최근 마이타민", mytaminService.getLatestMytamin(user)));
     }
 
 }

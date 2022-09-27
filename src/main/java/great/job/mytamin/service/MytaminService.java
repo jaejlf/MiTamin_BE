@@ -7,6 +7,7 @@ import great.job.mytamin.domain.User;
 import great.job.mytamin.dto.request.CareRequest;
 import great.job.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.dto.response.CareResponse;
+import great.job.mytamin.dto.response.MytaminResponse;
 import great.job.mytamin.dto.response.ReportResponse;
 import great.job.mytamin.enumerate.CareCategory;
 import great.job.mytamin.enumerate.MentalCondition;
@@ -74,6 +75,29 @@ public class MytaminService {
         Care newCare = careRepository.save(care);
         mytamin.updateCare(newCare);
         return CareResponse.of(newCare);
+    }
+
+    /*
+    최근 마이타민
+    */
+    @Transactional(readOnly = true)
+    public MytaminResponse getLatestMytamin(User user) {
+        Mytamin mytamin = mytaminRepository.findFirstByUserOrderByMytaminIdDesc(user);
+        if (mytamin == null) return null;
+
+        LocalDateTime rawTakeAt = mytamin.getRawTakeAt();
+        boolean canEdit = timeService.isCreatedAtWithin24(rawTakeAt);
+
+        if (mytamin.getReport() != null) {
+            int memtalConditionCode = MentalCondition.getCodeToMsg(mytamin.getReport().getMentalCondition());
+            if (mytamin.getCare() != null) {
+                return MytaminResponse.of(mytamin, memtalConditionCode, canEdit);
+            } else {
+                return MytaminResponse.withReport(mytamin, memtalConditionCode, canEdit);
+            }
+        } else {
+            return MytaminResponse.withCare(mytamin, canEdit);
+        }
     }
 
     // 오늘의 마이타민 가져오기
