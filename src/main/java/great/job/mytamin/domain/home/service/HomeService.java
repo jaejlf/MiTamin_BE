@@ -73,8 +73,10 @@ public class HomeService {
     @Transactional(readOnly = true)
     public ActiveResponse getProgressStatus(User user) {
         // 하루 기준 : am 5:00 ~ am 4:59
+        // start1 ~ end1 : am 5:00 ~ pm 11:59
+        // start2 ~ end2 : am 12:00 ~ am : 4:59
         start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 5, 0);
-        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 11, 59);
+        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 23, 59);
         start2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 0, 0);
         end2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
 
@@ -107,8 +109,10 @@ public class HomeService {
         if (timeService.isInRange(now, start1, end1)) return "어떤 하루를 보내고 계신가요 ?";
 
         // pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
+        // start1 ~ end1 : pm 7:00 ~ pm 11:59
+        // start2 ~ end2 : am 12:00 ~ am : 4:59
         start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 19, 0);
-        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 22, 59);
+        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 23, 59);
         start2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 0, 0);
         end2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
         if (timeService.isInRange(now, start1, end1) || timeService.isInRange(now, start2, end2)) return "푹 쉬고 내일 만나요";
