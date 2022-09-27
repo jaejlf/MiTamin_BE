@@ -1,8 +1,8 @@
 package great.job.mytamin.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import great.job.mytamin.domain.User;
-import great.job.mytamin.jwt.JwtAuthInterceptor;
+import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.global.jwt.JwtAuthInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

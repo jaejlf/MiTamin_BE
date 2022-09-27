@@ -1,16 +1,17 @@
 package great.job.mytamin.controller;
 
-import great.job.mytamin.domain.Care;
-import great.job.mytamin.domain.Mytamin;
-import great.job.mytamin.domain.Report;
-import great.job.mytamin.dto.request.CareRequest;
-import great.job.mytamin.dto.request.ReportRequest;
-import great.job.mytamin.dto.response.CareResponse;
-import great.job.mytamin.dto.response.ReportResponse;
-import great.job.mytamin.enumerate.CareCategory;
-import great.job.mytamin.enumerate.MentalCondition;
-import great.job.mytamin.exception.MytaminException;
-import great.job.mytamin.service.MytaminService;
+import great.job.mytamin.domain.care.entity.Care;
+import great.job.mytamin.domain.mytamin.controller.MytaminController;
+import great.job.mytamin.domain.mytamin.entity.Mytamin;
+import great.job.mytamin.domain.report.entity.Report;
+import great.job.mytamin.domain.care.dto.request.CareRequest;
+import great.job.mytamin.domain.report.dto.request.ReportRequest;
+import great.job.mytamin.domain.care.dto.response.CareResponse;
+import great.job.mytamin.domain.report.dto.response.ReportResponse;
+import great.job.mytamin.domain.care.enumerate.CareCategory;
+import great.job.mytamin.domain.report.enumerate.MentalCondition;
+import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.support.CommonControllerTest;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-import static great.job.mytamin.exception.ErrorMap.*;
+import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;

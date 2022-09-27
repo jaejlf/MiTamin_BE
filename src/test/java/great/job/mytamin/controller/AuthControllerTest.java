@@ -1,12 +1,13 @@
 package great.job.mytamin.controller;
 
-import great.job.mytamin.service.UserService;
-import great.job.mytamin.dto.request.LoginRequest;
-import great.job.mytamin.dto.request.ReissueRequest;
-import great.job.mytamin.dto.request.SignUpRequest;
-import great.job.mytamin.dto.response.TokenResponse;
-import great.job.mytamin.dto.response.UserResponse;
-import great.job.mytamin.exception.MytaminException;
+import great.job.mytamin.domain.user.controller.AuthController;
+import great.job.mytamin.domain.user.service.UserService;
+import great.job.mytamin.domain.user.dto.request.LoginRequest;
+import great.job.mytamin.domain.user.dto.request.ReissueRequest;
+import great.job.mytamin.domain.user.dto.request.SignUpRequest;
+import great.job.mytamin.domain.user.dto.response.TokenResponse;
+import great.job.mytamin.domain.user.dto.response.UserResponse;
+import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,7 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static great.job.mytamin.exception.ErrorMap.*;
+import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
