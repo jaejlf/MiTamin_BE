@@ -28,7 +28,7 @@ public class MytaminResponse {
                 .memtalConditionCode(memtalConditionCode)
                 .feelingTag("# " + mytamin.getReport().getFeelingTag())
                 .mentalConditionMsg("기분이 " + mytamin.getReport().getMentalCondition())
-                .todayReport( mytamin.getReport().getTodayReport())
+                .todayReport(mytamin.getReport().getTodayReport())
                 .careMsg1(mytamin.getCare().getCareMsg1())
                 .careMsg2(mytamin.getCare().getCareMsg2())
                 .build();

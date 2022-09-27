@@ -1,6 +1,7 @@
-package great.job.mytamin.support;
+package great.job.mytamin.global.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.jwt.JwtAuthInterceptor;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -33,13 +39,23 @@ public class CommonControllerTest {
     @MockBean
     public JwtAuthInterceptor jwtAuthInterceptor;
 
-    //Mock User
+    // Mock User
     public User user = new User(
             "mytamin@naver.com",
             "{{ENCODED_PASSWORD}}",
             "강철멘탈",
             "22",
             "00"
+    );
+
+    // Mock Mytamin
+    LocalDateTime rawTakeAt = LocalDateTime.now();
+    String dayOfWeek = rawTakeAt.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
+    String takeAt = rawTakeAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) + "." + dayOfWeek;
+    public Mytamin mytamin = new Mytamin(
+            rawTakeAt,
+            takeAt,
+            user
     );
 
     @BeforeEach

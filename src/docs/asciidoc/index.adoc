@@ -9,11 +9,17 @@ NOTE: 업데이트 내역
 * 2022.09.23.금 : 회원가입/로그인/이메일, 닉네임 중복 체크 API 구현
 * 2022.09.24.토 : 회원가입 API -> PASSWORD_PATTERN_ERROR 추가 (*비밀번호 패턴 서버 측과 일치하는지 체크)
 * 2022.09.26.월 : 홈 화면 관련 API 구현 (세부 로직 구현 전이지만, 업데이트 후에도 response는 동일할 예정임)
-* 2022.09.27.화 : 마이타민 섭취(하루 진단, 칭찬 처방) API 구현
+* 2022.09.27.화
+       ** 마이타민 섭취(하루 진단, 칭찬 처방) API 구현
+       ** 최근 마이타민 API 구현
+
+.참고사항
+* 하루 진단하기, 칭찬 처방하기 API의 path가 변경되었습니다.
+* DB 구조 변경으로 한차례 더 DB 삭제가 있었습니다. (재가입 필요)
 
 '''
 
-== Auth
+== User
 === 회원 가입
 * 마이타민 섭취 시간(mytaminHour, mytaminMin) 데이터는 필수 요청값이 아니다.
     ** 유저가 '건너뛰기'를 선택했을 경우 email, password, nickname 값만 넣어 요청한다. +
@@ -93,8 +99,22 @@ operation::home/getProgressStatus[snippets='http-request,http-response']
 operation::home/getProgressStatus[snippets='request-headers,response-fields']
 
 == Mytamin
-* takeAt 속성은 '마이타민 섭취 날짜'로, 행동 1 ~ 4가 일어나는 하루의 날짜 단위이다. (하루 진단 or 칭찬 처방 발생 시간을 뜻하는 것이 아님.)
+=== 최근 섭취한 마이타민
 
+* 하루 진단 or 칭찬 처방 중 하나라도 완료했을 경우 data가 리턴되며, 최근 섭취한 마이타민이 없을 경우 data 값은 null이다.
+* 하루 진단을 or 칭찬 처방 중 하나만 완료되었을 경우, 완료되지 않은 행동과 관련된 속성값은 null로 리턴된다.
+* 24시간 이내 생성된 마이타민일 경우에 canEdit 속성값은 true이다.
+* mentalConditionCode
+       ** 1 : "매우 나빠요 .."
+       ** 2 : "나쁜 편이에요 :("
+       ** 3 : "그럭저럭이에요"
+       ** 4 : "좋은 편이에요 :)"
+       ** 5 : "매우 좋아요 !"
+
+operation::mytamin/getLatestMytamin[snippets='http-request,http-response']
+operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
+
+== Report
 === 하루 진단하기
 * 마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int type의 코드를 보낸다.
 * mentalConditionCode
@@ -104,16 +124,16 @@ operation::home/getProgressStatus[snippets='request-headers,response-fields']
        ** 4 : "좋은 편이에요 :)"
        ** 5 : "매우 좋아요 !"
 
-operation::mytamin/reportToday[snippets='http-request,http-response']
-operation::mytamin/reportToday[snippets='request-headers,response-fields']
+operation::report/reportToday[snippets='http-request,http-response']
+operation::report/reportToday[snippets='request-headers,response-fields']
 
 ==== Exception Response
 * 하루 진단을 완료하면 같은 날짜에는 하루 진단하기 요청을 다시 보낼 수 없다.
-* 아직 수정 기능 구현 전
 
-include::{snippets}/mytamin/reportToday_REPORT_ALREADY_DONE/http-response.adoc[]
-include::{snippets}/mytamin/reportToday_INVALID_CONDITION_CODE_ERROR/http-response.adoc[]
+include::{snippets}/report/reportToday_REPORT_ALREADY_DONE/http-response.adoc[]
+include::{snippets}/report/reportToday_INVALID_CONDITION_CODE_ERROR/http-response.adoc[]
 
+== Care
 === 칭찬 처방하기
 * 칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int type의 코드를 보낸다.
 * careCategoryCode
@@ -125,12 +145,12 @@ include::{snippets}/mytamin/reportToday_INVALID_CONDITION_CODE_ERROR/http-respon
        ** 6 : "과거의 나"
        ** 7 : "기타"
 
-operation::mytamin/careToday[snippets='http-request,http-response']
-operation::mytamin/careToday[snippets='request-headers,response-fields']
+operation::care/careToday[snippets='http-request,http-response']
+operation::care/careToday[snippets='request-headers,response-fields']
 
 ==== Exception Response
 * 칭찬 처방을 완료하면 같은 날짜에는 칭찬 처방하기 요청을 다시 보낼 수 없다.
 * 아직 수정 기능 구현 전
 
-include::{snippets}/mytamin/careToday_CARE_ALREADY_DONE/http-response.adoc[]
-include::{snippets}/mytamin/careToday_INVALID_CATEGORY_CODE_ERROR/http-response.adoc[]
+include::{snippets}/care/careToday_CARE_ALREADY_DONE/http-response.adoc[]
+include::{snippets}/care/careToday_INVALID_CATEGORY_CODE_ERROR/http-response.adoc[]

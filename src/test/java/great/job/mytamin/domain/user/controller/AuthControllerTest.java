@@ -1,14 +1,13 @@
-package great.job.mytamin.controller;
+package great.job.mytamin.domain.user.controller;
 
-import great.job.mytamin.domain.user.controller.AuthController;
-import great.job.mytamin.domain.user.service.UserService;
 import great.job.mytamin.domain.user.dto.request.LoginRequest;
 import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
+import great.job.mytamin.domain.user.service.UserService;
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.support.CommonControllerTest;
+import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

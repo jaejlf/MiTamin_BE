@@ -1,11 +1,10 @@
-package great.job.mytamin.controller;
+package great.job.mytamin.domain.home.controller;
 
-import great.job.mytamin.domain.home.controller.HomeController;
 import great.job.mytamin.domain.home.dto.response.ActionResponse;
 import great.job.mytamin.domain.home.dto.response.ActiveResponse;
 import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
 import great.job.mytamin.domain.home.service.HomeService;
-import great.job.mytamin.support.CommonControllerTest;
+import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
