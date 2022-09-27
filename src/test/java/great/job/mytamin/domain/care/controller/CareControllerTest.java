@@ -79,7 +79,7 @@ class CareControllerTest extends CommonControllerTest {
                                     fieldWithPath("careMsg2").description("*칭찬 처방 메세지 2")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
                                     fieldWithPath("data.careCategory").description("칭찬 카테고리"),
@@ -91,7 +91,7 @@ class CareControllerTest extends CommonControllerTest {
 
         @DisplayName("이미 칭찬 처방 완료")
         @Test
-        void careToday_CARE_ALREADY_DONE(TestInfo testInfo) throws Exception {
+        void careToday_5001(TestInfo testInfo) throws Exception {
             //given
             CareRequest careRequest = new CareRequest(
                     1,
@@ -110,6 +110,7 @@ class CareControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorCode").value(5001))
                     .andExpect(jsonPath("errorName").value("CARE_ALREADY_DONE"))
                     .andDo(document("/care/" + testInfo.getTestMethod().get().getName(),
                             requestHeaders(
@@ -121,7 +122,8 @@ class CareControllerTest extends CommonControllerTest {
                                     fieldWithPath("careMsg2").description("*칭찬 처방 메세지 2")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -130,7 +132,7 @@ class CareControllerTest extends CommonControllerTest {
 
         @DisplayName("칭찬 카테고리 코드 오류")
         @Test
-        void careToday_INVALID_CATEGORY_CODE_ERROR(TestInfo testInfo) throws Exception {
+        void careToday_5000(TestInfo testInfo) throws Exception {
             //given
             CareRequest careRequest = new CareRequest(
                     1,
@@ -149,6 +151,7 @@ class CareControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorCode").value(5000))
                     .andExpect(jsonPath("errorName").value("INVALID_CATEGORY_CODE_ERROR"))
                     .andDo(document("/care/" + testInfo.getTestMethod().get().getName(),
                             requestHeaders(
@@ -160,7 +163,8 @@ class CareControllerTest extends CommonControllerTest {
                                     fieldWithPath("careMsg2").description("*칭찬 처방 메세지 2")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))

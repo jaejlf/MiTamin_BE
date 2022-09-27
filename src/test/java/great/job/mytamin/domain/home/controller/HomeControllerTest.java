@@ -58,7 +58,7 @@ class HomeControllerTest extends CommonControllerTest {
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("statusCode").description("상태 코드"),
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.nickname").description("닉네임"),
                                 fieldWithPath("data.comment").description("웰컴 메세지")
@@ -91,7 +91,7 @@ class HomeControllerTest extends CommonControllerTest {
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("statusCode").description("상태 코드"),
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.breathIsDone").description("숨 고르기 행동 완료 여부"),
                                 fieldWithPath("data.senseIsDone").description("감각 깨우기 행동 완료 여부"),
@@ -123,7 +123,7 @@ class HomeControllerTest extends CommonControllerTest {
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("statusCode").description("상태 코드"),
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.updatedTime").description("숨 고르기 최종 업데이트 시간")
                         ))
@@ -152,7 +152,7 @@ class HomeControllerTest extends CommonControllerTest {
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("statusCode").description("상태 코드"),
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.updatedTime").description("감각 깨우기 최종 업데이트 시간")
                         ))

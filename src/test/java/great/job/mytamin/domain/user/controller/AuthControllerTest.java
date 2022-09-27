@@ -73,7 +73,7 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.email").description("이메일"),
                                     fieldWithPath("data.nickname").description("닉네임"),
@@ -87,7 +87,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("이메일 형식 오류")
         @Test
-        void signup_EMAIL_PATTERN_ERROR(TestInfo testInfo) throws Exception {
+        void signup_2000(TestInfo testInfo) throws Exception {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "XXX email pattern XXX",
@@ -107,6 +107,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorCode").value(2000))
                     .andExpect(jsonPath("errorName").value("EMAIL_PATTERN_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -117,7 +118,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -126,7 +128,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("비밀번호 형식 오류")
         @Test
-        void signup_PASSWORD_PATTERN_ERROR(TestInfo testInfo) throws Exception {
+        void signup_2001(TestInfo testInfo) throws Exception {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "mytamin@naver.com",
@@ -146,6 +148,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorCode").value(2001))
                     .andExpect(jsonPath("errorName").value("PASSWORD_PATTERN_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -156,7 +159,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -165,7 +169,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("이미 가입된 유저")
         @Test
-        void signup_USER_ALREADY_EXIST_ERROR(TestInfo testInfo) throws Exception {
+        void signup_2002(TestInfo testInfo) throws Exception {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "mytamin@naver.com",
@@ -185,6 +189,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorCode").value(2002))
                     .andExpect(jsonPath("errorName").value("USER_ALREADY_EXIST_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -195,7 +200,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -204,7 +210,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("이미 사용 중인 닉네임")
         @Test
-        void signup_NICKNAME_DUPLICATE_ERROR(TestInfo testInfo) throws Exception {
+        void signup_2003(TestInfo testInfo) throws Exception {
             //given
             SignUpRequest signUpRequest = new SignUpRequest(
                     "mytamin@naver.com",
@@ -224,6 +230,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorCode").value(2003))
                     .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -234,7 +241,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -276,7 +284,7 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("password").description("*비밀번호")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.accessToken").description("액세스 토큰 (유효 기간 : 30일)"),
                                     fieldWithPath("data.refreshToken").description("리프레쉬 토큰 (유효 기간 : 180일)")
@@ -286,7 +294,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("가입되지 않은 유저")
         @Test
-        void defaultLogin_USER_NOT_FOUND_ERROR(TestInfo testInfo) throws Exception {
+        void defaultLogin_3000(TestInfo testInfo) throws Exception {
             //given
             LoginRequest loginRequest = new LoginRequest(
                     "mytamin@naver.com",
@@ -303,6 +311,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(3000))
                     .andExpect(jsonPath("errorName").value("USER_NOT_FOUND_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -310,7 +319,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("password").description("*비밀번호")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -319,7 +329,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("잘못된 비밀번호")
         @Test
-        void defaultLogin_PASSWORD_MISMATCH_ERROR(TestInfo testInfo) throws Exception {
+        void defaultLogin_3001(TestInfo testInfo) throws Exception {
             //given
             LoginRequest loginRequest = new LoginRequest(
                     "mytamin@naver.com",
@@ -336,6 +346,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorCode").value(3001))
                     .andExpect(jsonPath("errorName").value("PASSWORD_MISMATCH_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -343,7 +354,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("password").description("*비밀번호")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -372,7 +384,7 @@ class AuthControllerTest extends CommonControllerTest {
                                 parameterWithName("email").description("*이메일")
                         ),
                         responseFields(
-                                fieldWithPath("statusCode").description("상태 코드"),
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data").description("true : 이미 사용 중, false : 사용 가능")
                         ))
@@ -399,7 +411,7 @@ class AuthControllerTest extends CommonControllerTest {
                                 parameterWithName("nickname").description("*닉네임")
                         ),
                         responseFields(
-                                fieldWithPath("statusCode").description("상태 코드"),
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data").description("true : 이미 사용 중, false : 사용 가능")
                         ))
@@ -439,7 +451,7 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("refreshToken").description("*리프레쉬 토큰")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.accessToken").description("액세스 토큰 (유효 기간 : 30일)"),
                                     fieldWithPath("data.refreshToken").description("리프레쉬 토큰 (유효 기간 : 180일)")
@@ -449,7 +461,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("가입되지 않은 유저")
         @Test
-        void reissue_USER_NOT_FOUND_ERROR(TestInfo testInfo) throws Exception {
+        void reissue_3000(TestInfo testInfo) throws Exception {
             //given
             ReissueRequest tokenRequest = new ReissueRequest(
                     "mytamin@naver.com",
@@ -466,6 +478,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(3000))
                     .andExpect(jsonPath("errorName").value("USER_NOT_FOUND_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -473,7 +486,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("refreshToken").description("*리프레쉬 토큰")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -482,7 +496,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("DB에 저장된 토큰과 불일치")
         @Test
-        void reissue_INVALID_TOKEN_ERROR(TestInfo testInfo) throws Exception {
+        void reissue_1001(TestInfo testInfo) throws Exception {
             //given
             ReissueRequest tokenRequest = new ReissueRequest(
                     "mytamin@naver.com",
@@ -499,6 +513,7 @@ class AuthControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isForbidden())
+                    .andExpect(jsonPath("errorCode").value(1001))
                     .andExpect(jsonPath("errorName").value("INVALID_TOKEN_ERROR"))
                     .andDo(document("/auth/" + testInfo.getTestMethod().get().getName(),
                             requestFields(
@@ -506,7 +521,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("refreshToken").description("*리프레쉬 토큰")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))

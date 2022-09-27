@@ -12,7 +12,7 @@ public class MytaminException extends RuntimeException {
 
     public MytaminException(ErrorMap errorMap) {
         this.status = errorMap.getHttpStatus();
-        this.errorResponse = ErrorResponse.of(errorMap.getHttpStatus().value(), errorMap.getErrorName(), errorMap.getMessage());
+        this.errorResponse = ErrorResponse.of(errorMap.getHttpStatus().value(), errorMap.getErrorCode(), errorMap.getErrorName(), errorMap.getMessage());
     }
 
 }

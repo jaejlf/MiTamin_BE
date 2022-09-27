@@ -12,6 +12,7 @@ NOTE: 업데이트 내역
 * 2022.09.27.화
        ** 마이타민 섭취(하루 진단, 칭찬 처방) API 구현
        ** 최근 마이타민 API 구현
+       ** 오류 구별을 위한 errorCode 추가
 
 .참고사항
 * 하루 진단하기, 칭찬 처방하기 API의 path가 변경되었습니다.
@@ -34,18 +35,18 @@ operation::auth/signup[snippets='request-fields,response-fields']
 * EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$")과 다를 경우
 * PASSWORD_PATTERN_ERROR : 비밀번호가 정해진 패턴("^(?=.\*[0-9])(?=.*[A-Za-z]).{8,30}$")과 다를 경우
 
-include::{snippets}/auth/signup_EMAIL_PATTERN_ERROR/http-response.adoc[]
-include::{snippets}/auth/signup_PASSWORD_PATTERN_ERROR/http-response.adoc[]
-include::{snippets}/auth/signup_NICKNAME_DUPLICATE_ERROR/http-response.adoc[]
-include::{snippets}/auth/signup_USER_ALREADY_EXIST_ERROR/http-response.adoc[]
+include::{snippets}/auth/signup_2000/http-response.adoc[]
+include::{snippets}/auth/signup_2001/http-response.adoc[]
+include::{snippets}/auth/signup_2002/http-response.adoc[]
+include::{snippets}/auth/signup_2003/http-response.adoc[]
 
 === 기본 로그인
 operation::auth/defaultLogin[snippets='http-request,http-response']
 operation::auth/defaultLogin[snippets='request-fields,response-fields']
 
 ==== Exception Response
-include::{snippets}/auth/defaultLogin_PASSWORD_MISMATCH_ERROR/http-response.adoc[]
-include::{snippets}/auth/defaultLogin_USER_NOT_FOUND_ERROR/http-response.adoc[]
+include::{snippets}/auth/defaultLogin_3000/http-response.adoc[]
+include::{snippets}/auth/defaultLogin_3001/http-response.adoc[]
 
 === 이메일 중복 체크
 operation::auth/checkEmailDuplication[snippets='http-request,http-response']
@@ -66,8 +67,8 @@ operation::auth/reissue[snippets='request-fields,response-fields']
 ==== Exception Response
 * INVALID_TOKEN_ERROR : DB에 저장된 refresh 토큰과 일치하지 않는 경우 (= refreshToken 자체가 잘못 되었거나 만료된 경우)
 
-include::{snippets}/auth/reissue_INVALID_TOKEN_ERROR/http-response.adoc[]
-include::{snippets}/auth/reissue_USER_NOT_FOUND_ERROR/http-response.adoc[]
+include::{snippets}/auth/reissue_1001/http-response.adoc[]
+include::{snippets}/auth/reissue_3000/http-response.adoc[]
 
 == Home
 === 웰컴 메세지
@@ -130,8 +131,8 @@ operation::report/reportToday[snippets='request-headers,request-fields,response-
 ==== Exception Response
 * 하루 진단을 완료하면 같은 날짜에는 하루 진단하기 요청을 다시 보낼 수 없다.
 
-include::{snippets}/report/reportToday_REPORT_ALREADY_DONE/http-response.adoc[]
-include::{snippets}/report/reportToday_INVALID_CONDITION_CODE_ERROR/http-response.adoc[]
+include::{snippets}/report/reportToday_4000/http-response.adoc[]
+include::{snippets}/report/reportToday_4001/http-response.adoc[]
 
 == Care
 === 칭찬 처방하기
@@ -152,5 +153,5 @@ operation::care/careToday[snippets='request-headers,request-fields,response-fiel
 * 칭찬 처방을 완료하면 같은 날짜에는 칭찬 처방하기 요청을 다시 보낼 수 없다.
 * 아직 수정 기능 구현 전
 
-include::{snippets}/care/careToday_CARE_ALREADY_DONE/http-response.adoc[]
-include::{snippets}/care/careToday_INVALID_CATEGORY_CODE_ERROR/http-response.adoc[]
+include::{snippets}/care/careToday_5000/http-response.adoc[]
+include::{snippets}/care/careToday_5001/http-response.adoc[]

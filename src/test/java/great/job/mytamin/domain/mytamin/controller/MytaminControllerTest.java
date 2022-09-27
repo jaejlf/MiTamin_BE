@@ -58,7 +58,7 @@ class MytaminControllerTest extends CommonControllerTest {
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("statusCode").description("상태 코드"),
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
                                 fieldWithPath("data.canEdit").description("수정 가능 여부 (true : 수정 가능, false 수정 불가)"),

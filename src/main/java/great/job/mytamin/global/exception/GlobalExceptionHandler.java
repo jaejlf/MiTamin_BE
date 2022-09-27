@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
         log.error("[" + e.getClass().getSimpleName() + "] " + e.getMessage());
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.of(INTERNAL_SERVER_ERROR.value(), e.getClass().getSimpleName(), e.getMessage()));
+                .body(ErrorResponse.of(INTERNAL_SERVER_ERROR.value(), 9999, e.getClass().getSimpleName(), e.getMessage()));
     }
 
     @ExceptionHandler(MytaminException.class)

@@ -79,7 +79,7 @@ class ReportControllerTest extends CommonControllerTest {
                                     fieldWithPath("todayReport").description("*하루 진단")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
                                     fieldWithPath("data.mentalCondition").description("마음 컨디션 메세지"),
@@ -91,7 +91,7 @@ class ReportControllerTest extends CommonControllerTest {
 
         @DisplayName("이미 하루 진단 완료")
         @Test
-        void reportToday_REPORT_ALREADY_DONE(TestInfo testInfo) throws Exception {
+        void reportToday_4001(TestInfo testInfo) throws Exception {
             //given
             ReportRequest reportRequest = new ReportRequest(
                     5,
@@ -110,6 +110,7 @@ class ReportControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorCode").value(4001))
                     .andExpect(jsonPath("errorName").value("REPORT_ALREADY_DONE"))
                     .andDo(document("/report/" + testInfo.getTestMethod().get().getName(),
                             requestHeaders(
@@ -121,7 +122,8 @@ class ReportControllerTest extends CommonControllerTest {
                                     fieldWithPath("todayReport").description("*하루 진단")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))
@@ -130,7 +132,7 @@ class ReportControllerTest extends CommonControllerTest {
 
         @DisplayName("마음 컨디션 코드 오류")
         @Test
-        void reportToday_INVALID_CONDITION_CODE_ERROR(TestInfo testInfo) throws Exception {
+        void reportToday_4000(TestInfo testInfo) throws Exception {
             //given
             ReportRequest reportRequest = new ReportRequest(
                     5,
@@ -149,6 +151,7 @@ class ReportControllerTest extends CommonControllerTest {
             actions
                     .andDo(print())
                     .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorCode").value(4000))
                     .andExpect(jsonPath("errorName").value("INVALID_CONDITION_CODE_ERROR"))
                     .andDo(document("/report/" + testInfo.getTestMethod().get().getName(),
                             requestHeaders(
@@ -160,7 +163,8 @@ class ReportControllerTest extends CommonControllerTest {
                                     fieldWithPath("todayReport").description("*하루 진단")
                             ),
                             responseFields(
-                                    fieldWithPath("statusCode").description("상태 코드"),
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
                                     fieldWithPath("errorName").description("오류 이름"),
                                     fieldWithPath("message").description("오류 메세지")
                             ))

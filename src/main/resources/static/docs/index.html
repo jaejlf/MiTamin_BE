@@ -518,6 +518,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>최근 마이타민 API 구현</p>
 </li>
+<li>
+<p>오류 구별을 위한 errorCode 추가</p>
+</li>
 </ul>
 </div>
 </li>
@@ -665,7 +668,7 @@ Content-Length: 252
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -724,10 +727,11 @@ Content-Length: 252
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
 Content-Type: application/json;charset=UTF-8
-Content-Length: 124
+Content-Length: 147
 
 {
   "statusCode" : 400,
+  "errorCode" : 2000,
   "errorName" : "EMAIL_PATTERN_ERROR",
   "message" : "잘못된 형식의 이메일입니다."
 }</code></pre>
@@ -737,10 +741,11 @@ Content-Length: 124
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
 Content-Type: application/json;charset=UTF-8
-Content-Length: 161
+Content-Length: 184
 
 {
   "statusCode" : 400,
+  "errorCode" : 2001,
   "errorName" : "PASSWORD_PATTERN_ERROR",
   "message" : "비밀번호는 영문, 숫자를 포함한 8 ~ 30자리여야 합니다."
 }</code></pre>
@@ -750,12 +755,13 @@ Content-Length: 161
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
 Content-Type: application/json;charset=UTF-8
-Content-Length: 130
+Content-Length: 146
 
 {
   "statusCode" : 409,
-  "errorName" : "NICKNAME_DUPLICATE_ERROR",
-  "message" : "이미 사용 중인 닉네임입니다."
+  "errorCode" : 2002,
+  "errorName" : "USER_ALREADY_EXIST_ERROR",
+  "message" : "이미 가입된 유저입니다."
 }</code></pre>
 </div>
 </div>
@@ -763,12 +769,13 @@ Content-Length: 130
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
 Content-Type: application/json;charset=UTF-8
-Content-Length: 123
+Content-Length: 153
 
 {
   "statusCode" : 409,
-  "errorName" : "USER_ALREADY_EXIST_ERROR",
-  "message" : "이미 가입된 유저입니다."
+  "errorCode" : 2003,
+  "errorName" : "NICKNAME_DUPLICATE_ERROR",
+  "message" : "이미 사용 중인 닉네임입니다."
 }</code></pre>
 </div>
 </div>
@@ -859,7 +866,7 @@ Content-Length: 164
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -883,27 +890,29 @@ Content-Length: 164
 <h4 id="_exception_response_2">Exception Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
 Content-Type: application/json;charset=UTF-8
-Content-Length: 121
+Content-Length: 145
 
 {
-  "statusCode" : 400,
-  "errorName" : "PASSWORD_MISMATCH_ERROR",
-  "message" : "잘못된 비밀번호입니다."
+  "statusCode" : 404,
+  "errorCode" : 3000,
+  "errorName" : "USER_NOT_FOUND_ERROR",
+  "message" : "존재하지 않는 유저입니다."
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
 Content-Type: application/json;charset=UTF-8
-Content-Length: 122
+Content-Length: 144
 
 {
-  "statusCode" : 404,
-  "errorName" : "USER_NOT_FOUND_ERROR",
-  "message" : "존재하지 않는 유저입니다."
+  "statusCode" : 400,
+  "errorCode" : 3001,
+  "errorName" : "PASSWORD_MISMATCH_ERROR",
+  "message" : "잘못된 비밀번호입니다."
 }</code></pre>
 </div>
 </div>
@@ -978,7 +987,7 @@ Content-Length: 86
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1062,7 +1071,7 @@ Content-Length: 86
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1180,7 +1189,7 @@ Content-Length: 164
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1213,10 +1222,11 @@ Content-Length: 164
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
 Content-Type: application/json;charset=UTF-8
-Content-Length: 111
+Content-Length: 134
 
 {
   "statusCode" : 403,
+  "errorCode" : 1001,
   "errorName" : "INVALID_TOKEN_ERROR",
   "message" : "잘못된 토큰입니다."
 }</code></pre>
@@ -1226,10 +1236,11 @@ Content-Length: 111
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
 Content-Type: application/json;charset=UTF-8
-Content-Length: 122
+Content-Length: 145
 
 {
   "statusCode" : 404,
+  "errorCode" : 3000,
   "errorName" : "USER_NOT_FOUND_ERROR",
   "message" : "존재하지 않는 유저입니다."
 }</code></pre>
@@ -1336,7 +1347,7 @@ Content-Length: 176
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1388,7 +1399,7 @@ Content-Length: 125
   "statusCode" : 200,
   "message" : "숨 고르기 완료",
   "data" : {
-    "updatedTime" : "2022.09.28 01:05"
+    "updatedTime" : "2022.09.28 01:35"
   }
 }</code></pre>
 </div>
@@ -1434,7 +1445,7 @@ Content-Length: 125
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1481,7 +1492,7 @@ Content-Length: 128
   "statusCode" : 200,
   "message" : "감각 깨우기 완료",
   "data" : {
-    "updatedTime" : "2022.09.28 01:05"
+    "updatedTime" : "2022.09.28 01:35"
   }
 }</code></pre>
 </div>
@@ -1527,7 +1538,7 @@ Content-Length: 128
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1623,7 +1634,7 @@ Content-Length: 195
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1771,7 +1782,7 @@ Content-Length: 481
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -1971,7 +1982,7 @@ Content-Length: 293
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -2012,27 +2023,29 @@ Content-Length: 293
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
 Content-Type: application/json;charset=UTF-8
-Content-Length: 146
+Content-Length: 183
 
 {
-  "statusCode" : 409,
-  "errorName" : "REPORT_ALREADY_DONE",
-  "message" : "오늘의 '하루 진단하기'를 이미 완료했습니다."
+  "statusCode" : 400,
+  "errorCode" : 4000,
+  "errorName" : "INVALID_CONDITION_CODE_ERROR",
+  "message" : "마음 컨디션 코드는 1 ~ 5 사이의 값이어야 합니다."
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
 Content-Type: application/json;charset=UTF-8
-Content-Length: 160
+Content-Length: 169
 
 {
-  "statusCode" : 400,
-  "errorName" : "INVALID_CONDITION_CODE_ERROR",
-  "message" : "마음 컨디션 코드는 1 ~ 5 사이의 값이어야 합니다."
+  "statusCode" : 409,
+  "errorCode" : 4001,
+  "errorName" : "REPORT_ALREADY_DONE",
+  "message" : "오늘의 '하루 진단하기'를 이미 완료했습니다."
 }</code></pre>
 </div>
 </div>
@@ -2193,7 +2206,7 @@ Content-Length: 278
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태 코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
@@ -2237,27 +2250,29 @@ Content-Length: 278
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
 Content-Type: application/json;charset=UTF-8
-Content-Length: 144
+Content-Length: 178
 
 {
-  "statusCode" : 409,
-  "errorName" : "CARE_ALREADY_DONE",
-  "message" : "오늘의 '칭찬 처방하기'를 이미 완료했습니다."
+  "statusCode" : 400,
+  "errorCode" : 5000,
+  "errorName" : "INVALID_CATEGORY_CODE_ERROR",
+  "message" : "카테고리 코드는 1 ~ 7 사이의 값이어야 합니다."
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
 Content-Type: application/json;charset=UTF-8
-Content-Length: 155
+Content-Length: 167
 
 {
-  "statusCode" : 400,
-  "errorName" : "INVALID_CATEGORY_CODE_ERROR",
-  "message" : "카테고리 코드는 1 ~ 7 사이의 값이어야 합니다."
+  "statusCode" : 409,
+  "errorCode" : 5001,
+  "errorName" : "CARE_ALREADY_DONE",
+  "message" : "오늘의 '칭찬 처방하기'를 이미 완료했습니다."
 }</code></pre>
 </div>
 </div>
@@ -2269,7 +2284,7 @@ Content-Length: 155
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-09-28 01:04:41 +0900
+Last updated 2022-09-28 01:34:58 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
