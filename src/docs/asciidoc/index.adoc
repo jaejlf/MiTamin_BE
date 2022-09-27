@@ -125,7 +125,7 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
        ** 5 : "매우 좋아요 !"
 
 operation::report/reportToday[snippets='http-request,http-response']
-operation::report/reportToday[snippets='request-headers,response-fields']
+operation::report/reportToday[snippets='request-headers,request-fields,response-fields']
 
 ==== Exception Response
 * 하루 진단을 완료하면 같은 날짜에는 하루 진단하기 요청을 다시 보낼 수 없다.
@@ -146,7 +146,7 @@ include::{snippets}/report/reportToday_INVALID_CONDITION_CODE_ERROR/http-respons
        ** 7 : "기타"
 
 operation::care/careToday[snippets='http-request,http-response']
-operation::care/careToday[snippets='request-headers,response-fields']
+operation::care/careToday[snippets='request-headers,request-fields,response-fields']
 
 ==== Exception Response
 * 칭찬 처방을 완료하면 같은 날짜에는 칭찬 처방하기 요청을 다시 보낼 수 없다.
