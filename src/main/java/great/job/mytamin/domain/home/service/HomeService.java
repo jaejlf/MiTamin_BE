@@ -72,16 +72,8 @@ public class HomeService {
     */
     @Transactional(readOnly = true)
     public ActiveResponse getProgressStatus(User user) {
-        // 하루 기준 : am 5:00 ~ am 4:59
-        // start1 ~ end1 : am 5:00 ~ pm 11:59
-        // start2 ~ end2 : am 12:00 ~ am : 4:59
-        start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 5, 0);
-        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 23, 59);
-        start2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 0, 0);
-        end2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
-
-        boolean breathIsDone = timeService.isInRange(user.getBreathTime(), start1, end1) || timeService.isInRange(user.getBreathTime(), start2, end2);
-        boolean senseIsDone = timeService.isInRange(user.getSenseTime(), start1, end1) || timeService.isInRange(user.getSenseTime(), start2, end2);
+        boolean breathIsDone = timeService.isDay(user.getBreathTime());
+        boolean senseIsDone = timeService.isDay(user.getSenseTime());
 
         boolean reportIsDone, careIsDone;
         String takeAt = timeService.convertTimeFormat(LocalDateTime.now());
@@ -97,27 +89,17 @@ public class HomeService {
     }
 
     // 시간에 따른 메세지 반환
+    /*
+    am 5:00 ~ am 11:59 : 오늘도 힘차게 시작해볼까요 ?
+    pm 12:00 ~ pm 18:59 : 어떤 하루를 보내고 계신가요 ?
+    pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
+    */
     private String getCommentOverTime() {
-        // am 5:00 ~ am 11:59 : 오늘도 힘차게 시작해볼까요 ?
-        start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 5, 0);
-        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 11, 59);
-        if (timeService.isInRange(now, start1, end1)) return "오늘도 힘차게 시작해볼까요 ?";
+        if(timeService.isMorning()) return "오늘도 힘차게 시작해볼까요 ?";
+        if(timeService.isAfternoon()) return "어떤 하루를 보내고 계신가요 ?";
+        if(timeService.isNight()) return "푹 쉬고 내일 만나요";
 
-        // pm 12:00 ~ pm 18:59 : 어떤 하루를 보내고 계신가요 ?
-        start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 12, 0);
-        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 18, 59);
-        if (timeService.isInRange(now, start1, end1)) return "어떤 하루를 보내고 계신가요 ?";
-
-        // pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
-        // start1 ~ end1 : pm 7:00 ~ pm 11:59
-        // start2 ~ end2 : am 12:00 ~ am : 4:59
-        start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 19, 0);
-        end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 23, 59);
-        start2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 0, 0);
-        end2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
-        if (timeService.isInRange(now, start1, end1) || timeService.isInRange(now, start2, end2)) return "푹 쉬고 내일 만나요";
-
-        return "*** 이 메세지가 뜬다면 시간 설정 오류이니 서버에게 알려주세요 ***";
+        return "*** 이 메세지가 뜬다면 시간 설정 오류 ***";
     }
 
 }
