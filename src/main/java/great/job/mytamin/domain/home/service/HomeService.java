@@ -30,7 +30,7 @@ public class HomeService {
     */
     @Transactional(readOnly = true)
     public WelcomeResponse welcome(User user) {
-        String comment = "*** 이 메세지가 뜬다면 시간 설정 오류 **";
+        String comment = "*** 이 메세지가 뜬다면 시간 설정 오류 ***";
         String takeAt = timeService.convertToTakeAt(now);
         Mytamin mytamin = mytaminService.getMytamin(user, takeAt);
 
