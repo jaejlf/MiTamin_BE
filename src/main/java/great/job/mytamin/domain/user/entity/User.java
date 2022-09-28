@@ -83,6 +83,11 @@ public class User implements UserDetails {
         this.senseTime = LocalDateTime.now();
     }
 
+    public void updateMytaminTime(String mytaminHour, String mytaminMin) {
+        this.mytaminHour = mytaminHour;
+        this.mytaminMin = mytaminMin;
+    }
+
     /*
     UserDetails Method
     */

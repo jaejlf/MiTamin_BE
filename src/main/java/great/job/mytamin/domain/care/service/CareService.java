@@ -9,9 +9,12 @@ import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.global.service.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 import static great.job.mytamin.global.exception.ErrorMap.CARE_ALREADY_DONE;
 
@@ -19,6 +22,7 @@ import static great.job.mytamin.global.exception.ErrorMap.CARE_ALREADY_DONE;
 @RequiredArgsConstructor
 public class CareService {
 
+    private final TimeService timeService;
     private final MytaminService mytaminService;
     private final CareRepository careRepository;
 
@@ -27,7 +31,11 @@ public class CareService {
     */
     @Transactional
     public CareResponse careToday(User user, CareRequest careRequest) {
-        Mytamin mytamin = mytaminService.getMytamin(user);
+        LocalDateTime rawTakeAt = LocalDateTime.now();
+        String takeAt = timeService.convertToTakeAt(rawTakeAt);
+        Mytamin mytamin = mytaminService.getMytamin(user, takeAt);
+        if(mytamin == null) mytamin = mytaminService.createMytamin(user, rawTakeAt);
+
         if (mytamin.getCare() != null) {
             throw new MytaminException(CARE_ALREADY_DONE);
         }
@@ -38,7 +46,6 @@ public class CareService {
                 careRequest.getCareMsg2(),
                 mytamin
         );
-
         Care newCare = careRepository.save(care);
         mytamin.updateCare(newCare);
         return CareResponse.of(newCare);
