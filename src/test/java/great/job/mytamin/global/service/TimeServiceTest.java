@@ -2,8 +2,8 @@ package great.job.mytamin.global.service;
 
 import great.job.mytamin.global.support.CommonServiceTest;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -16,144 +16,101 @@ class TimeServiceTest extends CommonServiceTest {
     @Autowired
     private TimeService timeService;
 
-    LocalDateTime now = LocalDateTime.now();
-
-    @DisplayName("LocalDateTime 포맷 변환")
-    @Test
-    void convertTimeFormat() {
-        //given
-        LocalDateTime target = LocalDateTime.of(2022, 9, 28, 11, 59);
-
-        //when
-        String result = timeService.convertTimeFormat(target);
+    @DisplayName("LocalDateTime -> takeAt 포맷으로 변환")
+    @ParameterizedTest
+    @CsvSource({
+            "2022-09-05T10:00, 2022.09.05.Mon", // day1
+            "2022-09-13T23:59, 2022.09.13.Tue", // day1
+            "2022-09-23T00:00, 2022.09.22.Thu", // day2
+            "2022-09-25T00:34, 2022.09.24.Sat", // day2
+            "2022-09-27T05:00, 2022.09.27.Tue", // day1
+    })
+    void convertToTakeAt(LocalDateTime target, String expected) {
+        //given & when
+        String result = timeService.convertToTakeAt(target);
 
         //then
-        String expected = "2022.09.28.Wed";
         assertThat(result).isEqualTo(expected);
     }
 
-    @Nested
-    @DisplayName("24시간 이내 생성된 데이터인지")
-    class Within24Test {
+//    // LocalDateTime.now() 9.28 기준 - 성공
+//    @DisplayName("target이 오늘의 범위에 속하는지")
+//    @ParameterizedTest
+//    @CsvSource({
+//            "2022-09-28T04:59, false",
+//            "2022-09-28T05:00, true",
+//            "2022-09-28T11:59, true",
+//            "2022-09-29T00:00, true",
+//            "2022-09-29T04:59, true"
+//    })
+//    void isToday(LocalDateTime target, boolean expected) {
+//        //given & when
+//        boolean result = timeService.isToday(target);
+//
+//        //then
+//        assertThat(result).isEqualTo(expected);
+//    }
 
-        @DisplayName("true")
-        @Test
-        void isCreatedAtWithin24_true() {
-            //given
-            LocalDateTime target = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), now.getHour() - 1, 0);
+    @DisplayName("아침 am 5:00 ~ am 11:59")
+    @ParameterizedTest
+    @CsvSource({
+            "2022-09-28T04:59, false",
+            "2022-09-28T05:00, true",
+            "2022-09-28T11:59, true",
+            "2022-09-28T12:00, false",
+    })
+    void isMorning(LocalDateTime target, boolean expected) {
+        //given & when
+        boolean result = timeService.isMorning(target);
 
-            //when
-            boolean result = timeService.isCreatedAtWithin24(target);
-
-            //then
-            boolean expected = true;
-            assertThat(result).isEqualTo(expected);
-        }
-
-        @DisplayName("false")
-        @Test
-        void isCreatedAtWithin24_false() {
-            //given
-            LocalDateTime target = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth() - 1, 9, 0);
-
-            //when
-            boolean result = timeService.isCreatedAtWithin24(target);
-
-            //then
-            boolean expected = false;
-            assertThat(result).isEqualTo(expected);
-        }
-
+        //then
+        assertThat(result).isEqualTo(expected);
     }
 
-    @Nested
-    @DisplayName("하루의 범위 내에 있는지")
-    class IsDayTest {
+    @DisplayName("오후 pm 12:00 ~ pm 18:59")
+    @ParameterizedTest
+    @CsvSource({
+            "2022-09-28T11:59, false",
+            "2022-09-28T12:00, true",
+            "2022-09-28T18:59, true",
+            "2022-09-28T19:00, false",
+    })
+    void isAfternoon(LocalDateTime target, boolean expected) {
+        //given & when
+        boolean result = timeService.isAfternoon(target);
 
-        @DisplayName("true")
-        @Test
-        void isDay_true() {
-            //given
-            LocalDateTime target = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), now.getHour() - 1, 0);
-
-            //when
-            boolean result = timeService.isDay(target);
-
-            //then
-            boolean expected = true;
-            assertThat(result).isEqualTo(expected);
-        }
-
-        @DisplayName("false")
-        @Test
-        void isDay_false() {
-            //given
-            LocalDateTime target = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth() - 1, 9, 0);
-
-            //when
-            boolean result = timeService.isDay(target);
-
-            //then
-            boolean expected = false;
-            assertThat(result).isEqualTo(expected);
-        }
-
+        //then
+        assertThat(result).isEqualTo(expected);
     }
 
-    @Nested
-    @DisplayName("현재 시간이 특정 시간 범위 내에 있는지")
-    class IsInRangeTest {
+    @DisplayName("밤 pm 19:00 ~ am 4:59")
+    @ParameterizedTest
+    @CsvSource({
+            "2022-09-28T18:59, false",
+            "2022-09-28T19:00, true",
+            "2022-09-29T04:59, true",
+            "2022-09-29T05:00, false",
+    })
+    void isNight(LocalDateTime target, boolean expected) {
+        //given & when
+        boolean result = timeService.isNight(target);
 
-        @DisplayName("아침")
-        @Test
-        void isMorning() {
-            //given
-            LocalDateTime target = LocalDateTime.of(2022, 9, 28, 9, 0);
-            LocalDateTime start = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 5, 0);
-            LocalDateTime end = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 11, 59);
+        //then
+        assertThat(result).isEqualTo(expected);
+    }
 
-            //when
-            boolean result = timeService.isInRange(target, start, end);
+    @DisplayName("특정 시간 범위 내에 있는지")
+    @ParameterizedTest
+    @CsvSource({
+            "2022-09-28T18:59, 2022-09-28T19:00, 2022-09-28T20:00, false",
+            "2022-09-28T00:00, 2022-09-27T23:00, 2022-09-29T04:00, true",
+    })
+    void isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end, boolean expected) {
+        //given & when
+        boolean result = timeService.isInRange(target, start, end);
 
-            //then
-            boolean expected = true;
-            assertThat(result).isEqualTo(expected);
-        }
-
-        @DisplayName("오후")
-        @Test
-        void isAfternoon() {
-            //given
-            LocalDateTime target = LocalDateTime.of(2022, 9, 28, 15, 0);
-            LocalDateTime start = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 12, 0);
-            LocalDateTime end = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 18, 59);
-
-            //when
-            boolean result = timeService.isInRange(target, start, end);
-
-            //then
-            boolean expected = true;
-            assertThat(result).isEqualTo(expected);
-        }
-
-        @DisplayName("밤")
-        @Test
-        void isNight() {
-            //given
-            LocalDateTime target = LocalDateTime.of(2022, 9, 28, 0, 0);
-            LocalDateTime start1 = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 19, 0);
-            LocalDateTime end1 = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 23, 59);
-            LocalDateTime start2 = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 0, 0);
-            LocalDateTime end2 = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 4, 59);
-
-            //when
-            boolean result = timeService.isInRange(target, start1, end1) || timeService.isInRange(target, start2, end2);
-
-            //then
-            boolean expected = true;
-            assertThat(result).isEqualTo(expected);
-        }
-
+        //then
+        assertThat(result).isEqualTo(expected);
     }
 
 }
