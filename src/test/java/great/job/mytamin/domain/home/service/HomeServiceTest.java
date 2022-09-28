@@ -110,9 +110,9 @@ class HomeServiceTest extends CommonServiceTest {
         LocalDateTime nStart2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 0, 0);
         LocalDateTime nEnd2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
 
-        if (timeService.isMorning()) return "오늘도 힘차게 시작해볼까요 ?";
-        if (timeService.isAfternoon()) return "어떤 하루를 보내고 계신가요 ?";
-        if (timeService.isNight()) return "푹 쉬고 내일 만나요";
+        if (timeService.isMorning(now)) return "오늘도 힘차게 시작해볼까요 ?";
+        if (timeService.isAfternoon(now)) return "어떤 하루를 보내고 계신가요 ?";
+        if (timeService.isNight(now)) return "푹 쉬고 내일 만나요";
 
         return "*** 이 메세지가 뜬다면 시간 설정 오류 ***";
     }

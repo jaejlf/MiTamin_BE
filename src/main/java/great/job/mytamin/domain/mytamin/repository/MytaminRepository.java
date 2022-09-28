@@ -4,7 +4,9 @@ import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface MytaminRepository extends JpaRepository<Mytamin, Long> {
-    Mytamin findByTakeAtAndUser(String takeMytaminAtStr, User user);
+    Optional<Mytamin> findByTakeAtAndUser(String takeAt, User user);
     Mytamin findFirstByUserOrderByMytaminIdDesc(User user);
 }

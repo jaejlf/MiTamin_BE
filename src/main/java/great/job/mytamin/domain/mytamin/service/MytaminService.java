@@ -27,8 +27,11 @@ public class MytaminService {
         Mytamin mytamin = mytaminRepository.findFirstByUserOrderByMytaminIdDesc(user);
         if (mytamin == null) return null;
 
+        // 수정 가능 여부
+        // -> 24시간 이내 생성된 마이타민일 경우 수정 가능
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime rawTakeAt = mytamin.getRawTakeAt();
-        boolean canEdit = timeService.isCreatedAtWithin24(rawTakeAt);
+        boolean canEdit = timeService.isInRange(rawTakeAt, now.minusDays(1), now);
 
         if (mytamin.getReport() != null) {
             int memtalConditionCode = MentalCondition.getCodeToMsg(mytamin.getReport().getMentalCondition());
@@ -42,20 +45,23 @@ public class MytaminService {
         }
     }
 
-    // 오늘의 마이타민 가져오기
-    // LocalDateTime.now -> 커스텀 date로 변경의 여지가 있다.
-    @Transactional
-    public Mytamin getMytamin(User user) {
-        LocalDateTime rawTakeAt = LocalDateTime.now();
-        String takeAt = timeService.convertTimeFormat(rawTakeAt);
-        Mytamin mytamin = mytaminRepository.findByTakeAtAndUser(takeAt, user);
+    /*
+    마이타민 가져오기
+    */
+    @Transactional(readOnly = true)
+    public Mytamin getMytamin(User user, String takeAt) {
+        return mytaminRepository.findByTakeAtAndUser(takeAt, user)
+                .orElse(null);
+    }
 
-        // 존재하는 마이타민이 없다면 새로 생성
-        if (mytamin == null) {
-            mytamin = new Mytamin(rawTakeAt, takeAt, user);
-            mytaminRepository.save(mytamin);
-        }
-        return mytamin;
+    /*
+    마이타민 생성
+    */
+    @Transactional
+    public Mytamin createMytamin(User user, LocalDateTime rawTakeAt) {
+        String takeAt = timeService.convertToTakeAt(rawTakeAt);
+        Mytamin mytamin = new Mytamin(rawTakeAt, takeAt, user);
+        return mytaminRepository.save(mytamin);
     }
 
 }
