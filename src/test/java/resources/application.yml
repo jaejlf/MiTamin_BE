@@ -1,0 +1,25 @@
+# database
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mytestdb?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+
+#redis
+redis:
+  host: 127.0.0.1
+  port: 6379
+
+# env
+jwt:
+  secret:
+    key: secret-key-for-test
+  access:
+    token:
+      valid:
+        time: 15552000000 # 6개월
+  refresh:
+    token:
+      valid:
+        time: 31104000000 # 1년

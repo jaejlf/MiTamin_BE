@@ -39,27 +39,31 @@ public class CommonControllerTest {
     @MockBean
     public JwtAuthInterceptor jwtAuthInterceptor;
 
-    // Mock User
-    public User user = new User(
-            "mytamin@naver.com",
-            "{{ENCODED_PASSWORD}}",
-            "강철멘탈",
-            "22",
-            "00"
-    );
-
-    // Mock Mytamin
-    LocalDateTime rawTakeAt = LocalDateTime.now();
-    String dayOfWeek = rawTakeAt.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
-    String takeAt = rawTakeAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) + "." + dayOfWeek;
-    public Mytamin mytamin = new Mytamin(
-            rawTakeAt,
-            takeAt,
-            user
-    );
+    // Mock Data
+    public User user;
+    public Mytamin mytamin;
 
     @BeforeEach
     public void setUp(WebApplicationContext wac, RestDocumentationContextProvider restDoc) {
+
+        // Mock User
+        user = new User(
+                "mytamin@naver.com",
+                "{{ENCODED_PASSWORD}}",
+                "강철멘탈",
+                "22",
+                "00"
+        );
+
+        // Mock Mytamin
+        LocalDateTime rawTakeAt = LocalDateTime.now();
+        String dayOfWeek = rawTakeAt.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
+        String takeAt = rawTakeAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) + "." + dayOfWeek;
+        mytamin = new Mytamin(
+                rawTakeAt,
+                takeAt,
+                user
+        );
 
         //인터셉터 통과
         given(jwtAuthInterceptor.preHandle(any(), any(), any())).willReturn(true);

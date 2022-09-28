@@ -1,12 +1,11 @@
 package great.job.mytamin.domain.home.service;
 
-import great.job.mytamin.domain.mytamin.entity.Mytamin;
-import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.home.dto.response.ActionResponse;
 import great.job.mytamin.domain.home.dto.response.ActiveResponse;
 import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
+import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.repository.MytaminRepository;
-import great.job.mytamin.domain.user.repository.UserRepository;
+import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.service.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 public class HomeService {
 
     private final TimeService timeService;
-    private final UserRepository userRepository;
     private final MytaminRepository mytaminRepository;
 
     LocalDateTime start1, end1, start2, end2;

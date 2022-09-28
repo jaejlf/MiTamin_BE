@@ -67,7 +67,7 @@ public class TimeService {
     }
 
     /*
-    저녁 pm 19:00 ~ am 4:59
+    밤 pm 19:00 ~ am 4:59
     */
     public boolean isNight() {
         LocalDateTime start1, start2, end1, end2;
@@ -79,7 +79,7 @@ public class TimeService {
     }
 
     // 현재 시간이 특정 시간 범위 내에 있는지 확인
-    private boolean isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end) {
+    public boolean isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end) {
         return target.compareTo(start) >= 0 && end.compareTo(target) >= 0;
     }
 
