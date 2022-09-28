@@ -9,14 +9,12 @@ NOTE: 업데이트 내역
 * 2022.09.23.금 : 회원가입/로그인/이메일, 닉네임 중복 체크 API 구현
 * 2022.09.24.토 : 회원가입 API -> PASSWORD_PATTERN_ERROR 추가 (*비밀번호 패턴 서버 측과 일치하는지 체크)
 * 2022.09.26.월 : 홈 화면 관련 API 구현 (세부 로직 구현 전이지만, 업데이트 후에도 response는 동일할 예정임)
-* 2022.09.27.화
-       ** 마이타민 섭취(하루 진단, 칭찬 처방) API 구현
-       ** 최근 마이타민 API 구현
-       ** 오류 구별을 위한 errorCode 추가
+* 2022.09.27.화 : 마이타민 섭취(하루 진단, 칭찬 처방), 최근 마이타민 API 구현, 오류 구별을 위한 errorCode 추가
+* 2022.09.29.목 : 웰컴 메세지 API -> 마이타민 섭취 여부에 따른 웰컴 메세지 구현
 
 .참고사항
 * 하루 진단하기, 칭찬 처방하기 API의 path가 변경되었습니다.
-* DB 구조 변경으로 한차례 더 DB 삭제가 있었습니다. (재가입 필요)
+* DB 구조 변경으로 한차례 더 DB 삭제가 있었습니다. (당분간 테이블 변경이 조금씩 있을 것 같아서 기존 아이디 로그인 안될 경우에는 DB 비워진 상태이니 재가입해주세요.)
 
 '''
 
@@ -61,6 +59,9 @@ operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fiel
     ** refreshToken의 만료 기간이 2일 이내로 남았을 경우 refreshToken 또한 새로 발급한다.
 * 만약 403 응답(= refreshToken 만료)일 경우에는 재로그인하도록 한다.
 
+.참고사항
+JWT 인증 관련 자세한 내용 : 노션 Server 공유 페이지 -> '인증 관련 공통 참고 사항'
+
 operation::auth/reissue[snippets='http-request,http-response']
 operation::auth/reissue[snippets='request-fields,response-fields']
 
@@ -72,11 +73,15 @@ include::{snippets}/auth/reissue_3000/http-response.adoc[]
 
 == Home
 === 웰컴 메세지
-* 시간에 따른 웰컴 메시지를 리턴한다.
+* 조건에 따라 웰컴 메시지를 리턴한다. 조건 1, 2, 3 순으로 높은 우선 순위가 적용된다.
+* 조건 1. 마이타민 섭취 완료 : 오늘 하루도 수고 많았어요 :)
+* 조건 2. 마이타민 섭취 지정 시간 및 섭취 여부에 따른 웰컴 메세지
+       ** 섭취 지정 시간 2시간 전 : 오늘의 마이타민 섭취를 잊지마세요 :)
+       ** 섭취 지정 시간 2시간 후 : 마이타민 섭취.. 잊으시면 안 돼요 !
+* 조건 3. 시간에 따른 웰컴 메세지
        ** am 5:00 ~ am 11:59 : 오늘도 힘차게 시작해볼까요 ?
        ** pm 12:00 ~ pm 18:59 : 어떤 하루를 보내고 계신가요 ?
        ** pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
-* (추후 업데이트 예정) 마이타민 섭취 여부에 따른 메세지 구현 전
 
 operation::home/welcome[snippets='http-request,http-response']
 operation::home/welcome[snippets='request-headers,response-fields']
@@ -105,6 +110,7 @@ operation::home/getProgressStatus[snippets='request-headers,response-fields']
 * 하루 진단 or 칭찬 처방 중 하나라도 완료했을 경우 data가 리턴되며, 최근 섭취한 마이타민이 없을 경우 data 값은 null이다.
 * 하루 진단을 or 칭찬 처방 중 하나만 완료되었을 경우, 완료되지 않은 행동과 관련된 속성값은 null로 리턴된다.
 * 24시간 이내 생성된 마이타민일 경우에 canEdit 속성값은 true이다.
+       * canEdit 속성값은 추후 하루 진단/칭찬 처방의 수정 기능 구현 시 변경되거나 세분화될 수 있다.
 * mentalConditionCode
        ** 1 : "매우 나빠요 .."
        ** 2 : "나쁜 편이에요 :("
@@ -151,7 +157,6 @@ operation::care/careToday[snippets='request-headers,request-fields,response-fiel
 
 ==== Exception Response
 * 칭찬 처방을 완료하면 같은 날짜에는 칭찬 처방하기 요청을 다시 보낼 수 없다.
-* 아직 수정 기능 구현 전
 
 include::{snippets}/care/careToday_5000/http-response.adoc[]
 include::{snippets}/care/careToday_5001/http-response.adoc[]

@@ -47,7 +47,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Sans KR","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -82,7 +82,7 @@ hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em
 em,i{font-style:italic;line-height:inherit}
 strong,b{font-weight:bold;line-height:inherit}
 small{font-size:60%;line-height:inherit}
-code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+code{font-family:"Fira Code","Noto Sans KR",monospace;font-weight:400;color:rgba(0,0,0,.9)}
 ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
@@ -118,14 +118,14 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
 :not(pre)>code.nobreak{word-wrap:normal}
 :not(pre)>code.nowrap{white-space:nowrap}
-pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Fira Code","Noto Sans KR",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
 pre>code{display:block}
 pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
-kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+kbd{font-family:"Fira Code","Noto Sans KR",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
 .keyseq kbd:last-child{margin-right:0}
 .menuseq,.menuref{color:#000}
@@ -157,7 +157,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
 #toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
 #toc>ul{margin-left:.125em}
-#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0>li>a{font-style:normal}
 #toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
 #toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
 #toc li{line-height:1.3334;margin-top:.3334em}
@@ -197,7 +197,7 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details>summary:first-of-type{cursor:pointer;display:list-item;outline:none;margin-bottom:.75em}
-.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Sans KR","DejaVu Serif",serif;font-size:1rem;font-style:italic}
 table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .paragraph.lead>p,#preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
 table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:inherit}
@@ -509,20 +509,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>2022.09.26.월 : 홈 화면 관련 API 구현 (세부 로직 구현 전이지만, 업데이트 후에도 response는 동일할 예정임)</p>
 </li>
 <li>
-<p>2022.09.27.화</p>
-<div class="ulist">
-<ul>
-<li>
-<p>마이타민 섭취(하루 진단, 칭찬 처방) API 구현</p>
+<p>2022.09.27.화 : 마이타민 섭취(하루 진단, 칭찬 처방), 최근 마이타민 API 구현, 오류 구별을 위한 errorCode 추가</p>
 </li>
 <li>
-<p>최근 마이타민 API 구현</p>
-</li>
-<li>
-<p>오류 구별을 위한 errorCode 추가</p>
-</li>
-</ul>
-</div>
+<p>2022.09.29.목 : 웰컴 메세지 API &#8594; 마이타민 섭취 여부에 따른 웰컴 메세지 구현</p>
 </li>
 </ul>
 </div>
@@ -533,7 +523,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>하루 진단하기, 칭찬 처방하기 API의 path가 변경되었습니다.</p>
 </li>
 <li>
-<p>DB 구조 변경으로 한차례 더 DB 삭제가 있었습니다. (재가입 필요)</p>
+<p>DB 구조 변경으로 한차례 더 DB 삭제가 있었습니다. (당분간 테이블 변경이 조금씩 있을 것 같아서 기존 아이디 로그인 안될 경우에는 DB 비워진 상태이니 재가입해주세요.)</p>
 </li>
 </ul>
 </div>
@@ -1106,6 +1096,10 @@ Content-Length: 86
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<div class="title">참고사항</div>
+<p>JWT 인증 관련 자세한 내용 : 노션 Server 공유 페이지 &#8594; '인증 관련 공통 참고 사항'</p>
+</div>
 <div class="sect3">
 <h4 id="_토큰_재발급_http_request">HTTP request</h4>
 <div class="listingblock">
@@ -1258,7 +1252,26 @@ Content-Length: 145
 <div class="ulist">
 <ul>
 <li>
-<p>시간에 따른 웰컴 메시지를 리턴한다.</p>
+<p>조건에 따라 웰컴 메시지를 리턴한다. 조건 1, 2, 3 순으로 높은 우선 순위가 적용된다.</p>
+</li>
+<li>
+<p>조건 1. 마이타민 섭취 완료 : 오늘 하루도 수고 많았어요 :)</p>
+</li>
+<li>
+<p>조건 2. 마이타민 섭취 지정 시간 및 섭취 여부에 따른 웰컴 메세지</p>
+<div class="ulist">
+<ul>
+<li>
+<p>섭취 지정 시간 2시간 전 : 오늘의 마이타민 섭취를 잊지마세요 :)</p>
+</li>
+<li>
+<p>섭취 지정 시간 2시간 후 : 마이타민 섭취.. 잊으시면 안 돼요 !</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>조건 3. 시간에 따른 웰컴 메세지</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1272,9 +1285,6 @@ Content-Length: 145
 </li>
 </ul>
 </div>
-</li>
-<li>
-<p>(추후 업데이트 예정) 마이타민 섭취 여부에 따른 메세지 구현 전</p>
 </li>
 </ul>
 </div>
@@ -1399,7 +1409,7 @@ Content-Length: 125
   "statusCode" : 200,
   "message" : "숨 고르기 완료",
   "data" : {
-    "updatedTime" : "2022.09.28 01:35"
+    "updatedTime" : "2022.09.29 02:11"
   }
 }</code></pre>
 </div>
@@ -1492,7 +1502,7 @@ Content-Length: 128
   "statusCode" : 200,
   "message" : "감각 깨우기 완료",
   "data" : {
-    "updatedTime" : "2022.09.28 01:35"
+    "updatedTime" : "2022.09.29 02:11"
   }
 }</code></pre>
 </div>
@@ -1684,6 +1694,9 @@ Content-Length: 195
 <p>24시간 이내 생성된 마이타민일 경우에 canEdit 속성값은 true이다.</p>
 </li>
 <li>
+<p>canEdit 속성값은 추후 하루 진단/칭찬 처방의 수정 기능 구현 시 변경되거나 세분화될 수 있다.</p>
+</li>
+<li>
 <p>mentalConditionCode</p>
 <div class="ulist">
 <ul>
@@ -1729,7 +1742,7 @@ Content-Length: 481
   "statusCode" : 200,
   "message" : "최근 마이타민",
   "data" : {
-    "takeAt" : "2022.09.28.Wed",
+    "takeAt" : "2022.09.29.Thu",
     "canEdit" : true,
     "memtalConditionCode" : 5,
     "feelingTag" : "# 신나는",
@@ -1899,7 +1912,7 @@ Content-Length: 293
   "statusCode" : 201,
   "message" : "하루 진단하기",
   "data" : {
-    "takeAt" : "2022.09.28.Wed",
+    "takeAt" : "2022.09.29.Thu",
     "mentalCondition" : "매우 좋아요 !",
     "feelingTag" : "신나는",
     "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
@@ -2123,7 +2136,7 @@ Content-Length: 278
   "statusCode" : 201,
   "message" : "칭찬 처방하기",
   "data" : {
-    "takeAt" : "2022.09.28.Wed",
+    "takeAt" : "2022.09.29.Thu",
     "careCategory" : "이루어 낸 일",
     "careMsg1" : "오늘 할 일을 전부 했어",
     "careMsg2" : "성실히 노력하는 내 모습이 좋아"
@@ -2243,9 +2256,6 @@ Content-Length: 278
 <li>
 <p>칭찬 처방을 완료하면 같은 날짜에는 칭찬 처방하기 요청을 다시 보낼 수 없다.</p>
 </li>
-<li>
-<p>아직 수정 기능 구현 전</p>
-</li>
 </ul>
 </div>
 <div class="listingblock">
@@ -2284,7 +2294,7 @@ Content-Length: 167
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-09-28 01:34:58 +0900
+Last updated 2022-09-29 02:10:59 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
