@@ -67,7 +67,8 @@ asciidoctor {
             'source-highlighter': 'highlightjs',
             'toc': 'left',
             'toclevels': 2,
-            'icons': 'font'
+            'icons': 'font',
+            'stylesheet': 'asciidoctor.css'
 }
 
 bootJar {
