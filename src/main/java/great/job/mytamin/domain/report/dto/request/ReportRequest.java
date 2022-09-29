@@ -11,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class ReportRequest {
     @NotBlank int mentalConditionCode;
-    @NotBlank String feelingTag;
+    @NotBlank String tag1;
+    String tag2;
+    String tag3;
     @NotBlank String todayReport;
 }

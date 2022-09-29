@@ -34,7 +34,7 @@ public class ReportService {
         LocalDateTime rawTakeAt = LocalDateTime.now();
         String takeAt = timeService.convertToTakeAt(rawTakeAt);
         Mytamin mytamin = mytaminService.getMytamin(user, takeAt);
-        if(mytamin == null) mytamin = mytaminService.createMytamin(user, rawTakeAt);
+        if (mytamin == null) mytamin = mytaminService.createMytamin(user, rawTakeAt);
 
         if (mytamin.getReport() != null) {
             throw new MytaminException(REPORT_ALREADY_DONE);
@@ -42,7 +42,9 @@ public class ReportService {
 
         Report report = new Report(
                 MentalCondition.getMsgToCode(reportRequest.getMentalConditionCode()),
-                reportRequest.getFeelingTag(),
+                reportRequest.getTag1(),
+                reportRequest.getTag2(),
+                reportRequest.getTag3(),
                 reportRequest.getTodayReport(),
                 mytamin
         );

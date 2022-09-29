@@ -37,7 +37,7 @@ class MytaminControllerTest extends CommonControllerTest {
                 .takeAt(mytamin.getTakeAt())
                 .canEdit(true)
                 .memtalConditionCode(5)
-                .feelingTag("# " + "신나는")
+                .feelingTag("#신나는 #즐거운 #재밌는")
                 .mentalConditionMsg("기분이 " + "매우 좋아요 !")
                 .todayReport("아무래도 아침형 인간이 되는건 너무 어려운 것 같다.")
                 .careMsg1("오늘 할 일을 전부 했어")
@@ -61,7 +61,7 @@ class MytaminControllerTest extends CommonControllerTest {
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
-                                fieldWithPath("data.canEdit").description("수정 가능 여부 (true : 수정 가능, false 수정 불가)"),
+                                fieldWithPath("data.canEdit").description("true : 수정 가능, false : 수정 불가"),
                                 fieldWithPath("data.memtalConditionCode").description("마음 컨디션 코드"),
                                 fieldWithPath("data.feelingTag").description("감정 태그"),
                                 fieldWithPath("data.mentalConditionMsg").description("마음 컨디션 메세지"),
