@@ -77,8 +77,8 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.email").description("이메일"),
                                     fieldWithPath("data.nickname").description("닉네임"),
-                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL (초기값 = \"\")"),
-                                    fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지 (초기값 = \"\")"),
+                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL"),
+                                    fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지"),
                                     fieldWithPath("data.mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("data.mytaminMin").description("마이타민 섭취 시간 MM")
                             ))

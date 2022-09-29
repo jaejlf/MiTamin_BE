@@ -47,12 +47,16 @@ class ReportControllerTest extends CommonControllerTest {
             ReportRequest reportRequest = new ReportRequest(
                     5,
                     "신나는",
+                    "즐거운",
+                    "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
             given(reportService.reportToday(any(), any())).willReturn(ReportResponse.of(
                     new Report(
                             MentalCondition.VERY_GOOD.getMsg(),
                             "신나는",
+                            "즐거운",
+                            "재밌는",
                             "아무래도 아침형 인간이 되는건 너무 어려운 것 같다.",
                             mytamin
                     )
@@ -75,7 +79,9 @@ class ReportControllerTest extends CommonControllerTest {
                             ),
                             requestFields(
                                     fieldWithPath("mentalConditionCode").description("*마음 컨디션 코드"),
-                                    fieldWithPath("feelingTag").description("*감정 태그"),
+                                    fieldWithPath("tag1").description("*감정 태그1"),
+                                    fieldWithPath("tag2").description("감정 태그2"),
+                                    fieldWithPath("tag3").description("감정 태그3"),
                                     fieldWithPath("todayReport").description("*하루 진단")
                             ),
                             responseFields(
@@ -96,6 +102,8 @@ class ReportControllerTest extends CommonControllerTest {
             ReportRequest reportRequest = new ReportRequest(
                     5,
                     "신나는",
+                    "즐거운",
+                    "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
             given(reportService.reportToday(any(), any())).willThrow(new MytaminException(REPORT_ALREADY_DONE));
@@ -118,7 +126,9 @@ class ReportControllerTest extends CommonControllerTest {
                             ),
                             requestFields(
                                     fieldWithPath("mentalConditionCode").description("*마음 컨디션 코드"),
-                                    fieldWithPath("feelingTag").description("*감정 태그"),
+                                    fieldWithPath("tag1").description("*감정 태그1"),
+                                    fieldWithPath("tag2").description("감정 태그2"),
+                                    fieldWithPath("tag3").description("감정 태그3"),
                                     fieldWithPath("todayReport").description("*하루 진단")
                             ),
                             responseFields(
@@ -137,6 +147,8 @@ class ReportControllerTest extends CommonControllerTest {
             ReportRequest reportRequest = new ReportRequest(
                     5,
                     "신나는",
+                    "즐거운",
+                    "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
             given(reportService.reportToday(any(), any())).willThrow(new MytaminException(INVALID_CONDITION_CODE_ERROR));
@@ -159,7 +171,9 @@ class ReportControllerTest extends CommonControllerTest {
                             ),
                             requestFields(
                                     fieldWithPath("mentalConditionCode").description("*마음 컨디션 코드"),
-                                    fieldWithPath("feelingTag").description("*감정 태그"),
+                                    fieldWithPath("tag1").description("*감정 태그1"),
+                                    fieldWithPath("tag2").description("감정 태그2"),
+                                    fieldWithPath("tag3").description("감정 태그3"),
                                     fieldWithPath("todayReport").description("*하루 진단")
                             ),
                             responseFields(
