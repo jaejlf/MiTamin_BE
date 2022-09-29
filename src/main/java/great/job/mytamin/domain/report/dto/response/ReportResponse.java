@@ -21,9 +21,19 @@ public class ReportResponse {
         return ReportResponse.builder()
                 .takeAt(report.getMytamin().getTakeAt())
                 .mentalCondition(report.getMentalCondition())
-                .feelingTag(report.getFeelingTag())
+                .feelingTag(getFeelingTag(report))
                 .todayReport(report.getTodayReport())
                 .build();
+    }
+
+    private static String getFeelingTag(Report report) {
+        String feelingTag = "#" + report.getTag1();
+        if (report.getTag2() != null) {
+            feelingTag += " #" + report.getTag2();
+        } else if (report.getTag3() != null) {
+            feelingTag += " #" + report.getTag3();
+        }
+        return feelingTag;
     }
 
 }

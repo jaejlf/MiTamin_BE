@@ -1,6 +1,7 @@
 package great.job.mytamin.domain.mytamin.dto.response;
 
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
+import great.job.mytamin.domain.report.entity.Report;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class MytaminResponse {
                 .takeAt(mytamin.getTakeAt())
                 .canEdit(canEdit)
                 .memtalConditionCode(memtalConditionCode)
-                .feelingTag("# " + mytamin.getReport().getFeelingTag())
+                .feelingTag(getFeelingTag(mytamin.getReport()))
                 .mentalConditionMsg("기분이 " + mytamin.getReport().getMentalCondition())
                 .todayReport(mytamin.getReport().getTodayReport())
                 .careMsg1(mytamin.getCare().getCareMsg1())
@@ -39,9 +40,9 @@ public class MytaminResponse {
                 .takeAt(mytamin.getTakeAt())
                 .canEdit(canEdit)
                 .memtalConditionCode(memtalConditionCode)
-                .feelingTag("# " + mytamin.getReport().getFeelingTag())
+                .feelingTag(getFeelingTag(mytamin.getReport()))
                 .mentalConditionMsg("기분이 " + mytamin.getReport().getMentalCondition())
-                .todayReport( mytamin.getReport().getTodayReport())
+                .todayReport(mytamin.getReport().getTodayReport())
                 .build();
     }
 
@@ -52,6 +53,16 @@ public class MytaminResponse {
                 .careMsg1(mytamin.getCare().getCareMsg1())
                 .careMsg2(mytamin.getCare().getCareMsg2())
                 .build();
+    }
+
+    private static String getFeelingTag(Report report) {
+        String feelingTag = "#" + report.getTag1();
+        if (report.getTag2() != null) {
+            feelingTag += " #" + report.getTag2();
+        } else if (report.getTag3() != null) {
+            feelingTag += " #" + report.getTag3();
+        }
+        return feelingTag;
     }
 
 }
