@@ -51,14 +51,7 @@ class CareServiceTest extends CommonServiceTest {
             CareResponse result = careService.careToday(user, careRequest);
 
             //then
-            CareResponse expected = CareResponse.of(
-                    new Care(
-                            "이루어 낸 일",
-                            "오늘 할 일을 전부 했어",
-                            "성실히 노력하는 내 모습이 좋아",
-                            mytamin
-                    )
-            );
+            CareResponse expected = CareResponse.of(care);
             assertAll(
                     () -> assertThat(result.getCareCategory()).isEqualTo(expected.getCareCategory()),
                     () -> assertThat(result.getCareMsg1()).isEqualTo(expected.getCareMsg1()),

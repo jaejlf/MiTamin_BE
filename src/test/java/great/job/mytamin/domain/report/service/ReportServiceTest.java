@@ -85,14 +85,7 @@ class ReportServiceTest extends CommonServiceTest {
             given(timeService.convertToTakeAt(any())).willReturn(mockTakeAtNow);
             given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
 
-            mytamin.updateReport(new Report(
-                    MentalCondition.VERY_GOOD.getMsg(),
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "아무래도 아침형 인간이 되는건 너무 어려운 것 같다.",
-                    mytamin
-            ));
+            mytamin.updateReport(report);
 
             //when & then
             assertThatThrownBy(() -> reportService.reportToday(user, reportRequest))
