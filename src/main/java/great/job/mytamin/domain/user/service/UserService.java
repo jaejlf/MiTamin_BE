@@ -1,12 +1,12 @@
 package great.job.mytamin.domain.user.service;
 
-import great.job.mytamin.domain.user.repository.UserRepository;
-import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.dto.request.LoginRequest;
 import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
+import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.jwt.JwtTokenProvider;
 import great.job.mytamin.global.service.RedisService;
@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,7 +71,7 @@ public class UserService {
         checkPasswordMatching(loginRequest.getPassword(), user.getPassword());
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user);
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
         return TokenResponse.of(accessToken, refreshToken);
     }
@@ -101,7 +102,7 @@ public class UserService {
         User user = getUserByEmail(email);
 
         // DB에 저장된 refreshToken과 일치하는지 체크
-        if (!user.getRefreshToken().equals(refreshToken)) {
+        if (!Objects.equals(redisService.getValues(user.getEmail()), refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
 
@@ -113,7 +114,7 @@ public class UserService {
         // 토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
         Long remainTime = jwtTokenProvider.calValidTime(refreshToken);
         if (remainTime <= 172800000) {
-            refreshToken = jwtTokenProvider.createRefreshToken(user);
+            refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
         }
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
 
