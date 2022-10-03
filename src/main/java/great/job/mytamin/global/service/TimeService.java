@@ -10,8 +10,6 @@ import java.util.Locale;
 @Service
 public class TimeService {
 
-    LocalDateTime start, end;
-
     /*
     LocalDateTime -> takeAt 포맷 변환 (yyyy.MM.dd.요일)
     */
