@@ -43,9 +43,6 @@ public class User implements UserDetails {
     @Column(length = 300)
     private String beMyMessage = "";
 
-    @Column(length = 300)
-    private String refreshToken = "";
-
     /*
     마이타민 섭취 지정 시간
     */
@@ -69,10 +66,6 @@ public class User implements UserDetails {
         this.mytaminHour = mytaminHour;
         this.mytaminMin = mytaminMin;
         this.roles = Collections.singletonList("ROLE_USER");
-    }
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public void updateBreathTime() {
