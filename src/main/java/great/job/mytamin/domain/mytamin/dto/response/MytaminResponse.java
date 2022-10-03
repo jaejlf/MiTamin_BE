@@ -59,7 +59,8 @@ public class MytaminResponse {
         String feelingTag = "#" + report.getTag1();
         if (report.getTag2() != null) {
             feelingTag += " #" + report.getTag2();
-        } else if (report.getTag3() != null) {
+        }
+        if (report.getTag3() != null) {
             feelingTag += " #" + report.getTag3();
         }
         return feelingTag;

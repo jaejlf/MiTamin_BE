@@ -5,7 +5,6 @@ import great.job.mytamin.domain.care.enumerate.CareCategory;
 import great.job.mytamin.domain.home.dto.response.ActionResponse;
 import great.job.mytamin.domain.home.dto.response.ActiveResponse;
 import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
-import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.global.service.TimeService;
 import great.job.mytamin.global.support.CommonServiceTest;
@@ -44,11 +43,7 @@ class HomeServiceTest extends CommonServiceTest {
         @Test
         void welcome_case1() {
             //given
-            Mytamin mytamin = new Mytamin(
-                    LocalDateTime.now(),
-                    timeService.convertToTakeAt(LocalDateTime.now()),
-                    user
-            );
+            given(timeService.convertToTakeAt(any())).willReturn(mockTakeAtNow);
             given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
 
             // when
@@ -167,7 +162,7 @@ class HomeServiceTest extends CommonServiceTest {
         ActionResponse expected = ActionResponse.of(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
         );
-        assertThat(result.getUpdatedTime()).isEqualTo(result.getUpdatedTime());
+        assertThat(result.getUpdatedTime()).isEqualTo(expected.getUpdatedTime());
     }
 
     @DisplayName("감각 깨우기 완료")
@@ -180,18 +175,13 @@ class HomeServiceTest extends CommonServiceTest {
         ActionResponse expected = ActionResponse.of(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
         );
-        assertThat(result.getUpdatedTime()).isEqualTo(result.getUpdatedTime());
+        assertThat(result.getUpdatedTime()).isEqualTo(expected.getUpdatedTime());
     }
 
     @DisplayName("행동에 따른 버튼 활성화 여부")
     @Test
     void getProgressStatus() {
         //given
-        Mytamin mytamin = new Mytamin(
-                LocalDateTime.now(),
-                timeService.convertToTakeAt(LocalDateTime.now()),
-                user
-        );
         Care care = new Care(CareCategory.getMsgToCode(1), "hi", "hello", mytamin);
         careRepository.save(care);
         mytamin.updateCare(care);
