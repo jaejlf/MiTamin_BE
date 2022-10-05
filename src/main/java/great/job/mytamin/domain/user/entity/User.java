@@ -2,9 +2,11 @@ package great.job.mytamin.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
+import great.job.mytamin.domain.user.enumerate.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,17 +33,23 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(length = 100, nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(length = 300, nullable = false, unique = true)
+    @Length(min = 1, max = 9)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
-    @Column(length = 300)
+    @Length(max = 300)
     private String profileImgUrl = "";
 
-    @Column(length = 300)
-    private String beMyMessage = "";
+    @Length(min = 1, max = 20)
+    private String beMyMessage = "마음 면역력이 높아질";
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     /*
     마이타민 섭취 지정 시간
@@ -54,17 +62,30 @@ public class User implements UserDetails {
     */
     private LocalDateTime breathTime = LocalDateTime.of(1999, 1, 1, 0, 0);
     private LocalDateTime senseTime = LocalDateTime.of(1999, 1, 1, 0, 0);
+
+    /*
+    이번 달의 마이 데이
+    */
+    private LocalDateTime dateOfMyday;
+
+    /*
+    알림 설정
+    */
+    private boolean mytaminAlarmOn;
+    private boolean mydayAlarmOn = false;
     
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private Set<Mytamin> mytaminSet = new HashSet<>();
 
-    public User(String email, String encodedPw, String nickname, String mytaminHour, String mytaminMin) {
+    public User(String email, String encodedPw, String nickname, Provider provider, String mytaminHour, String mytaminMin, boolean mytaminAlarmOn) {
         this.email = email;
         this.password = encodedPw;
         this.nickname = nickname;
+        this.provider = provider;
         this.mytaminHour = mytaminHour;
         this.mytaminMin = mytaminMin;
+        this.mytaminAlarmOn = mytaminAlarmOn;
         this.roles = Collections.singletonList("ROLE_USER");
     }
 
@@ -81,6 +102,10 @@ public class User implements UserDetails {
         this.mytaminMin = mytaminMin;
     }
 
+    public void updateDateOfMyday(LocalDateTime dateOfMyday) {
+        this.dateOfMyday = dateOfMyday;
+    }
+    
     /*
     UserDetails Method
     */
