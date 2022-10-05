@@ -1,5 +1,7 @@
 package great.job.mytamin.global.jwt;
 
+import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.user.service.CustomUserDetailsService;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.service.RedisService;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
@@ -24,6 +25,7 @@ import static great.job.mytamin.global.exception.ErrorMap.INVALID_TOKEN_ERROR;
 public class JwtTokenProvider {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final UserRepository userRepository;
     private final RedisService redisService;
 
     @Value("${jwt.secret.key}")
@@ -45,9 +47,9 @@ public class JwtTokenProvider {
         return createToken(email, accessTokenValidTime);
     }
 
-    public String createRefreshToken(String email) {
-        String refreshToken = createToken(email, refreshTokenValidTime);
-        redisService.setValues(email, refreshToken, Duration.ofMillis(refreshTokenValidTime));
+    public String createRefreshToken(User user) {
+        String refreshToken = createToken(user.getEmail(), refreshTokenValidTime);
+        user.updateRefreshToken(refreshToken);
         return refreshToken;
     }
 

@@ -46,6 +46,7 @@ public class User implements UserDetails {
     @Length(min = 1, max = 20)
     private String beMyMessage = "마음 면역력이 높아질";
 
+    private String refreshToken = "";
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
@@ -100,6 +101,10 @@ public class User implements UserDetails {
     public void updateMytaminTime(String mytaminHour, String mytaminMin) {
         this.mytaminHour = mytaminHour;
         this.mytaminMin = mytaminMin;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public void updateDateOfMyday(LocalDateTime dateOfMyday) {

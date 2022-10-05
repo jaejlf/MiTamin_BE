@@ -36,7 +36,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         }
 
         // 리프레쉬 토큰인지 확인 -> 리프레쉬 토큰은 reissue를 위해서만 사용할 수 있다.
-        if (token.equals(redisService.getValues(jwtTokenProvider.getUserPk(token)))) {
+        if (userRepository.findByRefreshToken(token).isPresent()) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
 

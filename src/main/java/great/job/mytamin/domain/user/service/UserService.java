@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,7 +76,7 @@ public class UserService {
         checkPasswordMatching(loginRequest.getPassword(), user.getPassword());
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user);
 
         return TokenResponse.of(accessToken, refreshToken);
     }
@@ -108,7 +107,7 @@ public class UserService {
         User user = getUserByEmail(email);
 
         // DB에 저장된 refreshToken과 일치하는지 체크
-        if (!Objects.equals(redisService.getValues(user.getEmail()), refreshToken)) {
+        if (!user.getRefreshToken().equals(refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
 
@@ -120,7 +119,7 @@ public class UserService {
         // 토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
         Long remainTime = jwtTokenProvider.calValidTime(refreshToken);
         if (remainTime <= 172800000) {
-            refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
+            refreshToken = jwtTokenProvider.createRefreshToken(user);
         }
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
 
