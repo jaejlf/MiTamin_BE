@@ -10,3 +10,10 @@ spring:
     properties:
       hibernate:
         format_sql: false
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR

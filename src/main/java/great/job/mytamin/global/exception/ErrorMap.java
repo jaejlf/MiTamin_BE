@@ -28,7 +28,11 @@ public enum ErrorMap {
 
     // Care 5xxx
     INVALID_CATEGORY_CODE_ERROR(HttpStatus.BAD_REQUEST, 5000, "INVALID_CATEGORY_CODE_ERROR", "카테고리 코드는 1 ~ 7 사이의 값이어야 합니다."),
-    CARE_ALREADY_DONE(HttpStatus.CONFLICT, 5001, "CARE_ALREADY_DONE", "오늘의 '칭찬 처방하기'를 이미 완료했습니다.");
+    CARE_ALREADY_DONE(HttpStatus.CONFLICT, 5001, "CARE_ALREADY_DONE", "오늘의 '칭찬 처방하기'를 이미 완료했습니다."),
+
+    // S3 6xxx
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 6000, "FILE_UPLOAD_ERROR", "파일 업로드에 실패했습니다."),
+    FILE_EXTENTION_ERROR(HttpStatus.BAD_REQUEST, 6001, "FILE_EXTENTION_ERROR", ".jpg, .png, .jpeg 파일만 업로드할 수 있습니다.");
 
     private final HttpStatus httpStatus;
     private final int errorCode;
