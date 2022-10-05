@@ -6,6 +6,7 @@ import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.jwt.JwtTokenProvider;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,9 +57,13 @@ public class UserService {
                 email,
                 passwordEncoder.encode(password),
                 nickname,
+                Provider.DEFAULT,
                 signUpRequest.getMytaminHour(),
-                signUpRequest.getMytaminMin()
+                signUpRequest.getMytaminMin(),
+                isMytaminAlarmOn(signUpRequest.getMytaminHour())
+
         );
+        user.updateDateOfMyday(LocalDateTime.now()); // 마이데이 지정 날짜 -> 임시로 현재 날짜 할당
         return UserResponse.of(userRepository.save(user));
 
     }
@@ -107,10 +113,10 @@ public class UserService {
         }
 
         // 리프레쉬 유효성 체크
-        if(!jwtTokenProvider.validateToken(refreshToken)) {
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
-        
+
         // 토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
         Long remainTime = jwtTokenProvider.calValidTime(refreshToken);
         if (remainTime <= 172800000) {
@@ -147,6 +153,11 @@ public class UserService {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(password);
         if (!m.matches() || password.contains(" ")) throw new MytaminException(PASSWORD_PATTERN_ERROR);
+    }
+
+    // 마이타민 알림 설정 여부
+    private boolean isMytaminAlarmOn(String mytaminHour) {
+        return mytaminHour != null;
     }
 
 }

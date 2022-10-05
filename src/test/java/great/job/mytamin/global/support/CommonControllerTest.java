@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
+import static great.job.mytamin.domain.user.enumerate.Provider.DEFAULT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -51,8 +52,10 @@ public class CommonControllerTest {
                 "mytamin@naver.com",
                 "{{ENCODED_PASSWORD}}",
                 "강철멘탈",
+                DEFAULT,
                 "22",
-                "00"
+                "00",
+                true
         );
 
         // Mock Mytamin

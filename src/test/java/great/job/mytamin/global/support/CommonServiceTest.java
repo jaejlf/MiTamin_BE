@@ -8,6 +8,7 @@ import great.job.mytamin.domain.report.entity.Report;
 import great.job.mytamin.domain.report.enumerate.MentalCondition;
 import great.job.mytamin.domain.report.repository.ReportRepository;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.Locale;
+import static great.job.mytamin.domain.user.enumerate.Provider.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -48,8 +46,10 @@ public class CommonServiceTest {
                 "tester@mock.com",
                 "{{ENCODED_PASSWORD}}",
                 "테스터",
+                DEFAULT,
                 null,
-                null
+                null,
+                false
         );
         userRepository.save(user);
 

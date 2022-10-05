@@ -16,6 +16,7 @@ endif::[]
        ** 웰컴 메세지 API -> 마이타민 섭취 여부에 따른 웰컴 메세지 구현
        ** 하루 진단 API -> 감정 태그 중복 선택 기능 추가
        ** 전반적인 문서 설명 추가
+* 2022.10.05.수 : 이미지 업로드 테스트 API 추가
 
 .참고사항
 
@@ -30,7 +31,7 @@ endif::[]
 * mytaminHour, mytaminMin은 필수 요청값이 아니므로, 유저가 '건너뛰기'를 선택했을 경우 email, password, nickname 값만 넣어 요청한다.
        ** 이 경우 mytaminHour, mytaminMin의 초기값은 null이다.
        ** 마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.
-* 회원가입 시 따로 입력받지 않는 profileImgUrl, beMyMessage 의 초기값은 null이다.
+* profileImgUrl의 기본값은 "", beMyMessage의 기본값은 "마음 면역력이 높아질"이다.
 
 operation::auth/signup[snippets='http-request,http-response']
 operation::auth/signup[snippets='request-fields,response-fields']
@@ -77,7 +78,7 @@ operation::auth/reissue[snippets='request-fields,response-fields']
 
 ==== Exception Response
 * INVALID_TOKEN_ERROR
-    ** DB에 저장된 refresh 토큰과 일치하지 않는 경우
+    ** DB에 저장된 refreshToken과 일치하지 않는 경우
     ** refreshToken 자체가 잘못 되었거나 만료된 경우
 
 include::{snippets}/auth/reissue_1001/http-response.adoc[]
@@ -178,3 +179,19 @@ operation::care/careToday[snippets='request-headers,request-fields,response-fiel
 
 include::{snippets}/care/careToday_5000/http-response.adoc[]
 include::{snippets}/care/careToday_5001/http-response.adoc[]
+
+== Image
+* Multipart 타입으로 이미지를 전송한다.
+
+=== 단일 이미지 업로드
+* 하나의 이미지를 업로드 후, 이미지 URL을 리턴한다.
+
+operation::img/uploadImgOne[snippets='http-request,http-response']
+operation::img/uploadImgOne[snippets='request-headers,request-parts,response-fields']
+
+=== 이미지 리스트 업로드
+* 하나 이상의 이미지를 업로드 후, 이미지 URL을 리턴한다.
+
+operation::img/uploadImgList[snippets='http-request,http-response']
+operation::img/uploadImgList[snippets='request-headers,request-parts,response-fields']
+
