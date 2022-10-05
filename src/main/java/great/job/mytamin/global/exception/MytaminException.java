@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 public class MytaminException extends RuntimeException {
 
     private final HttpStatus status;
+    private final String message;
     private final ErrorResponse errorResponse;
 
     public MytaminException(ErrorMap errorMap) {
         this.status = errorMap.getHttpStatus();
+        this.message = errorMap.getErrorName();
         this.errorResponse = ErrorResponse.of(errorMap.getHttpStatus().value(), errorMap.getErrorCode(), errorMap.getErrorName(), errorMap.getMessage());
     }
 
