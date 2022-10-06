@@ -2,8 +2,6 @@ package great.job.mytamin.domain.care.controller;
 
 import great.job.mytamin.domain.care.dto.request.CareRequest;
 import great.job.mytamin.domain.care.dto.response.CareResponse;
-import great.job.mytamin.domain.care.entity.Care;
-import great.job.mytamin.domain.care.enumerate.CareCategory;
 import great.job.mytamin.domain.care.service.CareService;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
@@ -38,25 +36,19 @@ class CareControllerTest extends CommonControllerTest {
 
     @Nested
     @DisplayName("칭찬 처방하기")
-    class CareTodayTest {
+    class CreateCareTest {
 
         @DisplayName("성공")
         @Test
-        void careToday(TestInfo testInfo) throws Exception {
+        void createCare(TestInfo testInfo) throws Exception {
             //given
             CareRequest careRequest = new CareRequest(
                     1,
                     "오늘 할 일을 전부 했어",
                     "성실히 노력하는 내 모습이 좋아"
             );
-            given(careService.careToday(any(), any())).willReturn(CareResponse.of(
-                    new Care(
-                            CareCategory.ACCOMPLISHED.getMsg(),
-                            "오늘 할 일을 전부 했어",
-                            "성실히 노력하는 내 모습이 좋아",
-                            mytamin
-                    )
-            ));
+
+            given(careService.createCare(any(), any())).willReturn(mockCareResponse());
 
             //when
             ResultActions actions = mockMvc.perform(post("/care/new")
@@ -81,7 +73,6 @@ class CareControllerTest extends CommonControllerTest {
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
-                                    fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
                                     fieldWithPath("data.careCategory").description("칭찬 카테고리"),
                                     fieldWithPath("data.careMsg1").description("칭찬 처방 메세지 1"),
                                     fieldWithPath("data.careMsg2").description("칭찬 처방 메세지 2")
@@ -91,14 +82,15 @@ class CareControllerTest extends CommonControllerTest {
 
         @DisplayName("이미 칭찬 처방 완료")
         @Test
-        void careToday_5001(TestInfo testInfo) throws Exception {
+        void createCare_5001(TestInfo testInfo) throws Exception {
             //given
             CareRequest careRequest = new CareRequest(
                     1,
                     "오늘 할 일을 전부 했어",
                     "성실히 노력하는 내 모습이 좋아"
             );
-            given(careService.careToday(any(), any())).willThrow(new MytaminException(CARE_ALREADY_DONE));
+
+            given(careService.createCare(any(), any())).willThrow(new MytaminException(CARE_ALREADY_DONE));
 
             //when
             ResultActions actions = mockMvc.perform(post("/care/new")
@@ -132,14 +124,15 @@ class CareControllerTest extends CommonControllerTest {
 
         @DisplayName("칭찬 카테고리 코드 오류")
         @Test
-        void careToday_5000(TestInfo testInfo) throws Exception {
+        void createCare_5000(TestInfo testInfo) throws Exception {
             //given
             CareRequest careRequest = new CareRequest(
                     1,
                     "오늘 할 일을 전부 했어",
                     "성실히 노력하는 내 모습이 좋아"
             );
-            given(careService.careToday(any(), any())).willThrow(new MytaminException(INVALID_CATEGORY_CODE_ERROR));
+            
+            given(careService.createCare(any(), any())).willThrow(new MytaminException(INVALID_CATEGORY_CODE_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/care/new")
@@ -171,6 +164,14 @@ class CareControllerTest extends CommonControllerTest {
                     );
         }
 
+    }
+
+    private CareResponse mockCareResponse() {
+        return CareResponse.builder()
+                .careCategory("이루어 낸 일")
+                .careMsg1("오늘 할 일을 전부 했어")
+                .careMsg2("성실히 노력하는 내 모습이 좋아")
+                .build();
     }
 
 }

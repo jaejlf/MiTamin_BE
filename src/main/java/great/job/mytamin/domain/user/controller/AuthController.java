@@ -1,13 +1,13 @@
 package great.job.mytamin.domain.user.controller;
 
-import great.job.mytamin.domain.user.service.AuthService;
 import great.job.mytamin.domain.user.dto.request.LoginRequest;
 import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
-import great.job.mytamin.domain.user.util.UserUtil;
-import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
+import great.job.mytamin.domain.user.service.AuthService;
+import great.job.mytamin.domain.user.util.UserUtil;
+import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,32 +25,34 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody SignUpRequest signUpRequest) {
-        UserResponse newUser = authService.signup(signUpRequest);
+        UserResponse userResponse = authService.signup(signUpRequest);
         return ResponseEntity
                 .status(CREATED)
-                .body(ResultResponse.create("회원 가입", newUser));
+                .body(ResultResponse.create("회원 가입", userResponse));
     }
 
     @PostMapping("/default/login")
     public ResponseEntity<Object> defaultLogin(@RequestBody LoginRequest loginRequest) {
-        TokenResponse tokenSet = authService.defaultLogin(loginRequest);
+        TokenResponse tokenResponse = authService.defaultLogin(loginRequest);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("기본 로그인", tokenSet));
+                .body(ResultResponse.ok("기본 로그인", tokenResponse));
     }
 
     @GetMapping("/check/email/{email}")
     public ResponseEntity<Object> checkEmailDuplication(@PathVariable String email) {
+        boolean isDuplicate = userUtil.checkEmailDuplication(email);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("이메일 중복 체크", userUtil.checkEmailDuplication(email)));
+                .body(ResultResponse.ok("이메일 중복 체크", isDuplicate));
     }
 
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<Object> checkNicknameDuplication(@PathVariable String nickname) {
+        boolean isDuplicate = userUtil.checkNicknameDuplication(nickname);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("닉네임 중복 체크", userUtil.checkNicknameDuplication(nickname)));
+                .body(ResultResponse.ok("닉네임 중복 체크", isDuplicate));
     }
 
     @GetMapping("/reissue")

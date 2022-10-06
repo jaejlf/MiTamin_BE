@@ -19,7 +19,7 @@ public enum MentalCondition {
     private final int code;
     private final String msg;
 
-    public static String getMsgToCode(int code) {
+    public static String convertCodeToMsg(int code) {
         if (code == 1) return VERY_BAD.getMsg();
         else if (code == 2) return BAD.getMsg();
         else if (code == 3) return SO_SO.getMsg();
@@ -28,7 +28,7 @@ public enum MentalCondition {
         else throw new MytaminException(INVALID_CONDITION_CODE_ERROR);
     }
 
-    public static int getCodeToMsg(String msg) {
+    public static int convertMsgToCode(String msg) {
         if (msg.equals(VERY_BAD.getMsg())) return VERY_BAD.getCode();
         else if (msg.equals(BAD.getMsg())) return BAD.getCode();
         else if (msg.equals(SO_SO.getMsg())) return SO_SO.getCode();

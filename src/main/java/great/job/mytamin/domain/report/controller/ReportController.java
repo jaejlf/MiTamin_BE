@@ -1,6 +1,7 @@
 package great.job.mytamin.domain.report.controller;
 
 import great.job.mytamin.domain.report.dto.request.ReportRequest;
+import great.job.mytamin.domain.report.dto.response.ReportResponse;
 import great.job.mytamin.domain.report.service.ReportService;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.ResultResponse;
@@ -22,11 +23,12 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping("/new")
-    public ResponseEntity<Object> reportToday(@AuthenticationPrincipal User user,
-                                              @RequestBody ReportRequest reportRequest) {
+    public ResponseEntity<Object> createReport(@AuthenticationPrincipal User user,
+                                               @RequestBody ReportRequest reportRequest) {
+        ReportResponse reportResponse = reportService.createReport(user, reportRequest);
         return ResponseEntity
                 .status(CREATED)
-                .body(ResultResponse.create("하루 진단하기", reportService.reportToday(user, reportRequest)));
+                .body(ResultResponse.create("하루 진단하기", reportResponse));
     }
 
 }

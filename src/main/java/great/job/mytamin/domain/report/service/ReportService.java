@@ -9,12 +9,10 @@ import great.job.mytamin.domain.report.enumerate.MentalCondition;
 import great.job.mytamin.domain.report.repository.ReportRepository;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.service.TimeService;
+import great.job.mytamin.global.util.ReportUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 import static great.job.mytamin.global.exception.ErrorMap.REPORT_ALREADY_DONE;
 
@@ -22,7 +20,7 @@ import static great.job.mytamin.global.exception.ErrorMap.REPORT_ALREADY_DONE;
 @RequiredArgsConstructor
 public class ReportService {
 
-    private final TimeService timeService;
+    private final ReportUtil reportUtil;
     private final MytaminService mytaminService;
     private final ReportRepository reportRepository;
 
@@ -30,18 +28,17 @@ public class ReportService {
     하루 진단하기
     */
     @Transactional
-    public ReportResponse reportToday(User user, ReportRequest reportRequest) {
-        LocalDateTime rawTakeAt = LocalDateTime.now();
-        String takeAt = timeService.convertToTakeAt(rawTakeAt);
-        Mytamin mytamin = mytaminService.getMytamin(user, takeAt);
-        if (mytamin == null) mytamin = mytaminService.createMytamin(user, rawTakeAt);
+    public ReportResponse createReport(User user, ReportRequest reportRequest) {
+        Mytamin mytamin = mytaminService.getMytaminOrNew(user);
+        if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE);
 
-        if (mytamin.getReport() != null) {
-            throw new MytaminException(REPORT_ALREADY_DONE);
-        }
+        Report newReport = saveNewReport(reportRequest, mytamin);
+        return ReportResponse.of(newReport, reportUtil.concatFeelingTag(newReport));
+    }
 
+    private Report saveNewReport(ReportRequest reportRequest, Mytamin mytamin) {
         Report report = new Report(
-                MentalCondition.getMsgToCode(reportRequest.getMentalConditionCode()),
+                MentalCondition.convertCodeToMsg(reportRequest.getMentalConditionCode()),
                 reportRequest.getTag1(),
                 reportRequest.getTag2(),
                 reportRequest.getTag3(),
@@ -50,7 +47,7 @@ public class ReportService {
         );
         Report newReport = reportRepository.save(report);
         mytamin.updateReport(newReport);
-        return ReportResponse.of(newReport);
+        return newReport;
     }
 
 }

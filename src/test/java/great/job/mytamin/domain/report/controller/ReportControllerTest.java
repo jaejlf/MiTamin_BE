@@ -2,7 +2,6 @@ package great.job.mytamin.domain.report.controller;
 
 import great.job.mytamin.domain.report.dto.request.ReportRequest;
 import great.job.mytamin.domain.report.dto.response.ReportResponse;
-import great.job.mytamin.domain.report.entity.Report;
 import great.job.mytamin.domain.report.enumerate.MentalCondition;
 import great.job.mytamin.domain.report.service.ReportService;
 import great.job.mytamin.global.exception.MytaminException;
@@ -38,11 +37,11 @@ class ReportControllerTest extends CommonControllerTest {
 
     @Nested
     @DisplayName("하루 진단하기")
-    class ReportTodayTest {
+    class CreateReportTest {
 
         @DisplayName("성공")
         @Test
-        void reportToday(TestInfo testInfo) throws Exception {
+        void createReport(TestInfo testInfo) throws Exception {
             //given
             ReportRequest reportRequest = new ReportRequest(
                     5,
@@ -51,16 +50,8 @@ class ReportControllerTest extends CommonControllerTest {
                     "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
-            given(reportService.reportToday(any(), any())).willReturn(ReportResponse.of(
-                    new Report(
-                            MentalCondition.VERY_GOOD.getMsg(),
-                            "신나는",
-                            "즐거운",
-                            "재밌는",
-                            "아무래도 아침형 인간이 되는건 너무 어려운 것 같다.",
-                            mytamin
-                    )
-            ));
+
+            given(reportService.createReport(any(), any())).willReturn(mockReportResponse());
 
             //when
             ResultActions actions = mockMvc.perform(post("/report/new")
@@ -87,7 +78,7 @@ class ReportControllerTest extends CommonControllerTest {
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
-                                    fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
+                                    fieldWithPath("data.mentalConditionCode").description("마음 컨디션 코드"),
                                     fieldWithPath("data.mentalCondition").description("마음 컨디션 메세지"),
                                     fieldWithPath("data.feelingTag").description("감정 태그"),
                                     fieldWithPath("data.todayReport").description("하루 진단")
@@ -97,7 +88,7 @@ class ReportControllerTest extends CommonControllerTest {
 
         @DisplayName("이미 하루 진단 완료")
         @Test
-        void reportToday_4001(TestInfo testInfo) throws Exception {
+        void createReport_4001(TestInfo testInfo) throws Exception {
             //given
             ReportRequest reportRequest = new ReportRequest(
                     5,
@@ -106,7 +97,8 @@ class ReportControllerTest extends CommonControllerTest {
                     "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
-            given(reportService.reportToday(any(), any())).willThrow(new MytaminException(REPORT_ALREADY_DONE));
+
+            given(reportService.createReport(any(), any())).willThrow(new MytaminException(REPORT_ALREADY_DONE));
 
             //when
             ResultActions actions = mockMvc.perform(post("/report/new")
@@ -142,7 +134,7 @@ class ReportControllerTest extends CommonControllerTest {
 
         @DisplayName("마음 컨디션 코드 오류")
         @Test
-        void reportToday_4000(TestInfo testInfo) throws Exception {
+        void createReport_4000(TestInfo testInfo) throws Exception {
             //given
             ReportRequest reportRequest = new ReportRequest(
                     5,
@@ -151,7 +143,8 @@ class ReportControllerTest extends CommonControllerTest {
                     "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
-            given(reportService.reportToday(any(), any())).willThrow(new MytaminException(INVALID_CONDITION_CODE_ERROR));
+
+            given(reportService.createReport(any(), any())).willThrow(new MytaminException(INVALID_CONDITION_CODE_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/report/new")
@@ -185,6 +178,15 @@ class ReportControllerTest extends CommonControllerTest {
                     );
         }
 
+    }
+
+    private ReportResponse mockReportResponse() {
+        return ReportResponse.builder()
+                .mentalConditionCode(5)
+                .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
+                .feelingTag("#신나는 #즐거운 #재밌는")
+                .todayReport("아무래도 아침형 인간이 되는건 너무 어려운 것 같다.")
+                .build();
     }
 
 }

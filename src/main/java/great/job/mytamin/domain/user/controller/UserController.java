@@ -17,41 +17,27 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/info/nickname")
+    @GetMapping("/info")
     public String health(@AuthenticationPrincipal User user) {
         return user.getNickname();
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<Object> getProfile(@AuthenticationPrincipal User user) {
-        return ResponseEntity
-                .status(OK)
-                .body(ResultResponse.ok("마이페이지 프로필 조회", userService.getProfile(user)));
-    }
-
-    @GetMapping("/myday")
-    public ResponseEntity<Object> getMyday(@AuthenticationPrincipal User user) {
-        return ResponseEntity
-                .status(OK)
-                .body(ResultResponse.ok("이번 달의 마이데이", userService.getMyday(user)));
-    }
-
     @PatchMapping("/nickname/{nickname}")
-    public ResponseEntity<Object> editNickname(@AuthenticationPrincipal User user,
-                                               @PathVariable String nickname) {
-        userService.editNickname(user, nickname);
+    public ResponseEntity<Object> updateNickname(@AuthenticationPrincipal User user,
+                                                 @PathVariable String nickname) {
+        userService.updateNickname(user, nickname);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("닉네임 수정", user.getNickname()));
+                .body(ResultResponse.ok("닉네임 수정"));
     }
 
     @PatchMapping("/bemy/{msg}")
-    public ResponseEntity<Object> editBeMyMessage(@AuthenticationPrincipal User user,
-                                                  @PathVariable String msg) {
-        userService.editBeMyMessage(user, msg);
+    public ResponseEntity<Object> updateBeMyMessage(@AuthenticationPrincipal User user,
+                                                    @PathVariable String msg) {
+        userService.updateBeMyMessage(user, msg);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("'되고 싶은 나' 메세지 수정", user.getBeMyMessage()));
+                .body(ResultResponse.ok("'되고 싶은 나' 메세지 수정"));
     }
 
 }

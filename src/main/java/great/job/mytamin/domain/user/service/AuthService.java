@@ -11,7 +11,7 @@ import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.user.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.jwt.JwtTokenProvider;
-import great.job.mytamin.global.service.RedisService;
+import great.job.mytamin.global.util.MydayUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,34 +26,23 @@ import static great.job.mytamin.global.exception.ErrorMap.*;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisService redisService;
-    private final UserService userService;
     private final UserUtil userUtil;
+    private final MydayUtil mydayUtil;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /*
     회원가입
     */
     @Transactional
     public UserResponse signup(SignUpRequest signUpRequest) {
-
-        // 유효성 체크
         String email = signUpRequest.getEmail();
         String nickname = signUpRequest.getNickname();
         String password = signUpRequest.getPassword();
+        validateRequest(email, nickname, password);
 
-        // 1. 이메일, 비밀번호 패턴 체크
-        validateEmailPattern(email);
-        validatePasswordPattern(password);
-
-        // 2. 이메일, 닉네임 중복 체크
-        if (userUtil.checkEmailDuplication(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.checkNicknameDuplication(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
-
-        // 새로운 유저 저장
         User user = new User(
                 email,
                 passwordEncoder.encode(password),
@@ -62,11 +51,9 @@ public class AuthService {
                 signUpRequest.getMytaminHour(),
                 signUpRequest.getMytaminMin(),
                 isMytaminAlarmOn(signUpRequest.getMytaminHour())
-
         );
-        user.updateDateOfMyday(userService.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
+        user.updateDateOfMyday(mydayUtil.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
         return UserResponse.of(userRepository.save(user));
-
     }
 
     /*
@@ -88,10 +75,40 @@ public class AuthService {
     */
     @Transactional
     public TokenResponse tokenReIssue(ReissueRequest reissueRequest) {
-        String email = reissueRequest.getEmail();
+        User user = getUserByEmail(reissueRequest.getEmail());
         String refreshToken = reissueRequest.getRefreshToken();
-        User user = getUserByEmail(email);
 
+        validateRefreshToken(refreshToken, user);
+
+        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
+
+        // 토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
+        if (jwtTokenProvider.calValidTime(refreshToken) <= 172800000) {
+            refreshToken = jwtTokenProvider.createRefreshToken(user);
+        }
+
+        return TokenResponse.of(accessToken, refreshToken);
+    }
+
+    private void checkPasswordMatching(String requestPw, String realPw) {
+        if (!passwordEncoder.matches(requestPw, realPw)) {
+            throw new MytaminException(PASSWORD_MISMATCH_ERROR);
+        }
+    }
+
+    private User getUserByEmail(String email) {
+        return customUserDetailsService.loadUserByUsername(email);
+    }
+
+    private void validateRequest(String email, String nickname, String password) {
+        validateEmailPattern(email);
+        validatePasswordPattern(password);
+
+        if (userUtil.checkEmailDuplication(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
+        if (userUtil.checkNicknameDuplication(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+    }
+
+    private void validateRefreshToken(String refreshToken, User user) {
         // DB에 저장된 refreshToken과 일치하는지 체크
         if (!user.getRefreshToken().equals(refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
@@ -101,30 +118,8 @@ public class AuthService {
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
-
-        // 토큰 만료 기간이 2일 이내로 남았을 경우 refreshToken도 재발급
-        Long remainTime = jwtTokenProvider.calValidTime(refreshToken);
-        if (remainTime <= 172800000) {
-            refreshToken = jwtTokenProvider.createRefreshToken(user);
-        }
-        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
-
-        return TokenResponse.of(accessToken, refreshToken);
     }
 
-    // 올바른 비밀번호인지 체크
-    private void checkPasswordMatching(String requestPw, String realPw) {
-        if (!passwordEncoder.matches(requestPw, realPw)) {
-            throw new MytaminException(PASSWORD_MISMATCH_ERROR);
-        }
-    }
-
-    // 이메일로 유저 정보 찾기
-    private User getUserByEmail(String email) {
-        return customUserDetailsService.loadUserByUsername(email);
-    }
-
-    // 이메일 패턴 체크
     private void validateEmailPattern(String email) {
         String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"; // XXX@XXX.XXX
         Pattern p = Pattern.compile(regex);
@@ -132,7 +127,6 @@ public class AuthService {
         if (!m.matches()) throw new MytaminException(EMAIL_PATTERN_ERROR);
     }
 
-    // 비밀번호 패턴 체크
     private void validatePasswordPattern(String password) {
         String regex = "^(?=.*[0-9])(?=.*[A-Za-z]).{8,30}$"; // 영문, 숫자를 포함한 8 ~ 30자리
         Pattern p = Pattern.compile(regex);
@@ -140,7 +134,6 @@ public class AuthService {
         if (!m.matches() || password.contains(" ")) throw new MytaminException(PASSWORD_PATTERN_ERROR);
     }
 
-    // 마이타민 알림 설정 여부
     private boolean isMytaminAlarmOn(String mytaminHour) {
         return mytaminHour != null;
     }

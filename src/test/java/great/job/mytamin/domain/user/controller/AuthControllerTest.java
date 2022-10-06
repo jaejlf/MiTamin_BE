@@ -6,6 +6,7 @@ import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
 import great.job.mytamin.domain.user.service.AuthService;
+import great.job.mytamin.domain.user.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +38,9 @@ class AuthControllerTest extends CommonControllerTest {
     @MockBean
     private AuthService authService;
 
+    @MockBean
+    private UserUtil userUtil;
+
     @Nested
     @DisplayName("회원 가입")
     class SignUpTest {
@@ -52,6 +56,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
+
             given(authService.signup(any())).willReturn(UserResponse.of(user));
 
             //when
@@ -96,6 +101,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
+
             given(authService.signup(any())).willThrow(new MytaminException(EMAIL_PATTERN_ERROR));
 
             //when
@@ -137,6 +143,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
+
             given(authService.signup(any())).willThrow(new MytaminException(PASSWORD_PATTERN_ERROR));
 
             //when
@@ -178,6 +185,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
+
             given(authService.signup(any())).willThrow(new MytaminException(USER_ALREADY_EXIST_ERROR));
 
             //when
@@ -219,6 +227,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
+
             given(authService.signup(any())).willThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR));
 
             //when
@@ -263,10 +272,13 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "password1234"
             );
-            given(authService.defaultLogin(any())).willReturn(new TokenResponse(
-                    "{{ACCESS_TOKEN}}",
-                    "{{REFRESH_TOKEN}}"
-            ));
+
+            given(authService.defaultLogin(any())).willReturn(
+                    TokenResponse.builder()
+                            .accessToken("{{ACCESS_TOKEN}}")
+                            .refreshToken("{{REFRESH_TOKEN}}")
+                            .build()
+            );
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/default/login")
@@ -300,6 +312,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "password1234"
             );
+
             given(authService.defaultLogin(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
             //when
@@ -335,6 +348,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "XXX password XXX"
             );
+
             given(authService.defaultLogin(any())).willThrow(new MytaminException(PASSWORD_MISMATCH_ERROR));
 
             //when
@@ -369,7 +383,7 @@ class AuthControllerTest extends CommonControllerTest {
     void checkEmailDuplication(TestInfo testInfo) throws Exception {
         //given
         String email = "mytamin@naver.com";
-        given(authService.checkEmailDuplication(any())).willReturn(true);
+        given(userUtil.checkEmailDuplication(any())).willReturn(true);
 
         //when
         ResultActions actions = mockMvc.perform(get("/auth/check/email/{email}", email));
@@ -396,7 +410,7 @@ class AuthControllerTest extends CommonControllerTest {
     void checkNicknameDuplication(TestInfo testInfo) throws Exception {
         //given
         String nickname = "mental-zzang";
-        given(authService.checkNicknameDuplication(any())).willReturn(true);
+        given(userUtil.checkNicknameDuplication(any())).willReturn(true);
 
         //when
         ResultActions actions = mockMvc.perform(get("/auth/check/nickname/{nickname}", nickname));
@@ -430,10 +444,13 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "{{REFRESH_TOKEN}}"
             );
-            given(authService.tokenReIssue(any())).willReturn(new TokenResponse(
-                    "{{ACCESS_TOKEN}}",
-                    "{{REFRESH_TOKEN}}"
-            ));
+
+            given(authService.tokenReIssue(any())).willReturn(
+                    TokenResponse.builder()
+                            .accessToken("{{ACCESS_TOKEN}}")
+                            .refreshToken("{{REFRESH_TOKEN}}")
+                            .build()
+            );
 
             //when
             ResultActions actions = mockMvc.perform(get("/auth/reissue")
@@ -467,6 +484,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "{{REFRESH_TOKEN}}"
             );
+
             given(authService.tokenReIssue(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
             //when
@@ -502,6 +520,7 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "{{REFRESH_TOKEN}}"
             );
+
             given(authService.tokenReIssue(any())).willThrow(new MytaminException(INVALID_TOKEN_ERROR));
 
             //when

@@ -2,12 +2,11 @@ package great.job.mytamin.domain.home.service;
 
 import great.job.mytamin.domain.care.entity.Care;
 import great.job.mytamin.domain.care.enumerate.CareCategory;
-import great.job.mytamin.domain.home.dto.response.ActionResponse;
 import great.job.mytamin.domain.home.dto.response.ActiveResponse;
 import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
-import great.job.mytamin.global.service.TimeService;
 import great.job.mytamin.global.support.CommonServiceTest;
+import great.job.mytamin.global.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static great.job.mytamin.domain.mytamin.enumerate.WelcomeComment.*;
+import static great.job.mytamin.domain.home.enumerate.WelcomeComment.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +29,7 @@ class HomeServiceTest extends CommonServiceTest {
     private HomeService homeService;
 
     @MockBean
-    private TimeService timeService;
+    private TimeUtil timeUtil;
 
     @MockBean
     private MytaminService mytaminService;
@@ -43,7 +42,6 @@ class HomeServiceTest extends CommonServiceTest {
         @Test
         void welcome_case1() {
             //given
-            given(timeService.convertToTakeAt(any())).willReturn(mockTakeAtNow);
             given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
 
             // when
@@ -65,9 +63,9 @@ class HomeServiceTest extends CommonServiceTest {
         @Test
         void welcome_case2() {
             //given
-            given(timeService.isMorning(any())).willReturn(true);
-            given(timeService.isAfternoon(any())).willReturn(false);
-            given(timeService.isNight(any())).willReturn(false);
+            given(timeUtil.isMorning(any())).willReturn(true);
+            given(timeUtil.isAfternoon(any())).willReturn(false);
+            given(timeUtil.isNight(any())).willReturn(false);
 
             // when
             WelcomeResponse result = homeService.welcome(user);
@@ -88,9 +86,9 @@ class HomeServiceTest extends CommonServiceTest {
         @Test
         void welcome_case3() {
             //given
-            given(timeService.isMorning(any())).willReturn(false);
-            given(timeService.isAfternoon(any())).willReturn(true);
-            given(timeService.isNight(any())).willReturn(false);
+            given(timeUtil.isMorning(any())).willReturn(false);
+            given(timeUtil.isAfternoon(any())).willReturn(true);
+            given(timeUtil.isNight(any())).willReturn(false);
 
             // when
             WelcomeResponse result = homeService.welcome(user);
@@ -111,9 +109,9 @@ class HomeServiceTest extends CommonServiceTest {
         @Test
         void welcome_case4() {
             //given
-            given(timeService.isMorning(any())).willReturn(false);
-            given(timeService.isAfternoon(any())).willReturn(false);
-            given(timeService.isNight(any())).willReturn(true);
+            given(timeUtil.isMorning(any())).willReturn(false);
+            given(timeUtil.isAfternoon(any())).willReturn(false);
+            given(timeUtil.isNight(any())).willReturn(true);
 
             // when
             WelcomeResponse result = homeService.welcome(user);
@@ -156,55 +154,63 @@ class HomeServiceTest extends CommonServiceTest {
     @Test
     void completeBreath() {
         //given & when
-        ActionResponse result = homeService.completeBreath(user);
+        homeService.completeBreath(user);
+        String result = user.getBreathTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
         //then
-        ActionResponse expected = ActionResponse.of(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
-        );
-        assertThat(result.getUpdatedTime()).isEqualTo(expected.getUpdatedTime());
+        String expected = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+        assertThat(result).isEqualTo(expected);
     }
 
     @DisplayName("감각 깨우기 완료")
     @Test
     void completeSense() {
         //given & when
-        ActionResponse result = homeService.completeSense(user);
+        homeService.completeSense(user);
+        String result = user.getSenseTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
         //then
-        ActionResponse expected = ActionResponse.of(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
-        );
-        assertThat(result.getUpdatedTime()).isEqualTo(expected.getUpdatedTime());
+        String expected = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+        assertThat(result).isEqualTo(expected);
     }
 
     @DisplayName("행동에 따른 버튼 활성화 여부")
     @Test
     void getProgressStatus() {
         //given
-        Care care = new Care(CareCategory.getMsgToCode(1), "hi", "hello", mytamin);
-        careRepository.save(care);
-        mytamin.updateCare(care);
+        saveNewCare();
 
-        given(timeService.isToday(any())).willReturn(true);
+        given(timeUtil.isToday(any())).willReturn(true);
         given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
 
         // when
         ActiveResponse result = homeService.getProgressStatus(user);
 
         //then
-        ActiveResponse expected = ActiveResponse.of(
-                true,
-                true,
-                false,
-                true
-        );
+        ActiveResponse expected = ActiveResponse.builder()
+                .breathIsDone(true)
+                .senseIsDone(true)
+                .reportIsDone(false)
+                .careIsDone(true)
+                .build();
+
         assertAll(
                 () -> assertThat(result.isBreathIsDone()).isEqualTo(expected.isBreathIsDone()),
                 () -> assertThat(result.isSenseIsDone()).isEqualTo(expected.isSenseIsDone()),
                 () -> assertThat(result.isReportIsDone()).isEqualTo(expected.isReportIsDone()),
                 () -> assertThat(result.isCareIsDone()).isEqualTo(expected.isCareIsDone())
         );
+    }
+
+    private void saveNewCare() {
+        Care care = new Care(
+                CareCategory.getMsgToCode(1),
+                "hi",
+                "hello",
+                mytamin
+        );
+        careRepository.save(care);
+        mytamin.updateCare(care);
     }
 
 }

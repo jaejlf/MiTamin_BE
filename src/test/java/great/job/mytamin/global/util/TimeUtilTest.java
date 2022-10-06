@@ -1,4 +1,4 @@
-package great.job.mytamin.global.service;
+package great.job.mytamin.global.util;
 
 import great.job.mytamin.global.support.CommonServiceTest;
 import org.junit.jupiter.api.DisplayName;
@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Time 서비스")
-class TimeServiceTest extends CommonServiceTest {
+@DisplayName("Time 유틸")
+class TimeUtilTest extends CommonServiceTest {
 
     @Autowired
-    private TimeService timeService;
+    private TimeUtil timeUtil;
 
     @DisplayName("LocalDateTime -> takeAt 포맷으로 변환")
     @ParameterizedTest
@@ -27,7 +27,7 @@ class TimeServiceTest extends CommonServiceTest {
     })
     void convertToTakeAt(LocalDateTime target, String expected) {
         //given & when
-        String result = timeService.convertToTakeAt(target);
+        String result = timeUtil.convertToTakeAt(target);
 
         //then
         assertThat(result).isEqualTo(expected);
@@ -61,7 +61,7 @@ class TimeServiceTest extends CommonServiceTest {
     })
     void isMorning(LocalDateTime target, boolean expected) {
         //given & when
-        boolean result = timeService.isMorning(target);
+        boolean result = timeUtil.isMorning(target);
 
         //then
         assertThat(result).isEqualTo(expected);
@@ -77,7 +77,7 @@ class TimeServiceTest extends CommonServiceTest {
     })
     void isAfternoon(LocalDateTime target, boolean expected) {
         //given & when
-        boolean result = timeService.isAfternoon(target);
+        boolean result = timeUtil.isAfternoon(target);
 
         //then
         assertThat(result).isEqualTo(expected);
@@ -93,7 +93,7 @@ class TimeServiceTest extends CommonServiceTest {
     })
     void isNight(LocalDateTime target, boolean expected) {
         //given & when
-        boolean result = timeService.isNight(target);
+        boolean result = timeUtil.isNight(target);
 
         //then
         assertThat(result).isEqualTo(expected);
@@ -107,7 +107,7 @@ class TimeServiceTest extends CommonServiceTest {
     })
     void isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end, boolean expected) {
         //given & when
-        boolean result = timeService.isInRange(target, start, end);
+        boolean result = timeUtil.isInRange(target, start, end);
 
         //then
         assertThat(result).isEqualTo(expected);

@@ -1,8 +1,10 @@
 package great.job.mytamin.domain.home.controller;
 
+import great.job.mytamin.domain.home.dto.response.ActiveResponse;
+import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
+import great.job.mytamin.domain.home.service.HomeService;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.ResultResponse;
-import great.job.mytamin.domain.home.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,30 +24,34 @@ public class HomeController {
 
     @GetMapping("/welcome")
     public ResponseEntity<Object> welcome(@AuthenticationPrincipal User user) {
+        WelcomeResponse welcomeResponse = homeService.welcome(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("웰컴 메세지", homeService.welcome(user)));
+                .body(ResultResponse.ok("웰컴 메세지", welcomeResponse));
     }
 
     @GetMapping("/progress/status")
     public ResponseEntity<Object> getProgressStatus(@AuthenticationPrincipal User user) {
+        ActiveResponse activeResponse = homeService.getProgressStatus(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("행동 완료 상태", homeService.getProgressStatus(user)));
+                .body(ResultResponse.ok("행동 완료 상태", activeResponse));
     }
 
     @PatchMapping("/breath")
     public ResponseEntity<Object> completeBreath(@AuthenticationPrincipal User user) {
+        homeService.completeBreath(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("숨 고르기 완료", homeService.completeBreath(user)));
+                .body(ResultResponse.ok("숨 고르기 완료"));
     }
 
     @PatchMapping("/sense")
     public ResponseEntity<Object> completeSense(@AuthenticationPrincipal User user) {
+        homeService.completeSense(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("감각 깨우기 완료", homeService.completeSense(user)));
+                .body(ResultResponse.ok("감각 깨우기 완료"));
     }
 
 }

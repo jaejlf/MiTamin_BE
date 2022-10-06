@@ -1,6 +1,6 @@
-package great.job.mytamin.global.service;
+package great.job.mytamin.global.util;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 import static great.job.mytamin.domain.user.enumerate.MydayMessage.*;
 
-@Service
-public class TimeService {
+@Component
+public class TimeUtil {
 
     /*
     LocalDateTime -> takeAt 포맷 변환 (yyyy.MM.dd.요일)

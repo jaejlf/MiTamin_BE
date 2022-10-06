@@ -1,7 +1,7 @@
 package great.job.mytamin.domain.user.controller;
 
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
-import great.job.mytamin.domain.user.service.UserService;
+import great.job.mytamin.domain.user.service.MypageService;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,21 +22,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = UserController.class)
-@DisplayName("User 컨트롤러")
-class UserControllerTest extends CommonControllerTest {
+@WebMvcTest(controllers = MypageController.class)
+@DisplayName("Mypage 컨트롤러")
+class MypageControllerTest extends CommonControllerTest {
 
     @MockBean
-    private UserService userService;
+    private MypageService mypageService;
 
     @DisplayName("마이페이지 프로필 조회")
     @Test
     void getProfile(TestInfo testInfo) throws Exception {
         //given
-        given(userService.getProfile(any())).willReturn(ProfileResponse.of(user));
+        given(mypageService.getProfile(any())).willReturn(ProfileResponse.of(user));
 
         // when
-        ResultActions actions = mockMvc.perform(get("/user/profile")
+        ResultActions actions = mockMvc.perform(get("/mypage/profile")
                 .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
 
         //then
@@ -44,7 +44,7 @@ class UserControllerTest extends CommonControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("data").exists())
-                .andDo(document("/user/" + testInfo.getTestMethod().get().getName(),
+                .andDo(document("/mypage/" + testInfo.getTestMethod().get().getName(),
                         requestHeaders(
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                         ),

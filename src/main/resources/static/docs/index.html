@@ -1090,14 +1090,12 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 125
+Content-Length: 83
 
 {
   "statusCode" : 200,
   "message" : "숨 고르기 완료",
-  "data" : {
-    "updatedTime" : "2022.10.05 20:13"
-  }
+  "data" : null
 }</code></pre>
 </div>
 </div>
@@ -1149,11 +1147,6 @@ Content-Length: 125
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.updatedTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">숨 고르기 최종 업데이트 시간</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1186,14 +1179,12 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 128
+Content-Length: 86
 
 {
   "statusCode" : 200,
   "message" : "감각 깨우기 완료",
-  "data" : {
-    "updatedTime" : "2022.10.05 20:13"
-  }
+  "data" : null
 }</code></pre>
 </div>
 </div>
@@ -1244,11 +1235,6 @@ Content-Length: 128
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.updatedTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">감각 깨우기 최종 업데이트 시간</p></td>
 </tr>
 </tbody>
 </table>
@@ -1430,20 +1416,26 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 502
+Content-Length: 638
 
 {
   "statusCode" : 200,
-  "message" : "최근 마이타민",
+  "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "2022.10.05.Wed",
-    "canEdit" : true,
-    "memtalConditionCode" : 5,
-    "feelingTag" : "#신나는 #즐거운 #재밌는",
-    "mentalConditionMsg" : "기분이 매우 좋아요 !",
-    "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다.",
-    "careMsg1" : "오늘 할 일을 전부 했어",
-    "careMsg2" : "성실히 노력하는 내 모습이 좋아"
+    "takeAt" : "2022.10.07.Fri",
+    "canEditReport" : true,
+    "canEditCare" : false,
+    "report" : {
+      "mentalConditionCode" : 5,
+      "mentalCondition" : "매우 좋아요 !",
+      "feelingTag" : "#신나는 #즐거운 #재밌는",
+      "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
+    },
+    "care" : {
+      "careCategory" : "이루어 낸 일",
+      "careMsg1" : "오늘 할 일을 전부 했어",
+      "careMsg2" : "성실히 노력하는 내 모습이 좋아"
+    }
   }
 }</code></pre>
 </div>
@@ -1502,37 +1494,47 @@ Content-Length: 502
 <td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 날짜</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.canEdit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.canEditReport</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true : 수정 가능, false : 수정 불가</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'하루 진단' 수정 가능 여부</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.memtalConditionCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.canEditCare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'칭찬 처방' 수정 가능 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.report.mentalConditionCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마음 컨디션 코드</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.feelingTag</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">감정 태그</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.mentalConditionMsg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.report.mentalCondition</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마음 컨디션 메세지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.todayReport</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.report.feelingTag</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">감정 태그</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.report.todayReport</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">하루 진단</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careMsg1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.care.careCategory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.care.careMsg1</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careMsg2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.care.careMsg2</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 2</p></td>
 </tr>
@@ -1608,15 +1610,15 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 305
+Content-Length: 314
 
 {
   "statusCode" : 201,
   "message" : "하루 진단하기",
   "data" : {
-    "takeAt" : "2022.10.05.Wed",
+    "mentalConditionCode" : 5,
     "mentalCondition" : "매우 좋아요 !",
-    "feelingTag" : "#신나는 #즐거운",
+    "feelingTag" : "#신나는 #즐거운 #재밌는",
     "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
   }
 }</code></pre>
@@ -1715,9 +1717,9 @@ Content-Length: 305
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.takeAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 날짜</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.mentalConditionCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마음 컨디션 코드</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.mentalCondition</code></p></td>
@@ -1835,13 +1837,12 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 278
+Content-Length: 244
 
 {
   "statusCode" : 201,
   "message" : "칭찬 처방하기",
   "data" : {
-    "takeAt" : "2022.10.05.Wed",
     "careCategory" : "이루어 낸 일",
     "careMsg1" : "오늘 할 일을 전부 했어",
     "careMsg2" : "성실히 노력하는 내 모습이 좋아"
@@ -1930,11 +1931,6 @@ Content-Length: 278
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.takeAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 날짜</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careCategory</code></p></td>
@@ -2247,7 +2243,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-05 20:13:26 +0900
+Last updated 2022-10-07 04:44:12 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

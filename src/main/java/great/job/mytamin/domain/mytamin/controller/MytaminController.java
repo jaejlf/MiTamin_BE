@@ -1,5 +1,6 @@
 package great.job.mytamin.domain.mytamin.controller;
 
+import great.job.mytamin.domain.mytamin.dto.response.MytaminResponse;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.ResultResponse;
@@ -21,9 +22,10 @@ public class MytaminController {
 
     @GetMapping("/latest")
     public ResponseEntity<Object> getLatestMytamin(@AuthenticationPrincipal User user) {
+        MytaminResponse mytaminResponse = mytaminService.getLatestMytamin(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("최근 마이타민", mytaminService.getLatestMytamin(user)));
+                .body(ResultResponse.ok("최근 섭취한 마이타민", mytaminResponse));
     }
 
 }

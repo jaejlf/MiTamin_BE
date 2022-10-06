@@ -152,13 +152,13 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
 ** 4 : "좋은 편이에요 :)"
 ** 5 : "매우 좋아요 !"
 
-operation::report/reportToday[snippets='http-request,http-response']
-operation::report/reportToday[snippets='request-headers,request-fields,response-fields']
+operation::report/createReport[snippets='http-request,http-response']
+operation::report/createReport[snippets='request-headers,request-fields,response-fields']
 
 ==== Exception Response
 
-include::{snippets}/report/reportToday_4000/http-response.adoc[]
-include::{snippets}/report/reportToday_4001/http-response.adoc[]
+include::{snippets}/report/createReport_4000/http-response.adoc[]
+include::{snippets}/report/createReport_4001/http-response.adoc[]
 
 == Care
 === 칭찬 처방하기
@@ -172,13 +172,13 @@ include::{snippets}/report/reportToday_4001/http-response.adoc[]
     ** 6 : "과거의 나"
     ** 7 : "기타"
 
-operation::care/careToday[snippets='http-request,http-response']
-operation::care/careToday[snippets='request-headers,request-fields,response-fields']
+operation::care/createCare[snippets='http-request,http-response']
+operation::care/createCare[snippets='request-headers,request-fields,response-fields']
 
 ==== Exception Response
 
-include::{snippets}/care/careToday_5000/http-response.adoc[]
-include::{snippets}/care/careToday_5001/http-response.adoc[]
+include::{snippets}/care/createCare_5000/http-response.adoc[]
+include::{snippets}/care/createCare_5001/http-response.adoc[]
 
 == Image
 * Multipart 타입으로 이미지를 전송한다.
