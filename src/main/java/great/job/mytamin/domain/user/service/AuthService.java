@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +30,7 @@ public class AuthService {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
+    private final UserService userService;
 
     /*
     회원가입
@@ -62,7 +62,7 @@ public class AuthService {
                 isMytaminAlarmOn(signUpRequest.getMytaminHour())
 
         );
-        user.updateDateOfMyday(LocalDateTime.now()); // 마이데이 지정 날짜 -> 임시로 현재 날짜 할당
+        user.updateDateOfMyday(userService.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
         return UserResponse.of(userRepository.save(user));
 
     }

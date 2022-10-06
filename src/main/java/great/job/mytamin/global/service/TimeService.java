@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import static great.job.mytamin.domain.user.enumerate.MydayMessage.*;
 
 @Service
 public class TimeService {
@@ -60,6 +64,49 @@ public class TimeService {
     */
     public boolean isNight(LocalDateTime target) {
         return target.getHour() >= 19 || target.getHour() <= 4;
+    }
+
+    /*
+    target이 이번 달의 날짜에 속하는지
+    */
+    public boolean isCurrentMonth(LocalDateTime target) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), 1, 0, 0);
+        LocalDateTime end = LocalDateTime.of(now.getYear(), now.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
+        return isInRange(target, start, end);
+    }
+
+    /*
+    마이데이 디데이 & 메세지 계산
+    */
+    public Map<String, String> getMyDayInfo(String nickname, LocalDateTime dateOfMyDay) {
+        LocalDateTime now = LocalDateTime.now();
+        int dDay = now.getDayOfMonth() - dateOfMyDay.getDayOfMonth();
+
+        Map<String, String> map = new HashMap<>();
+
+        // 마이데이 당일
+        if (dDay == 0) {
+            map.put("dDay", "D-Day");
+            map.put("msg", nickname + "님, " + THE_DAY_OF_MYDAY.getMsg());
+        }
+        // 마이데이 이전
+        else if (dDay < -3) {
+            map.put("dDay", "D" + dDay + "일");
+            map.put("msg", BEFORE_MYDAY.getMsg());
+        }
+        // 마이데이 3일 전
+        else if (dDay < 0) {
+            map.put("dDay", "D" + dDay + "일");
+            map.put("msg", SOON_MYDAY.getMsg());
+        }
+        // 마이데이 이후
+        else {
+            map.put("dDay", "D+" + dDay + "일");
+            map.put("msg", AFTER_MYDAY.getMsg());
+        }
+
+        return map;
     }
 
     // 특정 시간 범위 내에 있는지

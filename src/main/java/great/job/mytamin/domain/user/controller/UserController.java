@@ -30,5 +30,12 @@ public class UserController {
                 .status(OK)
                 .body(ResultResponse.ok("마이페이지 프로필 조회", userService.getProfile(user)));
     }
+    
+    @GetMapping("/myday")
+    public ResponseEntity<Object> getMyday(@AuthenticationPrincipal User user) {
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("이번 달의 마이데이", userService.getMyday(user)));
+    }
 
 }
