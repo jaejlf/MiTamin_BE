@@ -8,6 +8,7 @@ import great.job.mytamin.domain.user.dto.response.UserResponse;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
+import great.job.mytamin.domain.user.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.jwt.JwtTokenProvider;
 import great.job.mytamin.global.service.RedisService;
@@ -31,6 +32,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
     private final UserService userService;
+    private final UserUtil userUtil;
 
     /*
     회원가입
@@ -48,8 +50,8 @@ public class AuthService {
         validatePasswordPattern(password);
 
         // 2. 이메일, 닉네임 중복 체크
-        if (checkEmailDuplication(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (checkNicknameDuplication(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        if (userUtil.checkEmailDuplication(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
+        if (userUtil.checkNicknameDuplication(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
 
         // 새로운 유저 저장
         User user = new User(
@@ -79,22 +81,6 @@ public class AuthService {
         String refreshToken = jwtTokenProvider.createRefreshToken(user);
 
         return TokenResponse.of(accessToken, refreshToken);
-    }
-
-    /*
-    이메일 중복 체크 (true : 이미 사용 중, false : 사용 가능)
-    */
-    @Transactional(readOnly = true)
-    public boolean checkEmailDuplication(String email) {
-        return userRepository.findByEmail(email).isPresent();
-    }
-
-    /*
-    닉네임 중복 체크 (true : 이미 사용 중, false : 사용 가능)
-    */
-    @Transactional(readOnly = true)
-    public boolean checkNicknameDuplication(String nickname) {
-        return userRepository.existsByNickname(nickname);
     }
 
     /*

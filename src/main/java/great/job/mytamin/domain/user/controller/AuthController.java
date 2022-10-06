@@ -4,6 +4,7 @@ import great.job.mytamin.domain.user.service.AuthService;
 import great.job.mytamin.domain.user.dto.request.LoginRequest;
 import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
+import great.job.mytamin.domain.user.util.UserUtil;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
@@ -20,6 +21,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserUtil userUtil;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody SignUpRequest signUpRequest) {
@@ -41,14 +43,14 @@ public class AuthController {
     public ResponseEntity<Object> checkEmailDuplication(@PathVariable String email) {
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("이메일 중복 체크", authService.checkEmailDuplication(email)));
+                .body(ResultResponse.ok("이메일 중복 체크", userUtil.checkEmailDuplication(email)));
     }
 
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<Object> checkNicknameDuplication(@PathVariable String nickname) {
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("닉네임 중복 체크", authService.checkNicknameDuplication(nickname)));
+                .body(ResultResponse.ok("닉네임 중복 체크", userUtil.checkNicknameDuplication(nickname)));
     }
 
     @GetMapping("/reissue")

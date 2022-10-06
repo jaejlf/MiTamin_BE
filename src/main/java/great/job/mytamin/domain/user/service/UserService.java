@@ -3,6 +3,7 @@ package great.job.mytamin.domain.user.service;
 import great.job.mytamin.domain.user.dto.response.MydayResponse;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.util.UserUtil;
 import great.job.mytamin.global.service.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class UserService {
 
     private final TimeService timeService;
+    private final UserUtil userUtil;
 
     /*
     마이페이지 프로필 조회
@@ -49,6 +51,7 @@ public class UserService {
     /*
     마이데이 날짜 랜덤 지정
     */
+    @Transactional(readOnly = true)
     public LocalDateTime randomizeDateOfMyday() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -65,4 +68,21 @@ public class UserService {
                 0, 0);
     }
 
+    /*
+    닉네임 수정
+    */
+    @Transactional
+    public void editNickname(User user, String nickname) {
+        userUtil.checkNicknameDuplication(nickname);
+        user.updateNickname(nickname);
+    }
+
+    /*
+    '되고 싶은 나' 메세지 수정
+    */
+    @Transactional
+    public void editBeMyMessage(User user, String msg) {
+        user.updateBeMyMessage(msg);
+    }
+    
 }

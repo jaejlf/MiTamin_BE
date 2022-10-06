@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -98,6 +98,14 @@ public class User implements UserDetails {
         this.senseTime = LocalDateTime.now();
     }
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateBeMyMessage(String beMyMessage) {
+        this.beMyMessage = beMyMessage;
+    }
+
     public void updateMytaminTime(String mytaminHour, String mytaminMin) {
         this.mytaminHour = mytaminHour;
         this.mytaminMin = mytaminMin;
@@ -114,7 +122,7 @@ public class User implements UserDetails {
     /*
     UserDetails Method
     */
-    @ElementCollection(fetch = EAGER)
+    @ElementCollection(fetch = LAZY)
     private List<String> roles = new ArrayList<>();
 
     @Override
