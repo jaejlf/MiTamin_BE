@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReportResponse {
 
+    Long reportId;
     int mentalConditionCode;
     String mentalCondition;
     String feelingTag;
@@ -20,6 +21,7 @@ public class ReportResponse {
 
     public static ReportResponse of(Report report, String feelingTag) {
         return ReportResponse.builder()
+                .reportId(report.getReportId())
                 .mentalConditionCode(MentalCondition.convertMsgToCode(report.getMentalCondition()))
                 .mentalCondition(report.getMentalCondition())
                 .feelingTag(feelingTag)

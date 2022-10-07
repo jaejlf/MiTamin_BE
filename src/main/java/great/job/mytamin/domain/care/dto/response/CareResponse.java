@@ -12,12 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CareResponse {
 
+    Long careId;
     String careCategory;
     String careMsg1;
     String careMsg2;
 
     public static CareResponse of(Care care) {
         return CareResponse.builder()
+                .careId(care.getCareId())
                 .careCategory(care.getCareCategory())
                 .careMsg1(care.getCareMsg1())
                 .careMsg2(care.getCareMsg2())

@@ -10,16 +10,20 @@ import great.job.mytamin.domain.report.repository.ReportRepository;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.util.ReportUtil;
+import great.job.mytamin.global.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static great.job.mytamin.global.exception.ErrorMap.REPORT_ALREADY_DONE;
+import java.time.LocalDateTime;
+
+import static great.job.mytamin.global.exception.ErrorMap.*;
 
 @Service
 @RequiredArgsConstructor
 public class ReportService {
 
+    private final TimeUtil timeUtil;
     private final ReportUtil reportUtil;
     private final MytaminService mytaminService;
     private final ReportRepository reportRepository;
@@ -34,6 +38,42 @@ public class ReportService {
 
         Report newReport = saveNewReport(reportRequest, mytamin);
         return ReportResponse.of(newReport, reportUtil.concatFeelingTag(newReport));
+    }
+
+    /*
+    하루 진단 수정
+    */
+    @Transactional
+    public void updateReport(User user, Long reportId, ReportRequest reportRequest) {
+        Report report = getReport(reportId);
+        hasAuthorized(report, user);
+        canEdit(report);
+
+        report.updateAll(
+                MentalCondition.convertCodeToMsg(reportRequest.getMentalConditionCode()),
+                reportRequest.getTag1(),
+                reportRequest.getTag2(),
+                reportRequest.getTag3(),
+                reportRequest.getTodayReport()
+        );
+        reportRepository.save(report);
+    }
+
+    private Report getReport(Long reportId) {
+        return reportRepository.findById(reportId)
+                .orElseThrow(() -> new MytaminException(REPORT_NOT_FOUND_ERROR));
+    }
+
+    private void hasAuthorized(Report report, User user) {
+        if (!report.getMytamin().getUser().equals(user)) {
+            throw new MytaminException(NO_AUTH_ERROR);
+        }
+    }
+
+    private void canEdit(Report report) {
+        if (!timeUtil.isInRange(LocalDateTime.now(), report.getCreatedAt(), report.getCreatedAt().plusDays(1))) {
+            throw new MytaminException(EDIT_TIMEOUT_ERROR);
+        }
     }
 
     private Report saveNewReport(ReportRequest reportRequest, Mytamin mytamin) {

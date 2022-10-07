@@ -8,10 +8,7 @@ import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -29,6 +26,16 @@ public class ReportController {
         return ResponseEntity
                 .status(CREATED)
                 .body(ResultResponse.create("하루 진단하기", reportResponse));
+    }
+
+    @PutMapping("/{reportId}")
+    public ResponseEntity<Object> updateReport(@AuthenticationPrincipal User user,
+                                               @PathVariable Long reportId,
+                                               @RequestBody ReportRequest reportRequest) {
+        reportService.updateReport(user, reportId, reportRequest);
+        return ResponseEntity
+                .status(CREATED)
+                .body(ResultResponse.create("하루 진단 수정"));
     }
 
 }
