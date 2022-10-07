@@ -81,28 +81,28 @@ public class TimeUtil {
     */
     public Map<String, String> getMyDayInfo(String nickname, LocalDateTime dateOfMyDay) {
         LocalDateTime now = LocalDateTime.now();
-        int dDay = now.getDayOfMonth() - dateOfMyDay.getDayOfMonth();
+        int dday = now.getDayOfMonth() - dateOfMyDay.getDayOfMonth();
 
         Map<String, String> map = new HashMap<>();
 
         // 마이데이 당일
-        if (dDay == 0) {
-            map.put("dDay", "D-Day");
+        if (dday == 0) {
+            map.put("dday", "D-Day");
             map.put("msg", nickname + "님, " + THE_DAY_OF_MYDAY.getMsg());
         }
         // 마이데이 이전
-        else if (dDay < -3) {
-            map.put("dDay", "D" + dDay + "일");
+        else if (dday < -3) {
+            map.put("dday", "D" + dday + "일");
             map.put("msg", BEFORE_MYDAY.getMsg());
         }
         // 마이데이 3일 전
-        else if (dDay < 0) {
-            map.put("dDay", "D" + dDay + "일");
+        else if (dday < 0) {
+            map.put("dday", "D" + dday + "일");
             map.put("msg", SOON_MYDAY.getMsg());
         }
         // 마이데이 이후
         else {
-            map.put("dDay", "D+" + dDay + "일");
+            map.put("dday", "D+" + dday + "일");
             map.put("msg", AFTER_MYDAY.getMsg());
         }
 
