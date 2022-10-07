@@ -340,6 +340,7 @@ class ReportControllerTest extends CommonControllerTest {
     
     private ReportResponse mockReportResponse() {
         return ReportResponse.builder()
+                .reportId(1L)
                 .mentalConditionCode(5)
                 .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
                 .feelingTag("#신나는 #즐거운 #재밌는")

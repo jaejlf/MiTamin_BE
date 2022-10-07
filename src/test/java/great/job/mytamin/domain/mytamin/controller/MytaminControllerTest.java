@@ -37,6 +37,7 @@ class MytaminControllerTest extends CommonControllerTest {
     void getLatestMytamin(TestInfo testInfo) throws Exception {
         //given
         ReportResponse report = ReportResponse.builder()
+                .reportId(1L)
                 .mentalConditionCode(5)
                 .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
                 .feelingTag("#신나는 #즐거운 #재밌는")
@@ -44,6 +45,7 @@ class MytaminControllerTest extends CommonControllerTest {
                 .build();
 
         CareResponse care = CareResponse.builder()
+                .careId(1L)
                 .careCategory("이루어 낸 일")
                 .careMsg1("오늘 할 일을 전부 했어")
                 .careMsg2("성실히 노력하는 내 모습이 좋아")

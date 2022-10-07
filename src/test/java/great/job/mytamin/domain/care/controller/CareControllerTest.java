@@ -314,6 +314,7 @@ class CareControllerTest extends CommonControllerTest {
 
     private CareResponse mockCareResponse() {
         return CareResponse.builder()
+                .careId(1L)
                 .careCategory("이루어 낸 일")
                 .careMsg1("오늘 할 일을 전부 했어")
                 .careMsg2("성실히 노력하는 내 모습이 좋아")
