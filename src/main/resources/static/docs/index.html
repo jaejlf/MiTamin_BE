@@ -1326,7 +1326,7 @@ Content-Length: 195
 <div class="ulist">
 <ul>
 <li>
-<p>수정이 가능할 경우 canEditReport, canEditCare는 true, 수정이 불가능할 경우 false를 리턴한다.</p>
+<p>canEditReport, canEditCare는 수정이 가능할 경우 true, 수정이 불가능할 경우 false를 리턴한다.</p>
 </li>
 </ul>
 </div>
@@ -1371,7 +1371,7 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 688
+Content-Length: 682
 
 {
   "statusCode" : 200,
@@ -1381,14 +1381,14 @@ Content-Length: 688
     "canEditReport" : true,
     "canEditCare" : false,
     "report" : {
-      "reportId" : null,
+      "reportId" : 1,
       "mentalConditionCode" : 5,
       "mentalCondition" : "매우 좋아요 !",
       "feelingTag" : "#신나는 #즐거운 #재밌는",
       "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
     },
     "care" : {
-      "careId" : null,
+      "careId" : 1,
       "careCategory" : "이루어 낸 일",
       "careMsg1" : "오늘 할 일을 전부 했어",
       "careMsg2" : "성실히 노력하는 내 모습이 좋아"
@@ -1462,7 +1462,7 @@ Content-Length: 688
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.report.reportId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">하루 진단 id</p></td>
 </tr>
 <tr>
@@ -1487,7 +1487,7 @@ Content-Length: 688
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.care.careId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 id</p></td>
 </tr>
 <tr>
@@ -1577,13 +1577,13 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 338
+Content-Length: 335
 
 {
   "statusCode" : 201,
   "message" : "하루 진단하기",
   "data" : {
-    "reportId" : null,
+    "reportId" : 1,
     "mentalConditionCode" : 5,
     "mentalCondition" : "매우 좋아요 !",
     "feelingTag" : "#신나는 #즐거운 #재밌는",
@@ -1686,7 +1686,7 @@ Content-Length: 338
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.reportId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 id</p></td>
 </tr>
 <tr>
@@ -2003,13 +2003,13 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 266
+Content-Length: 263
 
 {
   "statusCode" : 201,
   "message" : "칭찬 처방하기",
   "data" : {
-    "careId" : null,
+    "careId" : 1,
     "careCategory" : "이루어 낸 일",
     "careMsg1" : "오늘 할 일을 전부 했어",
     "careMsg2" : "성실히 노력하는 내 모습이 좋아"
@@ -2101,7 +2101,7 @@ Content-Length: 266
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 id</p></td>
 </tr>
 <tr>
@@ -3055,7 +3055,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-07 18:39:37 +0900
+Last updated 2022-10-07 22:32:58 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
