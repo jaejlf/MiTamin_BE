@@ -43,7 +43,7 @@ class UserControllerTest extends CommonControllerTest {
         @Test
         void updateNickname(TestInfo testInfo) throws Exception {
             //given
-            String nickname = "멘탈짱";
+            String nickname = "mental-zzang";
 
             doNothing().when(userService).updateNickname(any(), any());
 

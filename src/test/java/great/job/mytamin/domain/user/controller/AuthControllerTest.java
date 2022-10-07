@@ -400,7 +400,7 @@ class AuthControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data").description("true : 이미 사용 중, false : 사용 가능")
+                                fieldWithPath("data").description("사용 중인 이메일인지")
                         ))
                 );
     }
@@ -427,7 +427,7 @@ class AuthControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data").description("true : 이미 사용 중, false : 사용 가능")
+                                fieldWithPath("data").description("사용 중인 닉네임인지")
                         ))
                 );
     }
