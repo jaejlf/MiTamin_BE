@@ -29,7 +29,7 @@ public class UserController {
         userService.updateNickname(user, nickname);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("닉네임 수정"));
+                .body(ResultResponse.ok("닉네임 수정 완료", null));
     }
 
     @PatchMapping("/bemy-msg")
@@ -38,7 +38,7 @@ public class UserController {
         userService.updateBeMyMessage(user, beMyMsgRequest);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("'되고 싶은 나' 메세지 수정"));
+                .body(ResultResponse.ok("'되고 싶은 나' 메세지 수정 완료", null));
     }
 
 }

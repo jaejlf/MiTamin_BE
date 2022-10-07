@@ -67,7 +67,7 @@ video {
 <ul class="sectlevel0">
 <li><a href="#_my_tamin_api_document">💊 My Tamin API Document</a>
 <ul class="sectlevel1">
-<li><a href="#_user">User</a>
+<li><a href="#_auth">Auth</a>
 <ul class="sectlevel2">
 <li><a href="#_회원_가입">회원 가입</a></li>
 <li><a href="#_기본_로그인">기본 로그인</a></li>
@@ -101,7 +101,7 @@ video {
 <li><a href="#_칭찬_처방_수정">칭찬 처방 수정</a></li>
 </ul>
 </li>
-<li><a href="#_user_2">User</a>
+<li><a href="#_user">User</a>
 <ul class="sectlevel2">
 <li><a href="#_닉네임_수정">닉네임 수정</a></li>
 <li><a href="#_되고_싶은_나_메세지_수정">'되고 싶은 나' 메세지 수정</a></li>
@@ -127,7 +127,7 @@ video {
 <div id="content">
 <h1 id="_my_tamin_api_document" class="sect0">💊 My Tamin API Document</h1>
 <div class="sect1">
-<h2 id="_user">User</h2>
+<h2 id="_auth">Auth</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_회원_가입">회원 가입</h3>
@@ -141,7 +141,7 @@ video {
 <div class="ulist">
 <ul>
 <li>
-<p>이 경우 mytaminHour, mytaminMin의 초기값은 null이다.</p>
+<p>이 경우 mytaminHour, mytaminMin의 기본값은 null이다.</p>
 </li>
 <li>
 <p>마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.</p>
@@ -150,7 +150,7 @@ video {
 </div>
 </li>
 <li>
-<p>profileImgUrl의 기본값은 "", beMyMessage의 기본값은 "마음 면역력이 높아질"이다.</p>
+<p>profileImgUrl의 기본값은 "", beMyMessage의 기본값은 "마음 면역력이 높아질" 이다.</p>
 </li>
 </ul>
 </div>
@@ -518,7 +518,7 @@ Content-Length: 144
 <div class="ulist">
 <ul>
 <li>
-<p>이미 사용 중인 이메일일 경우 true, 사용 가능한 이메일일 경우 false를 리턴한다.</p>
+<p>중복된 이메일이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.</p>
 </li>
 </ul>
 </div>
@@ -599,7 +599,7 @@ Content-Length: 86
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용 중인 이메일인지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이메일 중복 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -610,7 +610,7 @@ Content-Length: 86
 <div class="ulist">
 <ul>
 <li>
-<p>이미 사용 중인 닉네임일 경우 true, 사용 가능한 닉네임일 경우 false를 리턴한다.</p>
+<p>중복된 닉네임이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.</p>
 </li>
 </ul>
 </div>
@@ -690,7 +690,7 @@ Content-Length: 86
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용 중인 닉네임인지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임 중복 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -711,7 +711,7 @@ Content-Length: 86
 </div>
 </li>
 <li>
-<p>만약 403 응답(= refreshToken 만료)일 경우에는 재로그인하도록 한다.</p>
+<p>만약 403 응답(= INVALID_TOKEN_ERROR)일 경우에는 재로그인하도록 한다.</p>
 </li>
 </ul>
 </div>
@@ -1048,12 +1048,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 83
+Content-Length: 65
 
 {
   "statusCode" : 200,
-  "message" : "숨 고르기 완료",
-  "data" : null
+  "message" : "숨 고르기 완료"
 }</code></pre>
 </div>
 </div>
@@ -1137,12 +1136,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 86
+Content-Length: 68
 
 {
   "statusCode" : 200,
-  "message" : "감각 깨우기 완료",
-  "data" : null
+  "message" : "감각 깨우기 완료"
 }</code></pre>
 </div>
 </div>
@@ -1319,14 +1317,14 @@ Content-Length: 195
 <div class="ulist">
 <ul>
 <li>
-<p>하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다. (ex. data.report = null)</p>
+<p>하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다. (ex. data.report : null)</p>
 </li>
 <li>
 <p>하루 진단/칭찬 처방은 작성 후 24시간 이내일 경우 수정이 가능하다.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>canEditReport, canEditCare는 수정이 가능할 경우 true, 수정이 불가능할 경우 false를 리턴한다.</p>
+<p>canEditReport, canEditCare는 수정 가능할 경우 true, 불가능할 경우 false를 리턴한다.</p>
 </li>
 </ul>
 </div>
@@ -1377,7 +1375,7 @@ Content-Length: 682
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "2022.10.07.Fri",
+    "takeAt" : "2022.10.08.Sat",
     "canEditReport" : true,
     "canEditCare" : false,
     "report" : {
@@ -1520,12 +1518,6 @@ Content-Length: 682
 <ul>
 <li>
 <p>마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int type의 코드를 보낸다.</p>
-</li>
-<li>
-<p>감정 태그 2, 3은 필수 요청값이 아니므로, 유저가 선택하지 않았다면 보내주지 않아도 된다.</p>
-</li>
-<li>
-<p>Response의 feelingTag는 Request의 tag1, tag2, tag3을 조합하여 리턴한다.</p>
 </li>
 <li>
 <p>mentalConditionCode</p>
@@ -1772,12 +1764,11 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 83
+Content-Length: 72
 
 {
   "statusCode" : 200,
-  "message" : "하루 진단 수정",
-  "data" : null
+  "message" : "하루 진단 수정 완료"
 }</code></pre>
 </div>
 </div>
@@ -2180,12 +2171,11 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 83
+Content-Length: 72
 
 {
   "statusCode" : 200,
-  "message" : "칭찬 처방 수정",
-  "data" : null
+  "message" : "칭찬 처방 수정 완료"
 }</code></pre>
 </div>
 </div>
@@ -2338,7 +2328,7 @@ Content-Length: 144
 </div>
 </div>
 <div class="sect1">
-<h2 id="_user_2">User</h2>
+<h2 id="_user">User</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_닉네임_수정">닉네임 수정</h3>
@@ -2358,12 +2348,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 79
+Content-Length: 68
 
 {
   "statusCode" : 200,
-  "message" : "닉네임 수정",
-  "data" : null
+  "message" : "닉네임 수정 완료"
 }</code></pre>
 </div>
 </div>
@@ -2482,12 +2471,11 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 99
+Content-Length: 88
 
 {
   "statusCode" : 200,
-  "message" : "'되고 싶은 나' 메세지 수정",
-  "data" : null
+  "message" : "'되고 싶은 나' 메세지 수정 완료"
 }</code></pre>
 </div>
 </div>
@@ -3055,7 +3043,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-07 22:32:58 +0900
+Last updated 2022-10-07 23:55:32 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -36,7 +36,7 @@ public class CareController {
         careService.updateCare(user, careId, careRequest);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("칭찬 처방 수정"));
+                .body(ResultResponse.ok("칭찬 처방 수정 완료", null));
     }
 
 }

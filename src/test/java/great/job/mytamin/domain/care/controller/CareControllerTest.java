@@ -212,8 +212,7 @@ class CareControllerTest extends CommonControllerTest {
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("message").description("결과 메세지"),
-                                    fieldWithPath("data").ignored()
+                                    fieldWithPath("message").description("결과 메세지")
                             ))
                     );
         }

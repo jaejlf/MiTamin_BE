@@ -43,7 +43,7 @@ public class HomeController {
         homeService.completeBreath(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("숨 고르기 완료"));
+                .body(ResultResponse.ok("숨 고르기 완료", null));
     }
 
     @PatchMapping("/sense")
@@ -51,7 +51,7 @@ public class HomeController {
         homeService.completeSense(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("감각 깨우기 완료"));
+                .body(ResultResponse.ok("감각 깨우기 완료", null));
     }
 
 }

@@ -36,7 +36,7 @@ public class ReportController {
         reportService.updateReport(user, reportId, reportRequest);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("하루 진단 수정"));
+                .body(ResultResponse.ok("하루 진단 수정 완료", null));
     }
 
 }

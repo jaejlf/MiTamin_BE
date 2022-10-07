@@ -4,13 +4,13 @@ endif::[]
 
 = 💊 My Tamin API Document
 
-== User
+== Auth
 === 회원 가입
 * mytaminHour은 24시간 단위의 값으로 요청한다. (ex. 오후 3시 -> "15")
 * mytaminHour, mytaminMin은 필수 요청값이 아니므로, 유저가 '건너뛰기'를 선택했을 경우 email, password, nickname 값만 넣어 요청한다.
-       ** 이 경우 mytaminHour, mytaminMin의 초기값은 null이다.
-       ** 마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.
-* profileImgUrl의 기본값은 "", beMyMessage의 기본값은 "마음 면역력이 높아질"이다.
+    ** 이 경우 mytaminHour, mytaminMin의 기본값은 null이다.
+    ** 마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.
+* profileImgUrl의 기본값은 "", beMyMessage의 기본값은 "마음 면역력이 높아질" 이다.
 
 operation::auth/signup[snippets='http-request,http-response']
 operation::auth/signup[snippets='request-fields,response-fields']
@@ -35,13 +35,13 @@ include::{snippets}/auth/defaultLogin_3000/http-response.adoc[]
 include::{snippets}/auth/defaultLogin_3001/http-response.adoc[]
 
 === 이메일 중복 체크
-* 이미 사용 중인 이메일일 경우 true, 사용 가능한 이메일일 경우 false를 리턴한다.
+* 중복된 이메일이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.
 
 operation::auth/checkEmailDuplication[snippets='http-request,http-response']
 operation::auth/checkEmailDuplication[snippets='path-parameters,response-fields']
 
 === 닉네임 중복 체크
-* 이미 사용 중인 닉네임일 경우 true, 사용 가능한 닉네임일 경우 false를 리턴한다.
+* 중복된 닉네임이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.
 
 operation::auth/checkNicknameDuplication[snippets='http-request,http-response']
 operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fields']
@@ -49,7 +49,7 @@ operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fiel
 === 토큰 재발급
 * 새로 발급한 accessToken과 기존의 refreshToken을 리턴한다.
     ** refreshToken의 만료 기간이 2일 이내로 남았을 경우 refreshToken 또한 새로 발급한다.
-* 만약 403 응답(= refreshToken 만료)일 경우에는 재로그인하도록 한다.
+* 만약 403 응답(= INVALID_TOKEN_ERROR)일 경우에는 재로그인하도록 한다.
 
 operation::auth/reissue[snippets='http-request,http-response']
 operation::auth/reissue[snippets='request-fields,response-fields']
@@ -102,9 +102,9 @@ operation::home/getProgressStatus[snippets='request-headers,response-fields']
 
 == Mytamin
 === 최근 섭취한 마이타민
-* 하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다. (ex. data.report = null)
+* 하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다. (ex. data.report : null)
 * 하루 진단/칭찬 처방은 작성 후 24시간 이내일 경우 수정이 가능하다.
-    ** canEditReport, canEditCare는 수정이 가능할 경우 true, 수정이 불가능할 경우 false를 리턴한다.
+    ** canEditReport, canEditCare는 수정 가능할 경우 true, 불가능할 경우 false를 리턴한다.
 * mentalConditionCode
     ** 1 : "매우 나빠요 .."
     ** 2 : "나쁜 편이에요 :("
@@ -118,15 +118,12 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
 == Report
 === 하루 진단하기
 * 마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int type의 코드를 보낸다.
-* 감정 태그 2, 3은 필수 요청값이 아니므로, 유저가 선택하지 않았다면 보내주지 않아도 된다.
-* Response의 feelingTag는 Request의 tag1, tag2, tag3을 조합하여 리턴한다.
-
 * mentalConditionCode
-** 1 : "매우 나빠요 .."
-** 2 : "나쁜 편이에요 :("
-** 3 : "그럭저럭이에요"
-** 4 : "좋은 편이에요 :)"
-** 5 : "매우 좋아요 !"
+    ** 1 : "매우 나빠요 .."
+    ** 2 : "나쁜 편이에요 :("
+    ** 3 : "그럭저럭이에요"
+    ** 4 : "좋은 편이에요 :)"
+    ** 5 : "매우 좋아요 !"
 
 operation::report/createReport[snippets='http-request,http-response']
 operation::report/createReport[snippets='request-headers,request-fields,response-fields']
@@ -191,13 +188,11 @@ include::{snippets}/user/updateNickname_2003/http-response.adoc[]
 operation::user/updateBeMyMessage[snippets='http-request,http-response']
 operation::user/updateBeMyMessage[snippets='request-headers,request-fields,response-fields']
 
-
 == Mypage
 === 마이페이지 프로필 조회
 
 operation::mypage/getProfile[snippets='http-request,http-response']
 operation::mypage/getProfile[snippets='request-headers,response-fields']
-
 
 === 이번 달의 마이데이
 * 매달 랜덤으로 마이데이 날짜가 지정된다.
