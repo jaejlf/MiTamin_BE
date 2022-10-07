@@ -1,6 +1,7 @@
 package great.job.mytamin.domain.report.dto.response;
 
 import great.job.mytamin.domain.report.entity.Report;
+import great.job.mytamin.domain.report.enumerate.MentalCondition;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,29 +13,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReportResponse {
 
-    String takeAt;
+    Long reportId;
+    int mentalConditionCode;
     String mentalCondition;
     String feelingTag;
     String todayReport;
 
-    public static ReportResponse of(Report report) {
+    public static ReportResponse of(Report report, String feelingTag) {
         return ReportResponse.builder()
-                .takeAt(report.getMytamin().getTakeAt())
+                .reportId(report.getReportId())
+                .mentalConditionCode(MentalCondition.convertMsgToCode(report.getMentalCondition()))
                 .mentalCondition(report.getMentalCondition())
-                .feelingTag(getFeelingTag(report))
+                .feelingTag(feelingTag)
                 .todayReport(report.getTodayReport())
                 .build();
-    }
-
-    public static String getFeelingTag(Report report) {
-        String feelingTag = "#" + report.getTag1();
-        if (report.getTag2() != null) {
-            feelingTag += " #" + report.getTag2();
-        }
-        if (report.getTag3() != null) {
-            feelingTag += " #" + report.getTag3();
-        }
-        return feelingTag;
     }
 
 }

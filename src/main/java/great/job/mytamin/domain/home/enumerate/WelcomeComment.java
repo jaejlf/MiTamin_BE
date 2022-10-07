@@ -1,4 +1,4 @@
-package great.job.mytamin.domain.mytamin.enumerate;
+package great.job.mytamin.domain.home.enumerate;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

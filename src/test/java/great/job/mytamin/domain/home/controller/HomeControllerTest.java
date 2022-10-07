@@ -1,6 +1,5 @@
 package great.job.mytamin.domain.home.controller;
 
-import great.job.mytamin.domain.home.dto.response.ActionResponse;
 import great.job.mytamin.domain.home.dto.response.ActiveResponse;
 import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
 import great.job.mytamin.domain.home.service.HomeService;
@@ -12,11 +11,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -39,10 +36,12 @@ class HomeControllerTest extends CommonControllerTest {
     @Test
     void welcome(TestInfo testInfo) throws Exception {
         //given
-        given(homeService.welcome(any())).willReturn(WelcomeResponse.of(
-                user.getNickname(),
-                "어떤 하루를 보내고 계신가요 ?"
-        ));
+        given(homeService.welcome(any())).willReturn(
+                WelcomeResponse.builder()
+                        .nickname(user.getNickname())
+                        .comment("어떤 하루를 보내고 계신가요 ?")
+                        .build()
+        );
 
         //when
         ResultActions actions = mockMvc.perform(get("/home/welcome")
@@ -70,12 +69,14 @@ class HomeControllerTest extends CommonControllerTest {
     @Test
     void getProgressStatus(TestInfo testInfo) throws Exception {
         //given
-        given(homeService.getProgressStatus(any())).willReturn(ActiveResponse.of(
-                true,
-                true,
-                false,
-                false
-        ));
+        given(homeService.getProgressStatus(any())).willReturn(
+                ActiveResponse.builder()
+                        .breathIsDone(true)
+                        .senseIsDone(true)
+                        .reportIsDone(false)
+                        .careIsDone(false)
+                        .build()
+        );
 
         //when
         ResultActions actions = mockMvc.perform(get("/home/progress/status")
@@ -105,11 +106,9 @@ class HomeControllerTest extends CommonControllerTest {
     @Test
     void completeBreath(TestInfo testInfo) throws Exception {
         //given
-        given(homeService.completeBreath(any())).willReturn(ActionResponse.of(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
-        ));
+        doNothing().when(homeService).completeBreath(any());
 
-        //when
+        // when
         ResultActions actions = mockMvc.perform(patch("/home/breath")
                 .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
 
@@ -117,7 +116,6 @@ class HomeControllerTest extends CommonControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("data").exists())
                 .andDo(document("/home/" + testInfo.getTestMethod().get().getName(),
                         requestHeaders(
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
@@ -125,7 +123,7 @@ class HomeControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data.updatedTime").description("숨 고르기 최종 업데이트 시간")
+                                fieldWithPath("data").ignored()
                         ))
                 );
     }
@@ -134,11 +132,9 @@ class HomeControllerTest extends CommonControllerTest {
     @Test
     void completeSense(TestInfo testInfo) throws Exception {
         //given
-        given(homeService.completeSense(any())).willReturn(ActionResponse.of(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
-        ));
+        doNothing().when(homeService).completeSense(any());
 
-        //when
+        // when
         ResultActions actions = mockMvc.perform(patch("/home/sense")
                 .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
 
@@ -146,7 +142,6 @@ class HomeControllerTest extends CommonControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("data").exists())
                 .andDo(document("/home/" + testInfo.getTestMethod().get().getName(),
                         requestHeaders(
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
@@ -154,7 +149,7 @@ class HomeControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data.updatedTime").description("감각 깨우기 최종 업데이트 시간")
+                                fieldWithPath("data").ignored()
                         ))
                 );
     }

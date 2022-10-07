@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class Daynote {
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String comment;
+
+    private LocalDateTime performedAt; // 마이데이를 수행한 날짜
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId")

@@ -39,4 +39,10 @@ public class Care {
         this.mytamin = mytamin;
     }
 
+    public void updateAll(String careCategory, String careMsg1, String careMsg2) {
+        this.careCategory = careCategory;
+        this.careMsg1 = careMsg1;
+        this.careMsg2 = careMsg2;
+    }
+
 }

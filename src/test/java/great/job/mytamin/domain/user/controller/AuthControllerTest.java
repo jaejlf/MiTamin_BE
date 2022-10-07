@@ -5,7 +5,8 @@ import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
-import great.job.mytamin.domain.user.service.UserService;
+import great.job.mytamin.domain.user.service.AuthService;
+import great.job.mytamin.domain.user.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest extends CommonControllerTest {
 
     @MockBean
-    private UserService userService;
+    private AuthService authService;
+
+    @MockBean
+    private UserUtil userUtil;
 
     @Nested
     @DisplayName("회원 가입")
@@ -52,7 +56,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
-            given(userService.signup(any())).willReturn(UserResponse.of(user));
+
+            given(authService.signup(any())).willReturn(UserResponse.of(user));
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/signup")
@@ -68,7 +73,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -96,7 +101,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
-            given(userService.signup(any())).willThrow(new MytaminException(EMAIL_PATTERN_ERROR));
+
+            given(authService.signup(any())).willThrow(new MytaminException(EMAIL_PATTERN_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/signup")
@@ -113,7 +119,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -137,7 +143,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
-            given(userService.signup(any())).willThrow(new MytaminException(PASSWORD_PATTERN_ERROR));
+
+            given(authService.signup(any())).willThrow(new MytaminException(PASSWORD_PATTERN_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/signup")
@@ -154,7 +161,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -178,7 +185,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
-            given(userService.signup(any())).willThrow(new MytaminException(USER_ALREADY_EXIST_ERROR));
+
+            given(authService.signup(any())).willThrow(new MytaminException(USER_ALREADY_EXIST_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/signup")
@@ -195,7 +203,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -219,7 +227,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "22",
                     "00"
             );
-            given(userService.signup(any())).willThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR));
+
+            given(authService.signup(any())).willThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/signup")
@@ -236,7 +245,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -263,10 +272,13 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "password1234"
             );
-            given(userService.defaultLogin(any())).willReturn(new TokenResponse(
-                    "{{ACCESS_TOKEN}}",
-                    "{{REFRESH_TOKEN}}"
-            ));
+
+            given(authService.defaultLogin(any())).willReturn(
+                    TokenResponse.builder()
+                            .accessToken("{{ACCESS_TOKEN}}")
+                            .refreshToken("{{REFRESH_TOKEN}}")
+                            .build()
+            );
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/default/login")
@@ -300,7 +312,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "password1234"
             );
-            given(userService.defaultLogin(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
+
+            given(authService.defaultLogin(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/default/login")
@@ -335,7 +348,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "XXX password XXX"
             );
-            given(userService.defaultLogin(any())).willThrow(new MytaminException(PASSWORD_MISMATCH_ERROR));
+
+            given(authService.defaultLogin(any())).willThrow(new MytaminException(PASSWORD_MISMATCH_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/auth/default/login")
@@ -369,7 +383,7 @@ class AuthControllerTest extends CommonControllerTest {
     void checkEmailDuplication(TestInfo testInfo) throws Exception {
         //given
         String email = "mytamin@naver.com";
-        given(userService.checkEmailDuplication(any())).willReturn(true);
+        given(userUtil.checkEmailDuplication(any())).willReturn(true);
 
         //when
         ResultActions actions = mockMvc.perform(get("/auth/check/email/{email}", email));
@@ -386,7 +400,7 @@ class AuthControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data").description("true : 이미 사용 중, false : 사용 가능")
+                                fieldWithPath("data").description("사용 중인 이메일인지")
                         ))
                 );
     }
@@ -396,7 +410,7 @@ class AuthControllerTest extends CommonControllerTest {
     void checkNicknameDuplication(TestInfo testInfo) throws Exception {
         //given
         String nickname = "mental-zzang";
-        given(userService.checkNicknameDuplication(any())).willReturn(true);
+        given(userUtil.checkNicknameDuplication(any())).willReturn(true);
 
         //when
         ResultActions actions = mockMvc.perform(get("/auth/check/nickname/{nickname}", nickname));
@@ -413,7 +427,7 @@ class AuthControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data").description("true : 이미 사용 중, false : 사용 가능")
+                                fieldWithPath("data").description("사용 중인 닉네임인지")
                         ))
                 );
     }
@@ -430,10 +444,13 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "{{REFRESH_TOKEN}}"
             );
-            given(userService.tokenReIssue(any())).willReturn(new TokenResponse(
-                    "{{ACCESS_TOKEN}}",
-                    "{{REFRESH_TOKEN}}"
-            ));
+
+            given(authService.tokenReIssue(any())).willReturn(
+                    TokenResponse.builder()
+                            .accessToken("{{ACCESS_TOKEN}}")
+                            .refreshToken("{{REFRESH_TOKEN}}")
+                            .build()
+            );
 
             //when
             ResultActions actions = mockMvc.perform(get("/auth/reissue")
@@ -467,7 +484,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "{{REFRESH_TOKEN}}"
             );
-            given(userService.tokenReIssue(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
+
+            given(authService.tokenReIssue(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(get("/auth/reissue")
@@ -502,7 +520,8 @@ class AuthControllerTest extends CommonControllerTest {
                     "mytamin@naver.com",
                     "{{REFRESH_TOKEN}}"
             );
-            given(userService.tokenReIssue(any())).willThrow(new MytaminException(INVALID_TOKEN_ERROR));
+
+            given(authService.tokenReIssue(any())).willThrow(new MytaminException(INVALID_TOKEN_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(get("/auth/reissue")

@@ -5,7 +5,6 @@ import great.job.mytamin.domain.care.dto.response.CareResponse;
 import great.job.mytamin.domain.care.entity.Care;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.service.TimeService;
 import great.job.mytamin.global.support.CommonServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,29 +25,26 @@ class CareServiceTest extends CommonServiceTest {
     private CareService careService;
 
     @MockBean
-    private TimeService timeService;
-
-    @MockBean
     private MytaminService mytaminService;
 
     @Nested
     @DisplayName("칭찬 처방하기")
-    class CareTodayTest {
+    class CreateCareTest {
 
         @DisplayName("성공")
         @Test
-        void careToday() {
+        void createCare() {
             //given
             CareRequest careRequest = new CareRequest(
                     1,
                     "오늘 할 일을 전부 했어",
                     "성실히 노력하는 내 모습이 좋아"
             );
-            given(timeService.convertToTakeAt(any())).willReturn(mockTakeAtNow);
-            given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
+
+            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
 
             //when
-            CareResponse result = careService.careToday(user, careRequest);
+            CareResponse result = careService.createCare(user, careRequest);
 
             //then
             CareResponse expected = CareResponse.of(care);
@@ -61,29 +57,34 @@ class CareServiceTest extends CommonServiceTest {
 
         @DisplayName("이미 칭찬 처방 완료")
         @Test
-        void careToday_5001() {
+        void createCare_5001() {
             //given
             CareRequest careRequest = new CareRequest(
                     1,
                     "오늘 할 일을 전부 했어",
                     "성실히 노력하는 내 모습이 좋아"
             );
-            given(timeService.convertToTakeAt(any())).willReturn(mockTakeAtNow);
-            given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
 
-            mytamin.updateCare(new Care(
-                    "이루어 낸 일",
-                    "오늘 할 일을 전부 했어",
-                    "성실히 노력하는 내 모습이 좋아",
-                    mytamin
-            ));
+            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            updateCare(); // CARE ALREADY DONE
 
             //when & then
-            assertThatThrownBy(() -> careService.careToday(user, careRequest))
+            assertThatThrownBy(() -> careService.createCare(user, careRequest))
                     .isInstanceOf(MytaminException.class)
                     .hasMessageContaining("CARE_ALREADY_DONE");
         }
 
+    }
+
+    private void updateCare() {
+        mytamin.updateCare(
+                new Care(
+                        "이루어 낸 일",
+                        "오늘 할 일을 전부 했어",
+                        "성실히 노력하는 내 모습이 좋아",
+                        mytamin
+                )
+        );
     }
 
 }

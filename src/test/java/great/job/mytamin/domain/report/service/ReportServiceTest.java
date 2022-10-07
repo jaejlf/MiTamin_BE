@@ -3,11 +3,11 @@ package great.job.mytamin.domain.report.service;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.report.dto.request.ReportRequest;
 import great.job.mytamin.domain.report.dto.response.ReportResponse;
-import great.job.mytamin.domain.report.entity.Report;
 import great.job.mytamin.domain.report.enumerate.MentalCondition;
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.service.TimeService;
 import great.job.mytamin.global.support.CommonServiceTest;
+import great.job.mytamin.global.util.ReportUtil;
+import great.job.mytamin.global.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,19 +26,22 @@ class ReportServiceTest extends CommonServiceTest {
     @Autowired
     private ReportService reportService;
 
+    @Autowired
+    private ReportUtil reportUtil;
+
     @MockBean
-    private TimeService timeService;
+    private TimeUtil timeUtil;
 
     @MockBean
     private MytaminService mytaminService;
 
     @Nested
     @DisplayName("하루 진단하기")
-    class ReportTodayTest {
+    class CreateReportTest {
 
         @DisplayName("성공")
         @Test
-        void reportToday() {
+        void createReport() {
             //given
             ReportRequest reportRequest = new ReportRequest(
                     5,
@@ -47,33 +50,30 @@ class ReportServiceTest extends CommonServiceTest {
                     "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
-            given(timeService.convertToTakeAt(any())).willReturn(mockTakeAtNow);
-            given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
+
+            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
 
             //when
-            ReportResponse result = reportService.reportToday(user, reportRequest);
+            ReportResponse result = reportService.createReport(user, reportRequest);
 
             //then
-            ReportResponse expected = ReportResponse.of(
-                    new Report(
-                            MentalCondition.VERY_GOOD.getMsg(),
-                            "신나는",
-                            "즐거운",
-                            "재밌는",
-                            "아무래도 아침형 인간이 되는건 너무 어려운 것 같다.",
-                            mytamin
-                    )
-            );
+            ReportResponse expected = ReportResponse.builder()
+                    .mentalConditionCode(5)
+                    .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
+                    .feelingTag("#신나는 #즐거운 #재밌는")
+                    .todayReport("아무래도 아침형 인간이 되는건 너무 어려운 것 같다.")
+                    .build();
+
             assertAll(
                     () -> assertThat(result.getMentalCondition()).isEqualTo(expected.getMentalCondition()),
-                    () -> assertThat(result.getFeelingTag()).isEqualTo("#신나는 #즐거운 #재밌는"),
+                    () -> assertThat(result.getFeelingTag()).isEqualTo(expected.getFeelingTag()),
                     () -> assertThat(result.getTodayReport()).isEqualTo(expected.getTodayReport())
             );
         }
 
         @DisplayName("이미 하루 진단 완료")
         @Test
-        void reportToday_4001() {
+        void createReport_4001() {
             //given
             ReportRequest reportRequest = new ReportRequest(
                     5,
@@ -82,13 +82,13 @@ class ReportServiceTest extends CommonServiceTest {
                     "재밌는",
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
-            given(timeService.convertToTakeAt(any())).willReturn(mockTakeAtNow);
-            given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
+
+            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
 
             mytamin.updateReport(report);
 
             //when & then
-            assertThatThrownBy(() -> reportService.reportToday(user, reportRequest))
+            assertThatThrownBy(() -> reportService.createReport(user, reportRequest))
                     .isInstanceOf(MytaminException.class)
                     .hasMessageContaining("REPORT_ALREADY_DONE");
         }

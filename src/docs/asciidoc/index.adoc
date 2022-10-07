@@ -4,27 +4,6 @@ endif::[]
 
 = 💊 My Tamin API Document
 
-'''
-
-.업데이트 내역
-
-* 2022.09.23.금 : 회원가입/로그인/이메일, 닉네임 중복 체크 API 구현
-* 2022.09.24.토 : 회원가입 API -> PASSWORD_PATTERN_ERROR 추가 (*비밀번호 패턴 서버 측과 일치하는지 체크)
-* 2022.09.26.월 : 홈 화면 관련 API 구현 (세부 로직 구현 전이지만, 업데이트 후에도 response는 동일할 예정임)
-* 2022.09.27.화 : 마이타민 섭취, 최근 마이타민 API 구현, 오류 구별을 위한 errorCode 추가
-* 2022.09.29.목
-       ** 웰컴 메세지 API -> 마이타민 섭취 여부에 따른 웰컴 메세지 구현
-       ** 하루 진단 API -> 감정 태그 중복 선택 기능 추가
-       ** 전반적인 문서 설명 추가
-* 2022.10.05.수 : 이미지 업로드 테스트 API 추가
-
-.참고사항
-
-* 하루 진단하기, 칭찬 처방하기 API의 path가 변경되었습니다.
-* 당분간 테이블 변경이 조금씩 있을 것 같습니다. 기존 아이디 로그인 안될 경우에는 DB 비워진 상태이니 재가입해주세요.
-
-'''
-
 == User
 === 회원 가입
 * mytaminHour은 24시간 단위의 값으로 요청한다. (ex. 오후 3시 -> "15")
@@ -47,7 +26,6 @@ include::{snippets}/auth/signup_2003/http-response.adoc[]
 
 === 기본 로그인
 * 로그인 성공 시 accessToken과 refreshToken을 발급한다.
-* JWT 관련한 세부 내용은 노션 Server 공유 페이지 -> '인증 관련 공통 참고 사항'에서 확인할 수 있다.
 
 operation::auth/defaultLogin[snippets='http-request,http-response']
 operation::auth/defaultLogin[snippets='request-fields,response-fields']
@@ -124,11 +102,9 @@ operation::home/getProgressStatus[snippets='request-headers,response-fields']
 
 == Mytamin
 === 최근 섭취한 마이타민
-* 하루 진단 or 칭찬 처방 중 하나라도 완료했을 경우 data가 리턴되며, 최근 섭취한 마이타민이 없을 경우 data 값은 null이다.
-* 하루 진단을 or 칭찬 처방 중 하나만 완료되었을 경우, 완료되지 않은 행동과 관련된 속성값은 null로 리턴된다.
-* 24시간 이내 생성된 마이타민일 경우에는 수정이 가능하다. (canEdit : true)
-       ** canEdit 속성값은 추후 하루 진단/칭찬 처방의 수정 기능 구현 시 변경되거나 세분화될 수 있다.
-
+* 하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다. (ex. data.report = null)
+* 하루 진단/칭찬 처방은 작성 후 24시간 이내일 경우 수정이 가능하다.
+    ** 수정이 가능할 경우 canEditReport, canEditCare는 true, 수정이 불가능할 경우 false를 리턴한다.
 * mentalConditionCode
     ** 1 : "매우 나빠요 .."
     ** 2 : "나쁜 편이에요 :("
@@ -152,13 +128,23 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
 ** 4 : "좋은 편이에요 :)"
 ** 5 : "매우 좋아요 !"
 
-operation::report/reportToday[snippets='http-request,http-response']
-operation::report/reportToday[snippets='request-headers,request-fields,response-fields']
+operation::report/createReport[snippets='http-request,http-response']
+operation::report/createReport[snippets='request-headers,request-fields,response-fields']
 
 ==== Exception Response
 
-include::{snippets}/report/reportToday_4000/http-response.adoc[]
-include::{snippets}/report/reportToday_4001/http-response.adoc[]
+include::{snippets}/report/createReport_4000/http-response.adoc[]
+include::{snippets}/report/createReport_4001/http-response.adoc[]
+
+=== 하루 진단 수정
+operation::report/updateReport[snippets='http-request,http-response']
+operation::report/updateReport[snippets='request-headers,path-parameters,request-fields,response-fields']
+
+==== Exception Response
+* EDIT_TIMEOUT_ERROR : 작성 시간 기준, 24시간이 지났다면 수정이 불가능하다.
+
+include::{snippets}/report/updateReport_4002/http-response.adoc[]
+include::{snippets}/report/updateReport_7000/http-response.adoc[]
 
 == Care
 === 칭찬 처방하기
@@ -172,13 +158,57 @@ include::{snippets}/report/reportToday_4001/http-response.adoc[]
     ** 6 : "과거의 나"
     ** 7 : "기타"
 
-operation::care/careToday[snippets='http-request,http-response']
-operation::care/careToday[snippets='request-headers,request-fields,response-fields']
+operation::care/createCare[snippets='http-request,http-response']
+operation::care/createCare[snippets='request-headers,request-fields,response-fields']
 
 ==== Exception Response
 
-include::{snippets}/care/careToday_5000/http-response.adoc[]
-include::{snippets}/care/careToday_5001/http-response.adoc[]
+include::{snippets}/care/createCare_5000/http-response.adoc[]
+include::{snippets}/care/createCare_5001/http-response.adoc[]
+
+=== 칭찬 처방 수정
+operation::care/updateCare[snippets='http-request,http-response']
+operation::care/updateCare[snippets='request-headers,path-parameters,request-fields,response-fields']
+
+==== Exception Response
+* EDIT_TIMEOUT_ERROR : 작성 시간 기준, 24시간이 지났다면 수정이 불가능하다.
+
+include::{snippets}/care/updateCare_5002/http-response.adoc[]
+include::{snippets}/care/updateCare_7000/http-response.adoc[]
+
+== User
+=== 닉네임 수정
+
+operation::user/updateNickname[snippets='http-request,http-response']
+operation::user/updateNickname[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception Response
+
+include::{snippets}/user/updateNickname_2003/http-response.adoc[]
+
+=== '되고 싶은 나' 메세지 수정
+
+operation::user/updateBeMyMessage[snippets='http-request,http-response']
+operation::user/updateBeMyMessage[snippets='request-headers,request-fields,response-fields']
+
+
+== Mypage
+=== 마이페이지 프로필 조회
+
+operation::mypage/getProfile[snippets='http-request,http-response']
+operation::mypage/getProfile[snippets='request-headers,response-fields']
+
+
+=== 이번 달의 마이데이
+* 매달 랜덤으로 마이데이 날짜가 지정된다.
+* msg
+    ** 마이데이 이전 : "이번 마이데이에는 무엇을 해볼까요 ?"
+    ** 마이데이 3일 전 : "두근두근 ! 마이데이가 머지 않았어요",
+    ** 마이데이 당일 : "기분 좋은 마이데이 되세요 !",
+    ** 마이데이 이후 : "이번 마이데이는 어떤 하루였나요 ?"
+
+operation::mypage/getMyday[snippets='http-request,http-response']
+operation::mypage/getMyday[snippets='request-headers,response-fields']
 
 == Image
 * Multipart 타입으로 이미지를 전송한다.

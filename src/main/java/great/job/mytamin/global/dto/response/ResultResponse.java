@@ -16,10 +16,10 @@ public class ResultResponse<T> {
     private String message;
     private T data;
 
-    public static <T> ResultResponse<Object> ok(String msg, T data) {
+    public static <T> ResultResponse<Object> ok(String message, T data) {
         return ResultResponse.builder()
                 .statusCode(OK)
-                .message(msg)
+                .message(message)
                 .data(data)
                 .build();
     }
@@ -29,6 +29,20 @@ public class ResultResponse<T> {
                 .statusCode(CREATED)
                 .message(message)
                 .data(data)
+                .build();
+    }
+
+    public static ResultResponse<Object> ok(String message) {
+        return ResultResponse.builder()
+                .statusCode(OK)
+                .message(message)
+                .build();
+    }
+
+    public static ResultResponse<Object> create(String message) {
+        return ResultResponse.builder()
+                .statusCode(CREATED)
+                .message(message)
                 .build();
     }
 
