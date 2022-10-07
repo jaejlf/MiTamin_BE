@@ -77,10 +77,14 @@ class MytaminControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
                                 fieldWithPath("data.canEditReport").description("'하루 진단' 수정 가능 여부"),
                                 fieldWithPath("data.canEditCare").description("'칭찬 처방' 수정 가능 여부"),
+                                // report
+                                fieldWithPath("data.report.reportId").description("하루 진단 id"),
                                 fieldWithPath("data.report.mentalConditionCode").description("마음 컨디션 코드"),
                                 fieldWithPath("data.report.mentalCondition").description("마음 컨디션 메세지"),
                                 fieldWithPath("data.report.feelingTag").description("감정 태그"),
                                 fieldWithPath("data.report.todayReport").description("하루 진단"),
+                                // care
+                                fieldWithPath("data.care.careId").description("칭찬 처방 id"),
                                 fieldWithPath("data.care.careCategory").description("칭찬 카테고리"),
                                 fieldWithPath("data.care.careMsg1").description("칭찬 처방 메세지 1"),
                                 fieldWithPath("data.care.careMsg2").description("칭찬 처방 메세지 2")

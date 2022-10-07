@@ -1,5 +1,6 @@
 package great.job.mytamin.domain.user.controller;
 
+import great.job.mytamin.domain.user.dto.response.MydayResponse;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.service.MypageService;
 import great.job.mytamin.global.support.CommonControllerTest;
@@ -54,6 +55,41 @@ class MypageControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.nickname").description("닉네임"),
                                 fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL"),
                                 fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지")
+                        ))
+                );
+    }
+
+    @DisplayName("이번 달의 마이데이")
+    @Test
+    void getMyday(TestInfo testInfo) throws Exception {
+        //given
+        given(mypageService.getMyday(any())).willReturn(
+                MydayResponse.builder()
+                        .myDayMMDD("10월 17일")
+                        .dday("D-7일")
+                        .msg("이번 마이데이에는 무엇을 해볼까요 ?")
+                        .build()
+        );
+
+        // when
+        ResultActions actions = mockMvc.perform(get("/mypage/myday")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document("/mypage/" + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data.myDayMMDD").description("마이데이 날짜"),
+                                fieldWithPath("data.dday").description("현재 시간 ~ 마이데이 날짜 D-Day"),
+                                fieldWithPath("data.msg").description("마이데이 메세지")
                         ))
                 );
     }

@@ -39,7 +39,7 @@ public class MypageService {
         Map<String, String> map = timeUtil.getMyDayInfo(user.getNickname(), dateOfMyday);
         return MydayResponse.of(
                 dateOfMyday.format(DateTimeFormatter.ofPattern("MM월 dd일")),
-                map.get("dDay"),
+                map.get("dday"),
                 map.get("msg"));
     }
 

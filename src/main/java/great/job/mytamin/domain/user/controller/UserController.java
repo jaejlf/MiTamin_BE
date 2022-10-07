@@ -1,5 +1,6 @@
 package great.job.mytamin.domain.user.controller;
 
+import great.job.mytamin.domain.user.dto.request.BeMyMsgRequest;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.service.UserService;
 import great.job.mytamin.global.dto.response.ResultResponse;
@@ -31,10 +32,10 @@ public class UserController {
                 .body(ResultResponse.ok("닉네임 수정"));
     }
 
-    @PatchMapping("/bemy/{msg}")
+    @PatchMapping("/bemy-msg")
     public ResponseEntity<Object> updateBeMyMessage(@AuthenticationPrincipal User user,
-                                                    @PathVariable String msg) {
-        userService.updateBeMyMessage(user, msg);
+                                                    @RequestBody BeMyMsgRequest beMyMsgRequest) {
+        userService.updateBeMyMessage(user, beMyMsgRequest);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("'되고 싶은 나' 메세지 수정"));

@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,8 +35,8 @@ public class ReportController {
                                                @RequestBody ReportRequest reportRequest) {
         reportService.updateReport(user, reportId, reportRequest);
         return ResponseEntity
-                .status(CREATED)
-                .body(ResultResponse.create("하루 진단 수정"));
+                .status(OK)
+                .body(ResultResponse.ok("하루 진단 수정"));
     }
 
 }

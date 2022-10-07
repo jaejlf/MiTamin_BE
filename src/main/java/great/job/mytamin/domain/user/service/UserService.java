@@ -1,5 +1,6 @@
 package great.job.mytamin.domain.user.service;
 
+import great.job.mytamin.domain.user.dto.request.BeMyMsgRequest;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
@@ -28,8 +29,9 @@ public class UserService {
     '되고 싶은 나' 메세지 수정
     */
     @Transactional
-    public void updateBeMyMessage(User user, String msg) {
-        user.updateBeMyMessage(msg);
+    public void updateBeMyMessage(User user, BeMyMsgRequest beMyMsgRequest) {
+        String beMyMessage = beMyMsgRequest.getBeMyMessage();
+        user.updateBeMyMessage(beMyMessage);
     }
     
 }

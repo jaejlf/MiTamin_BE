@@ -73,7 +73,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -119,7 +119,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -161,7 +161,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -203,7 +203,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
@@ -245,7 +245,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호"),
-                                    fieldWithPath("nickname").description("*닉네임"),
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
                                     fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
                                     fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
                             ),
