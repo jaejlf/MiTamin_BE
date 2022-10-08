@@ -74,20 +74,20 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호"),
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
                                     fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
+                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
+                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.email").description("이메일"),
                                     fieldWithPath("data.nickname").description("닉네임"),
-                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL"),
-                                    fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지"),
-                                    fieldWithPath("data.mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
-                                    fieldWithPath("data.mytaminMin").description("마이타민 섭취 시간 MM")
+                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL (default : \"\")"),
+                                    fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지 (default : \"마음 면역력이 높아질\")"),
+                                    fieldWithPath("data.mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간) (default = null)"),
+                                    fieldWithPath("data.mytaminMin").description("마이타민 섭취 지정 시간 MM (default = null)")
                             ))
                     );
         }
@@ -120,10 +120,10 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호"),
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
                                     fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
+                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
+                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -162,10 +162,10 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호"),
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
                                     fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
+                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
+                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -204,10 +204,10 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호"),
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
                                     fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
+                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
+                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -246,10 +246,10 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호"),
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
                                     fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 시간 MM")
+                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
+                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -295,7 +295,7 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호")
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -331,7 +331,7 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호")
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -367,7 +367,7 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호")
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),

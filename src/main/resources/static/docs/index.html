@@ -136,6 +136,30 @@ video {
 </li>
 </ul>
 </div>
+<div class="ulist">
+<div class="title">참고사항</div>
+<ul>
+<li>
+<p>request 속성의 description에 <mark>'*'</mark>문자가 붙어있지 않다면 필수값이 아니다.<br>
+이 경우 데이터가 없다면 <strong>아예 전송하지 않아야</strong> 서버에서 설정한 default값으로 저장된다.</p>
+</li>
+<li>
+<p>ex. 회원가입 시 유저가 마이타민 섭취 지정 시간 설정 '건너뛰기&#8217;를 했을경우,</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{
+  "email" : "mytamin@naver.com",
+  "password" : "password1234",
+  "nickname" : "강철멘탈"
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8658; 위와 같이, 데이터가 없는 mytaminHour, mytaminMin 속성은 전송하지 않는다.</p>
+</div>
 <hr>
 </div>
 </div>
@@ -148,22 +172,6 @@ video {
 <ul>
 <li>
 <p>mytaminHour은 24시간 단위의 값으로 요청한다. (ex. 오후 3시 &#8594; "15")</p>
-</li>
-<li>
-<p>mytaminHour, mytaminMin은 필수 요청값이 아니므로, 유저가 '건너뛰기&#8217;를 선택했을 경우 email, password, nickname 값만 넣어 요청한다.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>이 경우 mytaminHour, mytaminMin의 기본값은 null이다.</p>
-</li>
-<li>
-<p>마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>profileImgUrl의 기본값은 "", beMyMessage의 기본값은 "마음 면역력이 높아질" 이다.</p>
 </li>
 </ul>
 </div>
@@ -213,9 +221,9 @@ Content-Length: 281
 <h4 id="_회원_가입_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -233,7 +241,7 @@ Content-Length: 281
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*비밀번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*비밀번호 (8 ~ 30자)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
@@ -243,12 +251,12 @@ Content-Length: 281
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mytaminHour</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 시간 HH (24시간)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 지정 시간 HH (24시간)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mytaminMin</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 시간 MM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 지정 시간 MM</p></td>
 </tr>
 </tbody>
 </table>
@@ -257,9 +265,9 @@ Content-Length: 281
 <h4 id="_회원_가입_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -292,28 +300,28 @@ Content-Length: 281
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.profileImgUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL (default : "")</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.beMyMessage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">'되고싶은 내 모습' 메세지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'되고싶은 내 모습' 메세지 (default : "마음 면역력이 높아질")</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.mytaminHour</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 시간 HH (24시간)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 지정 시간 HH (24시간) (default = null)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.mytaminMin</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 시간 MM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 지정 시간 MM (default = null)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response">Exception Response</h4>
+<h4 id="_exception_response">Exception response</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -430,9 +438,9 @@ Content-Length: 164
 <h4 id="_기본_로그인_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -450,7 +458,7 @@ Content-Length: 164
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*비밀번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*비밀번호 (8 ~ 30자)</p></td>
 </tr>
 </tbody>
 </table>
@@ -459,9 +467,9 @@ Content-Length: 164
 <h4 id="_기본_로그인_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -495,7 +503,7 @@ Content-Length: 164
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_2">Exception Response</h4>
+<h4 id="_exception_response_2">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
@@ -564,7 +572,7 @@ Content-Length: 86
 <div class="sect3">
 <h4 id="_이메일_중복_체크_path_parameters">Path parameters</h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /auth/check/email/{email}</caption>
+<caption class="title">/auth/check/email/{email}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -587,9 +595,9 @@ Content-Length: 86
 <h4 id="_이메일_중복_체크_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -655,7 +663,7 @@ Content-Length: 86
 <div class="sect3">
 <h4 id="_닉네임_중복_체크_path_parameters">Path parameters</h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /auth/check/nickname/{nickname}</caption>
+<caption class="title">/auth/check/nickname/{nickname}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -678,9 +686,9 @@ Content-Length: 86
 <h4 id="_닉네임_중복_체크_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -767,9 +775,9 @@ Content-Length: 164
 <h4 id="_토큰_재발급_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -796,9 +804,9 @@ Content-Length: 164
 <h4 id="_토큰_재발급_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -832,7 +840,7 @@ Content-Length: 164
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_3">Exception Response</h4>
+<h4 id="_exception_response_3">Exception response</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -997,9 +1005,9 @@ Content-Length: 176
 <h4 id="_웰컴_메세지_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1098,9 +1106,9 @@ Content-Length: 195
 <h4 id="_행동_완료_상태_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1211,9 +1219,9 @@ Content-Length: 65
 <h4 id="_숨_고르기_완료_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1299,9 +1307,9 @@ Content-Length: 68
 <h4 id="_감각_깨우기_완료_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1434,9 +1442,9 @@ Content-Length: 682
 <h4 id="_최근_섭취한_마이타민_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1530,7 +1538,7 @@ Content-Length: 682
 <div class="ulist">
 <ul>
 <li>
-<p>마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int type의 코드를 보낸다.</p>
+<p>마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.</p>
 </li>
 <li>
 <p>mentalConditionCode</p>
@@ -1623,9 +1631,9 @@ Content-Length: 335
 <h4 id="_하루_진단하기_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1667,9 +1675,9 @@ Content-Length: 335
 <h4 id="_하루_진단하기_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1718,7 +1726,7 @@ Content-Length: 335
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_4">Exception Response</h4>
+<h4 id="_exception_response_4">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
@@ -1810,7 +1818,7 @@ Content-Length: 72
 <div class="sect3">
 <h4 id="_하루_진단_수정_path_parameters">Path parameters</h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /report/{reportId}</caption>
+<caption class="title">/report/{reportId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1833,9 +1841,9 @@ Content-Length: 72
 <h4 id="_하루_진단_수정_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1877,9 +1885,9 @@ Content-Length: 72
 <h4 id="_하루_진단_수정_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -1903,7 +1911,7 @@ Content-Length: 72
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_5">Exception Response</h4>
+<h4 id="_exception_response_5">Exception response</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1951,7 +1959,7 @@ Content-Length: 144
 <div class="ulist">
 <ul>
 <li>
-<p>칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int type의 코드를 보낸다.</p>
+<p>칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int 타입의 코드를 보낸다.</p>
 </li>
 <li>
 <p>careCategoryCode</p>
@@ -2047,9 +2055,9 @@ Content-Length: 263
 <h4 id="_칭찬_처방하기_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2081,9 +2089,9 @@ Content-Length: 263
 <h4 id="_칭찬_처방하기_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2127,7 +2135,7 @@ Content-Length: 263
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_6">Exception Response</h4>
+<h4 id="_exception_response_6">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
@@ -2217,7 +2225,7 @@ Content-Length: 72
 <div class="sect3">
 <h4 id="_칭찬_처방_수정_path_parameters">Path parameters</h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /care/{careId}</caption>
+<caption class="title">/care/{careId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2240,9 +2248,9 @@ Content-Length: 72
 <h4 id="_칭찬_처방_수정_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2274,9 +2282,9 @@ Content-Length: 72
 <h4 id="_칭찬_처방_수정_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2300,7 +2308,7 @@ Content-Length: 72
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_7">Exception Response</h4>
+<h4 id="_exception_response_7">Exception response</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2400,9 +2408,9 @@ Content-Length: 195
 <h4 id="_프로필_조회_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2492,7 +2500,7 @@ Content-Length: 68
 <div class="sect3">
 <h4 id="_닉네임_수정_path_parameters">Path parameters</h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /user/nickname/{nickname}</caption>
+<caption class="title">/user/nickname/{nickname}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2515,9 +2523,9 @@ Content-Length: 68
 <h4 id="_닉네임_수정_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2541,7 +2549,7 @@ Content-Length: 68
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_8">Exception Response</h4>
+<h4 id="_exception_response_8">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
@@ -2616,9 +2624,9 @@ Content-Length: 88
 <h4 id="_되고_싶은_나_메세지_수정_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2640,9 +2648,9 @@ Content-Length: 88
 <h4 id="_되고_싶은_나_메세지_수정_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2754,9 +2762,9 @@ Content-Length: 215
 <h4 id="_이번_달의_마이데이_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -2896,9 +2904,9 @@ Content-Length: 100
 <h4 id="_단일_이미지_업로드_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -3019,9 +3027,9 @@ Content-Length: 128
 <h4 id="_이미지_리스트_업로드_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
 </colgroup>
 <thead>
 <tr>
@@ -3056,7 +3064,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-08 18:49:45 +0900
+Last updated 2022-10-08 20:43:06 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

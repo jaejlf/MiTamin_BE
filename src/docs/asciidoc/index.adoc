@@ -7,20 +7,31 @@ endif::[]
 .API path 변경사항
 - 숨고르기/감각깨우기 : /home 경로에서 /mytamin 경로로 변경되었습니다.
 
+.참고사항
+- request 속성의 description에 ##'*'##문자가 붙어있지 않다면 필수값이 아니다. +
+이 경우 데이터가 없다면 **아예 전송하지 않아야** 서버에서 설정한 default값으로 저장된다.
+- ex. 회원가입 시 유저가 마이타민 섭취 지정 시간 설정 '건너뛰기'를 했을경우,
+[source]
+----
+{
+  "email" : "mytamin@naver.com",
+  "password" : "password1234",
+  "nickname" : "강철멘탈"
+}
+----
+
+=> 위와 같이, 데이터가 없는 mytaminHour, mytaminMin 속성은 전송하지 않는다.
+
 '''
 
 == Auth
 === 회원 가입
 * mytaminHour은 24시간 단위의 값으로 요청한다. (ex. 오후 3시 -> "15")
-* mytaminHour, mytaminMin은 필수 요청값이 아니므로, 유저가 '건너뛰기'를 선택했을 경우 email, password, nickname 값만 넣어 요청한다.
-    ** 이 경우 mytaminHour, mytaminMin의 기본값은 null이다.
-    ** 마이타민 섭취 시간 정보는 추후 관련 기능 구현 시 변경 가능성이 있다.
-* profileImgUrl의 기본값은 "", beMyMessage의 기본값은 "마음 면역력이 높아질" 이다.
 
 operation::auth/signup[snippets='http-request,http-response']
 operation::auth/signup[snippets='request-fields,response-fields']
 
-==== Exception Response
+==== Exception response
 * EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$") 과 다를 경우
 * PASSWORD_PATTERN_ERROR : 비밀번호가 정해진 패턴("^(?=.\*[0-9])(?=.*[A-Za-z]).{8,30}$") 과 다를 경우
 
@@ -35,7 +46,7 @@ include::{snippets}/auth/signup_2003/http-response.adoc[]
 operation::auth/defaultLogin[snippets='http-request,http-response']
 operation::auth/defaultLogin[snippets='request-fields,response-fields']
 
-==== Exception Response
+==== Exception response
 include::{snippets}/auth/defaultLogin_3000/http-response.adoc[]
 include::{snippets}/auth/defaultLogin_3001/http-response.adoc[]
 
@@ -59,7 +70,7 @@ operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fiel
 operation::auth/reissue[snippets='http-request,http-response']
 operation::auth/reissue[snippets='request-fields,response-fields']
 
-==== Exception Response
+==== Exception response
 * INVALID_TOKEN_ERROR
     ** DB에 저장된 refreshToken과 일치하지 않는 경우
     ** refreshToken 자체가 잘못 되었거나 만료된 경우
@@ -122,7 +133,7 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
 
 == Report
 === 하루 진단하기
-* 마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int type의 코드를 보낸다.
+* 마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.
 * mentalConditionCode
     ** 1 : "매우 나빠요 .."
     ** 2 : "나쁜 편이에요 :("
@@ -133,7 +144,7 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
 operation::report/createReport[snippets='http-request,http-response']
 operation::report/createReport[snippets='request-headers,request-fields,response-fields']
 
-==== Exception Response
+==== Exception response
 
 include::{snippets}/report/createReport_4000/http-response.adoc[]
 include::{snippets}/report/createReport_4001/http-response.adoc[]
@@ -142,7 +153,7 @@ include::{snippets}/report/createReport_4001/http-response.adoc[]
 operation::report/updateReport[snippets='http-request,http-response']
 operation::report/updateReport[snippets='request-headers,path-parameters,request-fields,response-fields']
 
-==== Exception Response
+==== Exception response
 * EDIT_TIMEOUT_ERROR : 작성 시간 기준, 24시간이 지났다면 수정이 불가능하다.
 
 include::{snippets}/report/updateReport_4002/http-response.adoc[]
@@ -150,7 +161,7 @@ include::{snippets}/report/updateReport_7000/http-response.adoc[]
 
 == Care
 === 칭찬 처방하기
-* 칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int type의 코드를 보낸다.
+* 칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
 * careCategoryCode
     ** 1 : "이루어 낸 일"
     ** 2 : "잘한 일이나 행동"
@@ -163,7 +174,7 @@ include::{snippets}/report/updateReport_7000/http-response.adoc[]
 operation::care/createCare[snippets='http-request,http-response']
 operation::care/createCare[snippets='request-headers,request-fields,response-fields']
 
-==== Exception Response
+==== Exception response
 
 include::{snippets}/care/createCare_5000/http-response.adoc[]
 include::{snippets}/care/createCare_5001/http-response.adoc[]
@@ -172,7 +183,7 @@ include::{snippets}/care/createCare_5001/http-response.adoc[]
 operation::care/updateCare[snippets='http-request,http-response']
 operation::care/updateCare[snippets='request-headers,path-parameters,request-fields,response-fields']
 
-==== Exception Response
+==== Exception response
 * EDIT_TIMEOUT_ERROR : 작성 시간 기준, 24시간이 지났다면 수정이 불가능하다.
 
 include::{snippets}/care/updateCare_5002/http-response.adoc[]
@@ -189,7 +200,7 @@ operation::user/getProfile[snippets='request-headers,response-fields']
 operation::user/updateNickname[snippets='http-request,http-response']
 operation::user/updateNickname[snippets='request-headers,path-parameters,response-fields']
 
-==== Exception Response
+==== Exception response
 
 include::{snippets}/user/updateNickname_2003/http-response.adoc[]
 
