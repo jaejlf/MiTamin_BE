@@ -1,8 +1,8 @@
 package great.job.mytamin.global.jwt;
 
-import great.job.mytamin.domain.user.entity.User;
-import great.job.mytamin.domain.user.repository.UserRepository;
-import great.job.mytamin.domain.user.service.CustomUserDetailsService;
+import great.job.mytamin.topic.user.entity.User;
+import great.job.mytamin.topic.user.repository.UserRepository;
+import great.job.mytamin.topic.user.service.CustomUserDetailsService;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.service.RedisService;
 import io.jsonwebtoken.*;

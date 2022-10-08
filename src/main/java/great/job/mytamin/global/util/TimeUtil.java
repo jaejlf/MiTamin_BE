@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static great.job.mytamin.domain.user.enumerate.MydayMessage.*;
+import static great.job.mytamin.topic.user.enumerate.MydayMessage.*;
 
 @Component
 public class TimeUtil {

@@ -1,0 +1,43 @@
+package great.job.mytamin.topic.myday.service;
+
+import great.job.mytamin.global.util.MydayUtil;
+import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.myday.dto.response.MydayResponse;
+import great.job.mytamin.topic.user.entity.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+public class MydayService {
+
+    private final TimeUtil timeUtil;
+    private final MydayUtil mydayUtil;
+
+    /*
+    이번 달의 마이데이
+    */
+    @Transactional(readOnly = true)
+    public MydayResponse getMyday(User user) {
+        LocalDateTime dateOfMyday = user.getDateOfMyday();
+        if (!timeUtil.isCurrentMonth(dateOfMyday)) dateOfMyday = updateDateOfMyday(user);
+
+        Map<String, String> map = timeUtil.getMyDayInfo(user.getNickname(), dateOfMyday);
+        return MydayResponse.of(
+                dateOfMyday.format(DateTimeFormatter.ofPattern("MM월 dd일")),
+                map.get("dday"),
+                map.get("msg"));
+    }
+
+    private LocalDateTime updateDateOfMyday(User user) {
+        LocalDateTime dateOfMyday = mydayUtil.randomizeDateOfMyday();
+        user.updateDateOfMyday(dateOfMyday);
+        return dateOfMyday;
+    }
+
+}

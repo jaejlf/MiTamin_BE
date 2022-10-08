@@ -1,6 +1,6 @@
 package great.job.mytamin.global.util;
 
-import great.job.mytamin.domain.report.entity.Report;
+import great.job.mytamin.topic.mytamin.entity.Report;
 import org.springframework.stereotype.Component;
 
 @Component
