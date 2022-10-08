@@ -4,6 +4,11 @@ endif::[]
 
 = 💊 My Tamin API Document
 
+.API path 변경사항
+- 숨고르기/감각깨우기 : /home 경로에서 /mytamin 경로로 변경되었습니다.
+
+'''
+
 == Auth
 === 회원 가입
 * mytaminHour은 24시간 단위의 값으로 요청한다. (ex. 오후 3시 -> "15")
@@ -80,20 +85,6 @@ include::{snippets}/auth/reissue_3000/http-response.adoc[]
 operation::home/welcome[snippets='http-request,http-response']
 operation::home/welcome[snippets='request-headers,response-fields']
 
-=== 숨 고르기 완료
-* 유저가 '숨 고르기' 행동을 완료했다면 해당 API를 요청한다.
-* 해당 API를 요청하면 유저가 '숨 고르기'를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.
-
-operation::home/completeBreath[snippets='http-request,http-response']
-operation::home/completeBreath[snippets='request-headers,response-fields']
-
-=== 감각 깨우기 완료
-* 유저가 '감각 깨우기' 행동을 완료했다면 해당 API를 요청한다.
-* 해당 API를 요청하면 유저가 '감각 깨우기'를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.
-
-operation::home/completeSense[snippets='http-request,http-response']
-operation::home/completeSense[snippets='request-headers,response-fields']
-
 === 행동 완료 상태
 * 1 ~ 4번 행동에 대해 유저가 행동을 완료했다면 true, 완료하지 않았다면 false를 리턴한다.
 
@@ -101,6 +92,20 @@ operation::home/getProgressStatus[snippets='http-request,http-response']
 operation::home/getProgressStatus[snippets='request-headers,response-fields']
 
 == Mytamin
+=== 숨 고르기 완료
+* 유저가 '숨 고르기' 행동을 완료했다면 해당 API를 요청한다.
+* 해당 API를 요청하면 유저가 '숨 고르기'를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.
+
+operation::mytamin/completeBreath[snippets='http-request,http-response']
+operation::mytamin/completeBreath[snippets='request-headers,response-fields']
+
+=== 감각 깨우기 완료
+* 유저가 '감각 깨우기' 행동을 완료했다면 해당 API를 요청한다.
+* 해당 API를 요청하면 유저가 '감각 깨우기'를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.
+
+operation::mytamin/completeSense[snippets='http-request,http-response']
+operation::mytamin/completeSense[snippets='request-headers,response-fields']
+
 === 최근 섭취한 마이타민
 * 하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다. (ex. data.report : null)
 * 하루 진단/칭찬 처방은 작성 후 24시간 이내일 경우 수정이 가능하다.
@@ -174,6 +179,11 @@ include::{snippets}/care/updateCare_5002/http-response.adoc[]
 include::{snippets}/care/updateCare_7000/http-response.adoc[]
 
 == User
+=== 프로필 조회
+
+operation::user/getProfile[snippets='http-request,http-response']
+operation::user/getProfile[snippets='request-headers,response-fields']
+
 === 닉네임 수정
 
 operation::user/updateNickname[snippets='http-request,http-response']
@@ -188,12 +198,7 @@ include::{snippets}/user/updateNickname_2003/http-response.adoc[]
 operation::user/updateBeMyMessage[snippets='http-request,http-response']
 operation::user/updateBeMyMessage[snippets='request-headers,request-fields,response-fields']
 
-== Mypage
-=== 마이페이지 프로필 조회
-
-operation::mypage/getProfile[snippets='http-request,http-response']
-operation::mypage/getProfile[snippets='request-headers,response-fields']
-
+== Myday
 === 이번 달의 마이데이
 * 매달 랜덤으로 마이데이 날짜가 지정된다.
 * msg
@@ -202,8 +207,8 @@ operation::mypage/getProfile[snippets='request-headers,response-fields']
     ** 마이데이 당일 : "기분 좋은 마이데이 되세요 !",
     ** 마이데이 이후 : "이번 마이데이는 어떤 하루였나요 ?"
 
-operation::mypage/getMyday[snippets='http-request,http-response']
-operation::mypage/getMyday[snippets='request-headers,response-fields']
+operation::myday/getMyday[snippets='http-request,http-response']
+operation::myday/getMyday[snippets='request-headers,response-fields']
 
 == Image
 * Multipart 타입으로 이미지를 전송한다.

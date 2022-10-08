@@ -79,13 +79,13 @@ video {
 <li><a href="#_home">Home</a>
 <ul class="sectlevel2">
 <li><a href="#_웰컴_메세지">웰컴 메세지</a></li>
-<li><a href="#_숨_고르기_완료">숨 고르기 완료</a></li>
-<li><a href="#_감각_깨우기_완료">감각 깨우기 완료</a></li>
 <li><a href="#_행동_완료_상태">행동 완료 상태</a></li>
 </ul>
 </li>
 <li><a href="#_mytamin">Mytamin</a>
 <ul class="sectlevel2">
+<li><a href="#_숨_고르기_완료">숨 고르기 완료</a></li>
+<li><a href="#_감각_깨우기_완료">감각 깨우기 완료</a></li>
 <li><a href="#_최근_섭취한_마이타민">최근 섭취한 마이타민</a></li>
 </ul>
 </li>
@@ -103,13 +103,13 @@ video {
 </li>
 <li><a href="#_user">User</a>
 <ul class="sectlevel2">
+<li><a href="#_프로필_조회">프로필 조회</a></li>
 <li><a href="#_닉네임_수정">닉네임 수정</a></li>
 <li><a href="#_되고_싶은_나_메세지_수정">'되고 싶은 나' 메세지 수정</a></li>
 </ul>
 </li>
-<li><a href="#_mypage">Mypage</a>
+<li><a href="#_myday">Myday</a>
 <ul class="sectlevel2">
-<li><a href="#_마이페이지_프로필_조회">마이페이지 프로필 조회</a></li>
 <li><a href="#_이번_달의_마이데이">이번 달의 마이데이</a></li>
 </ul>
 </li>
@@ -126,6 +126,19 @@ video {
 </div>
 <div id="content">
 <h1 id="_my_tamin_api_document" class="sect0">💊 My Tamin API Document</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="ulist">
+<div class="title">API path 변경사항</div>
+<ul>
+<li>
+<p>숨고르기/감각깨우기 : /home 경로에서 /mytamin 경로로 변경되었습니다.</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_auth">Auth</h2>
 <div class="sectionbody">
@@ -1021,182 +1034,6 @@ Content-Length: 176
 </div>
 </div>
 <div class="sect2">
-<h3 id="_숨_고르기_완료">숨 고르기 완료</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>유저가 '숨 고르기' 행동을 완료했다면 해당 API를 요청한다.</p>
-</li>
-<li>
-<p>해당 API를 요청하면 유저가 '숨 고르기&#8217;를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.</p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_숨_고르기_완료_http_request">HTTP request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /home/breath HTTP/1.1
-X-AUTH-TOKEN: {{ACCESS_TOKEN}}
-Host: MY-TAMIN-URL</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_숨_고르기_완료_http_response">HTTP response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 65
-
-{
-  "statusCode" : 200,
-  "message" : "숨 고르기 완료"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_숨_고르기_완료_request_headers">Request headers</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_숨_고르기_완료_response_fields">Response fields</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_감각_깨우기_완료">감각 깨우기 완료</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>유저가 '감각 깨우기' 행동을 완료했다면 해당 API를 요청한다.</p>
-</li>
-<li>
-<p>해당 API를 요청하면 유저가 '감각 깨우기&#8217;를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.</p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_감각_깨우기_완료_http_request">HTTP request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /home/sense HTTP/1.1
-X-AUTH-TOKEN: {{ACCESS_TOKEN}}
-Host: MY-TAMIN-URL</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_감각_깨우기_완료_http_response">HTTP response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 68
-
-{
-  "statusCode" : 200,
-  "message" : "감각 깨우기 완료"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_감각_깨우기_완료_request_headers">Request headers</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_감각_깨우기_완료_response_fields">Response fields</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
 <h3 id="_행동_완료_상태">행동 완료 상태</h3>
 <div class="ulist">
 <ul>
@@ -1312,6 +1149,182 @@ Content-Length: 195
 <div class="sect1">
 <h2 id="_mytamin">Mytamin</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_숨_고르기_완료">숨 고르기 완료</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>유저가 '숨 고르기' 행동을 완료했다면 해당 API를 요청한다.</p>
+</li>
+<li>
+<p>해당 API를 요청하면 유저가 '숨 고르기&#8217;를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_숨_고르기_완료_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /mytamin/breath HTTP/1.1
+X-AUTH-TOKEN: {{ACCESS_TOKEN}}
+Host: MY-TAMIN-URL</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_숨_고르기_완료_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 65
+
+{
+  "statusCode" : 200,
+  "message" : "숨 고르기 완료"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_숨_고르기_완료_request_headers">Request headers</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_숨_고르기_완료_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_감각_깨우기_완료">감각 깨우기 완료</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>유저가 '감각 깨우기' 행동을 완료했다면 해당 API를 요청한다.</p>
+</li>
+<li>
+<p>해당 API를 요청하면 유저가 '감각 깨우기&#8217;를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_감각_깨우기_완료_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /mytamin/sense HTTP/1.1
+X-AUTH-TOKEN: {{ACCESS_TOKEN}}
+Host: MY-TAMIN-URL</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_감각_깨우기_완료_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 68
+
+{
+  "statusCode" : 200,
+  "message" : "감각 깨우기 완료"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_감각_깨우기_완료_request_headers">Request headers</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_감각_깨우기_완료_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_최근_섭취한_마이타민">최근 섭취한 마이타민</h3>
 <div class="ulist">
@@ -2331,6 +2344,104 @@ Content-Length: 144
 <h2 id="_user">User</h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="_프로필_조회">프로필 조회</h3>
+<div class="sect3">
+<h4 id="_프로필_조회_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /user/profile HTTP/1.1
+X-AUTH-TOKEN: {{ACCESS_TOKEN}}
+Host: MY-TAMIN-URL</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_프로필_조회_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 195
+
+{
+  "statusCode" : 200,
+  "message" : "프로필 조회",
+  "data" : {
+    "nickname" : "강철멘탈",
+    "profileImgUrl" : "",
+    "beMyMessage" : "마음 면역력이 높아질"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_프로필_조회_request_headers">Request headers</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_프로필_조회_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.profileImgUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.beMyMessage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'되고싶은 내 모습' 메세지</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_닉네임_수정">닉네임 수정</h3>
 <div class="sect3">
 <h4 id="_닉네임_수정_http_request">HTTP request</h4>
@@ -2558,106 +2669,8 @@ Content-Length: 88
 </div>
 </div>
 <div class="sect1">
-<h2 id="_mypage">Mypage</h2>
+<h2 id="_myday">Myday</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_마이페이지_프로필_조회">마이페이지 프로필 조회</h3>
-<div class="sect3">
-<h4 id="_마이페이지_프로필_조회_http_request">HTTP request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /mypage/profile HTTP/1.1
-X-AUTH-TOKEN: {{ACCESS_TOKEN}}
-Host: MY-TAMIN-URL</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_마이페이지_프로필_조회_http_response">HTTP response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 211
-
-{
-  "statusCode" : 200,
-  "message" : "마이페이지 프로필 조회",
-  "data" : {
-    "nickname" : "강철멘탈",
-    "profileImgUrl" : "",
-    "beMyMessage" : "마음 면역력이 높아질"
-  }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_마이페이지_프로필_조회_request_headers">Request headers</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_마이페이지_프로필_조회_response_fields">Response fields</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.profileImgUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.beMyMessage</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">'되고싶은 내 모습' 메세지</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <div class="sect2">
 <h3 id="_이번_달의_마이데이">이번 달의 마이데이</h3>
 <div class="ulist">
@@ -2690,7 +2703,7 @@ Content-Length: 211
 <h4 id="_이번_달의_마이데이_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /mypage/myday HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /myday/info HTTP/1.1
 X-AUTH-TOKEN: {{ACCESS_TOKEN}}
 Host: MY-TAMIN-URL</code></pre>
 </div>
@@ -3043,7 +3056,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-07 23:55:32 +0900
+Last updated 2022-10-08 18:49:45 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
