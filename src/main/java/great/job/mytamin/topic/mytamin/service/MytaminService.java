@@ -72,7 +72,7 @@ public class MytaminService {
     마이타민 가져오기
     */
     @Transactional(readOnly = true)
-    public Mytamin getMytamin(User user, LocalDateTime rawTakeAt) {
+    public Mytamin findMytamin(User user, LocalDateTime rawTakeAt) {
         String takeAt = timeUtil.convertToTakeAt(rawTakeAt);
         return mytaminRepository.findByTakeAtAndUser(takeAt, user)
                 .orElse(null);
@@ -82,9 +82,9 @@ public class MytaminService {
     마이타민 가져오기 + 없다면 생성
     */
     @Transactional
-    public Mytamin getMytaminOrNew(User user) {
+    public Mytamin findMytaminOrNew(User user) {
         LocalDateTime now = LocalDateTime.now();
-        Mytamin mytamin = getMytamin(user, now);
+        Mytamin mytamin = findMytamin(user, now);
         if (mytamin == null) mytamin = createMytamin(user, now);
         return mytamin;
     }

@@ -1,5 +1,7 @@
 package great.job.mytamin.topic.mytamin.service;
 
+import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.global.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.CareRequest;
 import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
 import great.job.mytamin.topic.mytamin.entity.Care;
@@ -7,8 +9,6 @@ import great.job.mytamin.topic.mytamin.entity.Mytamin;
 import great.job.mytamin.topic.mytamin.enumerate.CareCategory;
 import great.job.mytamin.topic.mytamin.repository.CareRepository;
 import great.job.mytamin.topic.user.entity.User;
-import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class CareService {
     */
     @Transactional
     public CareResponse createCare(User user, CareRequest careRequest) {
-        Mytamin mytamin = mytaminService.getMytaminOrNew(user);
+        Mytamin mytamin = mytaminService.findMytaminOrNew(user);
         if (mytamin.getCare() != null) throw new MytaminException(CARE_ALREADY_DONE);
         Care newCare = saveNewCare(careRequest, mytamin);
         return CareResponse.of(newCare, timeUtil.canEditCare(newCare));
@@ -41,7 +41,7 @@ public class CareService {
     */
     @Transactional
     public void updateCare(User user, Long careId, CareRequest careRequest) {
-        Care care = getCare(careId);
+        Care care = findCareById(careId);
         hasAuthorized(care, user);
         canEdit(care);
 
@@ -53,7 +53,16 @@ public class CareService {
         careRepository.save(care);
     }
 
-    private Care getCare(Long careId) {
+    /*
+    칭찬 처방 조회
+    */
+    @Transactional(readOnly = true)
+    public CareResponse getCare(Long careId) {
+        Care care = findCareById(careId);
+        return CareResponse.of(care, timeUtil.canEditCare(care));
+    }
+
+    private Care findCareById(Long careId) {
         return careRepository.findById(careId)
                 .orElseThrow(() -> new MytaminException(CARE_NOT_FOUND_ERROR));
     }

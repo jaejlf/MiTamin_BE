@@ -26,7 +26,7 @@ public class HomeService {
     */
     @Transactional(readOnly = true)
     public WelcomeResponse welcome(User user) {
-        Mytamin mytamin = mytaminService.getMytamin(user, LocalDateTime.now());
+        Mytamin mytamin = mytaminService.findMytamin(user, LocalDateTime.now());
         String comment;
 
         if (mytamin != null) comment = TAKE_MYTAMIN_DONE.getComment();
@@ -50,7 +50,7 @@ public class HomeService {
         boolean breathIsDone = timeUtil.isToday(user.getBreathTime());
         boolean senseIsDone = timeUtil.isToday(user.getSenseTime());
 
-        Mytamin mytamin = mytaminService.getMytamin(user, LocalDateTime.now());
+        Mytamin mytamin = mytaminService.findMytamin(user, LocalDateTime.now());
         boolean reportIsDone = mytamin != null && mytamin.getReport() != null;
         boolean careIsDone = mytamin != null && mytamin.getCare() != null;
 

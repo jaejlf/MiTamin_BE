@@ -29,6 +29,14 @@ public class ReportController {
                 .body(ResultResponse.create("하루 진단하기", reportResponse));
     }
 
+    @GetMapping("/{reportId}")
+    public ResponseEntity<Object> getReport(@PathVariable Long reportId) {
+        ReportResponse reportResponse = reportService.getReport(reportId);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("하루 진단 조회", reportResponse));
+    }
+
     @PutMapping("/{reportId}")
     public ResponseEntity<Object> updateReport(@AuthenticationPrincipal User user,
                                                @PathVariable Long reportId,

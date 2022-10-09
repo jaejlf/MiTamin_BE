@@ -29,6 +29,14 @@ public class CareController {
                 .body(ResultResponse.create("칭찬 처방하기", careResponse));
     }
 
+    @GetMapping("/{careId}")
+    public ResponseEntity<Object> getCare(@PathVariable Long careId) {
+        CareResponse careResponse = careService.getCare(careId);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("칭찬 처방 조회", careResponse));
+    }
+
     @PutMapping("/{careId}")
     public ResponseEntity<Object> updateCare(@AuthenticationPrincipal User user,
                                              @PathVariable Long careId,

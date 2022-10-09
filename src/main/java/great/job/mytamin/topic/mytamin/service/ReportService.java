@@ -32,7 +32,7 @@ public class ReportService {
     */
     @Transactional
     public ReportResponse createReport(User user, ReportRequest reportRequest) {
-        Mytamin mytamin = mytaminService.getMytaminOrNew(user);
+        Mytamin mytamin = mytaminService.findMytaminOrNew(user);
         if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE);
         Report newReport = saveNewReport(reportRequest, mytamin);
         return ReportResponse.of(
@@ -46,7 +46,7 @@ public class ReportService {
     */
     @Transactional
     public void updateReport(User user, Long reportId, ReportRequest reportRequest) {
-        Report report = getReport(reportId);
+        Report report = findReportById(reportId);
         hasAuthorized(report, user);
         canEdit(report);
 
@@ -60,7 +60,18 @@ public class ReportService {
         reportRepository.save(report);
     }
 
-    private Report getReport(Long reportId) {
+    /*
+    하루 진단 조회
+    */
+    public ReportResponse getReport(Long reportId) {
+        Report report = findReportById(reportId);
+        return ReportResponse.of(
+                report,
+                reportUtil.concatFeelingTag(report),
+                timeUtil.canEditReport(report));
+    }
+
+    private Report findReportById(Long reportId) {
         return reportRepository.findById(reportId)
                 .orElseThrow(() -> new MytaminException(REPORT_NOT_FOUND_ERROR));
     }
