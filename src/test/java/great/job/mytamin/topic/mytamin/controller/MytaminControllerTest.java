@@ -92,6 +92,7 @@ class MytaminControllerTest extends CommonControllerTest {
         //given
         ReportResponse report = ReportResponse.builder()
                 .reportId(1L)
+                .canEdit(true)
                 .mentalConditionCode(5)
                 .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
                 .feelingTag("#신나는 #즐거운 #재밌는")
@@ -100,6 +101,7 @@ class MytaminControllerTest extends CommonControllerTest {
 
         CareResponse care = CareResponse.builder()
                 .careId(1L)
+                .canEdit(true)
                 .careCategory("이루어 낸 일")
                 .careMsg1("오늘 할 일을 전부 했어")
                 .careMsg2("성실히 노력하는 내 모습이 좋아")
@@ -107,8 +109,6 @@ class MytaminControllerTest extends CommonControllerTest {
 
         given(mytaminService.getLatestMytamin(any())).willReturn(MytaminResponse.builder()
                 .takeAt(mytamin.getTakeAt())
-                .canEditReport(true)
-                .canEditCare(false)
                 .report(report)
                 .care(care)
                 .build()
@@ -131,16 +131,16 @@ class MytaminControllerTest extends CommonControllerTest {
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.takeAt").description("마이타민 섭취 날짜"),
-                                fieldWithPath("data.canEditReport").description("'하루 진단' 수정 가능 여부"),
-                                fieldWithPath("data.canEditCare").description("'칭찬 처방' 수정 가능 여부"),
                                 // report
                                 fieldWithPath("data.report.reportId").description("하루 진단 id"),
+                                fieldWithPath("data.report.canEdit").description("'하루 진단' 수정 가능 여부"),
                                 fieldWithPath("data.report.mentalConditionCode").description("마음 컨디션 코드"),
                                 fieldWithPath("data.report.mentalCondition").description("마음 컨디션 메세지"),
                                 fieldWithPath("data.report.feelingTag").description("감정 태그"),
                                 fieldWithPath("data.report.todayReport").description("하루 진단"),
                                 // care
                                 fieldWithPath("data.care.careId").description("칭찬 처방 id"),
+                                fieldWithPath("data.care.canEdit").description("'칭찬 처방' 수정 가능 여부"),
                                 fieldWithPath("data.care.careCategory").description("칭찬 카테고리"),
                                 fieldWithPath("data.care.careMsg1").description("칭찬 처방 메세지 1"),
                                 fieldWithPath("data.care.careMsg2").description("칭찬 처방 메세지 2")

@@ -120,7 +120,7 @@ operation::mytamin/completeSense[snippets='request-headers,response-fields']
 === 최근 섭취한 마이타민
 * 하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다. (ex. data.report : null)
 * 하루 진단/칭찬 처방은 작성 후 24시간 이내일 경우 수정이 가능하다.
-    ** canEditReport, canEditCare는 수정 가능할 경우 true, 불가능할 경우 false를 리턴한다.
+    ** report.canEdit, care.canEdit은 수정 가능할 경우 true, 불가능할 경우 false를 리턴한다.
 * mentalConditionCode
     ** 1 : "매우 나빠요 .."
     ** 2 : "나쁜 편이에요 :("

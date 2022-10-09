@@ -84,7 +84,8 @@ class ReportControllerTest extends CommonControllerTest {
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
-                                    fieldWithPath("data.reportId").description("칭찬 처방 id"),
+                                    fieldWithPath("data.reportId").description("하루 진단 id"),
+                                    fieldWithPath("data.canEdit").description("'하루 진단' 수정 가능 여부"),
                                     fieldWithPath("data.mentalConditionCode").description("마음 컨디션 코드"),
                                     fieldWithPath("data.mentalCondition").description("마음 컨디션 메세지"),
                                     fieldWithPath("data.feelingTag").description("감정 태그"),
@@ -342,6 +343,7 @@ class ReportControllerTest extends CommonControllerTest {
     private ReportResponse mockReportResponse() {
         return ReportResponse.builder()
                 .reportId(1L)
+                .canEdit(true)
                 .mentalConditionCode(5)
                 .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
                 .feelingTag("#신나는 #즐거운 #재밌는")

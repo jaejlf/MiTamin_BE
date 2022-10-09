@@ -80,6 +80,7 @@ class CareControllerTest extends CommonControllerTest {
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.careId").description("칭찬 처방 id"),
+                                    fieldWithPath("data.canEdit").description("'칭찬 처방' 수정 가능 여부"),
                                     fieldWithPath("data.careCategory").description("칭찬 카테고리"),
                                     fieldWithPath("data.careMsg1").description("칭찬 처방 메세지 1"),
                                     fieldWithPath("data.careMsg2").description("칭찬 처방 메세지 2")
@@ -316,6 +317,7 @@ class CareControllerTest extends CommonControllerTest {
     private CareResponse mockCareResponse() {
         return CareResponse.builder()
                 .careId(1L)
+                .canEdit(true)
                 .careCategory("이루어 낸 일")
                 .careMsg1("오늘 할 일을 전부 했어")
                 .careMsg2("성실히 노력하는 내 모습이 좋아")

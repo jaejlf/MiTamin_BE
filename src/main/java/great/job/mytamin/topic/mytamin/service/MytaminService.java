@@ -1,15 +1,15 @@
 package great.job.mytamin.topic.mytamin.service;
 
-import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
-import great.job.mytamin.topic.mytamin.entity.Care;
-import great.job.mytamin.topic.mytamin.dto.response.MytaminResponse;
-import great.job.mytamin.topic.mytamin.entity.Mytamin;
-import great.job.mytamin.topic.mytamin.repository.MytaminRepository;
-import great.job.mytamin.topic.mytamin.dto.response.ReportResponse;
-import great.job.mytamin.topic.mytamin.entity.Report;
-import great.job.mytamin.topic.user.entity.User;
 import great.job.mytamin.global.util.ReportUtil;
 import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
+import great.job.mytamin.topic.mytamin.dto.response.MytaminResponse;
+import great.job.mytamin.topic.mytamin.dto.response.ReportResponse;
+import great.job.mytamin.topic.mytamin.entity.Care;
+import great.job.mytamin.topic.mytamin.entity.Mytamin;
+import great.job.mytamin.topic.mytamin.entity.Report;
+import great.job.mytamin.topic.mytamin.repository.MytaminRepository;
+import great.job.mytamin.topic.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,26 +48,24 @@ public class MytaminService {
         Mytamin mytamin = mytaminRepository.findFirstByUserOrderByMytaminIdDesc(user);
         if (mytamin == null) return null;
 
-        LocalDateTime now = LocalDateTime.now();
-
         // Report
         Report report = mytamin.getReport();
         ReportResponse reportResponse = null;
-        boolean canEditReport = false;
         if (report != null) {
-            reportResponse = ReportResponse.of(report, reportUtil.concatFeelingTag(report));
-            canEditReport = timeUtil.isInRange(now, report.getCreatedAt(), report.getCreatedAt().plusDays(1));
+            reportResponse = ReportResponse.of(
+                    report,
+                    reportUtil.concatFeelingTag(report),
+                    timeUtil.canEditReport(report));
         }
 
         // Care
         Care care = mytamin.getCare();
         CareResponse careResponse = null;
-        boolean canEditCare = false;
         if (care != null) {
-            careResponse = CareResponse.of(care);
-            canEditCare = timeUtil.isInRange(now, care.getCreatedAt(), care.getCreatedAt().plusDays(1));
+            careResponse = CareResponse.of(care, timeUtil.canEditCare(care));
         }
-        return MytaminResponse.of(mytamin, canEditReport, canEditCare, reportResponse, careResponse);
+
+        return MytaminResponse.of(mytamin, reportResponse, careResponse);
     }
 
     /*

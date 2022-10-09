@@ -2,6 +2,7 @@ package great.job.mytamin.topic.mytamin.service;
 
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonServiceTest;
+import great.job.mytamin.global.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.CareRequest;
 import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
 import great.job.mytamin.topic.mytamin.entity.Care;
@@ -24,6 +25,9 @@ class CareServiceTest extends CommonServiceTest {
     private CareService careService;
 
     @MockBean
+    private TimeUtil timeUtil;
+
+    @MockBean
     private MytaminService mytaminService;
 
     @Nested
@@ -41,13 +45,22 @@ class CareServiceTest extends CommonServiceTest {
             );
 
             given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(timeUtil.canEditCare(any())).willReturn(true);
 
             //when
             CareResponse result = careService.createCare(user, careRequest);
 
             //then
-            CareResponse expected = CareResponse.of(care);
+            CareResponse expected = CareResponse.builder()
+                    .careId(1L)
+                    .canEdit(true)
+                    .careCategory("이루어 낸 일")
+                    .careMsg1("오늘 할 일을 전부 했어")
+                    .careMsg2("성실히 노력하는 내 모습이 좋아")
+                    .build();
+
             assertAll(
+                    () -> assertThat(result.isCanEdit()).isEqualTo(expected.isCanEdit()),
                     () -> assertThat(result.getCareCategory()).isEqualTo(expected.getCareCategory()),
                     () -> assertThat(result.getCareMsg1()).isEqualTo(expected.getCareMsg1()),
                     () -> assertThat(result.getCareMsg2()).isEqualTo(expected.getCareMsg2())
@@ -65,6 +78,7 @@ class CareServiceTest extends CommonServiceTest {
             );
 
             given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(timeUtil.canEditCare(any())).willReturn(true);
             updateCare(); // CARE ALREADY DONE
 
             //when & then

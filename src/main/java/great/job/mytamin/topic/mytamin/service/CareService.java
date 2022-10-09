@@ -32,7 +32,8 @@ public class CareService {
     public CareResponse createCare(User user, CareRequest careRequest) {
         Mytamin mytamin = mytaminService.getMytaminOrNew(user);
         if (mytamin.getCare() != null) throw new MytaminException(CARE_ALREADY_DONE);
-        return CareResponse.of(saveNewCare(careRequest, mytamin));
+        Care newCare = saveNewCare(careRequest, mytamin);
+        return CareResponse.of(newCare, timeUtil.canEditCare(newCare));
     }
 
     /*

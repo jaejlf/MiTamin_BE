@@ -1,5 +1,8 @@
 package great.job.mytamin.topic.mytamin.service;
 
+import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.global.util.ReportUtil;
+import great.job.mytamin.global.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.topic.mytamin.dto.response.ReportResponse;
 import great.job.mytamin.topic.mytamin.entity.Mytamin;
@@ -7,9 +10,6 @@ import great.job.mytamin.topic.mytamin.entity.Report;
 import great.job.mytamin.topic.mytamin.enumerate.MentalCondition;
 import great.job.mytamin.topic.mytamin.repository.ReportRepository;
 import great.job.mytamin.topic.user.entity.User;
-import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.util.ReportUtil;
-import great.job.mytamin.global.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,9 +34,11 @@ public class ReportService {
     public ReportResponse createReport(User user, ReportRequest reportRequest) {
         Mytamin mytamin = mytaminService.getMytaminOrNew(user);
         if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE);
-
         Report newReport = saveNewReport(reportRequest, mytamin);
-        return ReportResponse.of(newReport, reportUtil.concatFeelingTag(newReport));
+        return ReportResponse.of(
+                newReport,
+                reportUtil.concatFeelingTag(newReport),
+                timeUtil.canEditReport(newReport));
     }
 
     /*

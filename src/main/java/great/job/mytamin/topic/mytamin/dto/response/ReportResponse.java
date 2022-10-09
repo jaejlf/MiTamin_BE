@@ -14,14 +14,16 @@ import lombok.NoArgsConstructor;
 public class ReportResponse {
 
     Long reportId;
+    boolean canEdit;
     int mentalConditionCode;
     String mentalCondition;
     String feelingTag;
     String todayReport;
 
-    public static ReportResponse of(Report report, String feelingTag) {
+    public static ReportResponse of(Report report, String feelingTag, boolean canEdit) {
         return ReportResponse.builder()
                 .reportId(report.getReportId())
+                .canEdit(canEdit)
                 .mentalConditionCode(MentalCondition.convertMsgToCode(report.getMentalCondition()))
                 .mentalCondition(report.getMentalCondition())
                 .feelingTag(feelingTag)

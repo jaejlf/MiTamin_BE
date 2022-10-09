@@ -13,20 +13,14 @@ import lombok.NoArgsConstructor;
 public class MytaminResponse {
 
     String takeAt;
-    boolean canEditReport;
-    boolean canEditCare;
     ReportResponse report;
     CareResponse care;
 
     public static MytaminResponse of(Mytamin mytamin,
-                                     boolean canEditReport,
-                                     boolean canEditCare,
                                      ReportResponse reportResponse,
                                      CareResponse careResponse) {
         return MytaminResponse.builder()
                 .takeAt(mytamin.getTakeAt())
-                .canEditReport(canEditReport)
-                .canEditCare(canEditCare)
                 .report(reportResponse)
                 .care(careResponse)
                 .build();

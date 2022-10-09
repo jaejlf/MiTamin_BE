@@ -1,13 +1,12 @@
 package great.job.mytamin.topic.mytamin.service;
 
+import great.job.mytamin.global.support.CommonServiceTest;
+import great.job.mytamin.global.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
 import great.job.mytamin.topic.mytamin.dto.response.MytaminResponse;
-import great.job.mytamin.topic.mytamin.entity.Mytamin;
 import great.job.mytamin.topic.mytamin.dto.response.ReportResponse;
+import great.job.mytamin.topic.mytamin.entity.Mytamin;
 import great.job.mytamin.topic.mytamin.enumerate.MentalCondition;
-import great.job.mytamin.global.support.CommonServiceTest;
-import great.job.mytamin.global.util.ReportUtil;
-import great.job.mytamin.global.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,6 @@ class MytaminServiceTest extends CommonServiceTest {
 
     @Autowired
     private MytaminService mytaminService;
-
-    @Autowired
-    private ReportUtil reportUtil;
 
     @MockBean
     private TimeUtil timeUtil;
@@ -70,16 +66,12 @@ class MytaminServiceTest extends CommonServiceTest {
         //then
         MytaminResponse expected = MytaminResponse.builder()
                 .takeAt(mytamin.getTakeAt())
-                .canEditReport(true)
-                .canEditCare(true)
                 .report(mockReportResponse())
                 .care(mockCareResponse())
                 .build();
 
         assertAll(
                 () -> assertThat(result.getTakeAt()).isEqualTo(expected.getTakeAt()),
-                () -> assertThat(result.isCanEditReport()).isEqualTo(expected.isCanEditReport()),
-                () -> assertThat(result.isCanEditCare()).isEqualTo(expected.isCanEditCare()),
                 () -> assertThat(result.getReport()).isNotNull(),
                 () -> assertThat(result.getCare()).isNotNull()
         );

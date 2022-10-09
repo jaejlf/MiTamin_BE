@@ -25,7 +25,7 @@ class ReportServiceTest extends CommonServiceTest {
     @Autowired
     private ReportService reportService;
 
-    @Autowired
+    @MockBean
     private ReportUtil reportUtil;
 
     @MockBean
@@ -51,12 +51,16 @@ class ReportServiceTest extends CommonServiceTest {
             );
 
             given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(reportUtil.concatFeelingTag(any())).willReturn("#신나는 #즐거운 #재밌는");
+            given(timeUtil.canEditReport(any())).willReturn(true);
 
             //when
             ReportResponse result = reportService.createReport(user, reportRequest);
 
             //then
             ReportResponse expected = ReportResponse.builder()
+                    .reportId(1L)
+                    .canEdit(true)
                     .mentalConditionCode(5)
                     .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
                     .feelingTag("#신나는 #즐거운 #재밌는")
@@ -64,6 +68,7 @@ class ReportServiceTest extends CommonServiceTest {
                     .build();
 
             assertAll(
+                    () -> assertThat(result.isCanEdit()).isEqualTo(expected.isCanEdit()),
                     () -> assertThat(result.getMentalCondition()).isEqualTo(expected.getMentalCondition()),
                     () -> assertThat(result.getFeelingTag()).isEqualTo(expected.getFeelingTag()),
                     () -> assertThat(result.getTodayReport()).isEqualTo(expected.getTodayReport())
@@ -83,6 +88,8 @@ class ReportServiceTest extends CommonServiceTest {
             );
 
             given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(reportUtil.concatFeelingTag(any())).willReturn("#신나는 #즐거운 #재밌는");
+            given(timeUtil.canEditReport(any())).willReturn(true);
 
             mytamin.updateReport(report);
 

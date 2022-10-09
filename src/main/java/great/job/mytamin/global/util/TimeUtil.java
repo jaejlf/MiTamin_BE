@@ -1,5 +1,7 @@
 package great.job.mytamin.global.util;
 
+import great.job.mytamin.topic.mytamin.entity.Care;
+import great.job.mytamin.topic.mytamin.entity.Report;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -107,6 +109,20 @@ public class TimeUtil {
         }
 
         return map;
+    }
+
+    /*
+    Report 수정 가능 여부
+    */
+    public boolean canEditReport(Report report) {
+        return isInRange(LocalDateTime.now(), report.getCreatedAt(), report.getCreatedAt().plusDays(1));
+    }
+
+    /*
+    Care 수정 가능 여부
+    */
+    public boolean canEditCare(Care care) {
+        return isInRange(LocalDateTime.now(), care.getCreatedAt(), care.getCreatedAt().plusDays(1));
     }
 
     // 특정 시간 범위 내에 있는지
