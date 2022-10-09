@@ -22,11 +22,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -162,6 +160,84 @@ class CareControllerTest extends CommonControllerTest {
                                     fieldWithPath("careCategoryCode").description("*칭찬 카테고리 코드"),
                                     fieldWithPath("careMsg1").description("*칭찬 처방 메세지 1"),
                                     fieldWithPath("careMsg2").description("*칭찬 처방 메세지 2")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("칭찬 처방 조회")
+    class GetCareTest {
+
+        @DisplayName("성공")
+        @Test
+        void getCare(TestInfo testInfo) throws Exception {
+            //given
+            Long careId = 1L;
+
+            given(careService.getCare(any())).willReturn(mockCareResponse());
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/care/{careId}", careId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("data").exists())
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("careId").description("*칭찬 처방 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지"),
+                                    fieldWithPath("data.careId").description("칭찬 처방 id"),
+                                    fieldWithPath("data.canEdit").description("'칭찬 처방' 수정 가능 여부"),
+                                    fieldWithPath("data.careCategory").description("칭찬 카테고리"),
+                                    fieldWithPath("data.careMsg1").description("칭찬 처방 메세지 1"),
+                                    fieldWithPath("data.careMsg2").description("칭찬 처방 메세지 2")
+                            ))
+                    );
+        }
+
+        @DisplayName("존재하지 않는 칭찬 처방 id")
+        @Test
+        void getCare_5002(TestInfo testInfo) throws Exception {
+            //given
+            Long careId = 1L;
+
+            given(careService.getCare(any())).willThrow(new MytaminException(CARE_NOT_FOUND_ERROR));
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/care/{careId}", careId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(5002))
+                    .andExpect(jsonPath("errorName").value("CARE_NOT_FOUND_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("careId").description("*칭찬 처방 id")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
