@@ -44,7 +44,7 @@ class CareServiceTest extends CommonServiceTest {
                     "성실히 노력하는 내 모습이 좋아"
             );
 
-            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(timeUtil.canEditCare(any())).willReturn(true);
 
             //when
@@ -77,7 +77,7 @@ class CareServiceTest extends CommonServiceTest {
                     "성실히 노력하는 내 모습이 좋아"
             );
 
-            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(timeUtil.canEditCare(any())).willReturn(true);
             updateCare(); // CARE ALREADY DONE
 

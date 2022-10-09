@@ -149,6 +149,16 @@ operation::report/createReport[snippets='request-headers,request-fields,response
 include::{snippets}/report/createReport_4000/http-response.adoc[]
 include::{snippets}/report/createReport_4001/http-response.adoc[]
 
+=== 하루 진단 조회
+* '하루 진단' 작성 시 발급받은 고유 id(= reportId)를 통해 데이터를 조회한다.
+
+operation::report/getReport[snippets='http-request,http-response']
+operation::report/getReport[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+
+include::{snippets}/report/getReport_4002/http-response.adoc[]
+
 === 하루 진단 수정
 operation::report/updateReport[snippets='http-request,http-response']
 operation::report/updateReport[snippets='request-headers,path-parameters,request-fields,response-fields']
@@ -178,6 +188,16 @@ operation::care/createCare[snippets='request-headers,request-fields,response-fie
 
 include::{snippets}/care/createCare_5000/http-response.adoc[]
 include::{snippets}/care/createCare_5001/http-response.adoc[]
+
+=== 칭찬 처방 조회
+* '칭찬 처방' 작성 시 발급받은 고유 id(= careId)를 통해 데이터를 조회한다.
+
+operation::care/getCare[snippets='http-request,http-response']
+operation::care/getCare[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+
+include::{snippets}/care/getCare_5002/http-response.adoc[]
 
 === 칭찬 처방 수정
 operation::care/updateCare[snippets='http-request,http-response']

@@ -39,7 +39,7 @@ class HomeServiceTest extends CommonServiceTest {
         @Test
         void welcome_case1() {
             //given
-            given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
+            given(mytaminService.findMytamin(any(), any())).willReturn(mytamin);
 
             // when
             WelcomeResponse result = homeService.welcome(user);
@@ -154,7 +154,7 @@ class HomeServiceTest extends CommonServiceTest {
         saveNewCare();
 
         given(timeUtil.isToday(any())).willReturn(true);
-        given(mytaminService.getMytamin(any(), any())).willReturn(mytamin);
+        given(mytaminService.findMytamin(any(), any())).willReturn(mytamin);
 
         // when
         ActiveResponse result = homeService.getProgressStatus(user);

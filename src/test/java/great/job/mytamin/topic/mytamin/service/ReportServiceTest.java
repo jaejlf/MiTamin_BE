@@ -50,7 +50,7 @@ class ReportServiceTest extends CommonServiceTest {
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
 
-            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(reportUtil.concatFeelingTag(any())).willReturn("#신나는 #즐거운 #재밌는");
             given(timeUtil.canEditReport(any())).willReturn(true);
 
@@ -87,7 +87,7 @@ class ReportServiceTest extends CommonServiceTest {
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
 
-            given(mytaminService.getMytaminOrNew(any())).willReturn(mytamin);
+            given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(reportUtil.concatFeelingTag(any())).willReturn("#신나는 #즐거운 #재밌는");
             given(timeUtil.canEditReport(any())).willReturn(true);
 

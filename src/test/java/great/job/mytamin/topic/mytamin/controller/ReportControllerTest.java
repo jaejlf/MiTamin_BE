@@ -23,8 +23,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -176,6 +176,85 @@ class ReportControllerTest extends CommonControllerTest {
                                     fieldWithPath("tag2").description("감정 태그2"),
                                     fieldWithPath("tag3").description("감정 태그3"),
                                     fieldWithPath("todayReport").description("*하루 진단")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("하루 진단 조회")
+    class GetReportTest {
+
+        @DisplayName("성공")
+        @Test
+        void getReport(TestInfo testInfo) throws Exception {
+            //given
+            Long reportId = 1L;
+
+            given(reportService.getReport(any())).willReturn(mockReportResponse());
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/report/{reportId}", reportId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("data").exists())
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("reportId").description("*하루 진단 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지"),
+                                    fieldWithPath("data.reportId").description("하루 진단 id"),
+                                    fieldWithPath("data.canEdit").description("'하루 진단' 수정 가능 여부"),
+                                    fieldWithPath("data.mentalConditionCode").description("마음 컨디션 코드"),
+                                    fieldWithPath("data.mentalCondition").description("마음 컨디션 메세지"),
+                                    fieldWithPath("data.feelingTag").description("감정 태그"),
+                                    fieldWithPath("data.todayReport").description("하루 진단")
+                            ))
+                    );
+        }
+
+        @DisplayName("존재하지 않는 하루 진단 id")
+        @Test
+        void getReport_4002(TestInfo testInfo) throws Exception {
+            //given
+            Long reportId = 1L;
+
+            given(reportService.getReport(any())).willThrow(new MytaminException(REPORT_NOT_FOUND_ERROR));
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/report/{reportId}", reportId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(4002))
+                    .andExpect(jsonPath("errorName").value("REPORT_NOT_FOUND_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("reportId").description("*하루 진단 id")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),

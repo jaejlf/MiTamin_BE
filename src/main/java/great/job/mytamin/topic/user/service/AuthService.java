@@ -61,7 +61,7 @@ public class AuthService {
     */
     @Transactional
     public TokenResponse defaultLogin(LoginRequest loginRequest) {
-        User user = getUserByEmail(loginRequest.getEmail());
+        User user = findUserByEmail(loginRequest.getEmail());
         checkPasswordMatching(loginRequest.getPassword(), user.getPassword());
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
@@ -75,7 +75,7 @@ public class AuthService {
     */
     @Transactional
     public TokenResponse tokenReIssue(ReissueRequest reissueRequest) {
-        User user = getUserByEmail(reissueRequest.getEmail());
+        User user = findUserByEmail(reissueRequest.getEmail());
         String refreshToken = reissueRequest.getRefreshToken();
 
         validateRefreshToken(refreshToken, user);
@@ -96,7 +96,7 @@ public class AuthService {
         }
     }
 
-    private User getUserByEmail(String email) {
+    private User findUserByEmail(String email) {
         return customUserDetailsService.loadUserByUsername(email);
     }
 
