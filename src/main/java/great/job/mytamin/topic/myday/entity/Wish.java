@@ -21,7 +21,7 @@ public class Wish {
     private Long wishId;
 
     @Length(min = 1, max = 100)
-    private String text;
+    private String wishText;
 
     private Boolean isHidden;
     private int orderId;
@@ -30,15 +30,15 @@ public class Wish {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Wish(String text, Boolean isHidden, int orderId, User user) {
-        this.text = text;
+    public Wish(String wishText, Boolean isHidden, int orderId, User user) {
+        this.wishText = wishText;
         this.isHidden = isHidden;
         this.orderId = orderId;
         this.user = user;
     }
 
     public void updateWish(String text, Boolean isHidden, int orderId) {
-        this.text = text;
+        this.wishText = text;
         this.isHidden = isHidden;
         this.orderId = orderId;
     }

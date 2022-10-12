@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 public class WishResponse {
 
     Long wishId;
-    String text;
+    String wishText;
     int count;
 
     public static WishResponse of(Wish wish, int count) {
         return WishResponse.builder()
                 .wishId(wish.getWishId())
-                .text(wish.getText())
+                .wishText(wish.getWishText())
                 .count(count)
                 .build();
     }

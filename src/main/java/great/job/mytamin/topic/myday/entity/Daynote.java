@@ -29,28 +29,33 @@ public class Daynote {
     @OneToOne
     @JoinColumn(name = "wishId")
     private Wish wish;
-    private String rawWishText; // 연관관계 삭제되었을 경우 -> raw text 활용
+    private String wishText; // 연관관계 삭제되었을 경우 -> raw text 활용
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String note;
 
-    private LocalDateTime performedAt; // 마이데이를 수행한 날짜
+    private LocalDateTime rawPerformedAt;
+    private int year;
+    private int month;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
-    public Daynote(List<String> imgList, Wish wish, String note, LocalDateTime performedAt) {
+    public Daynote(List<String> imgList, Wish wish, String note, LocalDateTime rawPerformedAt, int year, int month) {
         this.imgList = imgList;
         this.wish = wish;
-        this.rawWishText = wish.getText();
+        this.wishText = wish.getWishText();
         this.note = note;
-        this.performedAt = performedAt;
+        this.rawPerformedAt = rawPerformedAt;
+        this.year = year;
+        this.month = month;
     }
 
     public void updateWish(Wish wish) {
-        this.rawWishText = wish.getText();
+        this.wishText = wish.getWishText();
     }
 
 }

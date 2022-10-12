@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishRequest {
-    Long wishId;
+public class DaynoteRequest {
     @NotBlank String wishText;
-    @NotBlank Boolean isHidden;
-    @NotBlank int orderId;
+    @NotBlank String note;
+    @NotBlank int year;
+    @NotBlank int month;
 }

@@ -1,4 +1,4 @@
-package great.job.mytamin.global.util;
+package great.job.mytamin.topic.util;
 
 import great.job.mytamin.topic.mytamin.entity.Care;
 import great.job.mytamin.topic.mytamin.entity.Report;
