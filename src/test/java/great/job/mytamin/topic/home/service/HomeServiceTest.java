@@ -1,7 +1,7 @@
 package great.job.mytamin.topic.home.service;
 
 import great.job.mytamin.global.support.CommonServiceTest;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.home.dto.response.ActiveResponse;
 import great.job.mytamin.topic.home.dto.response.WelcomeResponse;
 import great.job.mytamin.topic.mytamin.entity.Care;

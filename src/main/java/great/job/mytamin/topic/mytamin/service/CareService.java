@@ -1,7 +1,7 @@
 package great.job.mytamin.topic.mytamin.service;
 
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.CareRequest;
 import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
 import great.job.mytamin.topic.mytamin.entity.Care;

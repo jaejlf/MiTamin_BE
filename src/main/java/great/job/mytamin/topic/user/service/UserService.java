@@ -3,7 +3,7 @@ package great.job.mytamin.topic.user.service;
 import great.job.mytamin.topic.user.dto.response.ProfileResponse;
 import great.job.mytamin.topic.user.dto.request.BeMyMsgRequest;
 import great.job.mytamin.topic.user.entity.User;
-import great.job.mytamin.global.util.UserUtil;
+import great.job.mytamin.topic.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

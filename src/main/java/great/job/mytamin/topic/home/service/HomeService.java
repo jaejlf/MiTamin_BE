@@ -5,7 +5,7 @@ import great.job.mytamin.topic.home.dto.response.WelcomeResponse;
 import great.job.mytamin.topic.mytamin.entity.Mytamin;
 import great.job.mytamin.topic.mytamin.service.MytaminService;
 import great.job.mytamin.topic.user.entity.User;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
