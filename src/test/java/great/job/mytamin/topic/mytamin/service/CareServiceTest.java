@@ -2,7 +2,7 @@ package great.job.mytamin.topic.mytamin.service;
 
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonServiceTest;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.CareRequest;
 import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
 import great.job.mytamin.topic.mytamin.entity.Care;
@@ -60,7 +60,7 @@ class CareServiceTest extends CommonServiceTest {
                     .build();
 
             assertAll(
-                    () -> assertThat(result.isCanEdit()).isEqualTo(expected.isCanEdit()),
+                    () -> assertThat(result.getCanEdit()).isEqualTo(expected.getCanEdit()),
                     () -> assertThat(result.getCareCategory()).isEqualTo(expected.getCareCategory()),
                     () -> assertThat(result.getCareMsg1()).isEqualTo(expected.getCareMsg1()),
                     () -> assertThat(result.getCareMsg2()).isEqualTo(expected.getCareMsg2())

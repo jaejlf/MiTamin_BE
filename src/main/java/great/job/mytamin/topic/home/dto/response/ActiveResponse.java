@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ActiveResponse {
 
-    boolean breathIsDone;
-    boolean senseIsDone;
-    boolean reportIsDone;
-    boolean careIsDone;
+    Boolean breathIsDone;
+    Boolean senseIsDone;
+    Boolean reportIsDone;
+    Boolean careIsDone;
 
-    public static ActiveResponse of(boolean breathIsDone, boolean senseIsDone, boolean reportIsDone, boolean careIsDone) {
+    public static ActiveResponse of(Boolean breathIsDone, Boolean senseIsDone, Boolean reportIsDone, Boolean careIsDone) {
         return ActiveResponse.builder()
                 .breathIsDone(breathIsDone)
                 .senseIsDone(senseIsDone)

@@ -1,4 +1,4 @@
-package great.job.mytamin.global.util;
+package great.job.mytamin.topic.util;
 
 import great.job.mytamin.topic.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class UserUtil {
     이메일 중복 체크 (true : 이미 사용 중, false : 사용 가능)
     */
     @Transactional(readOnly = true)
-    public boolean checkEmailDuplication(String email) {
+    public Boolean checkEmailDuplication(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 
@@ -23,7 +23,7 @@ public class UserUtil {
     닉네임 중복 체크 (true : 이미 사용 중, false : 사용 가능)
     */
     @Transactional(readOnly = true)
-    public boolean checkNicknameDuplication(String nickname) {
+    public Boolean checkNicknameDuplication(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
 

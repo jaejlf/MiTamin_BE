@@ -1,7 +1,7 @@
 package great.job.mytamin.topic.home.service;
 
 import great.job.mytamin.global.support.CommonServiceTest;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.home.dto.response.ActiveResponse;
 import great.job.mytamin.topic.home.dto.response.WelcomeResponse;
 import great.job.mytamin.topic.mytamin.entity.Care;
@@ -168,10 +168,10 @@ class HomeServiceTest extends CommonServiceTest {
                 .build();
 
         assertAll(
-                () -> assertThat(result.isBreathIsDone()).isEqualTo(expected.isBreathIsDone()),
-                () -> assertThat(result.isSenseIsDone()).isEqualTo(expected.isSenseIsDone()),
-                () -> assertThat(result.isReportIsDone()).isEqualTo(expected.isReportIsDone()),
-                () -> assertThat(result.isCareIsDone()).isEqualTo(expected.isCareIsDone())
+                () -> assertThat(result.getBreathIsDone()).isEqualTo(expected.getBreathIsDone()),
+                () -> assertThat(result.getSenseIsDone()).isEqualTo(expected.getSenseIsDone()),
+                () -> assertThat(result.getReportIsDone()).isEqualTo(expected.getReportIsDone()),
+                () -> assertThat(result.getCareIsDone()).isEqualTo(expected.getCareIsDone())
         );
     }
 

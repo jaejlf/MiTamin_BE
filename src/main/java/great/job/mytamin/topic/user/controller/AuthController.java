@@ -1,7 +1,6 @@
 package great.job.mytamin.topic.user.controller;
 
 import great.job.mytamin.global.dto.response.ResultResponse;
-import great.job.mytamin.global.util.UserUtil;
 import great.job.mytamin.topic.user.dto.request.EmailCheckRequest;
 import great.job.mytamin.topic.user.dto.request.LoginRequest;
 import great.job.mytamin.topic.user.dto.request.ReissueRequest;
@@ -10,6 +9,7 @@ import great.job.mytamin.topic.user.dto.response.TokenResponse;
 import great.job.mytamin.topic.user.dto.response.UserResponse;
 import great.job.mytamin.topic.user.service.AuthService;
 import great.job.mytamin.topic.user.service.EmailService;
+import great.job.mytamin.topic.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,7 @@ public class AuthController {
 
     @GetMapping("/check/email/{email}")
     public ResponseEntity<Object> checkEmailDuplication(@PathVariable String email) {
-        boolean isDuplicate = userUtil.checkEmailDuplication(email);
+        Boolean isDuplicate = userUtil.checkEmailDuplication(email);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("이메일 중복 체크", isDuplicate));
@@ -55,7 +55,7 @@ public class AuthController {
 
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<Object> checkNicknameDuplication(@PathVariable String nickname) {
-        boolean isDuplicate = userUtil.checkNicknameDuplication(nickname);
+        Boolean isDuplicate = userUtil.checkNicknameDuplication(nickname);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("닉네임 중복 체크", isDuplicate));

@@ -4,7 +4,6 @@ import great.job.mytamin.topic.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -27,17 +26,36 @@ public class Daynote {
     @OrderColumn
     private List<String> imgList = new ArrayList<>();
 
-    @Length(min = 1, max = 100)
-    private String wishlistTitle; // 연관관계 설정 X -> raw text만 활용
+    @OneToOne
+    @JoinColumn(name = "wishId")
+    private Wish wish;
+    private String wishText; // 연관관계 삭제되었을 경우 -> raw text 활용
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String comment;
+    private String note;
 
-    private LocalDateTime performedAt; // 마이데이를 수행한 날짜
+    private LocalDateTime rawPerformedAt;
+    private int year;
+    private int month;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId")
     private User user;
+
+    public Daynote(List<String> imgList, Wish wish, String note, LocalDateTime rawPerformedAt, int year, int month) {
+        this.imgList = imgList;
+        this.wish = wish;
+        this.wishText = wish.getWishText();
+        this.note = note;
+        this.rawPerformedAt = rawPerformedAt;
+        this.year = year;
+        this.month = month;
+    }
+
+    public void updateWish(Wish wish) {
+        this.wishText = wish.getWishText();
+    }
 
 }

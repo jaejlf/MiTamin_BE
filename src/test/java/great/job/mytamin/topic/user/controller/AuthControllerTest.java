@@ -6,7 +6,7 @@ import great.job.mytamin.topic.user.dto.request.SignUpRequest;
 import great.job.mytamin.topic.user.dto.response.TokenResponse;
 import great.job.mytamin.topic.user.dto.response.UserResponse;
 import great.job.mytamin.topic.user.service.AuthService;
-import great.job.mytamin.global.util.UserUtil;
+import great.job.mytamin.topic.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;

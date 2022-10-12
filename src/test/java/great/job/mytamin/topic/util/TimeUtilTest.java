@@ -1,6 +1,7 @@
-package great.job.mytamin.global.util;
+package great.job.mytamin.topic.util;
 
 import great.job.mytamin.global.support.CommonServiceTest;
+import great.job.mytamin.topic.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
