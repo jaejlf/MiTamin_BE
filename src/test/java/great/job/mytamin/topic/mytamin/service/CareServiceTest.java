@@ -60,7 +60,7 @@ class CareServiceTest extends CommonServiceTest {
                     .build();
 
             assertAll(
-                    () -> assertThat(result.isCanEdit()).isEqualTo(expected.isCanEdit()),
+                    () -> assertThat(result.getCanEdit()).isEqualTo(expected.getCanEdit()),
                     () -> assertThat(result.getCareCategory()).isEqualTo(expected.getCareCategory()),
                     () -> assertThat(result.getCareMsg1()).isEqualTo(expected.getCareMsg1()),
                     () -> assertThat(result.getCareMsg2()).isEqualTo(expected.getCareMsg2())

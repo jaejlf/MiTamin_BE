@@ -134,7 +134,7 @@ public class AuthService {
         if (!m.matches() || password.contains(" ")) throw new MytaminException(PASSWORD_PATTERN_ERROR);
     }
 
-    private boolean isMytaminAlarmOn(String mytaminHour) {
+    private Boolean isMytaminAlarmOn(String mytaminHour) {
         return mytaminHour != null;
     }
 

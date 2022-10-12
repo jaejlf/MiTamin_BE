@@ -72,14 +72,14 @@ public class User implements UserDetails {
     /*
     알림 설정
     */
-    private boolean mytaminAlarmOn;
-    private boolean mydayAlarmOn = false;
-    
+    private Boolean mytaminAlarmOn;
+    private Boolean mydayAlarmOn = false;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private Set<Mytamin> mytaminSet = new HashSet<>();
 
-    public User(String email, String encodedPw, String nickname, Provider provider, String mytaminHour, String mytaminMin, boolean mytaminAlarmOn) {
+    public User(String email, String encodedPw, String nickname, Provider provider, String mytaminHour, String mytaminMin, Boolean mytaminAlarmOn) {
         this.email = email;
         this.password = encodedPw;
         this.nickname = nickname;
@@ -118,7 +118,7 @@ public class User implements UserDetails {
     public void updateDateOfMyday(LocalDateTime dateOfMyday) {
         this.dateOfMyday = dateOfMyday;
     }
-    
+
     /*
     UserDetails Method
     */

@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 public class CareResponse {
 
     Long careId;
-    boolean canEdit;
+    Boolean canEdit;
     String careCategory;
     String careMsg1;
     String careMsg2;
 
-    public static CareResponse of(Care care, boolean canEdit) {
+    public static CareResponse of(Care care, Boolean canEdit) {
         return CareResponse.builder()
                 .careId(care.getCareId())
                 .canEdit(canEdit)

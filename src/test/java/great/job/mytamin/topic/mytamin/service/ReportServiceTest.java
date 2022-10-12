@@ -68,7 +68,7 @@ class ReportServiceTest extends CommonServiceTest {
                     .build();
 
             assertAll(
-                    () -> assertThat(result.isCanEdit()).isEqualTo(expected.isCanEdit()),
+                    () -> assertThat(result.getCanEdit()).isEqualTo(expected.getCanEdit()),
                     () -> assertThat(result.getMentalCondition()).isEqualTo(expected.getMentalCondition()),
                     () -> assertThat(result.getFeelingTag()).isEqualTo(expected.getFeelingTag()),
                     () -> assertThat(result.getTodayReport()).isEqualTo(expected.getTodayReport())

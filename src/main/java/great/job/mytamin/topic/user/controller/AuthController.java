@@ -41,7 +41,7 @@ public class AuthController {
 
     @GetMapping("/check/email/{email}")
     public ResponseEntity<Object> checkEmailDuplication(@PathVariable String email) {
-        boolean isDuplicate = userUtil.checkEmailDuplication(email);
+        Boolean isDuplicate = userUtil.checkEmailDuplication(email);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("이메일 중복 체크", isDuplicate));
@@ -49,7 +49,7 @@ public class AuthController {
 
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<Object> checkNicknameDuplication(@PathVariable String nickname) {
-        boolean isDuplicate = userUtil.checkNicknameDuplication(nickname);
+        Boolean isDuplicate = userUtil.checkNicknameDuplication(nickname);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("닉네임 중복 체크", isDuplicate));

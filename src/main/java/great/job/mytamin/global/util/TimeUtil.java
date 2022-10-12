@@ -28,7 +28,7 @@ public class TimeUtil {
     /*
     target이 오늘(am 5:00 ~ 4:59)의 범위에 속하는지
     */
-    public boolean isToday(LocalDateTime target) {
+    public Boolean isToday(LocalDateTime target) {
         LocalDateTime start1, start2, end1, end2;
         LocalDateTime now = LocalDateTime.now();
 
@@ -50,28 +50,28 @@ public class TimeUtil {
     /*
     아침 am 5:00 ~ am 11:59
     */
-    public boolean isMorning(LocalDateTime target) {
+    public Boolean isMorning(LocalDateTime target) {
         return target.getHour() >= 5 && target.getHour() <= 11;
     }
 
     /*
     오후 pm 12:00 ~ pm 18:59
     */
-    public boolean isAfternoon(LocalDateTime target) {
+    public Boolean isAfternoon(LocalDateTime target) {
         return target.getHour() >= 12 && target.getHour() <= 18;
     }
 
     /*
     밤 pm 19:00 ~ am 4:59
     */
-    public boolean isNight(LocalDateTime target) {
+    public Boolean isNight(LocalDateTime target) {
         return target.getHour() >= 19 || target.getHour() <= 4;
     }
 
     /*
     target이 이번 달의 날짜에 속하는지
     */
-    public boolean isCurrentMonth(LocalDateTime target) {
+    public Boolean isCurrentMonth(LocalDateTime target) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), 1, 0, 0);
         LocalDateTime end = LocalDateTime.of(now.getYear(), now.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
@@ -114,19 +114,19 @@ public class TimeUtil {
     /*
     Report 수정 가능 여부
     */
-    public boolean canEditReport(Report report) {
+    public Boolean canEditReport(Report report) {
         return isInRange(LocalDateTime.now(), report.getCreatedAt(), report.getCreatedAt().plusDays(1));
     }
 
     /*
     Care 수정 가능 여부
     */
-    public boolean canEditCare(Care care) {
+    public Boolean canEditCare(Care care) {
         return isInRange(LocalDateTime.now(), care.getCreatedAt(), care.getCreatedAt().plusDays(1));
     }
 
     // 특정 시간 범위 내에 있는지
-    public boolean isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end) {
+    public Boolean isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end) {
         return target.compareTo(start) >= 0 && end.compareTo(target) >= 0;
     }
 
