@@ -14,21 +14,33 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Wishlist {
+public class Wish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishId;
 
     @Length(min = 1, max = 100)
-    private String title;
+    private String text;
 
-    private int count;
-    private boolean isHidden;
-    private int order;
+    private Boolean isHidden;
+    private int orderId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId")
     private User user;
+
+    public Wish(String text, Boolean isHidden, int orderId, User user) {
+        this.text = text;
+        this.isHidden = isHidden;
+        this.orderId = orderId;
+        this.user = user;
+    }
+
+    public void updateWish(String text, Boolean isHidden, int orderId) {
+        this.text = text;
+        this.isHidden = isHidden;
+        this.orderId = orderId;
+    }
 
 }
