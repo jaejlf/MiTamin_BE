@@ -1,8 +1,6 @@
 package great.job.mytamin.topic.myday.service;
 
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.topic.util.MydayUtil;
-import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.myday.dto.request.DaynoteRequest;
 import great.job.mytamin.topic.myday.dto.response.DaynoteResponse;
 import great.job.mytamin.topic.myday.dto.response.MydayResponse;
@@ -10,6 +8,8 @@ import great.job.mytamin.topic.myday.entity.Daynote;
 import great.job.mytamin.topic.myday.entity.Wish;
 import great.job.mytamin.topic.myday.repository.DaynoteRepository;
 import great.job.mytamin.topic.user.entity.User;
+import great.job.mytamin.topic.util.MydayUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,16 +50,10 @@ public class MydayService {
     @Transactional
     public DaynoteResponse createDaynote(User user, DaynoteRequest daynoteRequest) {
         Wish wish = wishService.findWishOrElseNew(user, daynoteRequest.getWishText());
-        int year = daynoteRequest.getYear();
-        int month = daynoteRequest.getMonth();
-        LocalDateTime rawPerformedAt = LocalDateTime.of(year, month, 10, 10, 0); // 일, 시, 분은 더미 데이터 set
+        LocalDateTime rawPerformedAt = LocalDateTime.of(daynoteRequest.getYear(), daynoteRequest.getMonth(), 10, 10, 0); // 일, 시, 분은 더미 데이터 set
 
-        checkExistence(user, year, month);
-        return DaynoteResponse.of(
-                saveNewDaynote(
-                        daynoteRequest,
-                        wish,
-                        rawPerformedAt));
+        checkExistence(user, rawPerformedAt);
+        return DaynoteResponse.of(saveNewDaynote(daynoteRequest, wish, rawPerformedAt, user));
     }
 
     private LocalDateTime updateDateOfMyday(User user) {
@@ -68,20 +62,19 @@ public class MydayService {
         return dateOfMyday;
     }
 
-    private void checkExistence(User user, int year, int month) {
-        if (daynoteRepository.findByUserAndYearAndMonth(user, year, month).isPresent()) {
+    private void checkExistence(User user, LocalDateTime rawPerformedAt) {
+        if (daynoteRepository.findByUserAndRawPerformedAt(user, rawPerformedAt).isPresent()) {
             throw new MytaminException(DAYNOTE_ALREADY_DONE_ERROR);
         }
     }
 
-    private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, LocalDateTime rawPerformedAt) {
+    private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, LocalDateTime rawPerformedAt, User user) {
         Daynote daynote = new Daynote(
                 null, // 이미지 리스트 업로드 구현 전
                 wish,
                 daynoteRequest.getNote(),
                 rawPerformedAt,
-                daynoteRequest.getYear(),
-                daynoteRequest.getMonth()
+                user
         );
         return daynoteRepository.save(daynote);
     }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -24,7 +25,7 @@ public class DaynoteResponse {
                 .imgList(daynote.getImgList())
                 .wishText(daynote.getWishText())
                 .note(daynote.getNote())
-                .performedAt(daynote.getYear() + "년 " + daynote.getDaynoteId() + "월의 데이노트")
+                .performedAt(daynote.getRawPerformedAt().format(DateTimeFormatter.ofPattern("yyyy.MM")))
                 .build();
     }
 
