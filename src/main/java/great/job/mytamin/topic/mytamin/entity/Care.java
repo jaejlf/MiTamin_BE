@@ -28,7 +28,7 @@ public class Care {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String careMsg2;
 
-    @OneToOne(mappedBy = "report")
+    @OneToOne(mappedBy = "care")
     private Mytamin mytamin;
 
     public Care(String careCategory, String careMsg1, String careMsg2, Mytamin mytamin) {
