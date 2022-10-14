@@ -9,6 +9,7 @@ import great.job.mytamin.topic.user.service.AuthService;
 import great.job.mytamin.topic.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
+import great.job.mytamin.topic.user.service.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,9 @@ class AuthControllerTest extends CommonControllerTest {
     
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private EmailService emailService;
 
     @MockBean
     private UserUtil userUtil;
