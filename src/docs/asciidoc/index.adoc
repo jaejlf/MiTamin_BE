@@ -232,7 +232,7 @@ operation::user/updateBeMyMessage[snippets='request-headers,request-fields,respo
 == Myday
 === 이번 달의 마이데이
 * 매달 랜덤으로 마이데이 날짜가 지정된다.
-* msg
+* comment
     ** 마이데이 이전 : "이번 마이데이에는 무엇을 해볼까요 ?"
     ** 마이데이 3일 전 : "두근두근 ! 마이데이가 머지 않았어요",
     ** 마이데이 당일 : "기분 좋은 마이데이 되세요 !",

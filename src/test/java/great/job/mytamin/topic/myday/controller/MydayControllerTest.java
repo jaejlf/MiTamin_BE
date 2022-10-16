@@ -61,7 +61,7 @@ class MydayControllerTest extends CommonControllerTest {
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.myDayMMDD").description("마이데이 날짜"),
                                 fieldWithPath("data.dday").description("현재 시간 ~ 마이데이 날짜 D-Day"),
-                                fieldWithPath("data.msg").description("마이데이 메세지")
+                                fieldWithPath("data.comment").description("마이데이 메세지")
                         ))
                 );
     }

@@ -30,14 +30,6 @@ public class DaynoteController {
                 .body(ResultResponse.ok("데이노트 작성 가능 여부", canCreate));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<Object> getDaynoteList(@AuthenticationPrincipal User user) {
-        DaynoteListResponse daynoteListResponse = daynoteService.getDaynoteList(user);
-        return ResponseEntity
-                .status(OK)
-                .body(ResultResponse.ok("데이노트 리스트 조회", daynoteListResponse));
-    }
-
     @PostMapping("/new")
     public ResponseEntity<Object> createDaynote(@AuthenticationPrincipal User user,
                                                 @RequestBody DaynoteRequest daynoteRequest) {
@@ -45,6 +37,14 @@ public class DaynoteController {
         return ResponseEntity
                 .status(CREATED)
                 .body(ResultResponse.create("데이노트 작성하기", daynoteResponse));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Object> getDaynoteList(@AuthenticationPrincipal User user) {
+        DaynoteListResponse daynoteListResponse = daynoteService.getDaynoteList(user);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("데이노트 리스트 조회", daynoteListResponse));
     }
 
 }

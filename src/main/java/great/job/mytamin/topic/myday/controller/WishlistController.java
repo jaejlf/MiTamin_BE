@@ -26,7 +26,10 @@ public class WishlistController {
                 .status(OK)
                 .body(ResultResponse.ok("위시 리스트 조회", wishResponseList));
     }
-    
+
+    /*
+    화면 설계서 변경 사항 -> 수정/삭제 분리
+    */
     @PutMapping("/list")
     public ResponseEntity<Object> updateWishlist(@AuthenticationPrincipal User user,
                                                  @RequestBody UpdateWishRequest updateWishRequest) {

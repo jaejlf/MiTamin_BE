@@ -30,20 +30,6 @@ public class DaynoteService {
     private final DaynoteRepository daynoteRepository;
 
     /*
-    데이노트 리스트 조회
-    */
-    public DaynoteListResponse getDaynoteList(User user) {
-        List<Daynote> daynoteList = daynoteRepository.findByUser(user);
-        daynoteList.sort(Comparator.comparing(Daynote::getRawPerformedAt)); // 날짜 오름차순 정렬
-
-        Map<Integer, List<DaynoteResponse>> daynoteListMap =
-                daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()) // DTO 변환
-                        .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
-
-        return DaynoteListResponse.of(daynoteListMap);
-    }
-
-    /*
     데이노트 작성 가능 여부
     */
     public Boolean canCreateDaynote(User user, String performedAt) {
@@ -71,6 +57,20 @@ public class DaynoteService {
                 user
         );
         return daynoteRepository.save(daynote);
+    }
+
+    /*
+    데이노트 리스트 조회
+    */
+    public DaynoteListResponse getDaynoteList(User user) {
+        List<Daynote> daynoteList = daynoteRepository.findByUser(user);
+        daynoteList.sort(Comparator.comparing(Daynote::getRawPerformedAt)); // 날짜 오름차순 정렬
+
+        Map<Integer, List<DaynoteResponse>> daynoteListMap =
+                daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()) // DTO 변환
+                        .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
+
+        return DaynoteListResponse.of(daynoteListMap);
     }
 
 }
