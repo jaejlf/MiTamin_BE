@@ -36,6 +36,7 @@ public class DaynoteService {
     /*
     데이노트 작성 가능 여부
     */
+    @Transactional(readOnly = true)
     public Boolean canCreateDaynote(User user, String performedAt) {
         LocalDateTime rawPerformedAt = timeUtil.convertToRawPerformedAt(performedAt);
         return daynoteRepository.findByUserAndRawPerformedAt(user, rawPerformedAt).isEmpty();
@@ -52,17 +53,6 @@ public class DaynoteService {
         return DaynoteResponse.ofDetail(saveNewDaynote(fileList, daynoteRequest, wish, user));
     }
 
-    private Daynote saveNewDaynote(List<MultipartFile> fileList, DaynoteRequest daynoteRequest, Wish wish, User user) {
-        Daynote daynote = new Daynote(
-                awsS3Service.uploadImageList(fileList, "DN"),
-                wish,
-                daynoteRequest.getNote(),
-                timeUtil.convertToRawPerformedAt(daynoteRequest.getPerformedAt()),
-                user
-        );
-        return daynoteRepository.save(daynote);
-    }
-
     /*
     데이노트 조회
     */
@@ -74,6 +64,7 @@ public class DaynoteService {
     /*
     데이노트 수정
     */
+    @Transactional
     public void updateDaynote(User user, List<MultipartFile> fileList, Long daynoteId, DaynoteUpdateRequest daynoteUpdateRequest) {
         Daynote daynote = findDaynoteById(daynoteId);
         hasAuthorized(daynote, user);
@@ -91,6 +82,7 @@ public class DaynoteService {
     /*
     데이노트 삭제
     */
+    @Transactional
     public void deleteDaynote(User user, Long daynoteId) {
         Daynote daynote = findDaynoteById(daynoteId);
         hasAuthorized(daynote, user);
@@ -101,6 +93,7 @@ public class DaynoteService {
     /*
     데이노트 리스트 조회
     */
+    @Transactional(readOnly = true)
     public DaynoteListResponse getDaynoteList(User user) {
         List<Daynote> daynoteList = daynoteRepository.findByUser(user);
         daynoteList.sort(Comparator.comparing(Daynote::getRawPerformedAt)); // 날짜 오름차순 정렬
@@ -110,6 +103,17 @@ public class DaynoteService {
                         .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
 
         return DaynoteListResponse.of(daynoteListMap);
+    }
+
+    private Daynote saveNewDaynote(List<MultipartFile> fileList, DaynoteRequest daynoteRequest, Wish wish, User user) {
+        Daynote daynote = new Daynote(
+                awsS3Service.uploadImageList(fileList, "DN"),
+                wish,
+                daynoteRequest.getNote(),
+                timeUtil.convertToRawPerformedAt(daynoteRequest.getPerformedAt()),
+                user
+        );
+        return daynoteRepository.save(daynote);
     }
 
     private Daynote findDaynoteById(Long daynoteId) {

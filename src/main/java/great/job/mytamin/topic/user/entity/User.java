@@ -53,12 +53,6 @@ public class User implements UserDetails {
     private Provider provider;
 
     /*
-    마이타민 섭취 지정 시간
-    */
-    private String mytaminHour;
-    private String mytaminMin;
-
-    /*
     행동 1 : 숨 고르기, 행동 2 : 감각 깨우기 실천 시간
     */
     private LocalDateTime breathTime = LocalDateTime.of(1999, 1, 1, 0, 0);
@@ -68,6 +62,17 @@ public class User implements UserDetails {
     이번 달의 마이 데이
     */
     private LocalDateTime dateOfMyday;
+
+    /*
+    마이타민 섭취 지정 시간
+    */
+    private String mytaminHour;
+    private String mytaminMin;
+
+    /*
+    마이데이 알림 지정 시간
+    */
+    private String mydayWhen;
 
     /*
     알림 설정
@@ -106,9 +111,27 @@ public class User implements UserDetails {
         this.beMyMessage = beMyMessage;
     }
 
-    public void updateMytaminTime(String mytaminHour, String mytaminMin) {
+    /*
+    마이타민 알림 설정
+    */
+    public void updateMytaminWhen(String mytaminHour, String mytaminMin) {
         this.mytaminHour = mytaminHour;
         this.mytaminMin = mytaminMin;
+    }
+
+    public void updateMytaminAlarmOn(Boolean isOn) {
+        this.mytaminAlarmOn = isOn;
+    }
+
+    /*
+    마이데이 알림 설정
+    */
+    public void updateMydayWhen(String mydayWhen) {
+        this.mydayWhen = mydayWhen;
+    }
+
+    public void updateMydayAlarmOn(Boolean isOn) {
+        this.mydayAlarmOn = isOn;
     }
 
     public void updateprofileImgUrl(String profileImgUrl) {

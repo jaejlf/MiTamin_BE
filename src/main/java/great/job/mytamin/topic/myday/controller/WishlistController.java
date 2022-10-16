@@ -29,7 +29,8 @@ public class WishlistController {
     }
 
     /*
-    화면 설계서 변경 사항 -> 수정/삭제 분리
+    * (추후) 화면 설계서 변경 사항 확정되면 수정
+    * 삭제 시 데이노트 처리 주의
     */
     @PutMapping("/list")
     public ResponseEntity<Object> updateWishlist(@AuthenticationPrincipal User user,

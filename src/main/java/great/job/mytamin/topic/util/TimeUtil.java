@@ -128,6 +128,23 @@ public class TimeUtil {
     }
 
     /*
+    String HH, MM -> 오전/오후 HH:mm 포맷으로 변환
+    */
+    public String convertToAlarmFormat(String HH, String mm) {
+        int hour = Integer.parseInt(HH);
+        int minute = Integer.parseInt(mm);
+
+        String apm = "오전";
+        if (hour > 12) {
+            hour -= 12;
+            apm = "오후";
+        }
+
+        LocalDateTime alarmAt = LocalDateTime.of(2022, 10, 10, hour, minute);
+        return alarmAt.format(DateTimeFormatter.ofPattern(apm + " HH:mm"));
+    }
+
+    /*
     Report 수정 가능 여부
     */
     public Boolean canEditReport(Report report) {

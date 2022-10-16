@@ -22,6 +22,7 @@ public enum ErrorMap {
     // User 3xxx
     USER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 3000, "USER_NOT_FOUND_ERROR", "존재하지 않는 유저입니다."),
     PASSWORD_MISMATCH_ERROR(HttpStatus.BAD_REQUEST, 3001, "PASSWORD_MISMATCH_ERROR", "잘못된 비밀번호입니다."),
+    INVALID_MYDAY_ALARM_CODE_ERROR(HttpStatus.BAD_REQUEST, 3002, "INVALID_MYDAY_ALARM_CODE_ERROR", "마이데이 알림 코드는 0 ~ 3 사이의 값이어야 합니다."),
 
     // Report 4xxx
     INVALID_CONDITION_CODE_ERROR(HttpStatus.BAD_REQUEST, 4000, "INVALID_CONDITION_CODE_ERROR", "마음 컨디션 코드는 1 ~ 5 사이의 값이어야 합니다."),
