@@ -34,10 +34,11 @@ public class AwsS3Service {
     /*
     이미지 리스트 업로드
     */
-    public List<String> uploadImageList(List<MultipartFile> uploadFiles, String keymsg) {
+    public List<String> uploadImageList(List<MultipartFile> uploadFiles, String uniq) {
+        if(uploadFiles.isEmpty()) return null;
         List<String> uploadUrl = new ArrayList<>();
         for (MultipartFile uploadFile : uploadFiles) {
-            uploadUrl.add(uploadImg(uploadFile, keymsg));
+            uploadUrl.add(uploadImg(uploadFile, uniq));
         }
         return uploadUrl;
     }
@@ -45,8 +46,8 @@ public class AwsS3Service {
     /*
     단일 이미지 업로드
     */
-    public String uploadImg(MultipartFile file, String keymsg) {
-        if (file.isEmpty()) return "";
+    public String uploadImg(MultipartFile file, String uniq) {
+        if (file.isEmpty()) return null;
 
         // 확장자 체크
         String originFileName = file.getOriginalFilename();
@@ -56,7 +57,7 @@ public class AwsS3Service {
         }
 
         // 업로드
-        String fileName = keymsg + UUID.randomUUID();
+        String fileName = uniq + "-" + UUID.randomUUID();
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());

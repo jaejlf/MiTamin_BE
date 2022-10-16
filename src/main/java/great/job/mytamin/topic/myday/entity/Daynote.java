@@ -24,7 +24,7 @@ public class Daynote {
 
     @ElementCollection
     @OrderColumn
-    private List<String> imgList = new ArrayList<>();
+    private List<String> imgUrlList = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "wishId")
@@ -41,8 +41,8 @@ public class Daynote {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Daynote(List<String> imgList, Wish wish, String note, LocalDateTime rawPerformedAt, User user) {
-        this.imgList = imgList;
+    public Daynote(List<String> imgUrlList, Wish wish, String note, LocalDateTime rawPerformedAt, User user) {
+        this.imgUrlList = imgUrlList;
         this.wish = wish;
         this.wishText = wish.getWishText();
         this.note = note;

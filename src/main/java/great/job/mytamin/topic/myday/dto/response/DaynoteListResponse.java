@@ -14,11 +14,11 @@ import java.util.Map;
 @AllArgsConstructor
 public class DaynoteListResponse {
 
-    Map<Integer, List<DaynoteResponse>> daynoteListMap;
+    Map<Integer, List<DaynoteResponse>> daynoteList;
 
     public static DaynoteListResponse of(Map<Integer, List<DaynoteResponse>> daynoteListMap) {
         return DaynoteListResponse.builder()
-                .daynoteListMap(daynoteListMap)
+                .daynoteList(daynoteListMap)
                 .build();
     }
 

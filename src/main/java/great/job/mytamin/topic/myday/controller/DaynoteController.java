@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -32,8 +36,9 @@ public class DaynoteController {
 
     @PostMapping("/new")
     public ResponseEntity<Object> createDaynote(@AuthenticationPrincipal User user,
-                                                @RequestBody DaynoteRequest daynoteRequest) {
-        DaynoteResponse daynoteResponse = daynoteService.createDaynote(user, daynoteRequest);
+                                                @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList,
+                                                @RequestPart(value = "dayNote") @Valid DaynoteRequest daynoteRequest) {
+        DaynoteResponse daynoteResponse = daynoteService.createDaynote(user, fileList, daynoteRequest);
         return ResponseEntity
                 .status(CREATED)
                 .body(ResultResponse.create("데이노트 작성하기", daynoteResponse));
