@@ -1398,7 +1398,7 @@ Content-Length: 675
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "2022.10.10.Mon",
+    "takeAt" : "2022.10.16.Sun",
     "report" : {
       "reportId" : 1,
       "canEdit" : true,
@@ -1540,7 +1540,7 @@ Content-Length: 675
 <div class="ulist">
 <ul>
 <li>
-<p>마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.</p>
+<p>마음 컨디션은 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.</p>
 </li>
 <li>
 <p>mentalConditionCode</p>
@@ -1753,12 +1753,12 @@ Content-Length: 183
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
 Content-Type: application/json;charset=UTF-8
-Content-Length: 169
+Content-Length: 175
 
 {
   "statusCode" : 409,
   "errorCode" : 4001,
-  "errorName" : "REPORT_ALREADY_DONE",
+  "errorName" : "REPORT_ALREADY_DONE_ERROR",
   "message" : "오늘의 '하루 진단하기'를 이미 완료했습니다."
 }</code></pre>
 </div>
@@ -2130,7 +2130,7 @@ Content-Length: 144
 <div class="ulist">
 <ul>
 <li>
-<p>칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int 타입의 코드를 보낸다.</p>
+<p>칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.</p>
 </li>
 <li>
 <p>careCategoryCode</p>
@@ -2331,12 +2331,12 @@ Content-Length: 178
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
 Content-Type: application/json;charset=UTF-8
-Content-Length: 167
+Content-Length: 173
 
 {
   "statusCode" : 409,
   "errorCode" : 5001,
-  "errorName" : "CARE_ALREADY_DONE",
+  "errorName" : "CARE_ALREADY_DONE_ERROR",
   "message" : "오늘의 '칭찬 처방하기'를 이미 완료했습니다."
 }</code></pre>
 </div>
@@ -3021,7 +3021,7 @@ Content-Length: 88
 <p>매달 랜덤으로 마이데이 날짜가 지정된다.</p>
 </li>
 <li>
-<p>msg</p>
+<p>comment</p>
 <div class="ulist">
 <ul>
 <li>
@@ -3057,7 +3057,7 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 215
+Content-Length: 219
 
 {
   "statusCode" : 200,
@@ -3065,7 +3065,7 @@ Content-Length: 215
   "data" : {
     "myDayMMDD" : "10월 17일",
     "dday" : "D-7일",
-    "msg" : "이번 마이데이에는 무엇을 해볼까요 ?"
+    "comment" : "이번 마이데이에는 무엇을 해볼까요 ?"
   }
 }</code></pre>
 </div>
@@ -3129,7 +3129,7 @@ Content-Length: 215
 <td class="tableblock halign-left valign-top"><p class="tableblock">현재 시간 ~ 마이데이 날짜 D-Day</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.msg</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.comment</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마이데이 메세지</p></td>
 </tr>
@@ -3398,7 +3398,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-10 01:08:19 +0900
+Last updated 2022-10-16 22:21:11 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

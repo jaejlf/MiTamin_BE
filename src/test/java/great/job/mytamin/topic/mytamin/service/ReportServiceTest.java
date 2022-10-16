@@ -2,8 +2,8 @@ package great.job.mytamin.topic.mytamin.service;
 
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonServiceTest;
-import great.job.mytamin.global.util.ReportUtil;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.ReportUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.topic.mytamin.dto.response.ReportResponse;
 import great.job.mytamin.topic.mytamin.enumerate.MentalCondition;
@@ -68,7 +68,7 @@ class ReportServiceTest extends CommonServiceTest {
                     .build();
 
             assertAll(
-                    () -> assertThat(result.isCanEdit()).isEqualTo(expected.isCanEdit()),
+                    () -> assertThat(result.getCanEdit()).isEqualTo(expected.getCanEdit()),
                     () -> assertThat(result.getMentalCondition()).isEqualTo(expected.getMentalCondition()),
                     () -> assertThat(result.getFeelingTag()).isEqualTo(expected.getFeelingTag()),
                     () -> assertThat(result.getTodayReport()).isEqualTo(expected.getTodayReport())

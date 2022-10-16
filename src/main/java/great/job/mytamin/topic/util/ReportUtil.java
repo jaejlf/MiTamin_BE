@@ -1,4 +1,4 @@
-package great.job.mytamin.global.util;
+package great.job.mytamin.topic.util;
 
 import great.job.mytamin.topic.mytamin.entity.Report;
 import org.springframework.stereotype.Component;

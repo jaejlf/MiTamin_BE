@@ -96,7 +96,7 @@ class CareControllerTest extends CommonControllerTest {
                     "성실히 노력하는 내 모습이 좋아"
             );
 
-            given(careService.createCare(any(), any())).willThrow(new MytaminException(CARE_ALREADY_DONE));
+            given(careService.createCare(any(), any())).willThrow(new MytaminException(CARE_ALREADY_DONE_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/care/new")
@@ -109,7 +109,7 @@ class CareControllerTest extends CommonControllerTest {
                     .andDo(print())
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("errorCode").value(5001))
-                    .andExpect(jsonPath("errorName").value("CARE_ALREADY_DONE"))
+                    .andExpect(jsonPath("errorName").value("CARE_ALREADY_DONE_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestHeaders(
                                     headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")

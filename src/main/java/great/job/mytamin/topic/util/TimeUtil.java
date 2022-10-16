@@ -1,5 +1,6 @@
-package great.job.mytamin.global.util;
+package great.job.mytamin.topic.util;
 
+import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.topic.mytamin.entity.Care;
 import great.job.mytamin.topic.mytamin.entity.Report;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 import static great.job.mytamin.topic.user.enumerate.MydayMessage.*;
 
 @Component
@@ -26,9 +28,23 @@ public class TimeUtil {
     }
 
     /*
+    performedAt -> LocalDateTime 포맷 변환 & valid check
+    */
+    public LocalDateTime convertToRawPerformedAt(String performedAt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
+        LocalDateTime rawPerformedAt = LocalDateTime.parse(performedAt + ".10.10.00", formatter); // 10일.10시.00분으로 임의 설정
+
+        // 2020년 이전 or 올해 년도 이후
+        if (rawPerformedAt.getYear() < 2020 || rawPerformedAt.getYear() > LocalDateTime.now().getYear()) {
+            throw new MytaminException(DATETIME_PARSE_ERROR);
+        }
+        return rawPerformedAt;
+    }
+
+    /*
     target이 오늘(am 5:00 ~ 4:59)의 범위에 속하는지
     */
-    public boolean isToday(LocalDateTime target) {
+    public Boolean isToday(LocalDateTime target) {
         LocalDateTime start1, start2, end1, end2;
         LocalDateTime now = LocalDateTime.now();
 
@@ -50,28 +66,28 @@ public class TimeUtil {
     /*
     아침 am 5:00 ~ am 11:59
     */
-    public boolean isMorning(LocalDateTime target) {
+    public Boolean isMorning(LocalDateTime target) {
         return target.getHour() >= 5 && target.getHour() <= 11;
     }
 
     /*
     오후 pm 12:00 ~ pm 18:59
     */
-    public boolean isAfternoon(LocalDateTime target) {
+    public Boolean isAfternoon(LocalDateTime target) {
         return target.getHour() >= 12 && target.getHour() <= 18;
     }
 
     /*
     밤 pm 19:00 ~ am 4:59
     */
-    public boolean isNight(LocalDateTime target) {
+    public Boolean isNight(LocalDateTime target) {
         return target.getHour() >= 19 || target.getHour() <= 4;
     }
 
     /*
     target이 이번 달의 날짜에 속하는지
     */
-    public boolean isCurrentMonth(LocalDateTime target) {
+    public Boolean isCurrentMonth(LocalDateTime target) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), 1, 0, 0);
         LocalDateTime end = LocalDateTime.of(now.getYear(), now.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
@@ -90,22 +106,22 @@ public class TimeUtil {
         // 마이데이 당일
         if (dday == 0) {
             map.put("dday", "D-Day");
-            map.put("msg", nickname + "님, " + THE_DAY_OF_MYDAY.getMsg());
+            map.put("comment", nickname + "님, " + THE_DAY_OF_MYDAY.getMsg());
         }
         // 마이데이 이전
         else if (dday < -3) {
             map.put("dday", "D" + dday + "일");
-            map.put("msg", BEFORE_MYDAY.getMsg());
+            map.put("comment", BEFORE_MYDAY.getMsg());
         }
         // 마이데이 3일 전
         else if (dday < 0) {
             map.put("dday", "D" + dday + "일");
-            map.put("msg", SOON_MYDAY.getMsg());
+            map.put("comment", SOON_MYDAY.getMsg());
         }
         // 마이데이 이후
         else {
             map.put("dday", "D+" + dday + "일");
-            map.put("msg", AFTER_MYDAY.getMsg());
+            map.put("comment", AFTER_MYDAY.getMsg());
         }
 
         return map;
@@ -114,19 +130,19 @@ public class TimeUtil {
     /*
     Report 수정 가능 여부
     */
-    public boolean canEditReport(Report report) {
+    public Boolean canEditReport(Report report) {
         return isInRange(LocalDateTime.now(), report.getCreatedAt(), report.getCreatedAt().plusDays(1));
     }
 
     /*
     Care 수정 가능 여부
     */
-    public boolean canEditCare(Care care) {
+    public Boolean canEditCare(Care care) {
         return isInRange(LocalDateTime.now(), care.getCreatedAt(), care.getCreatedAt().plusDays(1));
     }
 
     // 특정 시간 범위 내에 있는지
-    public boolean isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end) {
+    public Boolean isInRange(LocalDateTime target, LocalDateTime start, LocalDateTime end) {
         return target.compareTo(start) >= 0 && end.compareTo(target) >= 0;
     }
 

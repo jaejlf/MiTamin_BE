@@ -133,7 +133,7 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
 
 == Report
 === 하루 진단하기
-* 마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.
+* 마음 컨디션은 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.
 * mentalConditionCode
     ** 1 : "매우 나빠요 .."
     ** 2 : "나쁜 편이에요 :("
@@ -171,7 +171,7 @@ include::{snippets}/report/updateReport_7000/http-response.adoc[]
 
 == Care
 === 칭찬 처방하기
-* 칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
+* 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
 * careCategoryCode
     ** 1 : "이루어 낸 일"
     ** 2 : "잘한 일이나 행동"
@@ -232,7 +232,7 @@ operation::user/updateBeMyMessage[snippets='request-headers,request-fields,respo
 == Myday
 === 이번 달의 마이데이
 * 매달 랜덤으로 마이데이 날짜가 지정된다.
-* msg
+* comment
     ** 마이데이 이전 : "이번 마이데이에는 무엇을 해볼까요 ?"
     ** 마이데이 3일 전 : "두근두근 ! 마이데이가 머지 않았어요",
     ** 마이데이 당일 : "기분 좋은 마이데이 되세요 !",

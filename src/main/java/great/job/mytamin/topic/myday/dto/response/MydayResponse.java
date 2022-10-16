@@ -13,13 +13,13 @@ public class MydayResponse {
 
     String myDayMMDD;
     String dday;
-    String msg;
+    String comment;
 
-    public static MydayResponse of(String myDayMMDD, String dday, String msg) {
+    public static MydayResponse of(String myDayMMDD, String dday, String comment) {
         return MydayResponse.builder()
                 .myDayMMDD(myDayMMDD)
                 .dday(dday)
-                .msg(msg)
+                .comment(comment)
                 .build();
     }
 

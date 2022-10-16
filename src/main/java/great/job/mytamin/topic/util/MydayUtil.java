@@ -1,4 +1,4 @@
-package great.job.mytamin.global.util;
+package great.job.mytamin.topic.util;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -5,7 +5,7 @@ import great.job.mytamin.topic.home.dto.response.WelcomeResponse;
 import great.job.mytamin.topic.mytamin.entity.Mytamin;
 import great.job.mytamin.topic.mytamin.service.MytaminService;
 import great.job.mytamin.topic.user.entity.User;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class HomeService {
 
         if (mytamin != null) comment = TAKE_MYTAMIN_DONE.getComment();
         else {
-            if (user.isMytaminAlarmOn()) {
+            if (user.getMydayAlarmOn()) {
                 int mytaminHour = Integer.parseInt(user.getMytaminHour());
                 int mytaminMin = Integer.parseInt(user.getMytaminMin());
                 comment = getCommentByMytaminTime(mytaminHour, mytaminMin);
@@ -47,12 +47,12 @@ public class HomeService {
     */
     @Transactional(readOnly = true)
     public ActiveResponse getProgressStatus(User user) {
-        boolean breathIsDone = timeUtil.isToday(user.getBreathTime());
-        boolean senseIsDone = timeUtil.isToday(user.getSenseTime());
+        Boolean breathIsDone = timeUtil.isToday(user.getBreathTime());
+        Boolean senseIsDone = timeUtil.isToday(user.getSenseTime());
 
         Mytamin mytamin = mytaminService.findMytamin(user, LocalDateTime.now());
-        boolean reportIsDone = mytamin != null && mytamin.getReport() != null;
-        boolean careIsDone = mytamin != null && mytamin.getCare() != null;
+        Boolean reportIsDone = mytamin != null && mytamin.getReport() != null;
+        Boolean careIsDone = mytamin != null && mytamin.getCare() != null;
 
         return ActiveResponse.of(breathIsDone, senseIsDone, reportIsDone, careIsDone);
     }

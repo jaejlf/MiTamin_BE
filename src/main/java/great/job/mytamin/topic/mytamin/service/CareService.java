@@ -1,7 +1,7 @@
 package great.job.mytamin.topic.mytamin.service;
 
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.CareRequest;
 import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
 import great.job.mytamin.topic.mytamin.entity.Care;
@@ -31,7 +31,7 @@ public class CareService {
     @Transactional
     public CareResponse createCare(User user, CareRequest careRequest) {
         Mytamin mytamin = mytaminService.findMytaminOrNew(user);
-        if (mytamin.getCare() != null) throw new MytaminException(CARE_ALREADY_DONE);
+        if (mytamin.getCare() != null) throw new MytaminException(CARE_ALREADY_DONE_ERROR);
         Care newCare = saveNewCare(careRequest, mytamin);
         return CareResponse.of(newCare, timeUtil.canEditCare(newCare));
     }

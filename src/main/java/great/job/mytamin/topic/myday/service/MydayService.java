@@ -1,9 +1,9 @@
 package great.job.mytamin.topic.myday.service;
 
-import great.job.mytamin.global.util.MydayUtil;
-import great.job.mytamin.global.util.TimeUtil;
 import great.job.mytamin.topic.myday.dto.response.MydayResponse;
 import great.job.mytamin.topic.user.entity.User;
+import great.job.mytamin.topic.util.MydayUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class MydayService {
         return MydayResponse.of(
                 dateOfMyday.format(DateTimeFormatter.ofPattern("MM월 dd일")),
                 map.get("dday"),
-                map.get("msg"));
+                map.get("comment"));
     }
 
     private LocalDateTime updateDateOfMyday(User user) {

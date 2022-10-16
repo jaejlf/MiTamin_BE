@@ -8,10 +8,10 @@ import great.job.mytamin.topic.user.dto.response.UserResponse;
 import great.job.mytamin.topic.user.entity.User;
 import great.job.mytamin.topic.user.enumerate.Provider;
 import great.job.mytamin.topic.user.repository.UserRepository;
-import great.job.mytamin.global.util.UserUtil;
+import great.job.mytamin.topic.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.jwt.JwtTokenProvider;
-import great.job.mytamin.global.util.MydayUtil;
+import great.job.mytamin.topic.util.MydayUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -134,7 +134,7 @@ public class AuthService {
         if (!m.matches() || password.contains(" ")) throw new MytaminException(PASSWORD_PATTERN_ERROR);
     }
 
-    private boolean isMytaminAlarmOn(String mytaminHour) {
+    private Boolean isMytaminAlarmOn(String mytaminHour) {
         return mytaminHour != null;
     }
 

@@ -1,8 +1,8 @@
 package great.job.mytamin.topic.mytamin.service;
 
 import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.util.ReportUtil;
-import great.job.mytamin.global.util.TimeUtil;
+import great.job.mytamin.topic.util.ReportUtil;
+import great.job.mytamin.topic.util.TimeUtil;
 import great.job.mytamin.topic.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.topic.mytamin.dto.response.ReportResponse;
 import great.job.mytamin.topic.mytamin.entity.Mytamin;
@@ -33,7 +33,7 @@ public class ReportService {
     @Transactional
     public ReportResponse createReport(User user, ReportRequest reportRequest) {
         Mytamin mytamin = mytaminService.findMytaminOrNew(user);
-        if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE);
+        if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE_ERROR);
         Report newReport = saveNewReport(reportRequest, mytamin);
         return ReportResponse.of(
                 newReport,

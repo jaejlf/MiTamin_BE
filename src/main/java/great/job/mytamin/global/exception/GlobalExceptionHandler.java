@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.format.DateTimeParseException;
+
+import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
@@ -22,6 +25,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MytaminException.class)
     public ResponseEntity<Object> mytaminExceptionHandler(MytaminException e) {
+        log.error("[" + e.getClass().getSimpleName() + "] " + e.getErrorResponse().getMessage());
+        return ResponseEntity
+                .status(e.getStatus())
+                .body(e.getErrorResponse());
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<Object> dateTimeParseExceptionHandler() {
+        MytaminException e = new MytaminException(DATETIME_PARSE_ERROR);
         log.error("[" + e.getClass().getSimpleName() + "] " + e.getErrorResponse().getMessage());
         return ResponseEntity
                 .status(e.getStatus())
