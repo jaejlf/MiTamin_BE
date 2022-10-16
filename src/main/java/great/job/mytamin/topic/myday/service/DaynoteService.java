@@ -3,6 +3,7 @@ package great.job.mytamin.topic.myday.service;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.service.AwsS3Service;
 import great.job.mytamin.topic.myday.dto.request.DaynoteRequest;
+import great.job.mytamin.topic.myday.dto.request.DaynoteUpdateRequest;
 import great.job.mytamin.topic.myday.dto.response.DaynoteListResponse;
 import great.job.mytamin.topic.myday.dto.response.DaynoteResponse;
 import great.job.mytamin.topic.myday.entity.Daynote;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static great.job.mytamin.global.exception.ErrorMap.DAYNOTE_ALREADY_EXIST_ERROR;
+import static great.job.mytamin.global.exception.ErrorMap.*;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +64,41 @@ public class DaynoteService {
     }
 
     /*
+    데이노트 조회
+    */
+    public DaynoteResponse getDaynote(Long daynoteId) {
+        Daynote daynote = findDaynoteById(daynoteId);
+        return DaynoteResponse.ofDetail(daynote);
+    }
+
+    /*
+    데이노트 수정
+    */
+    public void updateDaynote(User user, List<MultipartFile> fileList, Long daynoteId, DaynoteUpdateRequest daynoteUpdateRequest) {
+        Daynote daynote = findDaynoteById(daynoteId);
+        hasAuthorized(daynote, user);
+        awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
+
+        Wish wish = wishService.findWishOrElseNew(user, daynoteUpdateRequest.getWishText());
+        daynote.updateAll(
+                awsS3Service.uploadImageList(fileList, "DN"),
+                wish,
+                daynoteUpdateRequest.getNote()
+        );
+        daynoteRepository.save(daynote);
+    }
+
+    /*
+    데이노트 삭제
+    */
+    public void deleteDaynote(User user, Long daynoteId) {
+        Daynote daynote = findDaynoteById(daynoteId);
+        hasAuthorized(daynote, user);
+        awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
+        daynoteRepository.delete(daynote);
+    }
+
+    /*
     데이노트 리스트 조회
     */
     public DaynoteListResponse getDaynoteList(User user) {
@@ -74,6 +110,17 @@ public class DaynoteService {
                         .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
 
         return DaynoteListResponse.of(daynoteListMap);
+    }
+
+    private Daynote findDaynoteById(Long daynoteId) {
+        return daynoteRepository.findById(daynoteId)
+                .orElseThrow(() -> new MytaminException(DAYNOTE_NOT_FOUND_ERROR));
+    }
+
+    private void hasAuthorized(Daynote daynote, User user) {
+        if (!daynote.getUser().equals(user)) {
+            throw new MytaminException(NO_AUTH_ERROR);
+        }
     }
 
 }

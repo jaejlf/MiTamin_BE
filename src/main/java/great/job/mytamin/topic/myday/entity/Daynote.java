@@ -50,6 +50,13 @@ public class Daynote {
         this.user = user;
     }
 
+    public void updateAll(List<String> imgUrlList, Wish wish, String note) {
+        this.imgUrlList = imgUrlList;
+        this.wish = wish;
+        this.wishText = wish.getWishText();
+        this.note = note;
+    }
+
     public void updateWish(Wish wish) {
         this.wishText = wish.getWishText();
     }
