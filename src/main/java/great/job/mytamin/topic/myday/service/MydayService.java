@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-import static great.job.mytamin.global.exception.ErrorMap.DAYNOTE_ALREADY_DONE_ERROR;
+import static great.job.mytamin.global.exception.ErrorMap.DAYNOTE_ALREADY_EXIST_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -45,15 +45,22 @@ public class MydayService {
     }
 
     /*
+    데이노트 작성 가능 여부
+    */
+    public Boolean canCreateDaynote(User user, String performedAt) {
+        LocalDateTime rawPerformedAt = timeUtil.convertToRawPerformedAt(performedAt);
+        return daynoteRepository.findByUserAndRawPerformedAt(user, rawPerformedAt).isEmpty();
+    }
+
+    /*
     데이노트 작성하기
     */
     @Transactional
     public DaynoteResponse createDaynote(User user, DaynoteRequest daynoteRequest) {
         Wish wish = wishService.findWishOrElseNew(user, daynoteRequest.getWishText());
-        LocalDateTime rawPerformedAt = LocalDateTime.of(daynoteRequest.getYear(), daynoteRequest.getMonth(), 10, 10, 0); // 일, 시, 분은 더미 데이터 set
-
-        checkExistence(user, rawPerformedAt);
-        return DaynoteResponse.of(saveNewDaynote(daynoteRequest, wish, rawPerformedAt, user));
+        if (!canCreateDaynote(user, daynoteRequest.getPerformedAt()))
+            throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
+        return DaynoteResponse.of(saveNewDaynote(daynoteRequest, wish, user));
     }
 
     private LocalDateTime updateDateOfMyday(User user) {
@@ -62,18 +69,12 @@ public class MydayService {
         return dateOfMyday;
     }
 
-    private void checkExistence(User user, LocalDateTime rawPerformedAt) {
-        if (daynoteRepository.findByUserAndRawPerformedAt(user, rawPerformedAt).isPresent()) {
-            throw new MytaminException(DAYNOTE_ALREADY_DONE_ERROR);
-        }
-    }
-
-    private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, LocalDateTime rawPerformedAt, User user) {
+    private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, User user) {
         Daynote daynote = new Daynote(
                 null, // 이미지 리스트 업로드 구현 전
                 wish,
                 daynoteRequest.getNote(),
-                rawPerformedAt,
+                timeUtil.convertToRawPerformedAt(daynoteRequest.getPerformedAt()),
                 user
         );
         return daynoteRepository.save(daynote);

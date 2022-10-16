@@ -106,7 +106,7 @@ class ReportControllerTest extends CommonControllerTest {
                     "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
             );
 
-            given(reportService.createReport(any(), any())).willThrow(new MytaminException(REPORT_ALREADY_DONE));
+            given(reportService.createReport(any(), any())).willThrow(new MytaminException(REPORT_ALREADY_DONE_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(post("/report/new")
@@ -119,7 +119,7 @@ class ReportControllerTest extends CommonControllerTest {
                     .andDo(print())
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("errorCode").value(4001))
-                    .andExpect(jsonPath("errorName").value("REPORT_ALREADY_DONE"))
+                    .andExpect(jsonPath("errorName").value("REPORT_ALREADY_DONE_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestHeaders(
                                     headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")

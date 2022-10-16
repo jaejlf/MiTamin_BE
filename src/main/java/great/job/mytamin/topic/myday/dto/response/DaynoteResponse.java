@@ -25,7 +25,7 @@ public class DaynoteResponse {
                 .imgList(daynote.getImgList())
                 .wishText(daynote.getWishText())
                 .note(daynote.getNote())
-                .performedAt(daynote.getRawPerformedAt().format(DateTimeFormatter.ofPattern("yyyy.MM")))
+                .performedAt(daynote.getRawPerformedAt().format(DateTimeFormatter.ofPattern("yy년 MM월의 마이데이")))
                 .build();
     }
 

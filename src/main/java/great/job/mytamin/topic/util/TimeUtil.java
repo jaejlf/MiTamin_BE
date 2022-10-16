@@ -1,5 +1,6 @@
 package great.job.mytamin.topic.util;
 
+import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.topic.mytamin.entity.Care;
 import great.job.mytamin.topic.mytamin.entity.Report;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 import static great.job.mytamin.topic.user.enumerate.MydayMessage.*;
 
 @Component
@@ -23,6 +25,20 @@ public class TimeUtil {
         if (target.getHour() <= 4) target = target.minusDays(1);
         String dayOfWeek = target.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
         return target.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) + "." + dayOfWeek;
+    }
+
+    /*
+    performedAt -> LocalDateTime 포맷 변환 & valid check
+    */
+    public LocalDateTime convertToRawPerformedAt(String performedAt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
+        LocalDateTime rawPerformedAt = LocalDateTime.parse(performedAt + ".10.10.00", formatter); // 10일.10시.00분으로 임의 설정
+
+        // 2020년 이전 or 올해 년도 이후
+        if (rawPerformedAt.getYear() < 2020 || rawPerformedAt.getYear() > LocalDateTime.now().getYear()) {
+            throw new MytaminException(DATETIME_PARSE_ERROR);
+        }
+        return rawPerformedAt;
     }
 
     /*

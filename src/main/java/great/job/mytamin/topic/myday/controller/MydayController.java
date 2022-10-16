@@ -28,7 +28,16 @@ public class MydayController {
                 .status(OK)
                 .body(ResultResponse.ok("이번 달의 마이데이", mydayResponse));
     }
-    
+
+    @GetMapping("/check/{performedAt}")
+    public ResponseEntity<Object> canCreateDaynote(@AuthenticationPrincipal User user,
+                                                   @PathVariable String performedAt) {
+        Boolean canCreate = mydayService.canCreateDaynote(user, performedAt);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("데이노트 작성 가능 여부", canCreate));
+    }
+
     @PostMapping("/note")
     public ResponseEntity<Object> createDaynote(@AuthenticationPrincipal User user,
                                                 @RequestBody DaynoteRequest daynoteRequest) {
@@ -37,5 +46,5 @@ public class MydayController {
                 .status(CREATED)
                 .body(ResultResponse.create("데이노트 작성하기", daynoteResponse));
     }
-    
+
 }

@@ -12,6 +12,5 @@ import javax.validation.constraints.NotBlank;
 public class DaynoteRequest {
     @NotBlank String wishText;
     @NotBlank String note;
-    @NotBlank int year;
-    @NotBlank int month;
+    @NotBlank String performedAt;
 }

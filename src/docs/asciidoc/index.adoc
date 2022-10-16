@@ -133,7 +133,7 @@ operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
 
 == Report
 === 하루 진단하기
-* 마음 컨디션은 String이 아닌, 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.
+* 마음 컨디션은 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.
 * mentalConditionCode
     ** 1 : "매우 나빠요 .."
     ** 2 : "나쁜 편이에요 :("
@@ -171,7 +171,7 @@ include::{snippets}/report/updateReport_7000/http-response.adoc[]
 
 == Care
 === 칭찬 처방하기
-* 칭찬 카테고리는 String이 아닌, 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
+* 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
 * careCategoryCode
     ** 1 : "이루어 낸 일"
     ** 2 : "잘한 일이나 행동"

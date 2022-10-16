@@ -25,12 +25,12 @@ public enum ErrorMap {
 
     // Report 4xxx
     INVALID_CONDITION_CODE_ERROR(HttpStatus.BAD_REQUEST, 4000, "INVALID_CONDITION_CODE_ERROR", "마음 컨디션 코드는 1 ~ 5 사이의 값이어야 합니다."),
-    REPORT_ALREADY_DONE(HttpStatus.CONFLICT, 4001, "REPORT_ALREADY_DONE", "오늘의 '하루 진단하기'를 이미 완료했습니다."),
+    REPORT_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 4001, "REPORT_ALREADY_DONE_ERROR", "오늘의 '하루 진단하기'를 이미 완료했습니다."),
     REPORT_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 4002, "REPORT_NOT_FOUND_ERROR", "존재하지 않는 reportId 입니다."),
 
     // Care 5xxx
     INVALID_CATEGORY_CODE_ERROR(HttpStatus.BAD_REQUEST, 5000, "INVALID_CATEGORY_CODE_ERROR", "카테고리 코드는 1 ~ 7 사이의 값이어야 합니다."),
-    CARE_ALREADY_DONE(HttpStatus.CONFLICT, 5001, "CARE_ALREADY_DONE", "오늘의 '칭찬 처방하기'를 이미 완료했습니다."),
+    CARE_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 5001, "CARE_ALREADY_DONE_ERROR", "오늘의 '칭찬 처방하기'를 이미 완료했습니다."),
     CARE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 5002, "CARE_NOT_FOUND_ERROR", "존재하지 않는 careId 입니다."),
 
     // S3 6xxx
@@ -39,11 +39,13 @@ public enum ErrorMap {
 
     // Time 7xxx
     EDIT_TIMEOUT_ERROR(HttpStatus.BAD_REQUEST, 7000, "EDIT_TIMEOUT_ERROR", "수정 가능 시간이 아닙니다."),
+    DATETIME_PARSE_ERROR(HttpStatus.BAD_REQUEST, 7001, "DATETIME_PARSE_ERROR", "년/월 입력값에 오류가 있습니다."),
 
     // Myday 8xxx
     WISH_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 8000, "WISH_NOT_FOUND_ERROR", "존재하지 않는 wishId 입니다."),
     WISH_ALREADY_EXIST_ERROR(HttpStatus.CONFLICT, 8001,"WISH_ALREADY_EXIST_ERROR", "이미 존재하는 위시 리스트입니다."),
-    DAYNOTE_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 8002, "DAYNOTE_ALREADY_DONE_ERROR", "데이노트는 한 달에 한 번만 작성할 수 있습니다.");
+    DAYNOTE_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 8002, "DAYNOTE_ALREADY_DONE_ERROR", "데이노트는 한 달에 한 번만 작성할 수 있습니다."),
+    DAYNOTE_ALREADY_EXIST_ERROR(HttpStatus.CONFLICT, 8003, "DAYNOTE_ALREADY_EXIST_ERROR", "이미 해당 년/월에 데이노트가 존재합니다.");
 
     private final HttpStatus httpStatus;
     private final int errorCode;

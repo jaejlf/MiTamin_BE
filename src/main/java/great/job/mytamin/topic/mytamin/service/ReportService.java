@@ -33,7 +33,7 @@ public class ReportService {
     @Transactional
     public ReportResponse createReport(User user, ReportRequest reportRequest) {
         Mytamin mytamin = mytaminService.findMytaminOrNew(user);
-        if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE);
+        if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE_ERROR);
         Report newReport = saveNewReport(reportRequest, mytamin);
         return ReportResponse.of(
                 newReport,
