@@ -111,6 +111,10 @@ public class User implements UserDetails {
         this.mytaminMin = mytaminMin;
     }
 
+    public void updateprofileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
+    }
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }

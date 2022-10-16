@@ -1,15 +1,16 @@
 package great.job.mytamin.topic.user.controller;
 
 import great.job.mytamin.global.dto.response.NoDataResponse;
-import great.job.mytamin.topic.user.dto.response.ProfileResponse;
+import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.topic.user.dto.request.BeMyMsgRequest;
+import great.job.mytamin.topic.user.dto.response.ProfileResponse;
 import great.job.mytamin.topic.user.entity.User;
 import great.job.mytamin.topic.user.service.UserService;
-import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -31,6 +32,15 @@ public class UserController {
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("프로필 조회", profileResponse));
+    }
+
+    @PatchMapping("/img")
+    public ResponseEntity<Object> updateProfileImg(@AuthenticationPrincipal User user,
+                                                   @RequestPart("file") MultipartFile file) {
+        userService.updateProfileImg(user, file);
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("프로필 이미지 수정 완료"));
     }
 
     @PatchMapping("/nickname/{nickname}")
