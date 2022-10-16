@@ -39,7 +39,7 @@ class MydayControllerTest extends CommonControllerTest {
                 MydayResponse.builder()
                         .myDayMMDD("10월 17일")
                         .dday("D-7일")
-                        .msg("이번 마이데이에는 무엇을 해볼까요 ?")
+                        .comment("이번 마이데이에는 무엇을 해볼까요 ?")
                         .build()
         );
 

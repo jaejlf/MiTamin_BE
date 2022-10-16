@@ -106,22 +106,22 @@ public class TimeUtil {
         // 마이데이 당일
         if (dday == 0) {
             map.put("dday", "D-Day");
-            map.put("msg", nickname + "님, " + THE_DAY_OF_MYDAY.getMsg());
+            map.put("comment", nickname + "님, " + THE_DAY_OF_MYDAY.getMsg());
         }
         // 마이데이 이전
         else if (dday < -3) {
             map.put("dday", "D" + dday + "일");
-            map.put("msg", BEFORE_MYDAY.getMsg());
+            map.put("comment", BEFORE_MYDAY.getMsg());
         }
         // 마이데이 3일 전
         else if (dday < 0) {
             map.put("dday", "D" + dday + "일");
-            map.put("msg", SOON_MYDAY.getMsg());
+            map.put("comment", SOON_MYDAY.getMsg());
         }
         // 마이데이 이후
         else {
             map.put("dday", "D+" + dday + "일");
-            map.put("msg", AFTER_MYDAY.getMsg());
+            map.put("comment", AFTER_MYDAY.getMsg());
         }
 
         return map;
