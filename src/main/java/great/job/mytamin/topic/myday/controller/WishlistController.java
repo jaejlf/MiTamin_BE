@@ -1,5 +1,6 @@
 package great.job.mytamin.topic.myday.controller;
 
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.topic.myday.dto.request.UpdateWishRequest;
 import great.job.mytamin.topic.myday.dto.response.WishlistResponse;
@@ -37,7 +38,7 @@ public class WishlistController {
         wishService.deleteWishlist(user, updateWishRequest.getDeletedIdList());
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("위시 리스트 업데이트", null));
+                .body(NoDataResponse.ok("위시 리스트 업데이트"));
     }
 
 }

@@ -1,5 +1,6 @@
 package great.job.mytamin.topic.mytamin.controller;
 
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.topic.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.topic.mytamin.dto.response.ReportResponse;
 import great.job.mytamin.topic.mytamin.service.ReportService;
@@ -44,7 +45,7 @@ public class ReportController {
         reportService.updateReport(user, reportId, reportRequest);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("하루 진단 수정 완료", null));
+                .body(NoDataResponse.ok("하루 진단 수정 완료"));
     }
 
 }

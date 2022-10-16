@@ -1,5 +1,6 @@
 package great.job.mytamin.topic.mytamin.controller;
 
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.topic.mytamin.dto.response.MytaminResponse;
 import great.job.mytamin.topic.mytamin.service.MytaminService;
@@ -26,7 +27,7 @@ public class MytaminController {
         mytaminService.completeBreath(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("숨 고르기 완료", null));
+                .body(NoDataResponse.ok("숨 고르기 완료"));
     }
 
     @PatchMapping("/sense")
@@ -34,7 +35,7 @@ public class MytaminController {
         mytaminService.completeSense(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("감각 깨우기 완료", null));
+                .body(NoDataResponse.ok("감각 깨우기 완료"));
     }
 
     @GetMapping("/latest")

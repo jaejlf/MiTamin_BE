@@ -1,5 +1,6 @@
 package great.job.mytamin.topic.mytamin.controller;
 
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.topic.mytamin.dto.request.CareRequest;
 import great.job.mytamin.topic.mytamin.dto.response.CareResponse;
 import great.job.mytamin.topic.mytamin.service.CareService;
@@ -44,7 +45,7 @@ public class CareController {
         careService.updateCare(user, careId, careRequest);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("칭찬 처방 수정 완료", null));
+                .body(NoDataResponse.ok("칭찬 처방 수정 완료"));
     }
 
 }

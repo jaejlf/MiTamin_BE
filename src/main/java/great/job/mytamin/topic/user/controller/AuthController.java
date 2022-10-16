@@ -1,5 +1,6 @@
 package great.job.mytamin.topic.user.controller;
 
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.topic.user.dto.request.EmailCheckRequest;
 import great.job.mytamin.topic.user.dto.request.LoginRequest;
@@ -74,7 +75,7 @@ public class AuthController {
         emailService.sendAuthCode(map.get("email"));
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("이메일 인증 코드 전송", null));
+                .body(NoDataResponse.ok("이메일 인증 코드 전송"));
     }
 
     @GetMapping("/code")

@@ -1,5 +1,6 @@
 package great.job.mytamin.topic.user.controller;
 
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.topic.user.dto.response.ProfileResponse;
 import great.job.mytamin.topic.user.dto.request.BeMyMsgRequest;
 import great.job.mytamin.topic.user.entity.User;
@@ -38,7 +39,7 @@ public class UserController {
         userService.updateNickname(user, nickname);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("닉네임 수정 완료", null));
+                .body(NoDataResponse.ok("닉네임 수정 완료"));
     }
 
     @PatchMapping("/bemy-msg")
@@ -47,7 +48,7 @@ public class UserController {
         userService.updateBeMyMessage(user, beMyMsgRequest);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("'되고 싶은 나' 메세지 수정 완료", null));
+                .body(NoDataResponse.ok("'되고 싶은 나' 메세지 수정 완료"));
     }
 
 }
