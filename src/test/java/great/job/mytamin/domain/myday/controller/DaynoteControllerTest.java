@@ -1,35 +1,40 @@
 package great.job.mytamin.domain.myday.controller;
 
-import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.support.CommonControllerTest;
+import great.job.mytamin.domain.myday.dto.request.DaynoteRequest;
+import great.job.mytamin.domain.myday.dto.request.DaynoteUpdateRequest;
 import great.job.mytamin.domain.myday.dto.response.DaynoteListResponse;
 import great.job.mytamin.domain.myday.dto.response.DaynoteResponse;
 import great.job.mytamin.domain.myday.service.DaynoteService;
+import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
+import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,8 +62,7 @@ class DaynoteControllerTest extends CommonControllerTest {
 
             //when
             ResultActions actions = mockMvc.perform(get("/daynote/check/{performedAt}", performedAt)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                    .contentType(APPLICATION_JSON));
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
 
             //then
             actions
@@ -124,13 +128,392 @@ class DaynoteControllerTest extends CommonControllerTest {
         @DisplayName("성공")
         @Test
         void createDaynote(TestInfo testInfo) throws Exception {
+            //given
+            MockMultipartFile multipartFileList = new MockMultipartFile(
+                    "fileList",
+                    List.of(
+                            new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes()),
+                            new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>".getBytes())
+                    ).toString(),
+                    "image/jpg", "<<image>>".getBytes()
+            );
+            MockMultipartFile multipartDayNote = new MockMultipartFile(
+                    "dayNote", "dayNoteRequest",
+                    "application/json",
+                    objectMapper.writeValueAsString(new DaynoteRequest(
+                            "빵 나오는 시간에 맞춰서 갓 나온 빵 사기",
+                            "따끈따끈한 빵을 샀다. 맛있었따 :0",
+                            "2022.10")).getBytes());
 
+            given(daynoteService.createDaynote(any(), any(), any())).willReturn(mockDaynoteResponseOfDetail());
+
+            //when
+            ResultActions actions = mockMvc.perform(multipart("/daynote/new")
+                    .file(multipartFileList)
+                    .file(multipartDayNote)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("data").exists())
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestParts(
+                                    partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)"),
+                                    partWithName("dayNote").description("*데이노트 작성 데이터")
+                            ),
+                            requestPartFields("dayNote",
+                                    fieldWithPath("wishText").description("*위시 텍스트"),
+                                    fieldWithPath("note").description("*데이노트 코멘트"),
+                                    fieldWithPath("performedAt").description("*데이노트 수행 날짜 정보")
+                            ),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지"),
+                                    fieldWithPath("data.daynoteId").description("데이노트 id"),
+                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜 정보"),
+                                    fieldWithPath("data.imgList[]").description("데이노트 이미지 리스트"),
+                                    fieldWithPath("data.wishText").description("위시 텍스트"),
+                                    fieldWithPath("data.note").description("데이노트 코멘트")
+                            ))
+                    );
         }
 
         @DisplayName("이미 해당 년/월에 데이노트 존재")
         @Test
-        void createDaynote_8003(TestInfo testInfo) throws Exception {
+        void createDaynote_8004(TestInfo testInfo) throws Exception {
+            //given
+            MockMultipartFile multipartFileList = new MockMultipartFile(
+                    "fileList",
+                    List.of(
+                            new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes()),
+                            new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>".getBytes())
+                    ).toString(),
+                    "image/jpg", "<<image>>".getBytes()
+            );
+            MockMultipartFile multipartDayNote = new MockMultipartFile(
+                    "dayNote", "dayNoteRequest",
+                    "application/json",
+                    objectMapper.writeValueAsString(new DaynoteRequest(
+                            "빵 나오는 시간에 맞춰서 갓 나온 빵 사기",
+                            "따끈따끈한 빵을 샀다. 맛있었따 :0",
+                            "2022.10")).getBytes());
 
+            given(daynoteService.createDaynote(any(), any(), any())).willThrow(new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR));
+
+            //when
+            ResultActions actions = mockMvc.perform(multipart("/daynote/new")
+                    .file(multipartFileList)
+                    .file(multipartDayNote)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorCode").value(8004))
+                    .andExpect(jsonPath("errorName").value("DAYNOTE_ALREADY_EXIST_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestParts(
+                                    partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)"),
+                                    partWithName("dayNote").description("*데이노트 작성 데이터")
+                            ),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("데이노트 조회")
+    class GetDaynoteTest {
+
+        @DisplayName("성공")
+        @Test
+        void getDaynote(TestInfo testInfo) throws Exception {
+            //given
+            Long daynoteId = 1L;
+
+            given(daynoteService.getDaynote(any())).willReturn(mockDaynoteResponseOfDetail());
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/daynote/{daynoteId}", daynoteId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("data").exists())
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("daynoteId").description("*조회할 데이노트 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지"),
+                                    fieldWithPath("data.daynoteId").description("데이노트 id"),
+                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜 정보"),
+                                    fieldWithPath("data.imgList[]").description("데이노트 이미지 리스트"),
+                                    fieldWithPath("data.wishText").description("위시 텍스트"),
+                                    fieldWithPath("data.note").description("데이노트 코멘트")
+                            ))
+                    );
+        }
+
+        @DisplayName("존재하지 않는 데이노트 id")
+        @Test
+        void updateDaynote_8003(TestInfo testInfo) throws Exception {
+            //given
+            Long daynoteId = 999L;
+
+            doThrow(new MytaminException(DAYNOTE_NOT_FOUND_ERROR)).when(daynoteService).getDaynote(any());
+
+            //when
+            ResultActions actions = mockMvc.perform(get("/daynote/{daynoteId}", daynoteId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(8003))
+                    .andExpect(jsonPath("errorName").value("DAYNOTE_NOT_FOUND_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("daynoteId").description("*조회할 데이노트 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("데이노트 수정하기")
+    class UpdateDaynoteTest {
+
+        @DisplayName("성공")
+        @Test
+        void updateDaynote(TestInfo testInfo) throws Exception {
+            //given
+            Long daynoteId = 1L;
+            MockMultipartFile multipartFileList = new MockMultipartFile(
+                    "fileList",
+                    List.of(
+                            new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes()),
+                            new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>".getBytes())
+                    ).toString(),
+                    "image/jpg", "<<image>>".getBytes()
+            );
+            MockMultipartFile multipartDayNote = new MockMultipartFile(
+                    "dayNote", "dayNoteRequest",
+                    "application/json",
+                    objectMapper.writeValueAsString(new DaynoteUpdateRequest(
+                            "빵 나오는 시간에 맞춰서 갓 나온 빵 사기",
+                            "따끈따끈한 빵을 샀다. 맛있었따 :0 ... 다시 생각해보니까 그냥 그랬다,,")).getBytes());
+
+            doNothing().when(daynoteService).updateDaynote(any(), any(), any(), any());
+
+            //when
+            MockMultipartHttpServletRequestBuilder builder = multipart("/daynote/{daynoteId}", daynoteId);
+            builder.with(request -> {
+                request.setMethod("PUT");
+                return request;
+            });
+
+            ResultActions actions = mockMvc.perform(builder
+                    .file(multipartFileList)
+                    .file(multipartDayNote)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestParts(
+                                    partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)"),
+                                    partWithName("dayNote").description("*데이노트 수정 데이터")
+                            ),
+                            requestPartFields("dayNote",
+                                    fieldWithPath("wishText").description("*위시 텍스트"),
+                                    fieldWithPath("note").description("*데이노트 코멘트")
+                            ),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("daynoteId").description("*수정할 데이노트 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지")
+                            ))
+                    );
+        }
+
+        @DisplayName("존재하지 않는 데이노트 id")
+        @Test
+        void updateDaynote_8003(TestInfo testInfo) throws Exception {
+            //given
+            Long daynoteId = 999L;
+            MockMultipartFile multipartFileList = new MockMultipartFile(
+                    "fileList",
+                    List.of(
+                            new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes()),
+                            new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>".getBytes())
+                    ).toString(),
+                    "image/jpg", "<<image>>".getBytes()
+            );
+            MockMultipartFile multipartDayNote = new MockMultipartFile(
+                    "dayNote", "dayNoteRequest",
+                    "application/json",
+                    objectMapper.writeValueAsString(new DaynoteUpdateRequest(
+                            "빵 나오는 시간에 맞춰서 갓 나온 빵 사기",
+                            "따끈따끈한 빵을 샀다. 맛있었따 :0 ... 다시 생각해보니까 그냥 그랬다,,")).getBytes());
+
+            doThrow(new MytaminException(DAYNOTE_NOT_FOUND_ERROR)).when(daynoteService).updateDaynote(any(), any(), any(), any());
+
+            //when
+            MockMultipartHttpServletRequestBuilder builder = multipart("/daynote/{daynoteId}", daynoteId);
+            builder.with(request -> {
+                request.setMethod("PUT");
+                return request;
+            });
+
+            ResultActions actions = mockMvc.perform(builder
+                    .file(multipartFileList)
+                    .file(multipartDayNote)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(8003))
+                    .andExpect(jsonPath("errorName").value("DAYNOTE_NOT_FOUND_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestParts(
+                                    partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)"),
+                                    partWithName("dayNote").description("*데이노트 수정 데이터")
+                            ),
+                            requestPartFields("dayNote",
+                                    fieldWithPath("wishText").description("*위시 텍스트"),
+                                    fieldWithPath("note").description("*데이노트 코멘트")
+                            ),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("daynoteId").description("*수정할 데이노트 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("데이노트 삭제하기")
+    class DeleteDaynoteTest {
+
+        @DisplayName("성공")
+        @Test
+        void deleteDaynote(TestInfo testInfo) throws Exception {
+            //given
+            Long daynoteId = 1L;
+
+            doNothing().when(daynoteService).deleteDaynote(any(), any());
+
+            //when
+            ResultActions actions = mockMvc.perform(delete("/daynote/{daynoteId}", daynoteId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("daynoteId").description("*수정할 데이노트 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지")
+                            ))
+                    );
+        }
+
+        @DisplayName("존재하지 않는 데이노트 id")
+        @Test
+        void deleteDaynote_8003(TestInfo testInfo) throws Exception {
+            //given
+            Long daynoteId = 999L;
+
+            doThrow(new MytaminException(DAYNOTE_NOT_FOUND_ERROR)).when(daynoteService).deleteDaynote(any(), any());
+
+            //when
+            ResultActions actions = mockMvc.perform(delete("/daynote/{daynoteId}", daynoteId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(8003))
+                    .andExpect(jsonPath("errorName").value("DAYNOTE_NOT_FOUND_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestHeaders(
+                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                            ),
+                            pathParameters(
+                                    parameterWithName("daynoteId").description("*수정할 데이노트 id")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
         }
 
     }
@@ -161,13 +544,13 @@ class DaynoteControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.daynoteList.*[]").description("특정 연도의 데이노트 리스트"),
                                 fieldWithPath("data.daynoteList.*[].daynoteId").description("데이노트 id"),
                                 fieldWithPath("data.daynoteList.*[].month").description("특정 달의 데이노트"),
-                                fieldWithPath("data.daynoteList.*[].performedAt").description("데이노트 날짜 제목"),
+                                fieldWithPath("data.daynoteList.*[].performedAt").description("데이노트 수행 날짜 정보"),
                                 fieldWithPath("data.daynoteList.*[].imgList[]").description("데이노트 이미지 리스트")
                         ))
                 );
     }
 
-    private DaynoteResponse mockDaynoteResponse() {
+    private DaynoteResponse mockDaynoteResponseOfDetail() {
         List<String> imgList = new ArrayList<>();
         imgList.add("{{IMAGE_URL_1}}");
         imgList.add("{{IMAGE_URL_2}}");
@@ -175,7 +558,6 @@ class DaynoteControllerTest extends CommonControllerTest {
         return DaynoteResponse.builder()
                 .year(2022)
                 .daynoteId(1L)
-                .month("10")
                 .performedAt("22년 10월의 마이데이")
                 .imgList(imgList)
                 .wishText("도서관에 가서 책 한권 빌려오기")

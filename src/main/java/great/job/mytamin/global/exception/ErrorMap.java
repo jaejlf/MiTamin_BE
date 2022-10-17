@@ -47,8 +47,8 @@ public enum ErrorMap {
     WISH_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 8000, "WISH_NOT_FOUND_ERROR", "존재하지 않는 wishId 입니다."),
     WISH_ALREADY_EXIST_ERROR(HttpStatus.CONFLICT, 8001, "WISH_ALREADY_EXIST_ERROR", "이미 존재하는 위시 리스트입니다."),
     DAYNOTE_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 8002, "DAYNOTE_ALREADY_DONE_ERROR", "데이노트는 한 달에 한 번만 작성할 수 있습니다."),
-    DAYNOTE_ALREADY_EXIST_ERROR(HttpStatus.CONFLICT, 8003, "DAYNOTE_ALREADY_EXIST_ERROR", "이미 해당 년/월에 데이노트가 존재합니다."),
-    DAYNOTE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 8004, "DAYNOTE_NOT_FOUND_ERROR", "존재하지 않는 daynoteId 입니다.");
+    DAYNOTE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 8003, "DAYNOTE_NOT_FOUND_ERROR", "존재하지 않는 daynoteId 입니다."),
+    DAYNOTE_ALREADY_EXIST_ERROR(HttpStatus.CONFLICT, 8004, "DAYNOTE_ALREADY_EXIST_ERROR", "이미 해당 년/월에 데이노트가 존재합니다.");
 
     private final HttpStatus httpStatus;
     private final int errorCode;
