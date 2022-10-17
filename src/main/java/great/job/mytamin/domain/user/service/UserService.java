@@ -46,7 +46,7 @@ public class UserService {
     */
     @Transactional
     public void updateNickname(User user, String nickname) {
-        if (userUtil.checkNicknameDuplication(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        if (userUtil.isNicknameDuplicate(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
         user.updateNickname(nickname);
     }
 

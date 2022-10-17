@@ -15,7 +15,7 @@ public class UserUtil {
     이메일 중복 체크 (true : 이미 사용 중, false : 사용 가능)
     */
     @Transactional(readOnly = true)
-    public Boolean checkEmailDuplication(String email) {
+    public Boolean isEmailDuplicate(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 
@@ -23,7 +23,7 @@ public class UserUtil {
     닉네임 중복 체크 (true : 이미 사용 중, false : 사용 가능)
     */
     @Transactional(readOnly = true)
-    public Boolean checkNicknameDuplication(String nickname) {
+    public Boolean isNicknameDuplicate(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
 

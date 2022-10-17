@@ -37,7 +37,7 @@ public class AuthService {
     회원가입
     */
     @Transactional
-    public UserResponse signup(SignUpRequest signUpRequest) {
+    public UserResponse signUp(SignUpRequest signUpRequest) {
         String email = signUpRequest.getEmail();
         String nickname = signUpRequest.getNickname();
         String password = signUpRequest.getPassword();
@@ -74,7 +74,7 @@ public class AuthService {
     토큰 재발급
     */
     @Transactional
-    public TokenResponse tokenReIssue(ReissueRequest reissueRequest) {
+    public TokenResponse reissueToken(ReissueRequest reissueRequest) {
         User user = findUserByEmail(reissueRequest.getEmail());
         String refreshToken = reissueRequest.getRefreshToken();
 
@@ -104,8 +104,8 @@ public class AuthService {
         validateEmailPattern(email);
         validatePasswordPattern(password);
 
-        if (userUtil.checkEmailDuplication(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.checkNicknameDuplication(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        if (userUtil.isEmailDuplicate(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
+        if (userUtil.isNicknameDuplicate(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
     }
 
     private void validateRefreshToken(String refreshToken, User user) {

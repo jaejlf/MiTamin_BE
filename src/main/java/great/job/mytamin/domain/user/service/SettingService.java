@@ -22,7 +22,7 @@ public class SettingService {
     알림 설정 상태 조회
     */
     @Transactional(readOnly = true)
-    public SettingResponse getAlarmSetting(User user) {
+    public SettingResponse getAlarmSettingStatus(User user) {
         // 마이타민
         String mytaminWhen = null;
         Boolean mytaminAlarmOn = user.getMytaminAlarmOn();
@@ -42,7 +42,7 @@ public class SettingService {
     마이타민 알림 ON
     */
     @Transactional
-    public void mytaminAlarmOn(User user, MytaminAlarmRequest mytaminAlarmRequest) {
+    public void turnOnMytaminAlarm(User user, MytaminAlarmRequest mytaminAlarmRequest) {
         user.updateMytaminAlarmOn(true);
         user.updateMytaminWhen(
                 mytaminAlarmRequest.getMytaminHour(),
@@ -54,7 +54,7 @@ public class SettingService {
     /*
     마이타민 알림 OFF
     */
-    public void mytaminAlarmOff(User user) {
+    public void turnOffMytaminAlarm(User user) {
         user.updateMytaminAlarmOn(false);
         userRepository.save(user);
     }
@@ -63,7 +63,7 @@ public class SettingService {
     마이데이 알림 ON
     */
     @Transactional
-    public void mydayAlarmOn(User user, int code) {
+    public void turnOnMydayAlarm(User user, int code) {
         user.updateMydayAlarmOn(true);
         user.updateMydayWhen(MydayAlarm.convertCodeToMsg(code));
         userRepository.save(user);
@@ -72,7 +72,7 @@ public class SettingService {
     /*
     마이데이 알림 OFF
     */
-    public void mydayAlarmOff(User user) {
+    public void turnOffMydayAlarm(User user) {
         user.updateMydayAlarmOn(false);
         userRepository.save(user);
     }
