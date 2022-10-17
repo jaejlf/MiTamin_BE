@@ -45,19 +45,28 @@ class ReportControllerTest extends CommonControllerTest {
     @DisplayName("하루 진단하기")
     class CreateReportTest {
 
+        ReportRequest reportRequest = new ReportRequest(
+                5,
+                "신나는",
+                "즐거운",
+                "재밌는",
+                "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
+        );
+
         @DisplayName("성공")
         @Test
         void createReport(TestInfo testInfo) throws Exception {
             //given
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
+            given(reportService.createReport(any(), any())).willReturn(
+                    ReportResponse.builder()
+                            .reportId(1L)
+                            .canEdit(true)
+                            .mentalConditionCode(5)
+                            .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
+                            .feelingTag("#신나는 #즐거운 #재밌는")
+                            .todayReport("아무래도 아침형 인간이 되는건 너무 어려운 것 같다.")
+                            .build()
             );
-
-            given(reportService.createReport(any(), any())).willReturn(mockReportResponse());
 
             //when
             ResultActions actions = mockMvc.perform(post("/report/new")
@@ -98,14 +107,6 @@ class ReportControllerTest extends CommonControllerTest {
         @Test
         void createReport_4001(TestInfo testInfo) throws Exception {
             //given
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
-            );
-
             given(reportService.createReport(any(), any())).willThrow(new MytaminException(REPORT_ALREADY_DONE_ERROR));
 
             //when
@@ -121,16 +122,6 @@ class ReportControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(4001))
                     .andExpect(jsonPath("errorName").value("REPORT_ALREADY_DONE_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            requestFields(
-                                    fieldWithPath("mentalConditionCode").description("*마음 컨디션 코드"),
-                                    fieldWithPath("tag1").description("*감정 태그1"),
-                                    fieldWithPath("tag2").description("감정 태그2"),
-                                    fieldWithPath("tag3").description("감정 태그3"),
-                                    fieldWithPath("todayReport").description("*하루 진단")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -144,14 +135,6 @@ class ReportControllerTest extends CommonControllerTest {
         @Test
         void createReport_4000(TestInfo testInfo) throws Exception {
             //given
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
-            );
-
             given(reportService.createReport(any(), any())).willThrow(new MytaminException(INVALID_CONDITION_CODE_ERROR));
 
             //when
@@ -167,16 +150,6 @@ class ReportControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(4000))
                     .andExpect(jsonPath("errorName").value("INVALID_CONDITION_CODE_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            requestFields(
-                                    fieldWithPath("mentalConditionCode").description("*마음 컨디션 코드"),
-                                    fieldWithPath("tag1").description("*감정 태그1"),
-                                    fieldWithPath("tag2").description("감정 태그2"),
-                                    fieldWithPath("tag3").description("감정 태그3"),
-                                    fieldWithPath("todayReport").description("*하루 진단")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -192,13 +165,22 @@ class ReportControllerTest extends CommonControllerTest {
     @DisplayName("하루 진단 조회")
     class GetReportTest {
 
+        Long reportId = 1L;
+
         @DisplayName("성공")
         @Test
         void getReport(TestInfo testInfo) throws Exception {
             //given
-            Long reportId = 1L;
-
-            given(reportService.getReport(any())).willReturn(mockReportResponse());
+            given(reportService.getReport(any())).willReturn(
+                    ReportResponse.builder()
+                            .reportId(1L)
+                            .canEdit(true)
+                            .mentalConditionCode(5)
+                            .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
+                            .feelingTag("#신나는 #즐거운 #재밌는")
+                            .todayReport("아무래도 아침형 인간이 되는건 너무 어려운 것 같다.")
+                            .build()
+            );
 
             //when
             ResultActions actions = mockMvc.perform(get("/report/{reportId}", reportId)
@@ -234,8 +216,6 @@ class ReportControllerTest extends CommonControllerTest {
         @Test
         void getReport_4002(TestInfo testInfo) throws Exception {
             //given
-            Long reportId = 1L;
-
             given(reportService.getReport(any())).willThrow(new MytaminException(REPORT_NOT_FOUND_ERROR));
 
             //when
@@ -250,12 +230,6 @@ class ReportControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(4002))
                     .andExpect(jsonPath("errorName").value("REPORT_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("reportId").description("*하루 진단 id")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -271,19 +245,20 @@ class ReportControllerTest extends CommonControllerTest {
     @DisplayName("하루 진단 수정")
     class UpdateReportTest {
 
+        Long reportId = 1L;
+
+        ReportRequest reportRequest = new ReportRequest(
+                5,
+                "신나는",
+                "즐거운",
+                "재밌는",
+                "하루 진단 기록 수정 중..."
+        );
+
         @DisplayName("성공")
         @Test
         void updateReport(TestInfo testInfo) throws Exception {
             //given
-            Long reportId = 1L;
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "하루 진단 기록 수정 중..."
-            );
-
             doNothing().when(reportService).updateReport(any(), any(), any());
 
             //when
@@ -321,15 +296,6 @@ class ReportControllerTest extends CommonControllerTest {
         @Test
         void updateReport_4002(TestInfo testInfo) throws Exception {
             //given
-            Long reportId = 999L;
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "하루 진단 기록 수정 중..."
-            );
-
             doThrow(new MytaminException(REPORT_NOT_FOUND_ERROR)).when(reportService).updateReport(any(), any(), any());
 
             //when
@@ -345,19 +311,6 @@ class ReportControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(4002))
                     .andExpect(jsonPath("errorName").value("REPORT_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("reportId").description("*수정할 하루 진단 id")
-                            ),
-                            requestFields(
-                                    fieldWithPath("mentalConditionCode").description("*마음 컨디션 코드"),
-                                    fieldWithPath("tag1").description("*감정 태그1"),
-                                    fieldWithPath("tag2").description("감정 태그2"),
-                                    fieldWithPath("tag3").description("감정 태그3"),
-                                    fieldWithPath("todayReport").description("*하루 진단")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -371,15 +324,6 @@ class ReportControllerTest extends CommonControllerTest {
         @Test
         void updateReport_7000(TestInfo testInfo) throws Exception {
             //given
-            Long reportId = 1L;
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "하루 진단 기록 수정 중..."
-            );
-
             doThrow(new MytaminException(EDIT_TIMEOUT_ERROR)).when(reportService).updateReport(any(), any(), any());
 
             //when
@@ -395,19 +339,6 @@ class ReportControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(7000))
                     .andExpect(jsonPath("errorName").value("EDIT_TIMEOUT_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("reportId").description("*수정할 하루 진단 id")
-                            ),
-                            requestFields(
-                                    fieldWithPath("mentalConditionCode").description("*마음 컨디션 코드"),
-                                    fieldWithPath("tag1").description("*감정 태그1"),
-                                    fieldWithPath("tag2").description("감정 태그2"),
-                                    fieldWithPath("tag3").description("감정 태그3"),
-                                    fieldWithPath("todayReport").description("*하루 진단")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -417,17 +348,6 @@ class ReportControllerTest extends CommonControllerTest {
                     );
         }
 
-    }
-    
-    private ReportResponse mockReportResponse() {
-        return ReportResponse.builder()
-                .reportId(1L)
-                .canEdit(true)
-                .mentalConditionCode(5)
-                .mentalCondition(MentalCondition.VERY_GOOD.getMsg())
-                .feelingTag("#신나는 #즐거운 #재밌는")
-                .todayReport("아무래도 아침형 인간이 되는건 너무 어려운 것 같다.")
-                .build();
     }
 
 }

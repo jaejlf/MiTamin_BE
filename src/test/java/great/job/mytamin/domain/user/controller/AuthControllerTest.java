@@ -51,18 +51,18 @@ class AuthControllerTest extends CommonControllerTest {
     @DisplayName("회원 가입")
     class SignUpTest {
 
+        SignUpRequest signUpRequest = new SignUpRequest(
+                "mytamin@naver.com",
+                "password1234",
+                "강철멘탈",
+                "22",
+                "00"
+        );
+
         @DisplayName("성공")
         @Test
         void signUp(TestInfo testInfo) throws Exception {
             //given
-            SignUpRequest signUpRequest = new SignUpRequest(
-                    "mytamin@naver.com",
-                    "password1234",
-                    "강철멘탈",
-                    "22",
-                    "00"
-            );
-
             given(authService.signUp(any())).willReturn(UserResponse.of(user));
 
             //when
@@ -100,14 +100,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void signUp_2000(TestInfo testInfo) throws Exception {
             //given
-            SignUpRequest signUpRequest = new SignUpRequest(
-                    "XXX email pattern XXX",
-                    "password1234",
-                    "강철멘탈",
-                    "22",
-                    "00"
-            );
-
             given(authService.signUp(any())).willThrow(new MytaminException(EMAIL_PATTERN_ERROR));
 
             //when
@@ -122,13 +114,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(2000))
                     .andExpect(jsonPath("errorName").value("EMAIL_PATTERN_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
-                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -142,14 +127,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void signUp_2001(TestInfo testInfo) throws Exception {
             //given
-            SignUpRequest signUpRequest = new SignUpRequest(
-                    "mytamin@naver.com",
-                    "0000",
-                    "강철멘탈",
-                    "22",
-                    "00"
-            );
-
             given(authService.signUp(any())).willThrow(new MytaminException(PASSWORD_PATTERN_ERROR));
 
             //when
@@ -164,13 +141,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(2001))
                     .andExpect(jsonPath("errorName").value("PASSWORD_PATTERN_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
-                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -184,14 +154,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void signUp_2002(TestInfo testInfo) throws Exception {
             //given
-            SignUpRequest signUpRequest = new SignUpRequest(
-                    "mytamin@naver.com",
-                    "password1234",
-                    "강철멘탈",
-                    "22",
-                    "00"
-            );
-
             given(authService.signUp(any())).willThrow(new MytaminException(USER_ALREADY_EXIST_ERROR));
 
             //when
@@ -206,13 +168,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(2002))
                     .andExpect(jsonPath("errorName").value("USER_ALREADY_EXIST_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
-                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -226,14 +181,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void signUp_2003(TestInfo testInfo) throws Exception {
             //given
-            SignUpRequest signUpRequest = new SignUpRequest(
-                    "mytamin@naver.com",
-                    "password1234",
-                    "강철멘탈",
-                    "22",
-                    "00"
-            );
-
             given(authService.signUp(any())).willThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR));
 
             //when
@@ -248,13 +195,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(2003))
                     .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
-                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -270,15 +210,15 @@ class AuthControllerTest extends CommonControllerTest {
     @DisplayName("기본 로그인")
     class DefaultLoginTest {
 
+        LoginRequest loginRequest = new LoginRequest(
+                "mytamin@naver.com",
+                "password1234"
+        );
+
         @DisplayName("성공")
         @Test
         void defaultLogin(TestInfo testInfo) throws Exception {
             //given
-            LoginRequest loginRequest = new LoginRequest(
-                    "mytamin@naver.com",
-                    "password1234"
-            );
-
             given(authService.defaultLogin(any())).willReturn(
                     TokenResponse.builder()
                             .accessToken("{{ACCESS_TOKEN}}")
@@ -314,11 +254,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void defaultLogin_3000(TestInfo testInfo) throws Exception {
             //given
-            LoginRequest loginRequest = new LoginRequest(
-                    "mytamin@naver.com",
-                    "password1234"
-            );
-
             given(authService.defaultLogin(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
             //when
@@ -333,10 +268,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(3000))
                     .andExpect(jsonPath("errorName").value("USER_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -350,11 +281,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void defaultLogin_3001(TestInfo testInfo) throws Exception {
             //given
-            LoginRequest loginRequest = new LoginRequest(
-                    "mytamin@naver.com",
-                    "XXX password XXX"
-            );
-
             given(authService.defaultLogin(any())).willThrow(new MytaminException(PASSWORD_MISMATCH_ERROR));
 
             //when
@@ -369,10 +295,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(3001))
                     .andExpect(jsonPath("errorName").value("PASSWORD_MISMATCH_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -392,7 +314,8 @@ class AuthControllerTest extends CommonControllerTest {
         given(userUtil.isEmailDuplicate(any())).willReturn(true);
 
         //when
-        ResultActions actions = mockMvc.perform(get("/auth/check/email/{email}", email));
+        ResultActions actions = mockMvc.perform(get("/auth/check/email/{email}", email)
+                .contentType(APPLICATION_JSON));
 
         //then
         actions
@@ -419,7 +342,8 @@ class AuthControllerTest extends CommonControllerTest {
         given(userUtil.isNicknameDuplicate(any())).willReturn(true);
 
         //when
-        ResultActions actions = mockMvc.perform(get("/auth/check/nickname/{nickname}", nickname));
+        ResultActions actions = mockMvc.perform(get("/auth/check/nickname/{nickname}", nickname)
+                .contentType(APPLICATION_JSON));
 
         //then
         actions
@@ -442,15 +366,15 @@ class AuthControllerTest extends CommonControllerTest {
     @DisplayName("토큰 재발급")
     class ReissueTest {
 
+        ReissueRequest tokenRequest = new ReissueRequest(
+                "mytamin@naver.com",
+                "{{REFRESH_TOKEN}}"
+        );
+
         @DisplayName("성공")
         @Test
         void reissueToken(TestInfo testInfo) throws Exception {
             //given
-            ReissueRequest tokenRequest = new ReissueRequest(
-                    "mytamin@naver.com",
-                    "{{REFRESH_TOKEN}}"
-            );
-
             given(authService.reissueToken(any())).willReturn(
                     TokenResponse.builder()
                             .accessToken("{{ACCESS_TOKEN}}")
@@ -486,11 +410,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void reissueToken_3000(TestInfo testInfo) throws Exception {
             //given
-            ReissueRequest tokenRequest = new ReissueRequest(
-                    "mytamin@naver.com",
-                    "{{REFRESH_TOKEN}}"
-            );
-
             given(authService.reissueToken(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
             //when
@@ -505,10 +424,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(3000))
                     .andExpect(jsonPath("errorName").value("USER_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("refreshToken").description("*리프레쉬 토큰")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -522,11 +437,6 @@ class AuthControllerTest extends CommonControllerTest {
         @Test
         void reissueToken_1001(TestInfo testInfo) throws Exception {
             //given
-            ReissueRequest tokenRequest = new ReissueRequest(
-                    "mytamin@naver.com",
-                    "{{REFRESH_TOKEN}}"
-            );
-
             given(authService.reissueToken(any())).willThrow(new MytaminException(INVALID_TOKEN_ERROR));
 
             //when
@@ -541,10 +451,6 @@ class AuthControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(1001))
                     .andExpect(jsonPath("errorName").value("INVALID_TOKEN_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestFields(
-                                    fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("refreshToken").description("*리프레쉬 토큰")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),

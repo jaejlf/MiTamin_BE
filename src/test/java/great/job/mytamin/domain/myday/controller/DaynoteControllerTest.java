@@ -54,17 +54,18 @@ class DaynoteControllerTest extends CommonControllerTest {
     @DisplayName("데이노트 작성 가능 여부")
     class CanCreateDaynoteTest {
 
+        String performedAt = "2022.10";
+
         @DisplayName("성공")
         @Test
         void canCreateDaynote(TestInfo testInfo) throws Exception {
             //given
-            String performedAt = "2022.10";
-
             given(daynoteService.canCreateDaynote(any(), any())).willReturn(true);
 
             //when
             ResultActions actions = mockMvc.perform(get("/daynote/check/{performedAt}", performedAt)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
 
             //then
             actions
@@ -90,8 +91,6 @@ class DaynoteControllerTest extends CommonControllerTest {
         @Test
         void canCreateDaynote_7001(TestInfo testInfo) throws Exception {
             //given
-            String performedAt = "9999.99";
-
             given(daynoteService.canCreateDaynote(any(), any())).willThrow(new MytaminException(DATETIME_PARSE_ERROR));
 
             //when
@@ -106,12 +105,6 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(7001))
                     .andExpect(jsonPath("errorName").value("DATETIME_PARSE_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("performedAt").description("*데이노트 작성 날짜 (yyyy.MM)")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -211,17 +204,6 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(8004))
                     .andExpect(jsonPath("errorName").value("DAYNOTE_ALREADY_EXIST_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestParts(
-                                    partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)")
-                            ),
-                            requestParameters(
-                                    parameterWithName("wishText").description("*위시 텍스트"),
-                                    parameterWithName("note").description("*데이노트 코멘트"),
-                                    parameterWithName("performedAt").description("*데이노트 수행 날짜 정보")
-                            ),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -237,17 +219,18 @@ class DaynoteControllerTest extends CommonControllerTest {
     @DisplayName("데이노트 조회")
     class GetDaynoteTest {
 
+        Long daynoteId = 1L;
+
         @DisplayName("성공")
         @Test
         void getDaynote(TestInfo testInfo) throws Exception {
             //given
-            Long daynoteId = 1L;
-
             given(daynoteService.getDaynote(any())).willReturn(mockDaynoteResponseOfDetail());
 
             //when
             ResultActions actions = mockMvc.perform(get("/daynote/{daynoteId}", daynoteId)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
 
             //then
             actions
@@ -277,13 +260,12 @@ class DaynoteControllerTest extends CommonControllerTest {
         @Test
         void getDaynote_8003(TestInfo testInfo) throws Exception {
             //given
-            Long daynoteId = 999L;
-
             doThrow(new MytaminException(DAYNOTE_NOT_FOUND_ERROR)).when(daynoteService).getDaynote(any());
 
             //when
             ResultActions actions = mockMvc.perform(get("/daynote/{daynoteId}", daynoteId)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
 
             //then
             actions
@@ -292,12 +274,6 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(8003))
                     .andExpect(jsonPath("errorName").value("DAYNOTE_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("daynoteId").description("*조회할 데이노트 id")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -312,6 +288,8 @@ class DaynoteControllerTest extends CommonControllerTest {
     @Nested
     @DisplayName("데이노트 수정하기")
     class UpdateDaynoteTest {
+
+        Long daynoteId = 1L;
 
         List<MultipartFile> fileList = List.of(
                 new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes()),
@@ -334,8 +312,6 @@ class DaynoteControllerTest extends CommonControllerTest {
         @Test
         void updateDaynote(TestInfo testInfo) throws Exception {
             //given
-            Long daynoteId = 1L;
-
             doNothing().when(daynoteService).updateDaynote(any(), any(), any());
 
             //when
@@ -381,8 +357,6 @@ class DaynoteControllerTest extends CommonControllerTest {
         @Test
         void updateDaynote_8003(TestInfo testInfo) throws Exception {
             //given
-            Long daynoteId = 999L;
-
             doThrow(new MytaminException(DAYNOTE_NOT_FOUND_ERROR)).when(daynoteService).updateDaynote(any(), any(), any());
 
             //when
@@ -406,19 +380,6 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(8003))
                     .andExpect(jsonPath("errorName").value("DAYNOTE_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestParts(
-                                    partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)")
-                            ),
-                            requestParameters(
-                                    parameterWithName("wishText").description("*위시 텍스트"),
-                                    parameterWithName("note").description("*데이노트 코멘트")
-                            ),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("daynoteId").description("*수정할 데이노트 id")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
@@ -434,12 +395,12 @@ class DaynoteControllerTest extends CommonControllerTest {
     @DisplayName("데이노트 삭제하기")
     class DeleteDaynoteTest {
 
+        Long daynoteId = 1L;
+
         @DisplayName("성공")
         @Test
         void deleteDaynote(TestInfo testInfo) throws Exception {
             //given
-            Long daynoteId = 1L;
-
             doNothing().when(daynoteService).deleteDaynote(any(), any());
 
             //when
@@ -469,8 +430,6 @@ class DaynoteControllerTest extends CommonControllerTest {
         @Test
         void deleteDaynote_8003(TestInfo testInfo) throws Exception {
             //given
-            Long daynoteId = 999L;
-
             doThrow(new MytaminException(DAYNOTE_NOT_FOUND_ERROR)).when(daynoteService).deleteDaynote(any(), any());
 
             //when
@@ -485,12 +444,6 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(8003))
                     .andExpect(jsonPath("errorName").value("DAYNOTE_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("daynoteId").description("*수정할 데이노트 id")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),

@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -45,7 +46,8 @@ class MydayControllerTest extends CommonControllerTest {
 
         // when
         ResultActions actions = mockMvc.perform(get("/myday/info")
-                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
 
         //then
         actions

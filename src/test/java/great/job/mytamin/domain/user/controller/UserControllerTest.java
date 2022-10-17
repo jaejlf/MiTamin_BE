@@ -48,7 +48,8 @@ class UserControllerTest extends CommonControllerTest {
 
         // when
         ResultActions actions = mockMvc.perform(get("/user/profile")
-                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
 
         //then
         actions
@@ -105,17 +106,18 @@ class UserControllerTest extends CommonControllerTest {
     @DisplayName("닉네임 수정")
     class UpdateNicknameTest {
 
+        String nickname = "mental-zzang";
+
         @DisplayName("성공")
         @Test
         void updateNickname(TestInfo testInfo) throws Exception {
             //given
-            String nickname = "mental-zzang";
-
             doNothing().when(userService).updateNickname(any(), any());
 
             // when
             ResultActions actions = mockMvc.perform(patch("/user/nickname/{nickname}", nickname)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
 
             //then
             actions
@@ -139,13 +141,12 @@ class UserControllerTest extends CommonControllerTest {
         @Test
         void updateNickname_2003(TestInfo testInfo) throws Exception {
             //given
-            String nickname = "멘탈짱";
-
             doThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR)).when(userService).updateNickname(any(), any());
 
             // when
             ResultActions actions = mockMvc.perform(patch("/user/nickname/{nickname}", nickname)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(APPLICATION_JSON));
 
             //then
             actions
@@ -154,12 +155,6 @@ class UserControllerTest extends CommonControllerTest {
                     .andExpect(jsonPath("errorCode").value(2003))
                     .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("nickname").description("*수정할 닉네임")
-                            ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("errorCode").description("고유 에러 코드"),
