@@ -266,6 +266,7 @@ operation::wish/getWishlist[snippets='request-headers,response-fields']
 operation::myday/getMyday[snippets='http-request,http-response']
 operation::myday/getMyday[snippets='request-headers,response-fields']
 
+== Daynote
 === 데이노트 리스트 조회
 - 연도별로 그룹핑하여 데이노트 리스트를 리턴한다.
 - 년/월을 기준으로 오름차순 정렬되어 리턴된다.
@@ -295,7 +296,7 @@ include::{snippets}/daynote/canCreateDaynote_7001/http-response.adoc[]
 === 데이노트 작성
 * Multipart 타입으로 이미지 리스트를 전송한다.
 * fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
-* 이미지는 최대 5장까지 첨부할 수 있다. (아직 반영 전)
+* 이미지는 최대 5장까지 첨부할 수 있다.
 * wishText가 기존에 존재하지 않는 위시라면 자동으로 생성한다.
 * 예외처리를 위해 wishId 필드값이 추가될 예정 (asap하게 변경!!예정!)
 
@@ -305,6 +306,7 @@ operation::daynote/createDaynote[snippets='request-headers,request-parts,request
 ==== Exception response
 
 include::{snippets}/daynote/createDaynote_8004/http-response.adoc[]
+include::{snippets}/daynote/createDaynote_6003/http-response.adoc[]
 
 === 데이노트 조회
 * performedAt은 화면설계서 4.2.2.2의 날짜 정보를 대체한다. (기획팀과 상의 완료)
@@ -333,7 +335,7 @@ operation::daynote/deleteDaynote[snippets='request-headers,path-parameters,respo
 
 include::{snippets}/daynote/deleteDaynote_8003/http-response.adoc[]
 
-== Setting
+== Alarm
 
 === 알림 설정 상태 조회
 

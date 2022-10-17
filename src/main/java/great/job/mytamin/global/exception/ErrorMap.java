@@ -38,6 +38,7 @@ public enum ErrorMap {
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 6000, "FILE_UPLOAD_ERROR", "파일 업로드에 실패했습니다."),
     FILE_EXTENTION_ERROR(HttpStatus.BAD_REQUEST, 6001, "FILE_EXTENTION_ERROR", ".jpg, .png, .jpeg 파일만 업로드할 수 있습니다."),
     FILE_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 6002, "FILE_DELETE_ERROR", "파일 삭제에 실패했습니다."),
+    FILE_MAXIMUM_EXCEED(HttpStatus.BAD_REQUEST, 6003, "FILE_MAXIMUM_EXCEED", "이미지는 최대 5개까지 업로드할 수 있습니다."),
 
     // Time 7xxx
     EDIT_TIMEOUT_ERROR(HttpStatus.BAD_REQUEST, 7000, "EDIT_TIMEOUT_ERROR", "수정 가능 시간이 아닙니다."),

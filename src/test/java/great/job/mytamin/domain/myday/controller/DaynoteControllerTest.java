@@ -213,6 +213,37 @@ class DaynoteControllerTest extends CommonControllerTest {
                     );
         }
 
+        @DisplayName("이미지 최대 업로드 개수 초과")
+        @Test
+        void createDaynote_6003(TestInfo testInfo) throws Exception {
+            //given
+            given(daynoteService.createDaynote(any(), any())).willThrow(new MytaminException(FILE_MAXIMUM_EXCEED));
+
+            //when
+            ResultActions actions = mockMvc.perform(multipart("/daynote/new")
+                    .file(multipartFileList)
+                    .param("wishText", daynoteRequest.getWishText())
+                    .param("note", daynoteRequest.getNote())
+                    .param("performedAt", daynoteRequest.getPerformedAt())
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorCode").value(6003))
+                    .andExpect(jsonPath("errorName").value("FILE_MAXIMUM_EXCEED"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
     }
 
     @Nested
