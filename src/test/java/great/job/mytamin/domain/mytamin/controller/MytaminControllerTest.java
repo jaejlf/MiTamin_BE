@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -44,7 +45,8 @@ class MytaminControllerTest extends CommonControllerTest {
 
         // when
         ResultActions actions = mockMvc.perform(patch("/mytamin/breath")
-                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
 
         //then
         actions
@@ -69,7 +71,8 @@ class MytaminControllerTest extends CommonControllerTest {
 
         // when
         ResultActions actions = mockMvc.perform(patch("/mytamin/sense")
-                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
 
         //then
         actions
@@ -116,7 +119,8 @@ class MytaminControllerTest extends CommonControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(get("/mytamin/latest")
-                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}"));
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
 
         //then
         actions

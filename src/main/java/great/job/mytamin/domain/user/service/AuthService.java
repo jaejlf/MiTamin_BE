@@ -8,10 +8,11 @@ import great.job.mytamin.domain.user.dto.response.UserResponse;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
+import great.job.mytamin.domain.util.MydayUtil;
+import great.job.mytamin.domain.util.TimeUtil;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.jwt.JwtTokenProvider;
-import great.job.mytamin.domain.util.MydayUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserUtil userUtil;
     private final MydayUtil mydayUtil;
+    private final TimeUtil timeUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -38,15 +40,12 @@ public class AuthService {
     */
     @Transactional
     public UserResponse signUp(SignUpRequest signUpRequest) {
-        String email = signUpRequest.getEmail();
-        String nickname = signUpRequest.getNickname();
-        String password = signUpRequest.getPassword();
-        validateRequest(email, nickname, password);
+        validateRequest(signUpRequest);
 
         User user = new User(
-                email,
-                passwordEncoder.encode(password),
-                nickname,
+                signUpRequest.getEmail(),
+                passwordEncoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getNickname(),
                 Provider.DEFAULT,
                 signUpRequest.getMytaminHour(),
                 signUpRequest.getMytaminMin(),
@@ -100,12 +99,14 @@ public class AuthService {
         return customUserDetailsService.loadUserByUsername(email);
     }
 
-    private void validateRequest(String email, String nickname, String password) {
-        validateEmailPattern(email);
-        validatePasswordPattern(password);
+    private void validateRequest(SignUpRequest signUpRequest) {
+        validateEmailPattern(signUpRequest.getEmail());
+        validatePasswordPattern(signUpRequest.getPassword());
 
-        if (userUtil.isEmailDuplicate(email)) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.isNicknameDuplicate(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        if (userUtil.isEmailDuplicate(signUpRequest.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
+        if (userUtil.isNicknameDuplicate(signUpRequest.getNickname())) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+
+        if (signUpRequest.getMytaminHour() != null) timeUtil.isTimeValid(signUpRequest.getMytaminHour(), signUpRequest.getMytaminMin());
     }
 
     private void validateRefreshToken(String refreshToken, User user) {

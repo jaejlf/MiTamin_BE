@@ -4,16 +4,17 @@ import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingInfoResponse;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
 import great.job.mytamin.domain.user.entity.User;
-import great.job.mytamin.domain.user.enumerate.MydayAlarm;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static great.job.mytamin.domain.user.enumerate.MydayAlarm.convertCodeToMsg;
+
 @Service
 @RequiredArgsConstructor
-public class SettingService {
+public class AlarmService {
 
     private final TimeUtil timeUtil;
     private final UserRepository userRepository;
@@ -43,6 +44,7 @@ public class SettingService {
     */
     @Transactional
     public void turnOnMytaminAlarm(User user, MytaminAlarmRequest mytaminAlarmRequest) {
+        timeUtil.isTimeValid(mytaminAlarmRequest.getMytaminHour(), mytaminAlarmRequest.getMytaminMin());
         user.updateMytaminAlarmOn(true);
         user.updateMytaminWhen(
                 mytaminAlarmRequest.getMytaminHour(),
@@ -65,7 +67,7 @@ public class SettingService {
     @Transactional
     public void turnOnMydayAlarm(User user, int code) {
         user.updateMydayAlarmOn(true);
-        user.updateMydayWhen(MydayAlarm.convertCodeToMsg(code));
+        user.updateMydayWhen(convertCodeToMsg(code));
         userRepository.save(user);
     }
 
