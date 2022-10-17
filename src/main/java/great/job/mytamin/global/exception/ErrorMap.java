@@ -41,7 +41,7 @@ public enum ErrorMap {
 
     // Time 7xxx
     EDIT_TIMEOUT_ERROR(HttpStatus.BAD_REQUEST, 7000, "EDIT_TIMEOUT_ERROR", "수정 가능 시간이 아닙니다."),
-    DATETIME_PARSE_ERROR(HttpStatus.BAD_REQUEST, 7001, "DATETIME_PARSE_ERROR", "년/월 입력값에 오류가 있습니다."),
+    DATETIME_PARSE_ERROR(HttpStatus.BAD_REQUEST, 7001, "DATETIME_PARSE_ERROR", "날짜(또는 시간) 입력값에 오류가 있습니다."),
 
     // Myday 8xxx
     WISH_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 8000, "WISH_NOT_FOUND_ERROR", "존재하지 않는 wishId 입니다."),
