@@ -86,7 +86,7 @@ public class AwsS3Service {
     개별 이미지 삭제
     */
     public void deleteImg(String originImgUrl) {
-        if (originImgUrl.equals("")) return;
+        if (originImgUrl == null) return;
         try {
             amazonS3.deleteObject(bucketName, originImgUrl.split("/")[3]);
         } catch (AmazonServiceException e) {

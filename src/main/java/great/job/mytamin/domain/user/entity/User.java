@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private String nickname;
 
     @Length(max = 300)
-    private String profileImgUrl = "";
+    private String profileImgUrl;
 
     @Length(min = 1, max = 20)
     private String beMyMessage = "마음 면역력이 높아질";

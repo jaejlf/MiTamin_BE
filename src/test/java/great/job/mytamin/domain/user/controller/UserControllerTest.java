@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static great.job.mytamin.global.exception.ErrorMap.NICKNAME_DUPLICATE_ERROR;
@@ -19,14 +20,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,6 +65,38 @@ class UserControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.nickname").description("닉네임"),
                                 fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL"),
                                 fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지")
+                        ))
+                );
+    }
+
+    @DisplayName("프로필 이미지 수정")
+    @Test
+    void updateProfileImg(TestInfo testInfo) throws Exception {
+        //given
+        MockMultipartFile file = new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes());
+
+        doNothing().when(userService).updateProfileImg(any(), any());
+
+        // when
+        ResultActions actions = mockMvc.perform(multipart("/user/img")
+                .file(file)
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(MULTIPART_FORM_DATA));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestParts(
+                                partWithName("file").description("*업로드할 이미지 (.png, .jpg, .jpeg)")
+                        ),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지")
                         ))
                 );
     }

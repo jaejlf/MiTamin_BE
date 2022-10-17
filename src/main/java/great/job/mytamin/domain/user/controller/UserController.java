@@ -34,7 +34,7 @@ public class UserController {
                 .body(ResultResponse.ok("프로필 조회", profileResponse));
     }
 
-    @PatchMapping("/img")
+    @PostMapping("/img")
     public ResponseEntity<Object> updateProfileImg(@AuthenticationPrincipal User user,
                                                    @RequestPart("file") MultipartFile file) {
         userService.updateProfileImg(user, file);
