@@ -4,9 +4,6 @@ endif::[]
 
 = 💊 My Tamin API Document
 
-.API path 변경사항
-- 숨고르기/감각깨우기 : /home 경로에서 /mytamin 경로로 변경되었습니다.
-
 .참고사항
 - request 속성의 description에 ##'*'##문자가 붙어있지 않다면 필수값이 아니다. +
 이 경우 데이터가 없다면 **아예 전송하지 않아야** 서버에서 설정한 default값으로 저장된다.
@@ -22,23 +19,25 @@ endif::[]
 
 => 위와 같이, 데이터가 없는 mytaminHour, mytaminMin 속성은 전송하지 않는다.
 
+- ⭐ 만약 '*' 문자가 붙어있는데 전송할 값이 존재하지 않는다면, 문서에 기술된 기본값으로 세팅하여 전송한다.
+
 '''
 
 == Auth
 === 회원 가입
 * mytaminHour은 24시간 단위의 값으로 요청한다. (ex. 오후 3시 -> "15")
 
-operation::auth/signup[snippets='http-request,http-response']
-operation::auth/signup[snippets='request-fields,response-fields']
+operation::auth/signUp[snippets='http-request,http-response']
+operation::auth/signUp[snippets='request-fields,response-fields']
 
 ==== Exception response
 * EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$") 과 다를 경우
 * PASSWORD_PATTERN_ERROR : 비밀번호가 정해진 패턴("^(?=.\*[0-9])(?=.*[A-Za-z]).{8,30}$") 과 다를 경우
 
-include::{snippets}/auth/signup_2000/http-response.adoc[]
-include::{snippets}/auth/signup_2001/http-response.adoc[]
-include::{snippets}/auth/signup_2002/http-response.adoc[]
-include::{snippets}/auth/signup_2003/http-response.adoc[]
+include::{snippets}/auth/signUp_2000/http-response.adoc[]
+include::{snippets}/auth/signUp_2001/http-response.adoc[]
+include::{snippets}/auth/signUp_2002/http-response.adoc[]
+include::{snippets}/auth/signUp_2003/http-response.adoc[]
 
 === 기본 로그인
 * 로그인 성공 시 accessToken과 refreshToken을 발급한다.
@@ -53,30 +52,30 @@ include::{snippets}/auth/defaultLogin_3001/http-response.adoc[]
 === 이메일 중복 체크
 * 중복된 이메일이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.
 
-operation::auth/checkEmailDuplication[snippets='http-request,http-response']
-operation::auth/checkEmailDuplication[snippets='path-parameters,response-fields']
+operation::auth/isEmailDuplicate[snippets='http-request,http-response']
+operation::auth/isEmailDuplicate[snippets='path-parameters,response-fields']
 
 === 닉네임 중복 체크
 * 중복된 닉네임이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.
 
-operation::auth/checkNicknameDuplication[snippets='http-request,http-response']
-operation::auth/checkNicknameDuplication[snippets='path-parameters,response-fields']
+operation::auth/isNicknameDuplicate[snippets='http-request,http-response']
+operation::auth/isNicknameDuplicate[snippets='path-parameters,response-fields']
 
 === 토큰 재발급
 * 새로 발급한 accessToken과 기존의 refreshToken을 리턴한다.
     ** refreshToken의 만료 기간이 2일 이내로 남았을 경우 refreshToken 또한 새로 발급한다.
 * 만약 403 응답(= INVALID_TOKEN_ERROR)일 경우에는 재로그인하도록 한다.
 
-operation::auth/reissue[snippets='http-request,http-response']
-operation::auth/reissue[snippets='request-fields,response-fields']
+operation::auth/reissueToken[snippets='http-request,http-response']
+operation::auth/reissueToken[snippets='request-fields,response-fields']
 
 ==== Exception response
 * INVALID_TOKEN_ERROR
     ** DB에 저장된 refreshToken과 일치하지 않는 경우
     ** refreshToken 자체가 잘못 되었거나 만료된 경우
 
-include::{snippets}/auth/reissue_1001/http-response.adoc[]
-include::{snippets}/auth/reissue_3000/http-response.adoc[]
+include::{snippets}/auth/reissueToken_1001/http-response.adoc[]
+include::{snippets}/auth/reissueToken_3000/http-response.adoc[]
 
 == Home
 === 웰컴 메세지
@@ -211,9 +210,16 @@ include::{snippets}/care/updateCare_7000/http-response.adoc[]
 
 == User
 === 프로필 조회
+* 설정된 프로필 이미지가 없을 경우, profileImgUrl은 null로 리턴된다.
 
 operation::user/getProfile[snippets='http-request,http-response']
 operation::user/getProfile[snippets='request-headers,response-fields']
+
+=== 프로필 이미지 수정
+- file의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+
+operation::user/updateProfileImg[snippets='http-request,http-response']
+operation::user/updateProfileImg[snippets='request-headers,request-parts,response-fields']
 
 === 닉네임 수정
 
@@ -229,6 +235,15 @@ include::{snippets}/user/updateNickname_2003/http-response.adoc[]
 operation::user/updateBeMyMessage[snippets='http-request,http-response']
 operation::user/updateBeMyMessage[snippets='request-headers,request-fields,response-fields']
 
+== Wish
+=== 위시 리스트 조회
+
+operation::wish/getWishlist[snippets='http-request,http-response']
+operation::wish/getWishlist[snippets='request-headers,response-fields']
+
+=== 위시 리스트 업데이트
+플로우 확정되면 추가 예정
+
 == Myday
 === 이번 달의 마이데이
 * 매달 랜덤으로 마이데이 날짜가 지정된다.
@@ -240,6 +255,85 @@ operation::user/updateBeMyMessage[snippets='request-headers,request-fields,respo
 
 operation::myday/getMyday[snippets='http-request,http-response']
 operation::myday/getMyday[snippets='request-headers,response-fields']
+
+=== 데이노트 리스트 조회
+- 연도별로 그룹핑하여 데이노트 리스트를 리턴한다.
+- 년/월을 기준으로 오름차순 정렬되어 리턴된다.
+- performedAt은 이미지가 존재하지 않을 경우 대체 제목으로 사용되는 값이다.
+
+operation::daynote/getDaynoteList[snippets='http-request,http-response']
+operation::daynote/getDaynoteList[snippets='request-headers,response-fields']
+
+=== 데이노트 작성 가능 여부
+- 사용자가 선택한 데이노트 작성 날짜를 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 -> 2022.01)
+- performedAt에 해당하는 날짜에 데이노트 작성이 가능하면 true, 불가능하면 false를 리턴한다.
+- (아직 화면설계서에 반영되지 않았지만) 기획팀과 상의된 플로우
+    * 1. 데이노트 작성 가능 여부 체크
+    * 1-1. 작성 가능하다면(= true) 데이노트 작성 화면으로 넘어가기
+    * 1-2. 작성 불가능하다면(= false, 이미 해당 날짜에 데이노트가 존재한다면) 데이노트 수정/삭제 여부를 묻기
+
+operation::daynote/canCreateDaynote[snippets='http-request,http-response']
+operation::daynote/canCreateDaynote[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+* DATETIME_PARSE_ERROR
+    ** 날짜 형식이 yyyy.MM이 아닐 경우
+    ** 2020년 이전이거나, 올해 연도 이후일 경우
+
+include::{snippets}/daynote/canCreateDaynote_7001/http-response.adoc[]
+
+=== 데이노트 작성
+* Multipart 타입으로 이미지 리스트를 전송한다.
+* fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+* 이미지는 최대 5장까지 첨부할 수 있다. (아직 반영 전)
+
+operation::daynote/createDaynote[snippets='httpie-request,http-response']
+operation::daynote/createDaynote[snippets='request-headers,request-parts,request-parameters,response-fields']
+
+==== Exception response
+
+include::{snippets}/daynote/createDaynote_8004/http-response.adoc[]
+
+=== 데이노트 조회
+* performedAt은 화면설계서 4.2.2.2의 날짜 정보를 대체한다. (기획팀과 상의 완료)
+
+operation::daynote/getDaynote[snippets='http-request,http-response']
+operation::daynote/getDaynote[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+
+include::{snippets}/daynote/getDaynote_8003/http-response.adoc[]
+
+=== 데이노트 수정
+* Multipart 타입으로 이미지 리스트를 전송한다.
+* fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+* 이미지는 최대 5장까지 첨부할 수 있다. (아직 반영 전)
+
+operation::daynote/updateDaynote[snippets='httpie-request,http-response']
+operation::daynote/updateDaynote[snippets='request-headers,request-parts,request-parameters,response-fields']
+
+=== 데이노트 삭제
+
+operation::daynote/deleteDaynote[snippets='http-request,http-response']
+operation::daynote/deleteDaynote[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+
+include::{snippets}/daynote/deleteDaynote_8003/http-response.adoc[]
+
+== Setting
+
+테스트 전.. 문서 설명 추가 중..
+
+=== 알림 설정 상태 조회
+
+=== 마이타민 알림 ON
+
+=== 마이타민 알림 OFF
+
+=== 마이데이 알림 ON
+
+=== 마이데이 알림 OFF
 
 == Image
 * Multipart 타입으로 이미지를 전송한다.

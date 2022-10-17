@@ -1,8 +1,8 @@
 package great.job.mytamin.global.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import great.job.mytamin.topic.mytamin.entity.Mytamin;
-import great.job.mytamin.topic.user.entity.User;
+import great.job.mytamin.domain.mytamin.entity.Mytamin;
+import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.jwt.JwtAuthInterceptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-import static great.job.mytamin.topic.user.enumerate.Provider.DEFAULT;
+import static great.job.mytamin.domain.user.enumerate.Provider.DEFAULT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;

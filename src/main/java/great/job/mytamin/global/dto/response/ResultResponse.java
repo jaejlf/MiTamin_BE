@@ -1,6 +1,5 @@
 package great.job.mytamin.global.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +14,6 @@ public class ResultResponse<T> {
 
     private int statusCode;
     private String message;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     public static <T> ResultResponse<Object> ok(String message, T data) {

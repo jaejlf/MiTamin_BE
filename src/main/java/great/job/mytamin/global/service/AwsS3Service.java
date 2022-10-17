@@ -1,5 +1,6 @@
 package great.job.mytamin.global.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -16,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static great.job.mytamin.global.exception.ErrorMap.FILE_EXTENTION_ERROR;
-import static great.job.mytamin.global.exception.ErrorMap.FILE_UPLOAD_ERROR;
+import static great.job.mytamin.global.exception.ErrorMap.*;
 
 @RequiredArgsConstructor
 @Service
@@ -34,19 +34,20 @@ public class AwsS3Service {
     /*
     이미지 리스트 업로드
     */
-    public List<String> uploadImageList(List<MultipartFile> uploadFiles, String keymsg) {
+    public List<String> uploadImageList(List<MultipartFile> uploadFiles, String uniq) {
+        if (uploadFiles.isEmpty()) return null;
         List<String> uploadUrl = new ArrayList<>();
         for (MultipartFile uploadFile : uploadFiles) {
-            uploadUrl.add(uploadImg(uploadFile, keymsg));
+            uploadUrl.add(uploadImg(uploadFile, uniq));
         }
         return uploadUrl;
     }
 
     /*
-    단일 이미지 업로드
+    개별 이미지 업로드
     */
-    public String uploadImg(MultipartFile file, String keymsg) {
-        if (file.isEmpty()) return "";
+    public String uploadImg(MultipartFile file, String uniq) {
+        if (file.isEmpty()) return null;
 
         // 확장자 체크
         String originFileName = file.getOriginalFilename();
@@ -56,7 +57,7 @@ public class AwsS3Service {
         }
 
         // 업로드
-        String fileName = keymsg + UUID.randomUUID();
+        String fileName = uniq + "-" + UUID.randomUUID();
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
@@ -68,6 +69,29 @@ public class AwsS3Service {
             throw new MytaminException(FILE_UPLOAD_ERROR);
         }
         return amazonS3.getUrl(bucketName, fileName).toString();
+    }
+
+    /*
+    이미지 리스트 삭제
+    */
+    public void deleteImgList(List<String> imgUrlList) {
+        if (!imgUrlList.isEmpty()) {
+            for (String imgUrl : imgUrlList) {
+                deleteImg(imgUrl);
+            }
+        }
+    }
+
+    /*
+    개별 이미지 삭제
+    */
+    public void deleteImg(String originImgUrl) {
+        if (originImgUrl == null) return;
+        try {
+            amazonS3.deleteObject(bucketName, originImgUrl.split("/")[3]);
+        } catch (AmazonServiceException e) {
+            throw new MytaminException(FILE_DELETE_ERROR);
+        }
     }
 
 }
