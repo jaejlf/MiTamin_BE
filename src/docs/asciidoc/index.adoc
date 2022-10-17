@@ -7,6 +7,7 @@ endif::[]
 .참고사항
 - request 속성의 description에 ##'*'##문자가 붙어있지 않다면 필수값이 아니다. +
 이 경우 데이터가 없다면 **아예 전송하지 않아야** 서버에서 설정한 default값으로 저장된다.
+- ⭐ 만약 '*' 문자가 붙어있는데 전송할 값이 존재하지 않는다면, 문서에 기술된 기본값으로 세팅하여 전송한다.
 - ex. 회원가입 시 유저가 마이타민 섭취 지정 시간 설정 '건너뛰기'를 했을경우,
 [source]
 ----
@@ -19,13 +20,21 @@ endif::[]
 
 => 위와 같이, 데이터가 없는 mytaminHour, mytaminMin 속성은 전송하지 않는다.
 
-- ⭐ 만약 '*' 문자가 붙어있는데 전송할 값이 존재하지 않는다면, 문서에 기술된 기본값으로 세팅하여 전송한다.
+.multipart/form 타입 요청 시
+----
+PUT /daynote/1 HTTP/1.1
+Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+X-AUTH-TOKEN: {{ACCESS_TOKEN}}
+Host: MY-TAMIN-URL
+...
+----
+헤더의 boundary값은 메세지 파트를 구분하는 값으로, boundary에는 랜덤 UUID값 또는 기본으로 제공되는 '6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm' 값을 넣어 전송한다.
 
 '''
 
 == Auth
 === 회원 가입
-* mytaminHour은 24시간 단위의 값으로 요청한다. (ex. 오후 3시 -> "15")
+* mytaminHour은 24시간 단위(0 ~ 23)의 값으로 요청한다. (ex. 오후 3시 -> "15")
 
 operation::auth/signUp[snippets='http-request,http-response']
 operation::auth/signUp[snippets='request-fields,response-fields']
@@ -38,6 +47,7 @@ include::{snippets}/auth/signUp_2000/http-response.adoc[]
 include::{snippets}/auth/signUp_2001/http-response.adoc[]
 include::{snippets}/auth/signUp_2002/http-response.adoc[]
 include::{snippets}/auth/signUp_2003/http-response.adoc[]
+include::{snippets}/auth/signUp_7001/http-response.adoc[]
 
 === 기본 로그인
 * 로그인 성공 시 accessToken과 refreshToken을 발급한다.
@@ -286,8 +296,10 @@ include::{snippets}/daynote/canCreateDaynote_7001/http-response.adoc[]
 * Multipart 타입으로 이미지 리스트를 전송한다.
 * fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
 * 이미지는 최대 5장까지 첨부할 수 있다. (아직 반영 전)
+* wishText가 기존에 존재하지 않는 위시라면 자동으로 생성한다.
+* 예외처리를 위해 wishId 필드값이 추가될 예정 (asap하게 변경!!예정!)
 
-operation::daynote/createDaynote[snippets='httpie-request,http-response']
+operation::daynote/createDaynote[snippets='http-request,http-response']
 operation::daynote/createDaynote[snippets='request-headers,request-parts,request-parameters,response-fields']
 
 ==== Exception response
@@ -309,7 +321,7 @@ include::{snippets}/daynote/getDaynote_8003/http-response.adoc[]
 * fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
 * 이미지는 최대 5장까지 첨부할 수 있다. (아직 반영 전)
 
-operation::daynote/updateDaynote[snippets='httpie-request,http-response']
+operation::daynote/updateDaynote[snippets='http-request,http-response']
 operation::daynote/updateDaynote[snippets='request-headers,request-parts,request-parameters,response-fields']
 
 === 데이노트 삭제
@@ -323,17 +335,45 @@ include::{snippets}/daynote/deleteDaynote_8003/http-response.adoc[]
 
 == Setting
 
-테스트 전.. 문서 설명 추가 중..
-
 === 알림 설정 상태 조회
 
+operation::alarm/getAlarmSettingStatus[snippets='http-request,http-response']
+operation::alarm/getAlarmSettingStatus[snippets='request-headers,response-fields']
+
 === 마이타민 알림 ON
+* mytaminHour은 24시간 단위(0 ~ 23)의 값으로 요청한다. (ex. 오후 3시 -> "15")
+
+operation::alarm/turnOnMytaminAlarm[snippets='http-request,http-response']
+operation::alarm/turnOnMytaminAlarm[snippets='request-headers,request-fields,response-fields']
+
+==== Exception response
+
+include::{snippets}/alarm/turnOnMytaminAlarm_7001/http-response.adoc[]
 
 === 마이타민 알림 OFF
 
+operation::alarm/turnOffMydayAlarm[snippets='http-request,http-response']
+operation::alarm/turnOffMydayAlarm[snippets='request-headers,response-fields']
+
 === 마이데이 알림 ON
+* 마이데이 지정 시간은 각 시간에 해당하는 int 타입의 코드를 보낸다.
+* code
+    ** 0 : "없음"
+    ** 1 : "당일"
+    ** 2 : "하루 전"
+    ** 3 : "일주일 전"
+
+operation::alarm/turnOnmydayAlarm[snippets='http-request,http-response']
+operation::alarm/turnOnmydayAlarm[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+
+include::{snippets}/alarm/turnOnmydayAlarm_3002/http-response.adoc[]
 
 === 마이데이 알림 OFF
+
+operation::alarm/turnOffMydayAlarm[snippets='http-request,http-response']
+operation::alarm/turnOffMydayAlarm[snippets='request-headers,response-fields']
 
 == Image
 * Multipart 타입으로 이미지를 전송한다.

@@ -1,8 +1,8 @@
 package great.job.mytamin.domain.util;
 
-import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.domain.mytamin.entity.Care;
 import great.job.mytamin.domain.mytamin.entity.Report;
+import great.job.mytamin.global.exception.MytaminException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 import static great.job.mytamin.domain.user.enumerate.MydayMessage.*;
+import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 
 @Component
 public class TimeUtil {
@@ -125,6 +125,17 @@ public class TimeUtil {
         }
 
         return map;
+    }
+
+    /*
+    HH, MM 시간값 유효한지 체크
+    */
+    public void isTimeValid(String HH, String mm) {
+        int hour = Integer.parseInt(HH);
+        int minute = Integer.parseInt(mm);
+
+        if (hour < 0 || hour > 23) throw new MytaminException(DATETIME_PARSE_ERROR);
+        if (minute < 0 || minute > 59) throw new MytaminException(DATETIME_PARSE_ERROR);
     }
 
     /*
