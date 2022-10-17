@@ -1,6 +1,6 @@
 package great.job.mytamin.global.jwt;
 
-import great.job.mytamin.topic.user.repository.UserRepository;
+import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.service.RedisService;
 import lombok.RequiredArgsConstructor;

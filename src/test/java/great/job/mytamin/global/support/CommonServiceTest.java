@@ -1,14 +1,14 @@
 package great.job.mytamin.global.support;
 
-import great.job.mytamin.topic.mytamin.entity.Care;
-import great.job.mytamin.topic.mytamin.repository.CareRepository;
-import great.job.mytamin.topic.mytamin.entity.Mytamin;
-import great.job.mytamin.topic.mytamin.repository.MytaminRepository;
-import great.job.mytamin.topic.mytamin.entity.Report;
-import great.job.mytamin.topic.mytamin.enumerate.MentalCondition;
-import great.job.mytamin.topic.mytamin.repository.ReportRepository;
-import great.job.mytamin.topic.user.entity.User;
-import great.job.mytamin.topic.user.repository.UserRepository;
+import great.job.mytamin.domain.mytamin.entity.Care;
+import great.job.mytamin.domain.mytamin.repository.CareRepository;
+import great.job.mytamin.domain.mytamin.entity.Mytamin;
+import great.job.mytamin.domain.mytamin.repository.MytaminRepository;
+import great.job.mytamin.domain.mytamin.entity.Report;
+import great.job.mytamin.domain.mytamin.enumerate.MentalCondition;
+import great.job.mytamin.domain.mytamin.repository.ReportRepository;
+import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-import static great.job.mytamin.topic.user.enumerate.Provider.DEFAULT;
+import static great.job.mytamin.domain.user.enumerate.Provider.DEFAULT;
 
 @SpringBootTest
 @ActiveProfiles("test")

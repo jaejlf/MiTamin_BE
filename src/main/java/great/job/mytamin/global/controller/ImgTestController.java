@@ -1,6 +1,6 @@
 package great.job.mytamin.global.controller;
 
-import great.job.mytamin.topic.user.entity.User;
+import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.global.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
