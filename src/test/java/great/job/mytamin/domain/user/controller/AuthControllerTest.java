@@ -88,10 +88,10 @@ class AuthControllerTest extends CommonControllerTest {
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.email").description("이메일"),
                                     fieldWithPath("data.nickname").description("닉네임"),
-                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL (default : \"\")"),
+                                    fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL (default : null)"),
                                     fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지 (default : \"마음 면역력이 높아질\")"),
-                                    fieldWithPath("data.mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간) (default = null)"),
-                                    fieldWithPath("data.mytaminMin").description("마이타민 섭취 지정 시간 MM (default = null)")
+                                    fieldWithPath("data.mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간) (default : null)"),
+                                    fieldWithPath("data.mytaminMin").description("마이타민 섭취 지정 시간 MM (default : null)")
                             ))
                     );
         }
@@ -484,7 +484,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("가입되지 않은 유저")
         @Test
-        void reissue_3000(TestInfo testInfo) throws Exception {
+        void reissueToken_3000(TestInfo testInfo) throws Exception {
             //given
             ReissueRequest tokenRequest = new ReissueRequest(
                     "mytamin@naver.com",
@@ -520,7 +520,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         @DisplayName("DB에 저장된 토큰과 불일치")
         @Test
-        void reissue_1001(TestInfo testInfo) throws Exception {
+        void reissueToken_1001(TestInfo testInfo) throws Exception {
             //given
             ReissueRequest tokenRequest = new ReissueRequest(
                     "mytamin@naver.com",

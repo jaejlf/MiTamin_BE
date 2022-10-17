@@ -1,7 +1,5 @@
 package great.job.mytamin.domain.myday.service;
 
-import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.service.AwsS3Service;
 import great.job.mytamin.domain.myday.dto.request.DaynoteRequest;
 import great.job.mytamin.domain.myday.dto.request.DaynoteUpdateRequest;
 import great.job.mytamin.domain.myday.dto.response.DaynoteListResponse;
@@ -11,10 +9,11 @@ import great.job.mytamin.domain.myday.entity.Wish;
 import great.job.mytamin.domain.myday.repository.DaynoteRepository;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.util.TimeUtil;
+import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.global.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -46,11 +45,14 @@ public class DaynoteService {
     데이노트 작성하기
     */
     @Transactional
-    public DaynoteResponse createDaynote(User user, List<MultipartFile> fileList, DaynoteRequest daynoteRequest) {
+    public DaynoteResponse createDaynote(User user, DaynoteRequest daynoteRequest) {
+        System.out.println("1:" + daynoteRequest.getNote());
+        System.out.println("2:" + daynoteRequest.getWishText());
+        System.out.println("3:" + daynoteRequest.getPerformedAt());
         Wish wish = wishService.findWishOrElseNew(user, daynoteRequest.getWishText());
         if (!canCreateDaynote(user, daynoteRequest.getPerformedAt()))
             throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
-        return DaynoteResponse.ofDetail(saveNewDaynote(fileList, daynoteRequest, wish, user));
+        return DaynoteResponse.ofDetail(saveNewDaynote(daynoteRequest, wish, user));
     }
 
     /*
@@ -65,14 +67,14 @@ public class DaynoteService {
     데이노트 수정
     */
     @Transactional
-    public void updateDaynote(User user, List<MultipartFile> fileList, Long daynoteId, DaynoteUpdateRequest daynoteUpdateRequest) {
+    public void updateDaynote(User user, Long daynoteId, DaynoteUpdateRequest daynoteUpdateRequest) {
         Daynote daynote = findDaynoteById(daynoteId);
         hasAuthorized(daynote, user);
         awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
 
         Wish wish = wishService.findWishOrElseNew(user, daynoteUpdateRequest.getWishText());
         daynote.updateAll(
-                awsS3Service.uploadImageList(fileList, "DN"),
+                awsS3Service.uploadImageList(daynoteUpdateRequest.getFileList(), "DN"),
                 wish,
                 daynoteUpdateRequest.getNote()
         );
@@ -105,9 +107,9 @@ public class DaynoteService {
         return DaynoteListResponse.of(daynoteListMap);
     }
 
-    private Daynote saveNewDaynote(List<MultipartFile> fileList, DaynoteRequest daynoteRequest, Wish wish, User user) {
+    private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, User user) {
         Daynote daynote = new Daynote(
-                awsS3Service.uploadImageList(fileList, "DN"),
+                awsS3Service.uploadImageList(daynoteRequest.getFileList(), "DN"),
                 wish,
                 daynoteRequest.getNote(),
                 timeUtil.convertToRawPerformedAt(daynoteRequest.getPerformedAt()),
