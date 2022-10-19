@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -19,8 +24,10 @@ public class MytaminResponse {
     public static MytaminResponse of(Mytamin mytamin,
                                      ReportResponse reportResponse,
                                      CareResponse careResponse) {
+        LocalDateTime target = mytamin.getTakeAt();
+        String dayOfWeek = target.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
         return MytaminResponse.builder()
-                .takeAt(mytamin.getTakeAt())
+                .takeAt(target.format(DateTimeFormatter.ofPattern("MM.dd")) + "." + dayOfWeek)
                 .report(reportResponse)
                 .care(careResponse)
                 .build();

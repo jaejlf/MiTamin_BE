@@ -27,7 +27,7 @@ public class Care {
     private User user;
 
     @Column(nullable = false)
-    private String careCategory;
+    private int careCategoryCode;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String careMsg1;
@@ -38,16 +38,16 @@ public class Care {
     @OneToOne(mappedBy = "care")
     private Mytamin mytamin;
 
-    public Care(User user, String careCategory, String careMsg1, String careMsg2, Mytamin mytamin) {
+    public Care(User user, int careCategoryCode, String careMsg1, String careMsg2, Mytamin mytamin) {
         this.user = user;
-        this.careCategory = careCategory;
+        this.careCategoryCode = careCategoryCode;
         this.careMsg1 = careMsg1;
         this.careMsg2 = careMsg2;
         this.mytamin = mytamin;
     }
 
-    public void updateAll(String careCategory, String careMsg1, String careMsg2) {
-        this.careCategory = careCategory;
+    public void updateAll(int careCategoryCode, String careMsg1, String careMsg2) {
+        this.careCategoryCode = careCategoryCode;
         this.careMsg1 = careMsg1;
         this.careMsg2 = careMsg2;
     }

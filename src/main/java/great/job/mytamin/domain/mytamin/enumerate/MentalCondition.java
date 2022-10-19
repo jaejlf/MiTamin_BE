@@ -19,21 +19,17 @@ public enum MentalCondition {
     private final int code;
     private final String msg;
 
+    public static int validateCode(int code) {
+        if (code < 1 || code > 5) throw new MytaminException(INVALID_CONDITION_CODE_ERROR);
+        return code;
+    }
+
     public static String convertCodeToMsg(int code) {
         if (code == 1) return VERY_BAD.getMsg();
         else if (code == 2) return BAD.getMsg();
         else if (code == 3) return SO_SO.getMsg();
         else if (code == 4) return GOOD.getMsg();
-        else if (code == 5) return VERY_GOOD.getMsg();
-        else throw new MytaminException(INVALID_CONDITION_CODE_ERROR);
-    }
-
-    public static int convertMsgToCode(String msg) {
-        if (msg.equals(VERY_BAD.getMsg())) return VERY_BAD.getCode();
-        else if (msg.equals(BAD.getMsg())) return BAD.getCode();
-        else if (msg.equals(SO_SO.getMsg())) return SO_SO.getCode();
-        else if (msg.equals(GOOD.getMsg())) return GOOD.getCode();
-        else return VERY_GOOD.getCode();
+        else return VERY_GOOD.getMsg();
     }
 
 }

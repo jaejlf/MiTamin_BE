@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class RandomCareResponse {
         return RandomCareResponse.builder()
                 .careMsg1(care.getCareMsg1())
                 .careMsg2(care.getCareMsg2())
-                .takeAt(care.getMytamin().getTakeAt())
+                .takeAt(care.getMytamin().getTakeAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
                 .build();
     }
 

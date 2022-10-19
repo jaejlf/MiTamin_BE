@@ -7,6 +7,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,18 +19,20 @@ class TimeUtilTest extends CommonServiceTest {
     @Autowired
     private TimeUtil timeUtil;
 
-    @DisplayName("LocalDateTime -> takeAt 포맷으로 변환")
+    @DisplayName("LocalDateTime -> MM.dd.요일")
     @ParameterizedTest
     @CsvSource({
-            "2022-09-05T10:00, 2022.09.05.Mon", // day1
-            "2022-09-13T23:59, 2022.09.13.Tue", // day1
-            "2022-09-23T00:00, 2022.09.22.Thu", // day2
-            "2022-09-25T00:34, 2022.09.24.Sat", // day2
-            "2022-09-27T05:00, 2022.09.27.Tue", // day1
+            "2022-09-05T10:00, 09.05.Mon", // day1
+            "2022-09-13T23:59, 09.13.Tue", // day1
+            "2022-09-23T00:00, 09.22.Thu", // day2
+            "2022-09-25T00:34, 09.24.Sat", // day2
+            "2022-09-27T05:00, 09.27.Tue", // day1
     })
-    void convertToTakeAt(LocalDateTime target, String expected) {
+    void convertToMytaminDate(LocalDateTime target, String expected) {
         //given & when
-        String result = timeUtil.convertToTakeAt(target);
+        LocalDateTime raw = timeUtil.convertToMytaminDate(target);
+        String dayOfWeek = raw.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
+        String result = raw.format(DateTimeFormatter.ofPattern("MM.dd")) + "." + dayOfWeek;
 
         //then
         assertThat(result).isEqualTo(expected);

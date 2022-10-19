@@ -1,15 +1,18 @@
 package great.job.mytamin.domain.mytamin.controller;
 
-import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
+import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalResponse;
 import great.job.mytamin.domain.mytamin.service.ReportService;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -46,6 +49,14 @@ public class ReportController {
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("하루 진단 수정 완료"));
+    }
+
+    @GetMapping("/weekly/mental")
+    public ResponseEntity<Object> getWeeklyMentalReport(@AuthenticationPrincipal User user) {
+        List<WeeklyMentalResponse> weeklyMentalResponseList = reportService.getWeeklyMentalReport(user);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("주간 마음 컨디션", weeklyMentalResponseList));
     }
 
 }

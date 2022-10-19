@@ -27,7 +27,7 @@ public class Report {
     private User user;
 
     @Column(nullable = false)
-    private String mentalCondition;
+    private int mentalConditionCode;
 
     @Column(length = 100, nullable = false)
     private String tag1;
@@ -44,9 +44,9 @@ public class Report {
     @OneToOne(mappedBy = "report")
     private Mytamin mytamin;
 
-    public Report(User user, String mentalCondition, String tag1, String tag2, String tag3, String todayReport, Mytamin mytamin) {
+    public Report(User user, int mentalConditionCode, String tag1, String tag2, String tag3, String todayReport, Mytamin mytamin) {
         this.user = user;
-        this.mentalCondition = mentalCondition;
+        this.mentalConditionCode = mentalConditionCode;
         this.tag1 = tag1;
         this.tag2 = tag2;
         this.tag3 = tag3;
@@ -54,8 +54,8 @@ public class Report {
         this.mytamin = mytamin;
     }
 
-    public void updateAll(String mentalCondition, String tag1, String tag2, String tag3, String todayReport) {
-        this.mentalCondition = mentalCondition;
+    public void updateAll(int mentalConditionCode, String tag1, String tag2, String tag3, String todayReport) {
+        this.mentalConditionCode = mentalConditionCode;
         this.tag1 = tag1;
         this.tag2 = tag2;
         this.tag3 = tag3;

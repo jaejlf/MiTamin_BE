@@ -19,9 +19,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.Locale;
 
 import static great.job.mytamin.domain.user.enumerate.Provider.DEFAULT;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,11 +57,8 @@ public class CommonControllerTest {
 
         // Mock Mytamin
         LocalDateTime rawTakeAt = LocalDateTime.now();
-        String dayOfWeek = rawTakeAt.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
-        String takeAt = rawTakeAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) + "." + dayOfWeek;
         mytamin = new Mytamin(
-                rawTakeAt,
-                takeAt,
+                convertToMytaminDate(rawTakeAt),
                 user
         );
 
@@ -85,5 +79,11 @@ public class CommonControllerTest {
                 )
                 .build();
     }
+
+    private LocalDateTime convertToMytaminDate(LocalDateTime target) {
+        if (target.getHour() <= 4) target = target.minusDays(1);
+        return LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 10, 0);
+    }
+
 
 }

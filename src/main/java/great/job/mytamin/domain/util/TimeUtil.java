@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import static great.job.mytamin.domain.user.enumerate.MydayMessage.*;
@@ -19,16 +17,24 @@ import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 public class TimeUtil {
 
     /*
-    LocalDateTime -> takeAt 포맷 변환 (yyyy.MM.dd.요일)
+    마이타민 섭취 시간 포맷터
+    LocalDateTime -> MM.dd.요일
     */
-    public String convertToTakeAt(LocalDateTime target) {
+    public LocalDateTime convertToMytaminDate(LocalDateTime target) {
         if (target.getHour() <= 4) target = target.minusDays(1);
-        String dayOfWeek = target.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
-        return target.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) + "." + dayOfWeek;
+        return LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 10, 0);
     }
 
     /*
-    performedAt -> LocalDateTime 포맷 변환 & valid check
+    LocalDateTime -> 시간(10:00) 커스텀 세팅
+    */
+    public LocalDateTime convertToCustomHHmm(LocalDateTime target) {
+        return LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 10, 0);
+    }
+
+    /*
+    데이노트 포맷터
+    performedAt -> LocalDateTime
     */
     public LocalDateTime convertToRawPerformedAt(String performedAt) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
@@ -39,6 +45,38 @@ public class TimeUtil {
             throw new MytaminException(DATETIME_PARSE_ERROR);
         }
         return rawPerformedAt;
+    }
+
+    /*
+    알림 설정 포맷터
+    String HH, MM -> 오전/오후 HH:mm
+    */
+    public String convertToAlarmFormat(String HH, String mm) {
+        int hour = Integer.parseInt(HH);
+        int minute = Integer.parseInt(mm);
+
+        String apm = "오전";
+        if (hour > 12) {
+            hour -= 12;
+            apm = "오후";
+        }
+
+        LocalDateTime alarmAt = LocalDateTime.of(2022, 10, 10, hour, minute);
+        return alarmAt.format(DateTimeFormatter.ofPattern(apm + " HH:mm"));
+    }
+
+    /*
+    요일 숫자 -> 한글
+    */
+    public String convertDayNumToStr(int dayOfWeek) {
+        if (dayOfWeek == 1) return "월";
+        else if (dayOfWeek == 2) return "화";
+        else if (dayOfWeek == 3) return "수";
+        else if (dayOfWeek == 4) return "목";
+        else if (dayOfWeek == 5) return "금";
+        else if (dayOfWeek == 6) return "토";
+        else if (dayOfWeek == 7) return "일";
+        else throw new MytaminException(DATETIME_PARSE_ERROR);
     }
 
     /*
@@ -136,23 +174,6 @@ public class TimeUtil {
 
         if (hour < 0 || hour > 23) throw new MytaminException(DATETIME_PARSE_ERROR);
         if (minute < 0 || minute > 59) throw new MytaminException(DATETIME_PARSE_ERROR);
-    }
-
-    /*
-    String HH, MM -> 오전/오후 HH:mm 포맷으로 변환
-    */
-    public String convertToAlarmFormat(String HH, String mm) {
-        int hour = Integer.parseInt(HH);
-        int minute = Integer.parseInt(mm);
-
-        String apm = "오전";
-        if (hour > 12) {
-            hour -= 12;
-            apm = "오후";
-        }
-
-        LocalDateTime alarmAt = LocalDateTime.of(2022, 10, 10, hour, minute);
-        return alarmAt.format(DateTimeFormatter.ofPattern(apm + " HH:mm"));
     }
 
     /*

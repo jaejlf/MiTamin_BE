@@ -5,7 +5,6 @@ import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
 import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
 import great.job.mytamin.domain.mytamin.entity.Care;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
-import great.job.mytamin.domain.mytamin.enumerate.CareCategory;
 import great.job.mytamin.domain.mytamin.repository.CareRepository;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.util.TimeUtil;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static great.job.mytamin.domain.mytamin.enumerate.CareCategory.validateCode;
 import static great.job.mytamin.global.exception.ErrorMap.*;
 
 @Service
@@ -49,7 +49,7 @@ public class CareService {
         canEdit(care);
 
         care.updateAll(
-                CareCategory.getMsgToCode(careRequest.getCareCategoryCode()),
+                validateCode(careRequest.getCareCategoryCode()),
                 careRequest.getCareMsg1(),
                 careRequest.getCareMsg2()
         );
@@ -107,7 +107,7 @@ public class CareService {
     private Care saveNewCare(User user, CareRequest careRequest, Mytamin mytamin) {
         Care care = new Care(
                 user,
-                CareCategory.getMsgToCode(careRequest.getCareCategoryCode()),
+                validateCode(careRequest.getCareCategoryCode()),
                 careRequest.getCareMsg1(),
                 careRequest.getCareMsg2(),
                 mytamin

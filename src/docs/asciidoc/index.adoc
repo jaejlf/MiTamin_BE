@@ -178,6 +178,19 @@ operation::report/updateReport[snippets='request-headers,path-parameters,request
 include::{snippets}/report/updateReport_4002/http-response.adoc[]
 include::{snippets}/report/updateReport_7000/http-response.adoc[]
 
+=== 주간 마음 컨디션 조회
+* '오늘'을 기준으로 이전 7일 간의 마음 컨디션 기록을 조회한다.
+* 해당하는 날짜에 하루 진단 기록이 존재하지 않을 경우, mentalConditionCode는 '0'이다.
+* mentalConditionCode
+    ** 1 : "매우 나빠요 .."
+    ** 2 : "나쁜 편이에요 :("
+    ** 3 : "그럭저럭이에요"
+    ** 4 : "좋은 편이에요 :)"
+    ** 5 : "매우 좋아요 !"
+
+operation::report/getWeeklyMentalReport[snippets='http-request,http-response']
+operation::report/getWeeklyMentalReport[snippets='request-headers,response-fields']
+
 == Care
 === 칭찬 처방하기
 * 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static great.job.mytamin.domain.mytamin.enumerate.MentalCondition.*;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -21,11 +23,12 @@ public class ReportResponse {
     String todayReport;
 
     public static ReportResponse of(Report report, String feelingTag, Boolean canEdit) {
+        int mentalConditionCode = report.getMentalConditionCode();
         return ReportResponse.builder()
                 .reportId(report.getReportId())
                 .canEdit(canEdit)
-                .mentalConditionCode(MentalCondition.convertMsgToCode(report.getMentalCondition()))
-                .mentalCondition(report.getMentalCondition())
+                .mentalConditionCode(mentalConditionCode)
+                .mentalCondition(convertCodeToMsg(mentalConditionCode))
                 .feelingTag(feelingTag)
                 .todayReport(report.getTodayReport())
                 .build();

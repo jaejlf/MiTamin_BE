@@ -2,6 +2,7 @@ package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
+import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
 import great.job.mytamin.domain.mytamin.service.CareService;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
@@ -333,6 +334,42 @@ class CareControllerTest extends CommonControllerTest {
                     );
         }
 
+    }
+
+    @DisplayName("칭찬 처방 랜덤 조회")
+    @Test
+    void getRandomCare(TestInfo testInfo) throws Exception {
+        //given
+        given(careService.getRandomCare(any())).willReturn(
+                RandomCareResponse.builder()
+                        .careMsg1("오늘 할 일을 전부 했어")
+                        .careMsg2("성실히 노력하는 내 모습이 좋아")
+                        .takeAt("2022.10.19.Wed")
+                        .build()
+        );
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/care/random")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data.careMsg1").description("칭찬 처방 메세지 1"),
+                                fieldWithPath("data.careMsg2").description("칭찬 처방 메세지 2"),
+                                fieldWithPath("data.takeAt").description("마이타민 섭취 날짜")
+                        ))
+                );
     }
 
 }
