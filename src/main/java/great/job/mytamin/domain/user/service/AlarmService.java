@@ -56,6 +56,7 @@ public class AlarmService {
     /*
     마이타민 알림 OFF
     */
+    @Transactional
     public void turnOffMytaminAlarm(User user) {
         user.updateMytaminAlarmOn(false);
         userRepository.save(user);
@@ -74,11 +75,10 @@ public class AlarmService {
     /*
     마이데이 알림 OFF
     */
+    @Transactional
     public void turnOffMydayAlarm(User user) {
         user.updateMydayAlarmOn(false);
         userRepository.save(user);
     }
-
-    // 마이타민 섭취 지정 시간 -> valid check
 
 }

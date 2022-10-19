@@ -58,6 +58,7 @@ public class DaynoteService {
     /*
     데이노트 조회
     */
+    @Transactional(readOnly = true)
     public DaynoteResponse getDaynote(Long daynoteId) {
         Daynote daynote = findDaynoteById(daynoteId);
         return DaynoteResponse.ofDetail(daynote);
