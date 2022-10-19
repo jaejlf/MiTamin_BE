@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class ProfileUpdateRequest {
     MultipartFile file;
-    @NotBlank Boolean isImgEdited;
+    @NotBlank String isImgEdited;
     @NotBlank String nickname;
     @NotBlank String beMyMessage;
 }

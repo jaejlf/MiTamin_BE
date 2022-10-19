@@ -37,7 +37,7 @@ public class UserService {
     */
     @Transactional
     public void updateProfile(User user, ProfileUpdateRequest profileUpdateRequest) {
-        if (profileUpdateRequest.getIsImgEdited()) updateProfileImg(user, profileUpdateRequest.getFile());
+        if (profileUpdateRequest.getIsImgEdited().equals("T")) updateProfileImg(user, profileUpdateRequest.getFile());
         updateNickname(user, profileUpdateRequest.getNickname());
         updateBeMyMessage(user, profileUpdateRequest.getBeMyMessage());
 
@@ -47,7 +47,7 @@ public class UserService {
     private void updateProfileImg(User user, MultipartFile file) {
         awsS3Service.deleteImg(user.getProfileImgUrl()); // 기존 이미지 삭제
         user.updateprofileImgUrl(
-                awsS3Service.uploadImg(file, user.getNickname())
+                awsS3Service.uploadImg(file, "PF")
         );
     }
 
