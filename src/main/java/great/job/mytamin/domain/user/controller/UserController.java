@@ -7,12 +7,14 @@ import great.job.mytamin.domain.user.service.UserService;
 import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -36,6 +38,9 @@ public class UserController {
     @PutMapping("/profile")
     public ResponseEntity<Object> updateProfile(@AuthenticationPrincipal User user,
                                                 @ModelAttribute ProfileUpdateRequest profileUpdateRequest) {
+        log.info("---------isImgEdited : " + profileUpdateRequest.getIsImgEdited());
+        log.info("---------nickname : " + profileUpdateRequest.getNickname());
+        log.info("---------beMyMessage : " + profileUpdateRequest.getBeMyMessage());
         userService.updateProfile(user, profileUpdateRequest);
         return ResponseEntity
                 .status(OK)
