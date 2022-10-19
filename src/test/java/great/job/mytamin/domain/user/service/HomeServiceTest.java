@@ -1,13 +1,12 @@
 package great.job.mytamin.domain.user.service;
 
-import great.job.mytamin.domain.user.service.HomeService;
-import great.job.mytamin.global.support.CommonServiceTest;
-import great.job.mytamin.domain.util.TimeUtil;
-import great.job.mytamin.domain.user.dto.response.ActiveResponse;
-import great.job.mytamin.domain.user.dto.response.WelcomeResponse;
 import great.job.mytamin.domain.mytamin.entity.Care;
 import great.job.mytamin.domain.mytamin.enumerate.CareCategory;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
+import great.job.mytamin.domain.user.dto.response.ActiveResponse;
+import great.job.mytamin.domain.user.dto.response.WelcomeResponse;
+import great.job.mytamin.domain.util.TimeUtil;
+import great.job.mytamin.global.support.CommonServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -178,6 +177,7 @@ class HomeServiceTest extends CommonServiceTest {
 
     private void saveNewCare() {
         Care care = new Care(
+                user,
                 CareCategory.getMsgToCode(1),
                 "hi",
                 "hello",

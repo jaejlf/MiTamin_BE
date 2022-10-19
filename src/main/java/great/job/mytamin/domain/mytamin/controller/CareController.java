@@ -1,10 +1,11 @@
 package great.job.mytamin.domain.mytamin.controller;
 
-import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
+import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
 import great.job.mytamin.domain.mytamin.service.CareService;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,14 @@ public class CareController {
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("칭찬 처방 수정 완료"));
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<Object> getRandomCare(@AuthenticationPrincipal User user) {
+        RandomCareResponse randomCareResponse = careService.getRandomCare(user);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("칭찬 처방 랜덤 조회", randomCareResponse));
     }
 
 }

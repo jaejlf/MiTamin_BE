@@ -98,7 +98,7 @@ public class DaynoteService {
     */
     @Transactional(readOnly = true)
     public DaynoteListResponse getDaynoteList(User user) {
-        List<Daynote> daynoteList = daynoteRepository.findByUser(user);
+        List<Daynote> daynoteList = daynoteRepository.findAllByUser(user);
         daynoteList.sort(Comparator.comparing(Daynote::getRawPerformedAt)); // 날짜 오름차순 정렬
 
         Map<Integer, List<DaynoteResponse>> daynoteListMap =
