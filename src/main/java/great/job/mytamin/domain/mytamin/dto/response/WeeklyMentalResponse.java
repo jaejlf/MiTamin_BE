@@ -13,13 +13,11 @@ public class WeeklyMentalResponse {
 
     String dayOfWeek;
     int mentalConditionCode;
-    Boolean isToday;
 
-    public static WeeklyMentalResponse of(String dayOfWeek, int mentalConditionCode, Boolean isToday) {
+    public static WeeklyMentalResponse of(String dayOfWeek, int mentalConditionCode) {
         return WeeklyMentalResponse.builder()
                 .dayOfWeek(dayOfWeek)
                 .mentalConditionCode(mentalConditionCode)
-                .isToday(isToday)
                 .build();
     }
 

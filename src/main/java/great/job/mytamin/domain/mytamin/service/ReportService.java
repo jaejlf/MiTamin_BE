@@ -88,9 +88,9 @@ public class ReportService {
             Mytamin mytamin = mytaminService.findMytamin(user, target);
 
             weeklyMentalResponseList.add(WeeklyMentalResponse.of(
-                    i == 7 ? "오늘" : timeUtil.convertDayNumToStr(target.getDayOfWeek().getValue()),
-                    mytamin != null && mytamin.getReport() != null ? mytamin.getReport().getMentalConditionCode() : -1,
-                    i == 7)
+                            i == 7 ? "오늘" : timeUtil.convertDayNumToStr(target.getDayOfWeek().getValue()),
+                            mytamin != null && mytamin.getReport() != null ? mytamin.getReport().getMentalConditionCode() : 0
+                    )
             );
         }
 

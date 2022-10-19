@@ -1,11 +1,12 @@
 package great.job.mytamin.domain.mytamin.controller;
 
-import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.support.CommonControllerTest;
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
+import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalResponse;
 import great.job.mytamin.domain.mytamin.enumerate.MentalCondition;
 import great.job.mytamin.domain.mytamin.service.ReportService;
+import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,9 @@ import org.junit.jupiter.api.TestInfo;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,7 +28,6 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -348,6 +351,48 @@ class ReportControllerTest extends CommonControllerTest {
                     );
         }
 
+    }
+
+    @DisplayName("주간 마음 컨디션 조회")
+    @Test
+    void getWeeklyMentalReport(TestInfo testInfo) throws Exception {
+        //given
+        given(reportService.getWeeklyMentalReport(any())).willReturn(mockWeeklyMentalResponseList());
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/report/weekly/mental")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data[].dayOfWeek").description("요일"),
+                                fieldWithPath("data[].mentalConditionCode").description("마음 컨디션 코드")
+                        ))
+                );
+    }
+
+    private static List<WeeklyMentalResponse> mockWeeklyMentalResponseList() {
+        List<WeeklyMentalResponse> weeklyMentalResponseList = new ArrayList<>();
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("수", 0));
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("목", 3));
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("금", 1));
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("토", 0));
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("일", 0));
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("월", 3));
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("화", 2));
+        weeklyMentalResponseList.add(WeeklyMentalResponse.of("오늘", 5));
+        return weeklyMentalResponseList;
     }
 
 }
