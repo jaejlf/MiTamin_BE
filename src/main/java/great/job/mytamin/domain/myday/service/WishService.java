@@ -30,8 +30,8 @@ public class WishService {
     */
     @Transactional(readOnly = true)
     public WishlistResponse getWishlist(User user) {
-        List<Wish> publishedList = wishRepository.findByUserAndIsHidden(user, false);
-        List<Wish> hiddenList = wishRepository.findByUserAndIsHidden(user, true);
+        List<Wish> publishedList = wishRepository.findAllByUserAndIsHidden(user, false);
+        List<Wish> hiddenList = wishRepository.findAllByUserAndIsHidden(user, true);
 
         publishedList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));
         hiddenList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));

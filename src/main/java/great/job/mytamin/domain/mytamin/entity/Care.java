@@ -1,11 +1,14 @@
 package great.job.mytamin.domain.mytamin.entity;
 
+import great.job.mytamin.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -19,6 +22,10 @@ public class Care {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+
     @Column(nullable = false)
     private String careCategory;
 
@@ -31,7 +38,8 @@ public class Care {
     @OneToOne(mappedBy = "care")
     private Mytamin mytamin;
 
-    public Care(String careCategory, String careMsg1, String careMsg2, Mytamin mytamin) {
+    public Care(User user, String careCategory, String careMsg1, String careMsg2, Mytamin mytamin) {
+        this.user = user;
         this.careCategory = careCategory;
         this.careMsg1 = careMsg1;
         this.careMsg2 = careMsg2;

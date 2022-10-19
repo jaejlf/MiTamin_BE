@@ -1,4 +1,4 @@
-package great.job.mytamin.domain.home.dto.response;
+package great.job.mytamin.domain.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

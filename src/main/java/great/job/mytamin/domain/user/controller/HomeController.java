@@ -1,8 +1,8 @@
-package great.job.mytamin.domain.home.controller;
+package great.job.mytamin.domain.user.controller;
 
-import great.job.mytamin.domain.home.service.HomeService;
-import great.job.mytamin.domain.home.dto.response.ActiveResponse;
-import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
+import great.job.mytamin.domain.user.service.HomeService;
+import great.job.mytamin.domain.user.dto.response.ActiveResponse;
+import great.job.mytamin.domain.user.dto.response.WelcomeResponse;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;

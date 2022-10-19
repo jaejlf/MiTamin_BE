@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WishRepository extends JpaRepository<Wish, Long> {
-    List<Wish> findByUserAndIsHidden(User user, Boolean isHidden);
+    List<Wish> findAllByUserAndIsHidden(User user, Boolean isHidden);
     Optional<Wish> findByUserAndWishText(User user, String wishText);
 }

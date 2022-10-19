@@ -70,6 +70,7 @@ public class CommonServiceTest {
 
         // Mock Report & Care
         report = new Report(
+                user,
                 MentalCondition.VERY_GOOD.getMsg(),
                 "신나는",
                 "즐거운",
@@ -79,6 +80,7 @@ public class CommonServiceTest {
         );
 
         care = new Care(
+                user,
                 "이루어 낸 일",
                 "오늘 할 일을 전부 했어",
                 "성실히 노력하는 내 모습이 좋아",

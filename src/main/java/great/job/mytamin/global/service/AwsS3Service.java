@@ -36,6 +36,8 @@ public class AwsS3Service {
     */
     public List<String> uploadImageList(List<MultipartFile> uploadFiles, String uniq) {
         if (uploadFiles.isEmpty()) return null;
+        if (uploadFiles.size() > 5) throw new MytaminException(FILE_MAXIMUM_EXCEED);
+
         List<String> uploadUrl = new ArrayList<>();
         for (MultipartFile uploadFile : uploadFiles) {
             uploadUrl.add(uploadImg(uploadFile, uniq));

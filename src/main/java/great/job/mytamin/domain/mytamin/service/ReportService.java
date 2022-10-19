@@ -34,7 +34,7 @@ public class ReportService {
     public ReportResponse createReport(User user, ReportRequest reportRequest) {
         Mytamin mytamin = mytaminService.findMytaminOrNew(user);
         if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE_ERROR);
-        Report newReport = saveNewReport(reportRequest, mytamin);
+        Report newReport = saveNewReport(user, reportRequest, mytamin);
         return ReportResponse.of(
                 newReport,
                 reportUtil.concatFeelingTag(newReport),
@@ -77,7 +77,7 @@ public class ReportService {
     }
 
     private void hasAuthorized(Report report, User user) {
-        if (!report.getMytamin().getUser().equals(user)) {
+        if (!report.getUser().equals(user)) {
             throw new MytaminException(NO_AUTH_ERROR);
         }
     }
@@ -88,8 +88,9 @@ public class ReportService {
         }
     }
 
-    private Report saveNewReport(ReportRequest reportRequest, Mytamin mytamin) {
+    private Report saveNewReport(User user, ReportRequest reportRequest, Mytamin mytamin) {
         Report report = new Report(
+                user,
                 MentalCondition.convertCodeToMsg(reportRequest.getMentalConditionCode()),
                 reportRequest.getTag1(),
                 reportRequest.getTag2(),

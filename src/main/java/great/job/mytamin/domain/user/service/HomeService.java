@@ -1,7 +1,7 @@
-package great.job.mytamin.domain.home.service;
+package great.job.mytamin.domain.user.service;
 
-import great.job.mytamin.domain.home.dto.response.ActiveResponse;
-import great.job.mytamin.domain.home.dto.response.WelcomeResponse;
+import great.job.mytamin.domain.user.dto.response.ActiveResponse;
+import great.job.mytamin.domain.user.dto.response.WelcomeResponse;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.user.entity.User;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static great.job.mytamin.domain.home.enumerate.WelcomeComment.*;
+import static great.job.mytamin.domain.user.enumerate.WelcomeComment.*;
 
 @Service
 @RequiredArgsConstructor

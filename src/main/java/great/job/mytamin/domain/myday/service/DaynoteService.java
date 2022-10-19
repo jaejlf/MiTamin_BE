@@ -58,6 +58,7 @@ public class DaynoteService {
     /*
     데이노트 조회
     */
+    @Transactional(readOnly = true)
     public DaynoteResponse getDaynote(Long daynoteId) {
         Daynote daynote = findDaynoteById(daynoteId);
         return DaynoteResponse.ofDetail(daynote);
@@ -97,7 +98,7 @@ public class DaynoteService {
     */
     @Transactional(readOnly = true)
     public DaynoteListResponse getDaynoteList(User user) {
-        List<Daynote> daynoteList = daynoteRepository.findByUser(user);
+        List<Daynote> daynoteList = daynoteRepository.findAllByUser(user);
         daynoteList.sort(Comparator.comparing(Daynote::getRawPerformedAt)); // 날짜 오름차순 정렬
 
         Map<Integer, List<DaynoteResponse>> daynoteListMap =

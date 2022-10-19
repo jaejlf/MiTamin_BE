@@ -1,11 +1,10 @@
 package great.job.mytamin.domain.mytamin.service;
 
-import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.global.support.CommonServiceTest;
-import great.job.mytamin.domain.util.TimeUtil;
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
-import great.job.mytamin.domain.mytamin.entity.Care;
+import great.job.mytamin.domain.util.TimeUtil;
+import great.job.mytamin.global.exception.MytaminException;
+import great.job.mytamin.global.support.CommonServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -79,7 +78,7 @@ class CareServiceTest extends CommonServiceTest {
 
             given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(timeUtil.canEditCare(any())).willReturn(true);
-            updateCare(); // CARE ALREADY DONE
+            mytamin.updateCare(care); // CARE ALREADY DONE
 
             //when & then
             assertThatThrownBy(() -> careService.createCare(user, careRequest))
@@ -87,17 +86,6 @@ class CareServiceTest extends CommonServiceTest {
                     .hasMessageContaining("CARE_ALREADY_DONE");
         }
 
-    }
-
-    private void updateCare() {
-        mytamin.updateCare(
-                new Care(
-                        "이루어 낸 일",
-                        "오늘 할 일을 전부 했어",
-                        "성실히 노력하는 내 모습이 좋아",
-                        mytamin
-                )
-        );
     }
 
 }
