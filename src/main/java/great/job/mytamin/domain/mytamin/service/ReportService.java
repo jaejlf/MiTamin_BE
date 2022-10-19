@@ -1,21 +1,21 @@
 package great.job.mytamin.domain.mytamin.service;
 
-import great.job.mytamin.global.exception.MytaminException;
-import great.job.mytamin.domain.util.ReportUtil;
-import great.job.mytamin.domain.util.TimeUtil;
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.entity.Report;
-import great.job.mytamin.domain.mytamin.enumerate.MentalCondition;
 import great.job.mytamin.domain.mytamin.repository.ReportRepository;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.util.ReportUtil;
+import great.job.mytamin.domain.util.TimeUtil;
+import great.job.mytamin.global.exception.MytaminException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static great.job.mytamin.domain.mytamin.enumerate.MentalCondition.validateCode;
 import static great.job.mytamin.global.exception.ErrorMap.*;
 
 @Service
@@ -51,7 +51,7 @@ public class ReportService {
         canEdit(report);
 
         report.updateAll(
-                MentalCondition.convertCodeToMsg(reportRequest.getMentalConditionCode()),
+                validateCode(reportRequest.getMentalConditionCode()),
                 reportRequest.getTag1(),
                 reportRequest.getTag2(),
                 reportRequest.getTag3(),
@@ -91,7 +91,7 @@ public class ReportService {
     private Report saveNewReport(User user, ReportRequest reportRequest, Mytamin mytamin) {
         Report report = new Report(
                 user,
-                MentalCondition.convertCodeToMsg(reportRequest.getMentalConditionCode()),
+                validateCode(reportRequest.getMentalConditionCode()),
                 reportRequest.getTag1(),
                 reportRequest.getTag2(),
                 reportRequest.getTag3(),

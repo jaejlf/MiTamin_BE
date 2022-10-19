@@ -1,7 +1,6 @@
 package great.job.mytamin.domain.user.service;
 
 import great.job.mytamin.domain.mytamin.entity.Care;
-import great.job.mytamin.domain.mytamin.enumerate.CareCategory;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.user.dto.response.ActiveResponse;
 import great.job.mytamin.domain.user.dto.response.WelcomeResponse;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static great.job.mytamin.domain.mytamin.enumerate.CareCategory.validateCode;
 import static great.job.mytamin.domain.user.enumerate.WelcomeComment.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -178,7 +178,7 @@ class HomeServiceTest extends CommonServiceTest {
     private void saveNewCare() {
         Care care = new Care(
                 user,
-                CareCategory.getMsgToCode(1),
+                validateCode(1),
                 "hi",
                 "hello",
                 mytamin

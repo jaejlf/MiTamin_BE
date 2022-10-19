@@ -1,6 +1,7 @@
 package great.job.mytamin.global.support;
 
 import great.job.mytamin.domain.mytamin.entity.Care;
+import great.job.mytamin.domain.mytamin.enumerate.CareCategory;
 import great.job.mytamin.domain.mytamin.repository.CareRepository;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.repository.MytaminRepository;
@@ -71,7 +72,7 @@ public class CommonServiceTest {
         // Mock Report & Care
         report = new Report(
                 user,
-                MentalCondition.VERY_GOOD.getMsg(),
+                MentalCondition.VERY_GOOD.getCode(),
                 "신나는",
                 "즐거운",
                 "재밌는",
@@ -81,7 +82,7 @@ public class CommonServiceTest {
 
         care = new Care(
                 user,
-                "이루어 낸 일",
+                CareCategory.ACCOMPLISHED.getCode(),
                 "오늘 할 일을 전부 했어",
                 "성실히 노력하는 내 모습이 좋아",
                 mytamin

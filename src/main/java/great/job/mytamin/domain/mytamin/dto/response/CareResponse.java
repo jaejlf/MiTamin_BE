@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static great.job.mytamin.domain.mytamin.enumerate.CareCategory.convertCodeToMsg;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -22,7 +24,7 @@ public class CareResponse {
         return CareResponse.builder()
                 .careId(care.getCareId())
                 .canEdit(canEdit)
-                .careCategory(care.getCareCategory())
+                .careCategory(convertCodeToMsg(care.getCareCategoryCode()))
                 .careMsg1(care.getCareMsg1())
                 .careMsg2(care.getCareMsg2())
                 .build();

@@ -115,7 +115,7 @@ class UserControllerTest extends CommonControllerTest {
                             ),
                             requestParameters(
                                     parameterWithName("isImgEdited").description("*프로필 이미지 수정 여부"),
-                                    parameterWithName("nickname").description("*수정할 닉네임 (1 ~ 9자"),
+                                    parameterWithName("nickname").description("*수정할 닉네임 (1 ~ 9자)"),
                                     parameterWithName("beMyMessage").description("*수정할 '되고 싶은 나' 메세지 (1 ~ 20자)")
                             ),
                             requestHeaders(
