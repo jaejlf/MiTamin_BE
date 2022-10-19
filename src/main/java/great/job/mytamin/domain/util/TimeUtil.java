@@ -28,6 +28,20 @@ public class TimeUtil {
     }
 
     /*
+    요일 숫자 -> 한글 변환
+    */
+    public String convertDayNumToStr(int dayOfWeek) {
+        if (dayOfWeek == 1) return "월";
+        else if (dayOfWeek == 2) return "화";
+        else if (dayOfWeek == 3) return "수";
+        else if (dayOfWeek == 4) return "목";
+        else if (dayOfWeek == 5) return "금";
+        else if (dayOfWeek == 6) return "토";
+        else if (dayOfWeek == 7) return "일";
+        else throw new MytaminException(DATETIME_PARSE_ERROR);
+    }
+
+    /*
     performedAt -> LocalDateTime 포맷 변환 & valid check
     */
     public LocalDateTime convertToRawPerformedAt(String performedAt) {
