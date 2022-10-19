@@ -225,25 +225,18 @@ include::{snippets}/care/updateCare_7000/http-response.adoc[]
 operation::user/getProfile[snippets='http-request,http-response']
 operation::user/getProfile[snippets='request-headers,response-fields']
 
-=== 프로필 이미지 수정
-- file의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+=== 프로필 편집
+* file의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+* isImgEdited는 프로필 이미지가 수정되었을 경우 "T", 수정되지 않았을 경우 "F"를 전송한다.
+    ** isImgEdited가 "T"가 아닌 경우에는 이미지와 관련된 작업을 아예 진행하지 않으므로, file에는 어떤 값을 넣어도 무관하다. (null 또는 기존 이미지 등)
+* nickname, beMyMessage는 수정되지 않았더라도 항상 전송한다.
 
-operation::user/updateProfileImg[snippets='http-request,http-response']
-operation::user/updateProfileImg[snippets='request-headers,request-parts,response-fields']
-
-=== 닉네임 수정
-
-operation::user/updateNickname[snippets='http-request,http-response']
-operation::user/updateNickname[snippets='request-headers,path-parameters,response-fields']
+operation::user/updateProfile[snippets='http-request,http-response']
+operation::user/updateProfile[snippets='request-headers,request-parts,request-parameters,response-fields']
 
 ==== Exception response
 
-include::{snippets}/user/updateNickname_2003/http-response.adoc[]
-
-=== '되고 싶은 나' 메세지 수정
-
-operation::user/updateBeMyMessage[snippets='http-request,http-response']
-operation::user/updateBeMyMessage[snippets='request-headers,request-fields,response-fields']
+include::{snippets}/user/updateProfile_2003/http-response.adoc[]
 
 == Wish
 === 위시 리스트 조회
@@ -294,7 +287,6 @@ operation::daynote/canCreateDaynote[snippets='request-headers,path-parameters,re
 include::{snippets}/daynote/canCreateDaynote_7001/http-response.adoc[]
 
 === 데이노트 작성
-* Multipart 타입으로 이미지 리스트를 전송한다.
 * fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
 * 이미지는 최대 5장까지 첨부할 수 있다.
 * wishText가 기존에 존재하지 않는 위시라면 자동으로 생성한다.
@@ -319,7 +311,6 @@ operation::daynote/getDaynote[snippets='request-headers,path-parameters,response
 include::{snippets}/daynote/getDaynote_8003/http-response.adoc[]
 
 === 데이노트 수정
-* Multipart 타입으로 이미지 리스트를 전송한다.
 * fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
 * 이미지는 최대 5장까지 첨부할 수 있다. (아직 반영 전)
 

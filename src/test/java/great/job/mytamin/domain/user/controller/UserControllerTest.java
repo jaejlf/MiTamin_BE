@@ -114,7 +114,7 @@ class UserControllerTest extends CommonControllerTest {
                                     partWithName("file").description("*업로드할 이미지 (.png, .jpg, .jpeg)")
                             ),
                             requestParameters(
-                                    parameterWithName("isImgEdited").description("*위시 텍스트"),
+                                    parameterWithName("isImgEdited").description("*프로필 이미지 수정 여부"),
                                     parameterWithName("nickname").description("*수정할 닉네임 (1 ~ 9자"),
                                     parameterWithName("beMyMessage").description("*수정할 '되고 싶은 나' 메세지 (1 ~ 20자)")
                             ),
@@ -130,7 +130,7 @@ class UserControllerTest extends CommonControllerTest {
 
         @DisplayName("이미 사용 중인 닉네임")
         @Test
-        void updateNickname_2003(TestInfo testInfo) throws Exception {
+        void updateProfile_2003(TestInfo testInfo) throws Exception {
             //given
             doThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR)).when(userService).updateProfile(any(), any());
 
