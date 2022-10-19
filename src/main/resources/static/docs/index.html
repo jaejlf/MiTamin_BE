@@ -2851,6 +2851,19 @@ Content-Length: 197
 <li>
 <p>file의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.</p>
 </li>
+<li>
+<p>isImgEdited는 프로필 이미지가 수정되었을 경우 "T", 수정되지 않았을 경우 "F"를 전송한다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>isImgEdited가 "T"가 아닌 경우에는 이미지와 관련된 작업을 아예 진행하지 않으므로, file에는 어떤 값을 넣어도 무관하다. (null 또는 기존 이미지 등)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>nickname, beMyMessage는 수정되지 않았더라도 항상 전송한다.</p>
+</li>
 </ul>
 </div>
 <div class="sect3">
@@ -3598,9 +3611,6 @@ Content-Length: 167
 <div class="ulist">
 <ul>
 <li>
-<p>Multipart 타입으로 이미지 리스트를 전송한다.</p>
-</li>
-<li>
 <p>fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.</p>
 </li>
 <li>
@@ -3636,7 +3646,7 @@ Content-Disposition: form-data; name=performedAt
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@67e3839b, org.springframework.mock.web.MockMultipartFile@7e04af28]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@b78dcdf, org.springframework.mock.web.MockMultipartFile@183ab40f]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -3985,9 +3995,6 @@ Content-Length: 152
 <div class="ulist">
 <ul>
 <li>
-<p>Multipart 타입으로 이미지 리스트를 전송한다.</p>
-</li>
-<li>
 <p>fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.</p>
 </li>
 <li>
@@ -4013,7 +4020,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@4ef435f3, org.springframework.mock.web.MockMultipartFile@f25106c]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@216bd6cd, org.springframework.mock.web.MockMultipartFile@6ce07db6]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5066,7 +5073,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-19 12:54:26 +0900
+Last updated 2022-10-19 13:13:03 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
