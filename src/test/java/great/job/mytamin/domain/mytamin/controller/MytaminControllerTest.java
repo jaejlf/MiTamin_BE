@@ -13,6 +13,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -110,8 +115,10 @@ class MytaminControllerTest extends CommonControllerTest {
                 .careMsg2("성실히 노력하는 내 모습이 좋아")
                 .build();
 
+        LocalDateTime target = mytamin.getTakeAt();
+        String dayOfWeek = target.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
         given(mytaminService.getLatestMytamin(any())).willReturn(MytaminResponse.builder()
-                .takeAt(mytamin.getTakeAt())
+                .takeAt(target.format(DateTimeFormatter.ofPattern("MM.dd")) + "." + dayOfWeek)
                 .report(report)
                 .care(care)
                 .build()

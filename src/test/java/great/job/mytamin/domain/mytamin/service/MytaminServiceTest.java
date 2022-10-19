@@ -14,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -64,8 +66,10 @@ class MytaminServiceTest extends CommonServiceTest {
         MytaminResponse result = mytaminService.getLatestMytamin(user);
 
         //then
+        LocalDateTime target = mytamin.getTakeAt();
+        String dayOfWeek = target.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
         MytaminResponse expected = MytaminResponse.builder()
-                .takeAt(mytamin.getTakeAt())
+                .takeAt(target.format(DateTimeFormatter.ofPattern("MM.dd")) + "." + dayOfWeek)
                 .report(mockReportResponse())
                 .care(mockCareResponse())
                 .build();
@@ -93,7 +97,7 @@ class MytaminServiceTest extends CommonServiceTest {
     @Test
     void createMytamin() {
         //given
-        given(timeUtil.convertToTakeAt(any())).willReturn(mockTakeAtNow);
+        given(timeUtil.convertToMytaminDate(any())).willReturn(mockTakeAtNow);
 
         //when
         Mytamin result = mytaminService.createMytamin(user, LocalDateTime.now());

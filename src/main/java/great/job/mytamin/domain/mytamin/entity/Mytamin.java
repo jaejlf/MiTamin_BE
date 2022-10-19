@@ -20,8 +20,7 @@ public class Mytamin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mytaminId;
 
-    private LocalDateTime rawTakeAt;
-    private String takeAt;
+    private LocalDateTime takeAt;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId")
@@ -35,8 +34,7 @@ public class Mytamin {
     @JoinColumn(name = "careId")
     private Care care;
 
-    public Mytamin(LocalDateTime rawTakeAt, String takeAt, User user) {
-        this.rawTakeAt = rawTakeAt;
+    public Mytamin(LocalDateTime takeAt, User user) {
         this.takeAt = takeAt;
         this.user = user;
     }

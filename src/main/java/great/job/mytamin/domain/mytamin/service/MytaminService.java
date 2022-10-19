@@ -1,7 +1,5 @@
 package great.job.mytamin.domain.mytamin.service;
 
-import great.job.mytamin.domain.util.ReportUtil;
-import great.job.mytamin.domain.util.TimeUtil;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
 import great.job.mytamin.domain.mytamin.dto.response.MytaminResponse;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
@@ -10,6 +8,8 @@ import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.entity.Report;
 import great.job.mytamin.domain.mytamin.repository.MytaminRepository;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.util.ReportUtil;
+import great.job.mytamin.domain.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,7 +73,7 @@ public class MytaminService {
     */
     @Transactional(readOnly = true)
     public Mytamin findMytamin(User user, LocalDateTime rawTakeAt) {
-        String takeAt = timeUtil.convertToTakeAt(rawTakeAt);
+        LocalDateTime takeAt = timeUtil.convertToCustomHHmm(rawTakeAt);
         return mytaminRepository.findByTakeAtAndUser(takeAt, user)
                 .orElse(null);
     }
@@ -93,9 +93,8 @@ public class MytaminService {
     마이타민 생성
     */
     @Transactional
-    public Mytamin createMytamin(User user, LocalDateTime rawTakeAt) {
-        String takeAt = timeUtil.convertToTakeAt(rawTakeAt);
-        Mytamin mytamin = new Mytamin(rawTakeAt, takeAt, user);
+    public Mytamin createMytamin(User user, LocalDateTime takeAt) {
+        Mytamin mytamin = new Mytamin(timeUtil.convertToMytaminDate(takeAt), user);
         return mytaminRepository.save(mytamin);
     }
 
