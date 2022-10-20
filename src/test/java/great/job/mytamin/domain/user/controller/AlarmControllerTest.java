@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 import static great.job.mytamin.global.exception.ErrorMap.INVALID_MYDAY_ALARM_CODE_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -114,34 +113,6 @@ class AlarmControllerTest extends CommonControllerTest {
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지")
-                            ))
-                    );
-        }
-        
-        @DisplayName("마이타민 섭취 지정 시간 형식 오류")
-        @Test
-        void turnOnMytaminAlarm_7001(TestInfo testInfo) throws Exception {
-            //given
-            doThrow(new MytaminException(DATETIME_PARSE_ERROR)).when(alarmService).turnOnMytaminAlarm(any(), any());
-
-            //when
-            ResultActions actions = mockMvc.perform(patch("/alarm/mytamin/on")
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                    .content(objectMapper.writeValueAsString(mytaminAlarmRequest))
-                    .contentType(APPLICATION_JSON));
-
-            //then
-            actions
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("errorCode").value(7001))
-                    .andExpect(jsonPath("errorName").value("DATETIME_PARSE_ERROR"))
-                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            responseFields(
-                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("errorCode").description("고유 에러 코드"),
-                                    fieldWithPath("errorName").description("오류 이름"),
-                                    fieldWithPath("message").description("오류 메세지")
                             ))
                     );
         }

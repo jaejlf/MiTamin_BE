@@ -1,8 +1,9 @@
 package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
+import great.job.mytamin.domain.mytamin.dto.response.FeelingRankResponse;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
-import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalResponse;
+import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalReportResponse;
 import great.job.mytamin.domain.mytamin.enumerate.MentalCondition;
 import great.job.mytamin.domain.mytamin.service.ReportService;
 import great.job.mytamin.global.exception.MytaminException;
@@ -16,7 +17,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,8 +32,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -382,17 +384,134 @@ class ReportControllerTest extends CommonControllerTest {
                 );
     }
 
-    private static List<WeeklyMentalResponse> mockWeeklyMentalResponseList() {
-        List<WeeklyMentalResponse> weeklyMentalResponseList = new ArrayList<>();
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("수", 0));
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("목", 3));
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("금", 1));
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("토", 0));
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("일", 0));
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("월", 3));
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("화", 2));
-        weeklyMentalResponseList.add(WeeklyMentalResponse.of("오늘", 5));
-        return weeklyMentalResponseList;
+    @DisplayName("월간 마음 컨디션 조회")
+    @Test
+    void getMonthlyMentalReport(TestInfo testInfo) throws Exception {
+        //given
+        String date = "2022.10";
+        given(reportService.getMonthlyMentalReport(any(), any())).willReturn(mockMonthlyMentalResponseList());
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/report/monthly/mental/{date}", date)
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        pathParameters(
+                                parameterWithName("date").description("*조회할 날짜 (yyyy.MM)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data.*").description("월간 마음 컨디션")
+                        ))
+                );
+    }
+
+    @DisplayName("이번 달 가장 많이 느낀 감정")
+    @Test
+    void getMonthlyFeelingRank(TestInfo testInfo) throws Exception {
+        //given
+        given(reportService.getMonthlyFeelingRank(any())).willReturn(mockFeelingRankResponse());
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/report/feeling/rank")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data[].feeling").description("감정 태그"),
+                                fieldWithPath("data[].count").description("감정이 기록된 횟수")
+                        ))
+                );
+    }
+
+    private static List<WeeklyMentalReportResponse> mockWeeklyMentalResponseList() {
+        List<WeeklyMentalReportResponse> weeklyMentalReportResponseList = new ArrayList<>();
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("수", 0));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("목", 3));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("금", 1));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("토", 0));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("일", 0));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("월", 3));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("화", 2));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("오늘", 5));
+        return weeklyMentalReportResponseList;
+    }
+
+    private Map<Integer, Integer> mockMonthlyMentalResponseList() {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 0);
+        map.put(2, 0);
+        map.put(3, 1);
+        map.put(4, 2);
+        map.put(5, 5);
+        map.put(6, 4);
+        map.put(7, 3);
+        map.put(8, 0);
+        map.put(9, 1);
+        map.put(10, 5);
+        map.put(11, 4);
+        map.put(12, 3);
+        map.put(13, 0);
+        map.put(14, 1);
+        map.put(15, 5);
+        map.put(16, 4);
+        map.put(17, 3);
+        map.put(18, 0);
+        map.put(19, 3);
+        map.put(20, 0);
+        map.put(21, 0);
+        map.put(22, 0);
+        map.put(23, 0);
+        map.put(24, 0);
+        map.put(25, 0);
+        map.put(26, 0);
+        map.put(27, 0);
+        map.put(28, 0);
+        map.put(29, 0);
+        map.put(30, 0);
+        map.put(31, 0);
+        return map;
+    }
+
+    private List<FeelingRankResponse> mockFeelingRankResponse() {
+        List<FeelingRankResponse> feelingRankResponseList = new ArrayList<>();
+        feelingRankResponseList.add(
+                FeelingRankResponse.builder()
+                        .feeling("신나는")
+                        .count(5)
+                        .build());
+        feelingRankResponseList.add(
+                FeelingRankResponse.builder()
+                        .feeling("즐거운")
+                        .count(3)
+                        .build());
+        feelingRankResponseList.add(
+                FeelingRankResponse.builder()
+                        .feeling("무념무상의")
+                        .count(1)
+                        .build());
+        return feelingRankResponseList;
     }
 
 }

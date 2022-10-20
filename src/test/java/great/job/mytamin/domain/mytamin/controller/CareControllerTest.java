@@ -1,6 +1,9 @@
 package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
+import great.job.mytamin.domain.mytamin.dto.request.CareSearchFilter;
+import great.job.mytamin.domain.mytamin.dto.response.CareHistoryListResponse;
+import great.job.mytamin.domain.mytamin.dto.response.CareHistoryResponse;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
 import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
 import great.job.mytamin.domain.mytamin.service.CareService;
@@ -13,6 +16,11 @@ import org.junit.jupiter.api.TestInfo;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -344,7 +352,7 @@ class CareControllerTest extends CommonControllerTest {
                 RandomCareResponse.builder()
                         .careMsg1("오늘 할 일을 전부 했어")
                         .careMsg2("성실히 노력하는 내 모습이 좋아")
-                        .takeAt("2022.10.19.Wed")
+                        .takeAt("22.10.19")
                         .build()
         );
 
@@ -370,6 +378,67 @@ class CareControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.takeAt").description("마이타민 섭취 날짜")
                         ))
                 );
+    }
+
+    @DisplayName("칭찬 처방 히스토리 조회")
+    @Test
+    void getCareHistroy(TestInfo testInfo) throws Exception {
+        //given
+        CareSearchFilter careSearchFilter = new CareSearchFilter(
+                1,
+                List.of(1, 5),
+                "2022.10"
+        );
+
+        given(careService.getCareHistroy(any(), any())).willReturn(mockCareHistoryResponse());
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/care/list")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .content(objectMapper.writeValueAsString(careSearchFilter))
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("sort").description("정렬 조건"),
+                                fieldWithPath("careCategoryCodeList").description("카테고리 조건"),
+                                fieldWithPath("date").description("날짜 조건 (yyyy.MM)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data.careHistory.*[]").description("년/월로 그룹핑된 칭찬 처방 리스트"),
+                                fieldWithPath("data.careHistory.*[].careMsg1").description("칭찬 처방 메세지 1"),
+                                fieldWithPath("data.careHistory.*[].careMsg2").description("칭찬 처방 메세지 2"),
+                                fieldWithPath("data.careHistory.*[].takeAt").description("마이타민 섭취 날짜")
+                        ))
+                );
+    }
+
+    private CareHistoryListResponse mockCareHistoryResponse() {
+        List<CareHistoryResponse> list_oct = new ArrayList<>();
+        list_oct.add(CareHistoryResponse.builder()
+                .careMsg1("오늘 할 일을 전부 했어")
+                .careMsg2("성실히 노력하는 내 모습이 좋아")
+                .takeAt("10.13.Thu")
+                .build());
+        list_oct.add(CareHistoryResponse.builder()
+                .careMsg1("꾸준히 칭찬 기록 중이야")
+                .careMsg2("꾸준한 내 모습을 칭찬해 !")
+                .takeAt("10.19.Wed")
+                .build());
+
+        Map<String, List<CareHistoryResponse>> careHistory = new HashMap<>();
+        careHistory.put("2022년 10월", list_oct);
+        return CareHistoryListResponse.of(careHistory);
     }
 
 }

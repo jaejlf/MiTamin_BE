@@ -87,33 +87,6 @@ class DaynoteControllerTest extends CommonControllerTest {
                     );
         }
 
-        @DisplayName("날짜 입력값 오류")
-        @Test
-        void canCreateDaynote_7001(TestInfo testInfo) throws Exception {
-            //given
-            given(daynoteService.canCreateDaynote(any(), any())).willThrow(new MytaminException(DATETIME_PARSE_ERROR));
-
-            //when
-            ResultActions actions = mockMvc.perform(get("/daynote/check/{performedAt}", performedAt)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                    .contentType(APPLICATION_JSON));
-
-            //then
-            actions
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("errorCode").value(7001))
-                    .andExpect(jsonPath("errorName").value("DATETIME_PARSE_ERROR"))
-                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            responseFields(
-                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("errorCode").description("고유 에러 코드"),
-                                    fieldWithPath("errorName").description("오류 이름"),
-                                    fieldWithPath("message").description("오류 메세지")
-                            ))
-                    );
-        }
-
     }
 
     @Nested

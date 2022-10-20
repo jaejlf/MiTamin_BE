@@ -37,7 +37,7 @@ public class DaynoteService {
     */
     @Transactional(readOnly = true)
     public Boolean canCreateDaynote(User user, String performedAt) {
-        LocalDateTime rawPerformedAt = timeUtil.convertToRawPerformedAt(performedAt);
+        LocalDateTime rawPerformedAt = timeUtil.convertRawToLocalDateTime(performedAt);
         return daynoteRepository.findByUserAndRawPerformedAt(user, rawPerformedAt).isEmpty();
     }
 
@@ -113,7 +113,7 @@ public class DaynoteService {
                 awsS3Service.uploadImageList(daynoteRequest.getFileList(), "DN"),
                 wish,
                 daynoteRequest.getNote(),
-                timeUtil.convertToRawPerformedAt(daynoteRequest.getPerformedAt()),
+                timeUtil.convertRawToLocalDateTime(daynoteRequest.getPerformedAt()),
                 user
         );
         return daynoteRepository.save(daynote);

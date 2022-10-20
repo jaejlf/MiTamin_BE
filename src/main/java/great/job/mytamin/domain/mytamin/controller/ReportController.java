@@ -1,8 +1,9 @@
 package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
+import great.job.mytamin.domain.mytamin.dto.response.FeelingRankResponse;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
-import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalResponse;
+import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalReportResponse;
 import great.job.mytamin.domain.mytamin.service.ReportService;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.NoDataResponse;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -53,10 +55,27 @@ public class ReportController {
 
     @GetMapping("/weekly/mental")
     public ResponseEntity<Object> getWeeklyMentalReport(@AuthenticationPrincipal User user) {
-        List<WeeklyMentalResponse> weeklyMentalResponseList = reportService.getWeeklyMentalReport(user);
+        List<WeeklyMentalReportResponse> weeklyMentalReportResponseList = reportService.getWeeklyMentalReport(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("주간 마음 컨디션", weeklyMentalResponseList));
+                .body(ResultResponse.ok("주간 마음 컨디션", weeklyMentalReportResponseList));
+    }
+
+    @GetMapping("/monthly/mental/{date}")
+    public ResponseEntity<Object> getMonthlyMentalReport(@AuthenticationPrincipal User user,
+                                                         @PathVariable String date) {
+        Map<Integer, Integer> monthlyMentalReportMap = reportService.getMonthlyMentalReport(user, date);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("월간 마음 컨디션", monthlyMentalReportMap));
+    }
+
+    @GetMapping("/feeling/rank")
+    public ResponseEntity<Object> getMonthlyFeelingRank(@AuthenticationPrincipal User user) {
+        List<FeelingRankResponse> feelingRankResponseList = reportService.getMonthlyFeelingRank(user);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("이번 달 가장 많이 느낀 감정", feelingRankResponseList));
     }
 
 }

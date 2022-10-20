@@ -1,6 +1,9 @@
 package great.job.mytamin.domain.mytamin.service;
 
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
+import great.job.mytamin.domain.mytamin.dto.request.CareSearchFilter;
+import great.job.mytamin.domain.mytamin.dto.response.CareHistoryListResponse;
+import great.job.mytamin.domain.mytamin.dto.response.CareHistoryResponse;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
 import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
 import great.job.mytamin.domain.mytamin.entity.Care;
@@ -16,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static great.job.mytamin.domain.mytamin.enumerate.CareCategory.validateCode;
 import static great.job.mytamin.global.exception.ErrorMap.*;
@@ -85,6 +91,21 @@ public class CareService {
         } else {
             return null;
         }
+    }
+
+    /*
+    칭찬 처방 히스토리 조회
+    */
+    @Transactional(readOnly = true)
+    public CareHistoryListResponse getCareHistroy(User user, CareSearchFilter careSearchFilter) {
+        List<Care> careList = careRepository.searchCareHistory(careSearchFilter);
+        Map<String, List<CareHistoryResponse>> careHistory =
+                careList.stream().map(CareHistoryResponse::of).collect(Collectors.toList()) // DTO 변환
+                        .stream().collect(Collectors.groupingBy(CareHistoryResponse::getTitle)); // title로 그룹핑
+
+        // 정렬 조건 추가 필요
+        
+        return CareHistoryListResponse.of(careHistory);
     }
 
     private Care findCareById(Long careId) {

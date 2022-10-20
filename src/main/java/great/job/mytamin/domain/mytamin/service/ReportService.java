@@ -1,8 +1,9 @@
 package great.job.mytamin.domain.mytamin.service;
 
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
+import great.job.mytamin.domain.mytamin.dto.response.FeelingRankResponse;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
-import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalResponse;
+import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalReportResponse;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.entity.Report;
 import great.job.mytamin.domain.mytamin.repository.ReportRepository;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static great.job.mytamin.domain.mytamin.enumerate.MentalCondition.validateCode;
 import static great.job.mytamin.global.exception.ErrorMap.*;
@@ -79,22 +80,51 @@ public class ReportService {
     주간 마음 컨디션
     */
     @Transactional(readOnly = true)
-    public List<WeeklyMentalResponse> getWeeklyMentalReport(User user) {
+    public List<WeeklyMentalReportResponse> getWeeklyMentalReport(User user) {
         LocalDateTime start = LocalDateTime.now().minusDays(7); // 오늘을 기준으로 7일 전
-        List<WeeklyMentalResponse> weeklyMentalResponseList = new ArrayList<>();
+        List<WeeklyMentalReportResponse> weeklyMentalReportResponseList = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
             LocalDateTime target = start.plusDays(i);
             Mytamin mytamin = mytaminService.findMytamin(user, target);
 
-            weeklyMentalResponseList.add(WeeklyMentalResponse.of(
+            weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of(
                             i == 7 ? "오늘" : timeUtil.convertDayNumToStr(target.getDayOfWeek().getValue()),
                             mytamin != null && mytamin.getReport() != null ? mytamin.getReport().getMentalConditionCode() : 0
                     )
             );
         }
 
-        return weeklyMentalResponseList;
+        return weeklyMentalReportResponseList;
+    }
+
+    /*
+    이번 달 가장 많이 느낀 감정
+    */
+    @Transactional(readOnly = true)
+    public List<FeelingRankResponse> getMonthlyFeelingRank(User user) {
+        List<String> feelingList = getMontlyTagList(user);
+        List<FeelingRankResponse> feelingRankResponseList = countByFeeling(feelingList);
+        feelingRankResponseList.sort(Comparator.comparingInt(FeelingRankResponse::getCount)); // count 순 정렬
+        Collections.reverse(feelingRankResponseList); // 내림차순
+        if(feelingRankResponseList.size() > 3) return feelingRankResponseList.subList(0, 3); // Top3만 리턴
+        else return feelingRankResponseList;
+    }
+
+    /*
+    월간 마음 컨디션
+    */
+    @Transactional(readOnly = true)
+    public Map<Integer, Integer> getMonthlyMentalReport(User user, String date) {
+        LocalDateTime target = timeUtil.convertRawToLocalDateTime(date);
+        List<Report> monthlyReportList = getMonthlyReportList(user, target);
+
+        Map<Integer, Integer> map = initMap(target);
+        for (Report report : monthlyReportList) {
+            map.put(report.getTakeAt().getDayOfMonth(),
+                    report.getMentalConditionCode());
+        }
+        return map;
     }
 
     private Report findReportById(Long reportId) {
@@ -127,6 +157,43 @@ public class ReportService {
         Report newReport = reportRepository.save(report);
         mytamin.updateReport(newReport);
         return newReport;
+    }
+
+    private List<String> getMontlyTagList(User user) {
+        List<Report> monthlyReportList = getMonthlyReportList(user, LocalDateTime.now());
+        List<String> tagList = new ArrayList<>();
+        tagList.addAll(monthlyReportList.stream().map(Report::getTag1).collect(Collectors.toList()));
+        tagList.addAll(monthlyReportList.stream().map(Report::getTag2).collect(Collectors.toList()));
+        tagList.addAll(monthlyReportList.stream().map(Report::getTag3).collect(Collectors.toList()));
+        tagList.removeAll(Collections.singletonList(null));
+        return tagList;
+    }
+
+    private List<Report> getMonthlyReportList(User user, LocalDateTime target) {
+        LocalDateTime start = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), 1, 0, 0);
+        LocalDateTime end = timeUtil.getLastDayOfMonth(target);
+        return reportRepository.findAllByUserAndTakeAtBetween(user, start, end);
+    }
+
+    private List<FeelingRankResponse> countByFeeling(List<String> feelingList) {
+        Set<String> feelingSet = new HashSet<>(feelingList);
+        List<FeelingRankResponse> feelingRankResponseList = new ArrayList<>();
+        for (String feeling : feelingSet) {
+            feelingRankResponseList.add(FeelingRankResponse.of(
+                    feeling,
+                    Collections.frequency(feelingList, feeling)
+            ));
+        }
+        return feelingRankResponseList;
+    }
+
+    private Map<Integer, Integer> initMap(LocalDateTime target) {
+        int lastDay = timeUtil.getLastDayOfMonth(target).getDayOfMonth();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 1; i <= lastDay; i++) {
+            map.put(i, 0);
+        }
+        return map;
     }
 
 }

@@ -1,6 +1,8 @@
 package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
+import great.job.mytamin.domain.mytamin.dto.request.CareSearchFilter;
+import great.job.mytamin.domain.mytamin.dto.response.CareHistoryListResponse;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
 import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
 import great.job.mytamin.domain.mytamin.service.CareService;
@@ -55,6 +57,15 @@ public class CareController {
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("칭찬 처방 랜덤 조회", randomCareResponse));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Object> getCareHistroy(@AuthenticationPrincipal User user,
+                                                 @RequestBody CareSearchFilter careSearchFilter) {
+        CareHistoryListResponse careHistoryListResponse = careService.getCareHistroy(user, careSearchFilter);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("칭찬 처방 히스토리 조회", careHistoryListResponse));
     }
 
 }

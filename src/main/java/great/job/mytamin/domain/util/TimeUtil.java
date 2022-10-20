@@ -33,10 +33,10 @@ public class TimeUtil {
     }
 
     /*
-    데이노트 포맷터
+    yyyy.MM 포맷터
     performedAt -> LocalDateTime
     */
-    public LocalDateTime convertToRawPerformedAt(String performedAt) {
+    public LocalDateTime convertRawToLocalDateTime(String performedAt) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
         LocalDateTime rawPerformedAt = LocalDateTime.parse(performedAt + ".10.10.00", formatter); // 10일.10시.00분으로 임의 설정
 
@@ -128,8 +128,19 @@ public class TimeUtil {
     public Boolean isCurrentMonth(LocalDateTime target) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), 1, 0, 0);
-        LocalDateTime end = LocalDateTime.of(now.getYear(), now.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
+        LocalDateTime end = getLastDayOfMonth(now);
         return isInRange(target, start, end);
+    }
+
+    /*
+    target 월의 마지막 날
+    */
+    public LocalDateTime getLastDayOfMonth(LocalDateTime target) {
+        if (target.getMonth().getValue() == 12) {
+            return LocalDateTime.of(target.getYear() + 1, 1, 1, 23, 59).minusDays(1);
+        } else {
+            return LocalDateTime.of(target.getYear(), target.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
+        }
     }
 
     /*
