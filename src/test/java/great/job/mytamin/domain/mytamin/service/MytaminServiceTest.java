@@ -100,7 +100,7 @@ class MytaminServiceTest extends CommonServiceTest {
         given(timeUtil.convertToMytaminDate(any())).willReturn(mockTakeAtNow);
 
         //when
-        Mytamin result = mytaminService.createMytamin(user, LocalDateTime.now());
+        Mytamin result = mytaminService.createMytamin(user);
 
         //then
         assertAll(

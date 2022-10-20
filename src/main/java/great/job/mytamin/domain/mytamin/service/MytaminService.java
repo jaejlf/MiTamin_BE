@@ -69,32 +69,31 @@ public class MytaminService {
     }
 
     /*
-    마이타민 가져오기
-    */
-    @Transactional(readOnly = true)
-    public Mytamin findMytamin(User user, LocalDateTime rawTakeAt) {
-        LocalDateTime takeAt = timeUtil.convertToCustomHHmm(rawTakeAt);
-        return mytaminRepository.findByTakeAtAndUser(takeAt, user)
-                .orElse(null);
-    }
-
-    /*
     마이타민 가져오기 + 없다면 생성
     */
     @Transactional
     public Mytamin findMytaminOrNew(User user) {
-        LocalDateTime now = LocalDateTime.now();
-        Mytamin mytamin = findMytamin(user, now);
-        if (mytamin == null) mytamin = createMytamin(user, now);
+        Mytamin mytamin = findMytamin(user, LocalDateTime.now());
+        if (mytamin == null) mytamin = createMytamin(user);
         return mytamin;
+    }
+
+    /*
+    마이타민 가져오기
+    */
+    @Transactional(readOnly = true)
+    public Mytamin findMytamin(User user, LocalDateTime target) {
+        LocalDateTime takeAt = timeUtil.convertToMytaminDate(target);
+        return mytaminRepository.findByUserAndTakeAt(user, takeAt)
+                .orElse(null);
     }
 
     /*
     마이타민 생성
     */
     @Transactional
-    public Mytamin createMytamin(User user, LocalDateTime takeAt) {
-        Mytamin mytamin = new Mytamin(timeUtil.convertToMytaminDate(takeAt), user);
+    public Mytamin createMytamin(User user) {
+        Mytamin mytamin = new Mytamin(timeUtil.convertToMytaminDate(LocalDateTime.now()), user);
         return mytaminRepository.save(mytamin);
     }
 

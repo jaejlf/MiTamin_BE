@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface MytaminRepository extends JpaRepository<Mytamin, Long> {
-    Optional<Mytamin> findByTakeAtAndUser(LocalDateTime takeAt, User user);
+    Optional<Mytamin> findByUserAndTakeAt(User user, LocalDateTime takeAt);
     Mytamin findFirstByUserOrderByMytaminIdDesc(User user);
 }
