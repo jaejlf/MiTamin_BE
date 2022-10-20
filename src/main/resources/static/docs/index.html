@@ -95,6 +95,7 @@ video {
 <li><a href="#_하루_진단_조회">하루 진단 조회</a></li>
 <li><a href="#_하루_진단_수정">하루 진단 수정</a></li>
 <li><a href="#_주간_마음_컨디션_조회">주간 마음 컨디션 조회</a></li>
+<li><a href="#_이번_달_가장_많이_느낀_감정">이번 달 가장 많이 느낀 감정</a></li>
 </ul>
 </li>
 <li><a href="#_care">Care</a>
@@ -102,6 +103,8 @@ video {
 <li><a href="#_칭찬_처방하기">칭찬 처방하기</a></li>
 <li><a href="#_칭찬_처방_조회">칭찬 처방 조회</a></li>
 <li><a href="#_칭찬_처방_수정">칭찬 처방 수정</a></li>
+<li><a href="#_칭찬_처방_랜덤_조회">칭찬 처방 랜덤 조회</a></li>
+<li><a href="#_칭찬_처방_히스토리_조회">칭찬 처방 히스토리 조회</a></li>
 </ul>
 </li>
 <li><a href="#_user">User</a>
@@ -156,44 +159,44 @@ video {
 <div class="openblock partintro">
 <div class="content">
 <div class="ulist">
-<div class="title">참고사항</div>
+<div class="title">업데이트 내역 (2022.10.21.금요일 기준)</div>
 <ul>
 <li>
-<p>request 속성의 description에 <mark>'*'</mark>문자가 붙어있지 않다면 필수값이 아니다.<br>
-이 경우 데이터가 없다면 <strong>아예 전송하지 않아야</strong> 서버에서 설정한 default값으로 저장된다.</p>
+<p>Care</p>
+<div class="ulist">
+<ul>
+<li>
+<p>칭찬 처방 기록 랜덤 조회</p>
 </li>
 <li>
-<p>⭐ 만약 '*' 문자가 붙어있는데 전송할 값이 존재하지 않는다면, 문서에 기술된 기본값으로 세팅하여 전송한다.</p>
-</li>
-<li>
-<p>ex. 회원가입 시 유저가 마이타민 섭취 지정 시간 설정 '건너뛰기&#8217;를 했을경우,</p>
+<p>칭찬 처방 히스토리 조회 (정렬 조건 추가 전)</p>
 </li>
 </ul>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre>{
-  "email" : "mytamin@naver.com",
-  "password" : "password1234",
-  "nickname" : "강철멘탈"
-}</pre>
+</li>
+<li>
+<p>Report</p>
+<div class="ulist">
+<ul>
+<li>
+<p>주간 마음 컨디션</p>
+</li>
+<li>
+<p>이번 달 가장 많이 느낀 감정 TOP3</p>
+</li>
+<li>
+<p>월간 마음 컨디션</p>
+</li>
+</ul>
 </div>
-</div>
-<div class="paragraph">
-<p>&#8658; 위와 같이, 데이터가 없는 mytaminHour, mytaminMin 속성은 전송하지 않는다.</p>
-</div>
-<div class="listingblock">
-<div class="title">multipart/form 타입 요청 시</div>
-<div class="content">
-<pre>PUT /daynote/1 HTTP/1.1
-Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-X-AUTH-TOKEN: {{ACCESS_TOKEN}}
-Host: MY-TAMIN-URL
-...</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>헤더의 boundary값은 메세지 파트를 구분하는 값으로, boundary에는 랜덤 UUID값 또는 기본으로 제공되는 '6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm' 값을 넣어 전송한다.</p>
+</li>
+<li>
+<p>노션 - Server 공유 페이지 업뎃 (날짜/시간 공통 오류 관련 내용 추가)</p>
+</li>
+<li>
+<p>디또클 &#8230;&#8203; (DB 또 클리어😥)</p>
+</li>
+</ul>
 </div>
 <hr>
 </div>
@@ -420,20 +423,6 @@ Content-Length: 153
   "errorCode" : 2003,
   "errorName" : "NICKNAME_DUPLICATE_ERROR",
   "message" : "이미 사용 중인 닉네임입니다."
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
-Content-Type: application/json;charset=UTF-8
-Content-Length: 167
-
-{
-  "statusCode" : 400,
-  "errorCode" : 7001,
-  "errorName" : "DATETIME_PARSE_ERROR",
-  "message" : "날짜(또는 시간) 입력값에 오류가 있습니다."
 }</code></pre>
 </div>
 </div>
@@ -1446,13 +1435,13 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 675
+Content-Length: 670
 
 {
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "2022.10.19.Wed",
+    "takeAt" : "10.20.Thu",
     "report" : {
       "reportId" : 1,
       "canEdit" : true,
@@ -2320,6 +2309,131 @@ Content-Length: 607
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_이번_달_가장_많이_느낀_감정">이번 달 가장 많이 느낀 감정</h3>
+<div class="sect3">
+<h4 id="_이번_달_가장_많이_느낀_감정_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /report/feeling/rank HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-AUTH-TOKEN: {{ACCESS_TOKEN}}
+Host: MY-TAMIN-URL</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_이번_달_가장_많이_느낀_감정_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 270
+
+{
+  "statusCode" : 200,
+  "message" : "이번 달 가장 많이 느낀 감정",
+  "data" : [ {
+    "feeling" : "신나는",
+    "count" : 5
+  }, {
+    "feeling" : "즐거운",
+    "count" : 3
+  }, {
+    "feeling" : "무념무상의",
+    "count" : 1
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_http_response">Other HTTP response</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>이번 달 느낀 감정이 3개가 되지 않을 경우</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 270
+
+{
+  "statusCode" : 200,
+  "message" : "이번 달 가장 많이 느낀 감정",
+  "data" : [{
+    "feeling" : "신나는",
+    "count" : 5
+  }]
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_request_headers">Request headers</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_response_fields">Response fields</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].feeling</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">감정 태그</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">감정이 기록된 횟수</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2880,6 +2994,358 @@ Content-Length: 144
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_칭찬_처방_랜덤_조회">칭찬 처방 랜덤 조회</h3>
+<div class="sect3">
+<h4 id="_칭찬_처방_랜덤_조회_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /care/random HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-AUTH-TOKEN: {{ACCESS_TOKEN}}
+Host: MY-TAMIN-URL</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_칭찬_처방_랜덤_조회_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 237
+
+{
+  "statusCode" : 200,
+  "message" : "칭찬 처방 랜덤 조회",
+  "data" : {
+    "careMsg1" : "오늘 할 일을 전부 했어",
+    "careMsg2" : "성실히 노력하는 내 모습이 좋아",
+    "takeAt" : "22.10.19"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_칭찬_처방_랜덤_조회_request_headers">Request headers</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_칭찬_처방_랜덤_조회_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careMsg1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careMsg2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.takeAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 날짜</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_칭찬_처방_히스토리_조회">칭찬 처방 히스토리 조회</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>조건에 따라 칭찬 처방 기록을 조회한다.</p>
+</li>
+<li>
+<p>sort, careCategoryCodeList, date는 모두 필수값이 아니다.</p>
+</li>
+<li>
+<p>정렬 조건(sort), 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.</p>
+</li>
+<li>
+<p>sort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>1 : 가장 최근 순</p>
+</li>
+<li>
+<p>2 : 가장 오래된 순</p>
+</li>
+<li>
+<p>마음 컨디션 관련 조건 &#8594; 칭찬 처방에 해당하는 항목이 아니므로 기획팀에게 문의 예정</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>careCategoryCode</p>
+<div class="ulist">
+<ul>
+<li>
+<p>1 : "이루어 낸 일"</p>
+</li>
+<li>
+<p>2 : "잘한 일이나 행동"</p>
+</li>
+<li>
+<p>3 : "노력하고 있는 부분"</p>
+</li>
+<li>
+<p>4 : "긍정적인 변화나 깨달음"</p>
+</li>
+<li>
+<p>5 : "감정, 생각 혹은 신체 일부분"</p>
+</li>
+<li>
+<p>6 : "과거의 나"</p>
+</li>
+<li>
+<p>7 : "기타"</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>sort 조건은 현재 어떤 값을 보내도 결과가 동일함 !! (추가 개발 예정)</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_칭찬_처방_히스토리_조회_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /care/list HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+X-AUTH-TOKEN: {{ACCESS_TOKEN}}
+Content-Length: 79
+Host: MY-TAMIN-URL
+
+{
+  "sort" : 1,
+  "careCategoryCodeList" : [ 1, 5 ],
+  "date" : "2022.10"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_칭찬_처방_히스토리_조회_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 490
+
+{
+  "statusCode" : 200,
+  "message" : "칭찬 처방 히스토리 조회",
+  "data" : {
+    "careHistory" : {
+      "2022년 10월" : [ {
+        "careMsg1" : "오늘 할 일을 전부 했어",
+        "careMsg2" : "성실히 노력하는 내 모습이 좋아",
+        "takeAt" : "10.13.Thu"
+      }, {
+        "careMsg1" : "꾸준히 칭찬 기록 중이야",
+        "careMsg2" : "꾸준한 내 모습을 칭찬해 !",
+        "takeAt" : "10.19.Wed"
+      } ]
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_http_response_2">Other HTTP response</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>date 조건이 없을 경우(= 전체 날짜 조회)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 490
+
+{
+  "statusCode" : 200,
+  "message" : "칭찬 처방 히스토리 조회",
+  "data" : {
+    "careHistory" : {
+      "2022년 10월" : [ {
+        "careMsg1" : "오늘 할 일을 전부 했어",
+        "careMsg2" : "성실히 노력하는 내 모습이 좋아",
+        "takeAt" : "10.13.Thu"
+      }, {
+        "careMsg1" : "꾸준히 칭찬 기록 중이야",
+        "careMsg2" : "꾸준한 내 모습을 칭찬해 !",
+        "takeAt" : "10.19.Wed"
+      } ],
+      "2022년 09월" : [ {
+        "careMsg1" : "새로운 마음으로 다시 마이타민을 시작했어",
+        "careMsg2" : "계속해서 노력하려는 시도가 멋있어",
+        "takeAt" : "09.30.Fri"
+      }]
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_2_request_headers">Request headers</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_2_request_fields">Request fields</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sort</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 조건</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>careCategoryCodeList</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 조건</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">날짜 조건 (yyyy.MM)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_2_response_fields">Response fields</h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP 상태 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careHistory.*[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">년/월로 그룹핑된 칭찬 처방 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careHistory.*[].careMsg1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careHistory.*[].careMsg2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.careHistory.*[].takeAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 날짜</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -3230,7 +3696,32 @@ Content-Length: 596
 </div>
 </div>
 <div class="sect3">
-<h4 id="_위시_리스트_조회_request_headers">Request headers</h4>
+<h4 id="_other_http_response_3">Other HTTP response</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>위시 리스트가 존재하지 않을 경우</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 596
+
+{
+  "statusCode" : 200,
+  "message" : "위시 리스트 조회",
+  "data" : {
+    "published" : [],
+    "hidden" : []
+  }
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_3_request_headers">Request headers</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3250,8 +3741,8 @@ Content-Length: 596
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_위시_리스트_조회_response_fields">Response fields</h4>
+<div class="sect4">
+<h5 id="_other_http_response_3_response_fields">Response fields</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -3303,6 +3794,7 @@ Content-Length: 596
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -3509,7 +4001,31 @@ Content-Length: 706
 </div>
 </div>
 <div class="sect3">
-<h4 id="_데이노트_리스트_조회_request_headers">Request headers</h4>
+<h4 id="_other_http_response_4">Other HTTP response</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>데이노트가 존재하지 않을 경우</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 706
+
+{
+  "statusCode" : 200,
+  "message" : "데이노트 리스트 조회",
+  "data" : {
+    "daynoteList" : {}
+  }
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_4_request_headers">Request headers</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3529,8 +4045,8 @@ Content-Length: 706
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_데이노트_리스트_조회_response_fields">Response fields</h4>
+<div class="sect4">
+<h5 id="_other_http_response_4_response_fields">Response fields</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -3582,6 +4098,7 @@ Content-Length: 706
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -3717,41 +4234,6 @@ Content-Length: 96
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_exception_response_11">Exception response</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>DATETIME_PARSE_ERROR</p>
-<div class="ulist">
-<ul>
-<li>
-<p>날짜 형식이 yyyy.MM이 아닐 경우</p>
-</li>
-<li>
-<p>2020년 이전이거나, 올해 연도 이후일 경우</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
-Content-Disposition: inline;filename=f.txt
-Content-Type: application/json;charset=UTF-8
-Content-Length: 167
-
-{
-  "statusCode" : 400,
-  "errorCode" : 7001,
-  "errorName" : "DATETIME_PARSE_ERROR",
-  "message" : "날짜(또는 시간) 입력값에 오류가 있습니다."
-}</code></pre>
-</div>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_데이노트_작성">데이노트 작성</h3>
@@ -3793,7 +4275,7 @@ Content-Disposition: form-data; name=performedAt
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@318856a5, org.springframework.mock.web.MockMultipartFile@2d2bda62]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@537e8a15, org.springframework.mock.web.MockMultipartFile@71da2e9e]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -3949,7 +4431,7 @@ Content-Length: 426
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_12">Exception response</h4>
+<h4 id="_exception_response_11">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
@@ -4120,7 +4602,7 @@ Content-Length: 420
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_13">Exception response</h4>
+<h4 id="_exception_response_12">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
@@ -4167,7 +4649,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@2d86f17b, org.springframework.mock.web.MockMultipartFile@340572ad]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@58decd96, org.springframework.mock.web.MockMultipartFile@67ee26af]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -4388,7 +4870,7 @@ Content-Length: 71
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_14">Exception response</h4>
+<h4 id="_exception_response_13">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
@@ -4449,7 +4931,36 @@ Content-Length: 243
 </div>
 </div>
 <div class="sect3">
-<h4 id="_알림_설정_상태_조회_request_headers">Request headers</h4>
+<h4 id="_other_http_response_5">Other HTTP response</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>마이타민, 마이데이 알림이 모두 꺼져있을 경우</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 243
+
+{
+  "statusCode" : 200,
+  "message" : "알림 설정 상태 조회",
+  "data" : {
+    "mytamin" : {
+      "isOn" : false
+    },
+    "myday" : {
+      "isOn" : false
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_other_http_response_5_request_headers">Request headers</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -4469,8 +4980,8 @@ Content-Length: 243
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_알림_설정_상태_조회_response_fields">Response fields</h4>
+<div class="sect4">
+<h5 id="_other_http_response_5_response_fields">Response fields</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -4517,6 +5028,7 @@ Content-Length: 243
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -4638,23 +5150,6 @@ Content-Length: 67
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_exception_response_15">Exception response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
-Content-Type: application/json;charset=UTF-8
-Content-Length: 167
-
-{
-  "statusCode" : 400,
-  "errorCode" : 7001,
-  "errorName" : "DATETIME_PARSE_ERROR",
-  "message" : "날짜(또는 시간) 입력값에 오류가 있습니다."
-}</code></pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -4863,7 +5358,7 @@ Content-Length: 67
 </table>
 </div>
 <div class="sect3">
-<h4 id="_exception_response_16">Exception response</h4>
+<h4 id="_exception_response_14">Exception response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
@@ -5220,7 +5715,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-19 20:14:12 +0900
+Last updated 2022-10-21 04:55:51 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

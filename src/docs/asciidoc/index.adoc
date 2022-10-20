@@ -4,31 +4,16 @@ endif::[]
 
 = 💊 My Tamin API Document
 
-.참고사항
-- request 속성의 description에 ##'*'##문자가 붙어있지 않다면 필수값이 아니다. +
-이 경우 데이터가 없다면 **아예 전송하지 않아야** 서버에서 설정한 default값으로 저장된다.
-- ⭐ 만약 '*' 문자가 붙어있는데 전송할 값이 존재하지 않는다면, 문서에 기술된 기본값으로 세팅하여 전송한다.
-- ex. 회원가입 시 유저가 마이타민 섭취 지정 시간 설정 '건너뛰기'를 했을경우,
-[source]
-----
-{
-  "email" : "mytamin@naver.com",
-  "password" : "password1234",
-  "nickname" : "강철멘탈"
-}
-----
-
-=> 위와 같이, 데이터가 없는 mytaminHour, mytaminMin 속성은 전송하지 않는다.
-
-.multipart/form 타입 요청 시
-----
-PUT /daynote/1 HTTP/1.1
-Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-X-AUTH-TOKEN: {{ACCESS_TOKEN}}
-Host: MY-TAMIN-URL
-...
-----
-헤더의 boundary값은 메세지 파트를 구분하는 값으로, boundary에는 랜덤 UUID값 또는 기본으로 제공되는 '6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm' 값을 넣어 전송한다.
+.업데이트 내역 (2022.10.21.금요일 기준)
+* Care
+    ** 칭찬 처방 기록 랜덤 조회
+    ** 칭찬 처방 히스토리 조회 (정렬 조건 추가 전)
+* Report
+    ** 주간 마음 컨디션
+    ** 이번 달 가장 많이 느낀 감정 TOP3
+    ** 월간 마음 컨디션
+* 노션 - Server 공유 페이지 업뎃 (날짜/시간 공통 오류 관련 내용 추가)
+* 디또클 ... (DB 또 클리어😥)
 
 '''
 
@@ -47,7 +32,6 @@ include::{snippets}/auth/signUp_2000/http-response.adoc[]
 include::{snippets}/auth/signUp_2001/http-response.adoc[]
 include::{snippets}/auth/signUp_2002/http-response.adoc[]
 include::{snippets}/auth/signUp_2003/http-response.adoc[]
-include::{snippets}/auth/signUp_7001/http-response.adoc[]
 
 === 기본 로그인
 * 로그인 성공 시 accessToken과 refreshToken을 발급한다.
@@ -191,6 +175,29 @@ include::{snippets}/report/updateReport_7000/http-response.adoc[]
 operation::report/getWeeklyMentalReport[snippets='http-request,http-response']
 operation::report/getWeeklyMentalReport[snippets='request-headers,response-fields']
 
+=== 이번 달 가장 많이 느낀 감정
+operation::report/getMonthlyFeelingRank[snippets='http-request,http-response']
+==== Other HTTP response
+* 이번 달 느낀 감정이 3개가 되지 않을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 270
+
+{
+  "statusCode" : 200,
+  "message" : "이번 달 가장 많이 느낀 감정",
+  "data" : [{
+    "feeling" : "신나는",
+    "count" : 5
+  }]
+}
+----
+
+operation::report/getMonthlyFeelingRank[snippets='request-headers,response-fields']
+
 == Care
 === 칭찬 처방하기
 * 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
@@ -231,6 +238,64 @@ operation::care/updateCare[snippets='request-headers,path-parameters,request-fie
 include::{snippets}/care/updateCare_5002/http-response.adoc[]
 include::{snippets}/care/updateCare_7000/http-response.adoc[]
 
+=== 칭찬 처방 랜덤 조회
+operation::care/getRandomCare[snippets='http-request,http-response']
+operation::care/getRandomCare[snippets='request-headers,response-fields']
+
+=== 칭찬 처방 히스토리 조회
+* 조건에 따라 칭찬 처방 기록을 조회한다.
+* sort, careCategoryCodeList, date는 모두 필수값이 아니다.
+* 정렬 조건(sort), 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
+* sort
+    ** 1 : 가장 최근 순
+    ** 2 : 가장 오래된 순
+    ** 마음 컨디션 관련 조건 -> 칭찬 처방에 해당하는 항목이 아니므로 기획팀에게 문의 예정
+* careCategoryCode
+    ** 1 : "이루어 낸 일"
+    ** 2 : "잘한 일이나 행동"
+    ** 3 : "노력하고 있는 부분"
+    ** 4 : "긍정적인 변화나 깨달음"
+    ** 5 : "감정, 생각 혹은 신체 일부분"
+    ** 6 : "과거의 나"
+    ** 7 : "기타"
+
+* sort 조건은 현재 어떤 값을 보내도 결과가 동일함 !! (추가 개발 예정)
+
+operation::care/getCareHistroy[snippets='http-request,http-response']
+==== Other HTTP response
+* date 조건이 없을 경우(= 전체 날짜 조회)
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 490
+
+{
+  "statusCode" : 200,
+  "message" : "칭찬 처방 히스토리 조회",
+  "data" : {
+    "careHistory" : {
+      "2022년 10월" : [ {
+        "careMsg1" : "오늘 할 일을 전부 했어",
+        "careMsg2" : "성실히 노력하는 내 모습이 좋아",
+        "takeAt" : "10.13.Thu"
+      }, {
+        "careMsg1" : "꾸준히 칭찬 기록 중이야",
+        "careMsg2" : "꾸준한 내 모습을 칭찬해 !",
+        "takeAt" : "10.19.Wed"
+      } ],
+      "2022년 09월" : [ {
+        "careMsg1" : "새로운 마음으로 다시 마이타민을 시작했어",
+        "careMsg2" : "계속해서 노력하려는 시도가 멋있어",
+        "takeAt" : "09.30.Fri"
+      }]
+    }
+  }
+}
+----
+operation::care/getCareHistroy[snippets='request-headers,request-fields,response-fields']
+
 == User
 === 프로필 조회
 * 설정된 프로필 이미지가 없을 경우, profileImgUrl은 null로 리턴된다.
@@ -255,6 +320,24 @@ include::{snippets}/user/updateProfile_2003/http-response.adoc[]
 === 위시 리스트 조회
 
 operation::wish/getWishlist[snippets='http-request,http-response']
+==== Other HTTP response
+* 위시 리스트가 존재하지 않을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 596
+
+{
+  "statusCode" : 200,
+  "message" : "위시 리스트 조회",
+  "data" : {
+    "published" : [],
+    "hidden" : []
+  }
+}
+----
 operation::wish/getWishlist[snippets='request-headers,response-fields']
 
 === 위시 리스트 업데이트
@@ -279,6 +362,23 @@ operation::myday/getMyday[snippets='request-headers,response-fields']
 - performedAt은 이미지가 존재하지 않을 경우 대체 제목으로 사용되는 값이다.
 
 operation::daynote/getDaynoteList[snippets='http-request,http-response']
+==== Other HTTP response
+* 데이노트가 존재하지 않을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 706
+
+{
+  "statusCode" : 200,
+  "message" : "데이노트 리스트 조회",
+  "data" : {
+    "daynoteList" : {}
+  }
+}
+----
 operation::daynote/getDaynoteList[snippets='request-headers,response-fields']
 
 === 데이노트 작성 가능 여부
@@ -291,13 +391,6 @@ operation::daynote/getDaynoteList[snippets='request-headers,response-fields']
 
 operation::daynote/canCreateDaynote[snippets='http-request,http-response']
 operation::daynote/canCreateDaynote[snippets='request-headers,path-parameters,response-fields']
-
-==== Exception response
-* DATETIME_PARSE_ERROR
-    ** 날짜 형식이 yyyy.MM이 아닐 경우
-    ** 2020년 이전이거나, 올해 연도 이후일 경우
-
-include::{snippets}/daynote/canCreateDaynote_7001/http-response.adoc[]
 
 === 데이노트 작성
 * fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
@@ -344,6 +437,28 @@ include::{snippets}/daynote/deleteDaynote_8003/http-response.adoc[]
 === 알림 설정 상태 조회
 
 operation::alarm/getAlarmSettingStatus[snippets='http-request,http-response']
+==== Other HTTP response
+* 마이타민, 마이데이 알림이 모두 꺼져있을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 243
+
+{
+  "statusCode" : 200,
+  "message" : "알림 설정 상태 조회",
+  "data" : {
+    "mytamin" : {
+      "isOn" : false
+    },
+    "myday" : {
+      "isOn" : false
+    }
+  }
+}
+----
 operation::alarm/getAlarmSettingStatus[snippets='request-headers,response-fields']
 
 === 마이타민 알림 ON
@@ -351,10 +466,6 @@ operation::alarm/getAlarmSettingStatus[snippets='request-headers,response-fields
 
 operation::alarm/turnOnMytaminAlarm[snippets='http-request,http-response']
 operation::alarm/turnOnMytaminAlarm[snippets='request-headers,request-fields,response-fields']
-
-==== Exception response
-
-include::{snippets}/alarm/turnOnMytaminAlarm_7001/http-response.adoc[]
 
 === 마이타민 알림 OFF
 
