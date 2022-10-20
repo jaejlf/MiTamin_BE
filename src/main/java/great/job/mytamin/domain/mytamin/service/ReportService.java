@@ -107,7 +107,8 @@ public class ReportService {
         List<FeelingRankResponse> feelingRankResponseList = countByFeeling(feelingList);
         feelingRankResponseList.sort(Comparator.comparingInt(FeelingRankResponse::getCount)); // count 순 정렬
         Collections.reverse(feelingRankResponseList); // 내림차순
-        return feelingRankResponseList.subList(0, 3); // Top3만 리턴
+        if(feelingRankResponseList.size() > 3) return feelingRankResponseList.subList(0, 3); // Top3만 리턴
+        else return feelingRankResponseList;
     }
 
     /*
