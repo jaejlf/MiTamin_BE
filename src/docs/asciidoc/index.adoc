@@ -175,8 +175,22 @@ include::{snippets}/report/updateReport_7000/http-response.adoc[]
 operation::report/getWeeklyMentalReport[snippets='http-request,http-response']
 operation::report/getWeeklyMentalReport[snippets='request-headers,response-fields']
 
+=== 월간 마음 컨디션 조회
+* 조회하는 month의 모든 날짜(1일 ~ 해당 월의 마지막날)에 대해 '일자:mentalConditionCode' 형태로 데이터를 리턴한다.
+* 해당하는 날짜에 하루 진단 기록이 존재하지 않을 경우, mentalConditionCode는 '0'이다.
+* mentalConditionCode
+    ** 1 : "매우 나빠요 .."
+    ** 2 : "나쁜 편이에요 :("
+    ** 3 : "그럭저럭이에요"
+    ** 4 : "좋은 편이에요 :)"
+    ** 5 : "매우 좋아요 !"
+
+operation::report/getMonthlyMentalReport[snippets='http-request,http-response']
+operation::report/getMonthlyMentalReport[snippets='request-headers,path-parameters,response-fields']
+
 === 이번 달 가장 많이 느낀 감정
 operation::report/getMonthlyFeelingRank[snippets='http-request,http-response']
+
 ==== Other HTTP response
 * 이번 달 느낀 감정이 3개가 되지 않을 경우
 
@@ -239,6 +253,7 @@ include::{snippets}/care/updateCare_5002/http-response.adoc[]
 include::{snippets}/care/updateCare_7000/http-response.adoc[]
 
 === 칭찬 처방 랜덤 조회
+* 칭찬 처방 기록이 하나도 없는 경우 data는 null로 리턴된다. (ex. data : null)
 operation::care/getRandomCare[snippets='http-request,http-response']
 operation::care/getRandomCare[snippets='request-headers,response-fields']
 
@@ -262,6 +277,7 @@ operation::care/getRandomCare[snippets='request-headers,response-fields']
 * sort 조건은 현재 어떤 값을 보내도 결과가 동일함 !! (추가 개발 예정)
 
 operation::care/getCareHistroy[snippets='http-request,http-response']
+
 ==== Other HTTP response
 * date 조건이 없을 경우(= 전체 날짜 조회)
 
@@ -294,6 +310,24 @@ Content-Length: 490
   }
 }
 ----
+
+* 조회할 데이터가 하나도 없을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 490
+
+{
+  "statusCode" : 200,
+  "message" : "칭찬 처방 히스토리 조회",
+  "data" : {
+    "careHistory" : {}
+  }
+}
+----
+
 operation::care/getCareHistroy[snippets='request-headers,request-fields,response-fields']
 
 == User
@@ -320,6 +354,7 @@ include::{snippets}/user/updateProfile_2003/http-response.adoc[]
 === 위시 리스트 조회
 
 operation::wish/getWishlist[snippets='http-request,http-response']
+
 ==== Other HTTP response
 * 위시 리스트가 존재하지 않을 경우
 
@@ -338,6 +373,7 @@ Content-Length: 596
   }
 }
 ----
+
 operation::wish/getWishlist[snippets='request-headers,response-fields']
 
 === 위시 리스트 업데이트
@@ -362,6 +398,7 @@ operation::myday/getMyday[snippets='request-headers,response-fields']
 - performedAt은 이미지가 존재하지 않을 경우 대체 제목으로 사용되는 값이다.
 
 operation::daynote/getDaynoteList[snippets='http-request,http-response']
+
 ==== Other HTTP response
 * 데이노트가 존재하지 않을 경우
 
@@ -379,6 +416,7 @@ Content-Length: 706
   }
 }
 ----
+
 operation::daynote/getDaynoteList[snippets='request-headers,response-fields']
 
 === 데이노트 작성 가능 여부
@@ -437,6 +475,7 @@ include::{snippets}/daynote/deleteDaynote_8003/http-response.adoc[]
 === 알림 설정 상태 조회
 
 operation::alarm/getAlarmSettingStatus[snippets='http-request,http-response']
+
 ==== Other HTTP response
 * 마이타민, 마이데이 알림이 모두 꺼져있을 경우
 
@@ -459,6 +498,7 @@ Content-Length: 243
   }
 }
 ----
+
 operation::alarm/getAlarmSettingStatus[snippets='request-headers,response-fields']
 
 === 마이타민 알림 ON
