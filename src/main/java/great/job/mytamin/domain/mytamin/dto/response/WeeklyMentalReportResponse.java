@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MentalConditionResponse {
+public class WeeklyMentalReportResponse {
 
     String dayOfWeek;
     int mentalConditionCode;
 
-    public static MentalConditionResponse of(String dayOfWeek, int mentalConditionCode) {
-        return MentalConditionResponse.builder()
+    public static WeeklyMentalReportResponse of(String dayOfWeek, int mentalConditionCode) {
+        return WeeklyMentalReportResponse.builder()
                 .dayOfWeek(dayOfWeek)
                 .mentalConditionCode(mentalConditionCode)
                 .build();

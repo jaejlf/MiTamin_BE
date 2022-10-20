@@ -2,7 +2,7 @@ package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
-import great.job.mytamin.domain.mytamin.dto.response.MentalConditionResponse;
+import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalReportResponse;
 import great.job.mytamin.domain.mytamin.enumerate.MentalCondition;
 import great.job.mytamin.domain.mytamin.service.ReportService;
 import great.job.mytamin.global.exception.MytaminException;
@@ -382,17 +382,17 @@ class ReportControllerTest extends CommonControllerTest {
                 );
     }
 
-    private static List<MentalConditionResponse> mockWeeklyMentalResponseList() {
-        List<MentalConditionResponse> mentalConditionResponseList = new ArrayList<>();
-        mentalConditionResponseList.add(MentalConditionResponse.of("수", 0));
-        mentalConditionResponseList.add(MentalConditionResponse.of("목", 3));
-        mentalConditionResponseList.add(MentalConditionResponse.of("금", 1));
-        mentalConditionResponseList.add(MentalConditionResponse.of("토", 0));
-        mentalConditionResponseList.add(MentalConditionResponse.of("일", 0));
-        mentalConditionResponseList.add(MentalConditionResponse.of("월", 3));
-        mentalConditionResponseList.add(MentalConditionResponse.of("화", 2));
-        mentalConditionResponseList.add(MentalConditionResponse.of("오늘", 5));
-        return mentalConditionResponseList;
+    private static List<WeeklyMentalReportResponse> mockWeeklyMentalResponseList() {
+        List<WeeklyMentalReportResponse> weeklyMentalReportResponseList = new ArrayList<>();
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("수", 0));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("목", 3));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("금", 1));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("토", 0));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("일", 0));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("월", 3));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("화", 2));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("오늘", 5));
+        return weeklyMentalReportResponseList;
     }
 
 }

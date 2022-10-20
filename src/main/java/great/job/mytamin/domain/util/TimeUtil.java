@@ -128,8 +128,19 @@ public class TimeUtil {
     public Boolean isCurrentMonth(LocalDateTime target) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), 1, 0, 0);
-        LocalDateTime end = LocalDateTime.of(now.getYear(), now.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
+        LocalDateTime end = getLastDayOfMonth(now);
         return isInRange(target, start, end);
+    }
+
+    /*
+    target 월의 마지막 날
+    */
+    public LocalDateTime getLastDayOfMonth(LocalDateTime target) {
+        if (target.getMonth().getValue() == 12) {
+            return LocalDateTime.of(target.getYear() + 1, 1, 1, 23, 59).minusDays(1);
+        } else {
+            return LocalDateTime.of(target.getYear(), target.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
+        }
     }
 
     /*
@@ -174,6 +185,14 @@ public class TimeUtil {
 
         if (hour < 0 || hour > 23) throw new MytaminException(DATETIME_PARSE_ERROR);
         if (minute < 0 || minute > 59) throw new MytaminException(DATETIME_PARSE_ERROR);
+    }
+
+    /*
+    yyyy, MM 날짜값 유효한지 체크
+    */
+    public void isDateValid(int year, int month) {
+        if (year < 2020 || year > LocalDateTime.now().getYear()) throw new MytaminException(DATETIME_PARSE_ERROR);
+        if (month < 1 || month > 12) throw new MytaminException(DATETIME_PARSE_ERROR);
     }
 
     /*
