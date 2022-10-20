@@ -114,9 +114,8 @@ public class ReportService {
     월간 마음 컨디션
     */
     @Transactional(readOnly = true)
-    public Map<Integer, Integer> getMonthlyMentalReport(User user, int year, int month) {
-        timeUtil.isDateValid(year, month);
-        LocalDateTime target = LocalDateTime.of(year, month, 10, 10, 0); // 10일.10시.00분으로 임의 설정
+    public Map<Integer, Integer> getMonthlyMentalReport(User user, String date) {
+        LocalDateTime target = timeUtil.convertRawToLocalDateTime(date);
         List<Report> monthlyReportList = getMonthlyReportList(user, target);
 
         Map<Integer, Integer> map = initMap(target);

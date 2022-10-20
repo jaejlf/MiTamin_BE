@@ -61,11 +61,10 @@ public class ReportController {
                 .body(ResultResponse.ok("주간 마음 컨디션", weeklyMentalReportResponseList));
     }
 
-    @GetMapping("/monthly/mental/{year}/{month}")
+    @GetMapping("/monthly/mental/{date}")
     public ResponseEntity<Object> getMonthlyMentalReport(@AuthenticationPrincipal User user,
-                                                         @PathVariable int year,
-                                                         @PathVariable int month) {
-        Map<Integer, Integer> monthlyMentalReportMap = reportService.getMonthlyMentalReport(user, year, month);
+                                                         @PathVariable String date) {
+        Map<Integer, Integer> monthlyMentalReportMap = reportService.getMonthlyMentalReport(user, date);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("월간 마음 컨디션", monthlyMentalReportMap));

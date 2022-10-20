@@ -33,10 +33,10 @@ public class TimeUtil {
     }
 
     /*
-    데이노트 포맷터
+    yyyy.MM 포맷터
     performedAt -> LocalDateTime
     */
-    public LocalDateTime convertToRawPerformedAt(String performedAt) {
+    public LocalDateTime convertRawToLocalDateTime(String performedAt) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
         LocalDateTime rawPerformedAt = LocalDateTime.parse(performedAt + ".10.10.00", formatter); // 10일.10시.00분으로 임의 설정
 
@@ -185,14 +185,6 @@ public class TimeUtil {
 
         if (hour < 0 || hour > 23) throw new MytaminException(DATETIME_PARSE_ERROR);
         if (minute < 0 || minute > 59) throw new MytaminException(DATETIME_PARSE_ERROR);
-    }
-
-    /*
-    yyyy, MM 날짜값 유효한지 체크
-    */
-    public void isDateValid(int year, int month) {
-        if (year < 2020 || year > LocalDateTime.now().getYear()) throw new MytaminException(DATETIME_PARSE_ERROR);
-        if (month < 1 || month > 12) throw new MytaminException(DATETIME_PARSE_ERROR);
     }
 
     /*
