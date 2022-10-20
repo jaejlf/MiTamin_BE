@@ -98,15 +98,13 @@ public class CareService {
     */
     @Transactional(readOnly = true)
     public CareHistoryListResponse getCareHistroy(User user, CareSearchFilter careSearchFilter) {
-        Integer sort = careSearchFilter.getSort();
-        List<Integer> careCategoryCodeList = careSearchFilter.getCareCategoryCodeList();
-        String date = careSearchFilter.getDate();
-
         List<Care> careList = careRepository.searchCareHistory(careSearchFilter);
         Map<String, List<CareHistoryResponse>> careHistory =
                 careList.stream().map(CareHistoryResponse::of).collect(Collectors.toList()) // DTO 변환
                         .stream().collect(Collectors.groupingBy(CareHistoryResponse::getTitle)); // title로 그룹핑
 
+        // 정렬 조건 추가 필요
+        
         return CareHistoryListResponse.of(careHistory);
     }
 

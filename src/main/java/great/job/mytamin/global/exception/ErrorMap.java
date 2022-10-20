@@ -33,7 +33,6 @@ public enum ErrorMap {
     INVALID_CATEGORY_CODE_ERROR(HttpStatus.BAD_REQUEST, 5000, "INVALID_CATEGORY_CODE_ERROR", "카테고리 코드는 1 ~ 7 사이의 값이어야 합니다."),
     CARE_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 5001, "CARE_ALREADY_DONE_ERROR", "오늘의 '칭찬 처방하기'를 이미 완료했습니다."),
     CARE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 5002, "CARE_NOT_FOUND_ERROR", "존재하지 않는 careId 입니다."),
-    INVALID_CARE_SORT_CODE_ERROR(HttpStatus.BAD_REQUEST, 5003, "INVALID_CARE_SORT_CODE_ERROR", "정렬 코드는 1 ~ 4 사이의 값이어야 합니다."),
 
     // S3 6xxx
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 6000, "FILE_UPLOAD_ERROR", "파일 업로드에 실패했습니다."),

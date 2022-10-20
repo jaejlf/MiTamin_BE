@@ -8,15 +8,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import great.job.mytamin.domain.mytamin.dto.request.CareSearchFilter;
 import great.job.mytamin.domain.mytamin.entity.Care;
 import great.job.mytamin.domain.mytamin.entity.QCare;
-import great.job.mytamin.domain.mytamin.enumerate.CareSort;
 import great.job.mytamin.domain.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static great.job.mytamin.domain.mytamin.enumerate.CareSort.LATEST;
-import static great.job.mytamin.domain.mytamin.enumerate.CareSort.OLDEST;
 
 @RequiredArgsConstructor
 public class CustomCareRepositoryImpl implements CustomCareRepository {
@@ -60,12 +56,12 @@ public class CustomCareRepositoryImpl implements CustomCareRepository {
 
     // 정렬
     private OrderSpecifier<?> sorting(Integer sort) {
-        if (sort != null) {
-            sort = CareSort.validateCode(sort);
-            if (sort == LATEST.getCode()) return new OrderSpecifier<>(Order.DESC, care.careId); // 최신 순
-            else if (sort == OLDEST.getCode()) return new OrderSpecifier<>(Order.ASC, care.careId); // 오래된 순
-        }
-        return new OrderSpecifier<>(Order.DESC, care.careId); // 최신 순
+//        if (sort != null) {
+//            if (sort == 1) return new OrderSpecifier<>(Order.DESC, care.careId); // 최신 순
+//            else if (sort == 2) return new OrderSpecifier<>(Order.ASC, care.careId); // 오래된 순
+//        }
+//        return new OrderSpecifier<>(Order.DESC, care.careId); // 최신 순
+        return new OrderSpecifier<>(Order.ASC, care.careId); // 오래된 순
     }
 
 }
