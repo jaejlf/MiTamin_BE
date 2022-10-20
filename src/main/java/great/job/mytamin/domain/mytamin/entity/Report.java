@@ -43,6 +43,7 @@ public class Report {
 
     @OneToOne(mappedBy = "report")
     private Mytamin mytamin;
+    private LocalDateTime takeAt;
 
     public Report(User user, int mentalConditionCode, String tag1, String tag2, String tag3, String todayReport, Mytamin mytamin) {
         this.user = user;
@@ -52,6 +53,7 @@ public class Report {
         this.tag3 = tag3;
         this.todayReport = todayReport;
         this.mytamin = mytamin;
+        this.takeAt = mytamin.getTakeAt();
     }
 
     public void updateAll(int mentalConditionCode, String tag1, String tag2, String tag3, String todayReport) {

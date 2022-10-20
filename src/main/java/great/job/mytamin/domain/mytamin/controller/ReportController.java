@@ -1,8 +1,9 @@
 package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.ReportRequest;
+import great.job.mytamin.domain.mytamin.dto.response.FeelingRankResponse;
+import great.job.mytamin.domain.mytamin.dto.response.MentalConditionResponse;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
-import great.job.mytamin.domain.mytamin.dto.response.WeeklyMentalResponse;
 import great.job.mytamin.domain.mytamin.service.ReportService;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.NoDataResponse;
@@ -53,10 +54,18 @@ public class ReportController {
 
     @GetMapping("/weekly/mental")
     public ResponseEntity<Object> getWeeklyMentalReport(@AuthenticationPrincipal User user) {
-        List<WeeklyMentalResponse> weeklyMentalResponseList = reportService.getWeeklyMentalReport(user);
+        List<MentalConditionResponse> mentalConditionResponseList = reportService.getWeeklyMentalReport(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("주간 마음 컨디션", weeklyMentalResponseList));
+                .body(ResultResponse.ok("주간 마음 컨디션", mentalConditionResponseList));
+    }
+
+    @GetMapping("/feeling/rank")
+    public ResponseEntity<Object> getMonthlyFeelingRank(@AuthenticationPrincipal User user) {
+        List<FeelingRankResponse> feelingRankResponseList = reportService.getMonthlyFeelingRank(user);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("이번 달 가장 많이 느낀 감정", feelingRankResponseList));
     }
 
 }

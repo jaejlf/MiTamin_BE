@@ -37,6 +37,7 @@ public class Care {
 
     @OneToOne(mappedBy = "care")
     private Mytamin mytamin;
+    private LocalDateTime takeAt;
 
     public Care(User user, int careCategoryCode, String careMsg1, String careMsg2, Mytamin mytamin) {
         this.user = user;
@@ -44,6 +45,7 @@ public class Care {
         this.careMsg1 = careMsg1;
         this.careMsg2 = careMsg2;
         this.mytamin = mytamin;
+        this.takeAt = mytamin.getTakeAt();
     }
 
     public void updateAll(int careCategoryCode, String careMsg1, String careMsg2) {
