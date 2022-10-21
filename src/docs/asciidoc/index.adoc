@@ -41,8 +41,6 @@ include::{snippets}{custom}/wish.adoc[]
 
 == Myday
 include::{snippets}{custom}/myday.adoc[]
-
-== Daynote
 include::{snippets}{custom}/daynote.adoc[]
 
 == Alarm

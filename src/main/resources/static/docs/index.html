@@ -126,10 +126,6 @@ video {
 <li><a href="#_myday">Myday</a>
 <ul class="sectlevel2">
 <li><a href="#_이번_달의_마이데이">이번 달의 마이데이</a></li>
-</ul>
-</li>
-<li><a href="#_daynote">Daynote</a>
-<ul class="sectlevel2">
 <li><a href="#_데이노트_리스트_조회">데이노트 리스트 조회</a></li>
 <li><a href="#_데이노트_작성_가능_여부">데이노트 작성 가능 여부</a></li>
 <li><a href="#_데이노트_작성">데이노트 작성</a></li>
@@ -2375,6 +2371,9 @@ Content-Length: 607
 <div class="ulist">
 <ul>
 <li>
+<p>date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 → 2022.01)</p>
+</li>
+<li>
 <p>조회하는 month의 모든 날짜(1일 ~ 해당 월의 마지막날)에 대해 '일자:mentalConditionCode' 형태로 데이터를 리턴한다.</p>
 </li>
 <li>
@@ -2544,6 +2543,13 @@ Content-Length: 543
 </div>
 <div class="sect2">
 <h3 id="_이번_달_가장_많이_느낀_감정">이번 달 가장 많이 느낀 감정</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>이번 달을 기준으로, 가장 많이 태그된 감정 1 ~ 3순위를 감정이 기록된 횟수가 높은 순으로 리턴한다.</p>
+</li>
+</ul>
+</div>
 <div class="sect3">
 <h4 id="_이번_달_가장_많이_느낀_감정_http_request">HTTP request</h4>
 <div class="listingblock">
@@ -3391,6 +3397,9 @@ Content-Length: 237
 </li>
 <li>
 <p>sort, careCategoryCodeList, date는 모두 필수값이 아니다.</p>
+</li>
+<li>
+<p>date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 → 2022.01)</p>
 </li>
 <li>
 <p>sort, careCategoryCodeList에 잘못된 값이 들어올 경우 따로 오류가 발생하지는 않지만, 해당 조건은 적용되지 않는다.</p>
@@ -4250,11 +4259,6 @@ Content-Length: 219
 </table>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_daynote">Daynote</h2>
-<div class="sectionbody">
 <div class="sect2">
 <h3 id="_데이노트_리스트_조회">데이노트 리스트 조회</h3>
 <div class="ulist">
@@ -4407,7 +4411,7 @@ Content-Length: 706
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.daynoteList.*[].performedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 수행 날짜 정보</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 수행 날짜</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.daynoteList.*[].imgList[]</code></p></td>
@@ -4423,7 +4427,7 @@ Content-Length: 706
 <div class="ulist">
 <ul>
 <li>
-<p>사용자가 선택한 데이노트 작성 날짜를 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 &#8594; 2022.01)</p>
+<p>performedAt은 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 &#8594; 2022.01)</p>
 </li>
 <li>
 <p>performedAt에 해당하는 날짜에 데이노트 작성이 가능하면 true, 불가능하면 false를 리턴한다.</p>
@@ -4512,7 +4516,7 @@ Content-Length: 96
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>performedAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*데이노트 작성 날짜 (yyyy.MM)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*데이노트 수행 날짜 (yyyy.MM)</p></td>
 </tr>
 </tbody>
 </table>
@@ -4563,6 +4567,9 @@ Content-Length: 96
 <p>이미지는 최대 5장까지 첨부할 수 있다.</p>
 </li>
 <li>
+<p>performedAt은 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 &#8594; 2022.01)</p>
+</li>
+<li>
 <p>wishText가 기존에 존재하지 않는 위시라면 자동으로 생성한다.</p>
 </li>
 <li>
@@ -4592,7 +4599,7 @@ Content-Disposition: form-data; name=performedAt
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@19a71722, org.springframework.mock.web.MockMultipartFile@5e30ea7c]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@337f76ff, org.springframework.mock.web.MockMultipartFile@5e3c3c3d]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -4688,7 +4695,7 @@ Content-Length: 426
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>performedAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*데이노트 수행 날짜 정보</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*데이노트 수행 날짜 (yyyy.MM)</p></td>
 </tr>
 </tbody>
 </table>
@@ -4727,7 +4734,7 @@ Content-Length: 426
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.performedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 수행 날짜 정보</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 수행 날짜</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.imgList[]</code></p></td>
@@ -4898,7 +4905,7 @@ Content-Length: 420
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.performedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 수행 날짜 정보</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 수행 날짜</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.imgList[]</code></p></td>
@@ -4966,7 +4973,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@58decd96, org.springframework.mock.web.MockMultipartFile@67ee26af]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@71e7b3c9, org.springframework.mock.web.MockMultipartFile@4465d4ce]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -6032,7 +6039,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-21 16:02:08 +0900
+Last updated 2022-10-21 16:13:14 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

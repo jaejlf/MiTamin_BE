@@ -77,7 +77,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                             ),
                             pathParameters(
-                                    parameterWithName("performedAt").description("*데이노트 작성 날짜 (yyyy.MM)")
+                                    parameterWithName("performedAt").description("*데이노트 수행 날짜 (yyyy.MM)")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -138,7 +138,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                             requestParameters(
                                     parameterWithName("wishText").description("*위시 텍스트"),
                                     parameterWithName("note").description("*데이노트 코멘트"),
-                                    parameterWithName("performedAt").description("*데이노트 수행 날짜 정보")
+                                    parameterWithName("performedAt").description("*데이노트 수행 날짜 (yyyy.MM)")
                             ),
                             requestHeaders(
                                     headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
@@ -147,7 +147,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.daynoteId").description("데이노트 id"),
-                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜 정보"),
+                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜"),
                                     fieldWithPath("data.imgList[]").description("데이노트 이미지 리스트"),
                                     fieldWithPath("data.wishText").description("위시 텍스트"),
                                     fieldWithPath("data.note").description("데이노트 코멘트")
@@ -252,7 +252,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.daynoteId").description("데이노트 id"),
-                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜 정보"),
+                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜"),
                                     fieldWithPath("data.imgList[]").description("데이노트 이미지 리스트"),
                                     fieldWithPath("data.wishText").description("위시 텍스트"),
                                     fieldWithPath("data.note").description("데이노트 코멘트")
@@ -485,7 +485,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.daynoteList.*[]").description("연도별로 그룹핑된 데이노트 리스트"),
                                 fieldWithPath("data.daynoteList.*[].daynoteId").description("데이노트 id"),
                                 fieldWithPath("data.daynoteList.*[].month").description("데이노트가 작성된 '월'"),
-                                fieldWithPath("data.daynoteList.*[].performedAt").description("데이노트 수행 날짜 정보"),
+                                fieldWithPath("data.daynoteList.*[].performedAt").description("데이노트 수행 날짜"),
                                 fieldWithPath("data.daynoteList.*[].imgList[]").description("데이노트 이미지 리스트")
                         ))
                 );
