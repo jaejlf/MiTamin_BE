@@ -20,6 +20,7 @@
 
 /* Text color */
 h1{color:var(--primarycolor) !important;}
+h1{margin-bottom: 10px !important;}
 h2,h3,h4,h5,h6{color:var(--secondarycolor) !important;}
 .title{color:var(--tertiarycolor) !important;}
 
