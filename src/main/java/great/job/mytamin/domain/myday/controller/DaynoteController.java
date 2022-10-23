@@ -41,14 +41,6 @@ public class DaynoteController {
                 .body(ResultResponse.create("데이노트 작성하기", daynoteResponse));
     }
 
-    @GetMapping("/{daynoteId}")
-    public ResponseEntity<Object> getDaynote(@PathVariable Long daynoteId) {
-        DaynoteResponse daynoteResponse = daynoteService.getDaynote(daynoteId);
-        return ResponseEntity
-                .status(OK)
-                .body(ResultResponse.ok("데이노트 조회", daynoteResponse));
-    }
-
     @PutMapping("/{daynoteId}")
     public ResponseEntity<Object> updateDaynote(@AuthenticationPrincipal User user,
                                                 @PathVariable Long daynoteId,

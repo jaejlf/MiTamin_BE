@@ -52,16 +52,7 @@ public class DaynoteService {
         Wish wish = wishService.findWishOrElseNew(user, daynoteRequest.getWishText());
         if (!canCreateDaynote(user, daynoteRequest.getPerformedAt()))
             throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
-        return DaynoteResponse.ofDetail(saveNewDaynote(daynoteRequest, wish, user));
-    }
-
-    /*
-    데이노트 조회
-    */
-    @Transactional(readOnly = true)
-    public DaynoteResponse getDaynote(Long daynoteId) {
-        Daynote daynote = findDaynoteById(daynoteId);
-        return DaynoteResponse.ofDetail(daynote);
+        return DaynoteResponse.of(saveNewDaynote(daynoteRequest, wish, user));
     }
 
     /*
@@ -102,7 +93,7 @@ public class DaynoteService {
         daynoteList.sort(Comparator.comparing(Daynote::getRawPerformedAt)); // 날짜 오름차순 정렬
 
         Map<Integer, List<DaynoteResponse>> daynoteListMap =
-                daynoteList.stream().map(DaynoteResponse::ofOverview).collect(Collectors.toList()) // DTO 변환
+                daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()) // DTO 변환
                         .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
 
         return DaynoteListResponse.of(daynoteListMap);
