@@ -36,12 +36,12 @@ include::{snippets}{custom}/care.adoc[]
 == User
 include::{snippets}{custom}/user.adoc[]
 
-== Wish
-include::{snippets}{custom}/wish.adoc[]
-
 == Myday
 include::{snippets}{custom}/myday.adoc[]
 include::{snippets}{custom}/daynote.adoc[]
+
+== Wish
+include::{snippets}{custom}/wish.adoc[]
 
 == Alarm
 include::{snippets}{custom}/alarm.adoc[]
