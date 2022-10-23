@@ -10,7 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CareSearchFilter {
-    Integer sort;
     List<Integer> careCategoryCodeList;
-    String date;
 }
