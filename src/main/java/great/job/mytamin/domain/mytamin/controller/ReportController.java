@@ -14,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -59,15 +58,6 @@ public class ReportController {
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("주간 마음 컨디션", weeklyMentalReportResponseList));
-    }
-
-    @GetMapping("/monthly/mental/{date}")
-    public ResponseEntity<Object> getMonthlyMentalReport(@AuthenticationPrincipal User user,
-                                                         @PathVariable String date) {
-        Map<Integer, Integer> monthlyMentalReportMap = reportService.getMonthlyMentalReport(user, date);
-        return ResponseEntity
-                .status(OK)
-                .body(ResultResponse.ok("월간 마음 컨디션", monthlyMentalReportMap));
     }
 
     @GetMapping("/feeling/rank")

@@ -1,17 +1,17 @@
 package great.job.mytamin.domain.mytamin.controller;
 
-import great.job.mytamin.global.dto.response.NoDataResponse;
-import great.job.mytamin.global.dto.response.ResultResponse;
+import great.job.mytamin.domain.mytamin.dto.response.MonthlyMytaminResponse;
 import great.job.mytamin.domain.mytamin.dto.response.MytaminResponse;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.global.dto.response.NoDataResponse;
+import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -44,6 +44,15 @@ public class MytaminController {
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("최근 섭취한 마이타민", mytaminResponse));
+    }
+
+    @GetMapping("/monthly/mytamin/{date}")
+    public ResponseEntity<Object> getMonthlyMytamin(@AuthenticationPrincipal User user,
+                                                         @PathVariable String date) {
+        List<MonthlyMytaminResponse> monthlyMytaminResponseList = mytaminService.getMonthlyMytamin(user, date);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("월간 마이타민 기록 조회", monthlyMytaminResponseList));
     }
 
 }

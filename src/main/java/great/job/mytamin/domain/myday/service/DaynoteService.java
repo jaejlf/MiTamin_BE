@@ -46,9 +46,6 @@ public class DaynoteService {
     */
     @Transactional
     public DaynoteResponse createDaynote(User user, DaynoteRequest daynoteRequest) {
-        System.out.println("1:" + daynoteRequest.getNote());
-        System.out.println("2:" + daynoteRequest.getWishText());
-        System.out.println("3:" + daynoteRequest.getPerformedAt());
         Wish wish = wishService.findWishOrElseNew(user, daynoteRequest.getWishText());
         if (!canCreateDaynote(user, daynoteRequest.getPerformedAt()))
             throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);

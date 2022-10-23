@@ -111,22 +111,6 @@ public class ReportService {
         else return feelingRankResponseList;
     }
 
-    /*
-    월간 마음 컨디션
-    */
-    @Transactional(readOnly = true)
-    public Map<Integer, Integer> getMonthlyMentalReport(User user, String date) {
-        LocalDateTime target = timeUtil.convertRawToLocalDateTime(date);
-        List<Report> monthlyReportList = getMonthlyReportList(user, target);
-
-        Map<Integer, Integer> map = initMap(target);
-        for (Report report : monthlyReportList) {
-            map.put(report.getTakeAt().getDayOfMonth(),
-                    report.getMentalConditionCode());
-        }
-        return map;
-    }
-
     private Report findReportById(Long reportId) {
         return reportRepository.findById(reportId)
                 .orElseThrow(() -> new MytaminException(REPORT_NOT_FOUND_ERROR));
@@ -185,15 +169,6 @@ public class ReportService {
             ));
         }
         return feelingRankResponseList;
-    }
-
-    private Map<Integer, Integer> initMap(LocalDateTime target) {
-        int lastDay = timeUtil.getLastDayOfMonth(target).getDayOfMonth();
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 1; i <= lastDay; i++) {
-            map.put(i, 0);
-        }
-        return map;
     }
 
 }
