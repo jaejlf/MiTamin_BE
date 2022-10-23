@@ -2,7 +2,6 @@ package great.job.mytamin.domain.myday.controller;
 
 import great.job.mytamin.domain.myday.dto.request.DaynoteRequest;
 import great.job.mytamin.domain.myday.dto.request.DaynoteUpdateRequest;
-import great.job.mytamin.domain.myday.dto.response.DaynoteListResponse;
 import great.job.mytamin.domain.myday.dto.response.DaynoteResponse;
 import great.job.mytamin.domain.myday.service.DaynoteService;
 import great.job.mytamin.global.exception.MytaminException;
@@ -18,10 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +50,7 @@ class DaynoteControllerTest extends CommonControllerTest {
     @DisplayName("데이노트 작성 가능 여부")
     class CanCreateDaynoteTest {
 
-        String performedAt = "2022.10";
+        String date = "2022.10";
 
         @DisplayName("성공")
         @Test
@@ -63,7 +59,7 @@ class DaynoteControllerTest extends CommonControllerTest {
             given(daynoteService.canCreateDaynote(any(), any())).willReturn(true);
 
             //when
-            ResultActions actions = mockMvc.perform(get("/daynote/check/{performedAt}", performedAt)
+            ResultActions actions = mockMvc.perform(get("/daynote/check/{date}", date)
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                     .contentType(APPLICATION_JSON));
 
@@ -77,7 +73,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                             ),
                             pathParameters(
-                                    parameterWithName("performedAt").description("*데이노트 수행 날짜 (yyyy.MM)")
+                                    parameterWithName("date").description("*데이노트 수행 날짜 (yyyy.MM)")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -94,14 +90,14 @@ class DaynoteControllerTest extends CommonControllerTest {
     class CreateDaynoteTest {
 
         List<MultipartFile> fileList = List.of(
-                new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes()),
-                new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>".getBytes())
+                new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>" .getBytes()),
+                new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>" .getBytes())
         );
 
         MockMultipartFile multipartFileList = new MockMultipartFile(
                 "fileList",
                 fileList.toString(),
-                "image/jpg", "<<image>>".getBytes()
+                "image/jpg", "<<image>>" .getBytes()
         );
 
         DaynoteRequest daynoteRequest = new DaynoteRequest(
@@ -122,7 +118,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .file(multipartFileList)
                     .param("wishText", daynoteRequest.getWishText())
                     .param("note", daynoteRequest.getNote())
-                    .param("performedAt", daynoteRequest.getPerformedAt())
+                    .param("date", daynoteRequest.getDate())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                     .contentType(MULTIPART_FORM_DATA));
 
@@ -138,7 +134,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                             requestParameters(
                                     parameterWithName("wishText").description("*위시 텍스트"),
                                     parameterWithName("note").description("*데이노트 코멘트"),
-                                    parameterWithName("performedAt").description("*데이노트 수행 날짜 (yyyy.MM)")
+                                    parameterWithName("date").description("*데이노트 수행 날짜 (yyyy.MM)")
                             ),
                             requestHeaders(
                                     headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
@@ -147,8 +143,9 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                     fieldWithPath("message").description("결과 메세지"),
                                     fieldWithPath("data.daynoteId").description("데이노트 id"),
-                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜"),
                                     fieldWithPath("data.imgList[]").description("데이노트 이미지 리스트"),
+                                    fieldWithPath("data.year").description("데이노트가 작성된 year"),
+                                    fieldWithPath("data.month").description("데이노트가 작성된 month"),
                                     fieldWithPath("data.wishText").description("위시 텍스트"),
                                     fieldWithPath("data.note").description("데이노트 코멘트")
                             ))
@@ -166,7 +163,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .file(multipartFileList)
                     .param("wishText", daynoteRequest.getWishText())
                     .param("note", daynoteRequest.getNote())
-                    .param("performedAt", daynoteRequest.getPerformedAt())
+                    .param("date", daynoteRequest.getDate())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                     .contentType(MULTIPART_FORM_DATA));
 
@@ -197,7 +194,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .file(multipartFileList)
                     .param("wishText", daynoteRequest.getWishText())
                     .param("note", daynoteRequest.getNote())
-                    .param("performedAt", daynoteRequest.getPerformedAt())
+                    .param("date", daynoteRequest.getDate())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                     .contentType(MULTIPART_FORM_DATA));
 
@@ -220,90 +217,20 @@ class DaynoteControllerTest extends CommonControllerTest {
     }
 
     @Nested
-    @DisplayName("데이노트 조회")
-    class GetDaynoteTest {
-
-        Long daynoteId = 1L;
-
-        @DisplayName("성공")
-        @Test
-        void getDaynote(TestInfo testInfo) throws Exception {
-            //given
-            given(daynoteService.getDaynote(any())).willReturn(mockDaynoteResponseOfDetail());
-
-            //when
-            ResultActions actions = mockMvc.perform(get("/daynote/{daynoteId}", daynoteId)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                    .contentType(APPLICATION_JSON));
-
-            //then
-            actions
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("data").exists())
-                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("daynoteId").description("*조회할 데이노트 id")
-                            ),
-                            responseFields(
-                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("message").description("결과 메세지"),
-                                    fieldWithPath("data.daynoteId").description("데이노트 id"),
-                                    fieldWithPath("data.performedAt").description("데이노트 수행 날짜"),
-                                    fieldWithPath("data.imgList[]").description("데이노트 이미지 리스트"),
-                                    fieldWithPath("data.wishText").description("위시 텍스트"),
-                                    fieldWithPath("data.note").description("데이노트 코멘트")
-                            ))
-                    );
-        }
-
-        @DisplayName("존재하지 않는 데이노트 id")
-        @Test
-        void getDaynote_8003(TestInfo testInfo) throws Exception {
-            //given
-            doThrow(new MytaminException(DAYNOTE_NOT_FOUND_ERROR)).when(daynoteService).getDaynote(any());
-
-            //when
-            ResultActions actions = mockMvc.perform(get("/daynote/{daynoteId}", daynoteId)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                    .contentType(APPLICATION_JSON));
-
-            //then
-            actions
-                    .andDo(print())
-                    .andExpect(status().isNotFound())
-                    .andExpect(jsonPath("errorCode").value(8003))
-                    .andExpect(jsonPath("errorName").value("DAYNOTE_NOT_FOUND_ERROR"))
-                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            responseFields(
-                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("errorCode").description("고유 에러 코드"),
-                                    fieldWithPath("errorName").description("오류 이름"),
-                                    fieldWithPath("message").description("오류 메세지")
-                            ))
-                    );
-        }
-
-    }
-
-    @Nested
     @DisplayName("데이노트 수정하기")
     class UpdateDaynoteTest {
 
         Long daynoteId = 1L;
 
         List<MultipartFile> fileList = List.of(
-                new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes()),
-                new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>".getBytes())
+                new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>" .getBytes()),
+                new MockMultipartFile("file", "mock2.jpg", "image/jpg", "<<image>>" .getBytes())
         );
 
         MockMultipartFile multipartFileList = new MockMultipartFile(
                 "fileList",
                 fileList.toString(),
-                "image/jpg", "<<image>>".getBytes()
+                "image/jpg", "<<image>>" .getBytes()
         );
 
         DaynoteUpdateRequest daynoteUpdateRequest = new DaynoteUpdateRequest(
@@ -393,6 +320,42 @@ class DaynoteControllerTest extends CommonControllerTest {
                     );
         }
 
+        @DisplayName("이미지 최대 업로드 개수 초과")
+        @Test
+        void updateDaynote_6003(TestInfo testInfo) throws Exception {
+            //given
+            doThrow(new MytaminException(FILE_MAXIMUM_EXCEED)).when(daynoteService).updateDaynote(any(), any(), any());
+
+            //when
+            MockMultipartHttpServletRequestBuilder builder = multipart("/daynote/{daynoteId}", daynoteId);
+            builder.with(request -> {
+                request.setMethod("PUT");
+                return request;
+            });
+
+            ResultActions actions = mockMvc.perform(builder
+                    .file(multipartFileList)
+                    .param("wishText", daynoteUpdateRequest.getWishText())
+                    .param("note", daynoteUpdateRequest.getNote())
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("errorCode").value(6003))
+                    .andExpect(jsonPath("errorName").value("FILE_MAXIMUM_EXCEED"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
     }
 
     @Nested
@@ -421,7 +384,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
                             ),
                             pathParameters(
-                                    parameterWithName("daynoteId").description("*수정할 데이노트 id")
+                                    parameterWithName("daynoteId").description("*삭제할 데이노트 id")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -482,11 +445,13 @@ class DaynoteControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data.daynoteList.*[]").description("연도별로 그룹핑된 데이노트 리스트"),
-                                fieldWithPath("data.daynoteList.*[].daynoteId").description("데이노트 id"),
-                                fieldWithPath("data.daynoteList.*[].month").description("데이노트가 작성된 '월'"),
-                                fieldWithPath("data.daynoteList.*[].performedAt").description("데이노트 수행 날짜"),
-                                fieldWithPath("data.daynoteList.*[].imgList[]").description("데이노트 이미지 리스트")
+                                fieldWithPath("data.*[]").description("연도별로 그룹핑된 데이노트 리스트"),
+                                fieldWithPath("data.*[].daynoteId").description("데이노트 id"),
+                                fieldWithPath("data.*[].imgList[]").description("데이노트 이미지 리스트"),
+                                fieldWithPath("data.*[].year").description("데이노트가 작성된 year"),
+                                fieldWithPath("data.*[].month").description("데이노트가 작성된 month"),
+                                fieldWithPath("data.*[].wishText").description("위시 텍스트"),
+                                fieldWithPath("data.*[].note").description("데이노트 코멘트")
                         ))
                 );
     }
@@ -497,49 +462,52 @@ class DaynoteControllerTest extends CommonControllerTest {
         imgList.add("{{IMAGE_URL_2}}");
 
         return DaynoteResponse.builder()
-                .year(2022)
                 .daynoteId(1L)
-                .performedAt("22년 10월의 마이데이")
                 .imgList(imgList)
+                .year(2022)
+                .month(10)
                 .wishText("도서관에 가서 책 한권 빌려오기")
                 .note("백만년만에 도서관에 가서 책을 빌렸다. 이번엔 연체되기 전에 꼭 다 읽고 반납해야겠다 *_*")
                 .build();
     }
 
-    private DaynoteListResponse mockDaynoteListResponse() {
+    private Map<Integer, List<DaynoteResponse>> mockDaynoteListResponse() {
         List<String> imgList = new ArrayList<>();
         imgList.add("{{IMAGE_URL_1}}");
         imgList.add("{{IMAGE_URL_2}}");
 
         List<DaynoteResponse> list_2021 = new ArrayList<>();
         list_2021.add(DaynoteResponse.builder()
-                .year(2021)
                 .daynoteId(1L)
-                .month("12")
-                .performedAt("21년 12월의 마이데이")
                 .imgList(imgList)
+                .year(2021)
+                .month(12)
+                .wishText("도서관에 가서 책 한권 빌려오기")
+                .note("백만년만에 도서관에 가서 책을 빌렸다. 이번엔 연체되기 전에 꼭 다 읽고 반납해야겠다 *_*")
                 .build());
 
         List<DaynoteResponse> list_2022 = new ArrayList<>();
         list_2022.add(DaynoteResponse.builder()
-                .year(2022)
-                .daynoteId(2L)
-                .month("05")
-                .performedAt("22년 05월의 마이데이")
+                .daynoteId(3L)
                 .imgList(imgList)
+                .year(2022)
+                .month(10)
+                .wishText("소품샵 가기")
+                .note("소품샵 가서 귀여운 비누를 샀다.")
                 .build());
         list_2022.add(DaynoteResponse.builder()
-                .year(2022)
-                .daynoteId(3L)
-                .month("10")
-                .performedAt("22년 10월의 마이데이")
+                .daynoteId(2L)
                 .imgList(imgList)
+                .year(2022)
+                .month(9)
+                .wishText("빵 나오는 시간에 맞춰서 갓 나온 빵 사먹기")
+                .note("따끈따끈한 식빵에 우유는 역시 최고 !")
                 .build());
 
-        Map<Integer, List<DaynoteResponse>> daynoteListMap = new HashMap<>();
-        daynoteListMap.put(2021, list_2021);
+        Map<Integer, List<DaynoteResponse>> daynoteListMap = new LinkedHashMap<>();
         daynoteListMap.put(2022, list_2022);
-        return DaynoteListResponse.of(daynoteListMap);
+        daynoteListMap.put(2021, list_2021);
+        return daynoteListMap;
     }
 
 }

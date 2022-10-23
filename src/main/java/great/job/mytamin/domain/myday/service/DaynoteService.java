@@ -2,7 +2,6 @@ package great.job.mytamin.domain.myday.service;
 
 import great.job.mytamin.domain.myday.dto.request.DaynoteRequest;
 import great.job.mytamin.domain.myday.dto.request.DaynoteUpdateRequest;
-import great.job.mytamin.domain.myday.dto.response.DaynoteListResponse;
 import great.job.mytamin.domain.myday.dto.response.DaynoteResponse;
 import great.job.mytamin.domain.myday.entity.Daynote;
 import great.job.mytamin.domain.myday.entity.Wish;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,9 +34,9 @@ public class DaynoteService {
     데이노트 작성 가능 여부
     */
     @Transactional(readOnly = true)
-    public Boolean canCreateDaynote(User user, String performedAt) {
-        LocalDateTime rawPerformedAt = timeUtil.convertRawToLocalDateTime(performedAt);
-        return daynoteRepository.findByUserAndRawPerformedAt(user, rawPerformedAt).isEmpty();
+    public Boolean canCreateDaynote(User user, String date) {
+        LocalDateTime rawDate = timeUtil.convertRawToLocalDateTime(date);
+        return daynoteRepository.findByUserAndDate(user, rawDate).isEmpty();
     }
 
     /*
@@ -47,7 +45,7 @@ public class DaynoteService {
     @Transactional
     public DaynoteResponse createDaynote(User user, DaynoteRequest daynoteRequest) {
         Wish wish = wishService.findWishOrElseNew(user, daynoteRequest.getWishText());
-        if (!canCreateDaynote(user, daynoteRequest.getPerformedAt()))
+        if (!canCreateDaynote(user, daynoteRequest.getDate()))
             throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
         return DaynoteResponse.of(saveNewDaynote(daynoteRequest, wish, user));
     }
@@ -85,15 +83,10 @@ public class DaynoteService {
     데이노트 리스트 조회
     */
     @Transactional(readOnly = true)
-    public DaynoteListResponse getDaynoteList(User user) {
-        List<Daynote> daynoteList = daynoteRepository.findAllByUser(user);
-        daynoteList.sort(Comparator.comparing(Daynote::getRawPerformedAt)); // 날짜 오름차순 정렬
-
-        Map<Integer, List<DaynoteResponse>> daynoteListMap =
-                daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()) // DTO 변환
-                        .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
-
-        return DaynoteListResponse.of(daynoteListMap);
+    public Map<Integer, List<DaynoteResponse>> getDaynoteList(User user) {
+        List<Daynote> daynoteList = daynoteRepository.searchDaynoteList(user);
+        return daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()) // DTO 변환
+                .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
     }
 
     private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, User user) {
@@ -101,7 +94,7 @@ public class DaynoteService {
                 awsS3Service.uploadImageList(daynoteRequest.getFileList(), "DN"),
                 wish,
                 daynoteRequest.getNote(),
-                timeUtil.convertRawToLocalDateTime(daynoteRequest.getPerformedAt()),
+                timeUtil.convertRawToLocalDateTime(daynoteRequest.getDate()),
                 user
         );
         return daynoteRepository.save(daynote);

@@ -46,7 +46,7 @@ public class MytaminController {
                 .body(ResultResponse.ok("최근 섭취한 마이타민", mytaminResponse));
     }
 
-    @GetMapping("/monthly/mytamin/{date}")
+    @GetMapping("/monthly/{date}")
     public ResponseEntity<Object> getMonthlyMytamin(@AuthenticationPrincipal User user,
                                                          @PathVariable String date) {
         List<MonthlyMytaminResponse> monthlyMytaminResponseList = mytaminService.getMonthlyMytamin(user, date);

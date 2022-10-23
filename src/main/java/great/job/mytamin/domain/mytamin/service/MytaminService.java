@@ -112,13 +112,11 @@ public class MytaminService {
         for (Mytamin mytamin : mytaminList) {
             int index = mytamin.getTakeAt().getDayOfMonth() - 1;
             MonthlyMytaminResponse tmp = monthlyMytaminResponseList.get(index);
-
             monthlyMytaminResponseList.set(
                     index,
                     MonthlyMytaminResponse.builder()
                             .mytaminId(mytamin.getMytaminId())
                             .day(tmp.getDay())
-                            .dayOfWeek(tmp.getDayOfWeek())
                             .mentalConditionCode(mytamin.getReport() == null ? 9 : mytamin.getReport().getMentalConditionCode()) // 칭찬 처방만 존재하는 경우 -> 9
                             .build()
             );
@@ -135,22 +133,16 @@ public class MytaminService {
 
     private List<MonthlyMytaminResponse> initList(LocalDateTime target) {
         int lastDay = timeUtil.getLastDayOfMonth(target).getDayOfMonth();
-        int dayOfWeek = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), 1, 0, 0)
-                .getDayOfWeek().getValue(); // target달 1일이 무슨 요일인지
-
         List<MonthlyMytaminResponse> monthlyMytaminResponseList = new ArrayList<>();
         for (int i = 1; i <= lastDay; i++) {
             monthlyMytaminResponseList.add(
                     MonthlyMytaminResponse.builder()
                             .mytaminId(null)
                             .day(i)
-                            .dayOfWeek(timeUtil.convertDayNumToStr(dayOfWeek++))
                             .mentalConditionCode(0)
                             .build()
             );
-            dayOfWeek = dayOfWeek % 8 == 0 ? 1 : dayOfWeek % 8;
         }
-        
         return monthlyMytaminResponseList;
     }
 

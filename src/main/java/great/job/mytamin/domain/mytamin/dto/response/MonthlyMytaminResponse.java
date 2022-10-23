@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class MonthlyMytaminResponse {
     Long mytaminId;
     int day;
-    String dayOfWeek;
     int mentalConditionCode;
 }

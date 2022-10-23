@@ -17,9 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +30,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -384,38 +383,6 @@ class ReportControllerTest extends CommonControllerTest {
                 );
     }
 
-    @DisplayName("월간 마음 컨디션 조회")
-    @Test
-    void getMonthlyMentalReport(TestInfo testInfo) throws Exception {
-        //given
-        String date = "2022.10";
-        given(reportService.getMonthlyMentalReport(any(), any())).willReturn(mockMonthlyMentalResponseList());
-
-        //when
-        ResultActions actions = mockMvc.perform(get("/report/monthly/mental/{date}", date)
-                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                .contentType(APPLICATION_JSON));
-
-        //then
-        actions
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("data").exists())
-                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                        requestHeaders(
-                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                        ),
-                        pathParameters(
-                                parameterWithName("date").description("*조회할 날짜 (yyyy.MM)")
-                        ),
-                        responseFields(
-                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data.*").description("월간 마음 컨디션")
-                        ))
-                );
-    }
-
     @DisplayName("이번 달 가장 많이 느낀 감정")
     @Test
     void getMonthlyFeelingRank(TestInfo testInfo) throws Exception {
@@ -456,42 +423,6 @@ class ReportControllerTest extends CommonControllerTest {
         weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("화", 2));
         weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("오늘", 5));
         return weeklyMentalReportResponseList;
-    }
-
-    private Map<Integer, Integer> mockMonthlyMentalResponseList() {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(1, 0);
-        map.put(2, 0);
-        map.put(3, 1);
-        map.put(4, 2);
-        map.put(5, 5);
-        map.put(6, 4);
-        map.put(7, 3);
-        map.put(8, 0);
-        map.put(9, 1);
-        map.put(10, 5);
-        map.put(11, 4);
-        map.put(12, 3);
-        map.put(13, 0);
-        map.put(14, 1);
-        map.put(15, 5);
-        map.put(16, 4);
-        map.put(17, 3);
-        map.put(18, 0);
-        map.put(19, 3);
-        map.put(20, 0);
-        map.put(21, 0);
-        map.put(22, 0);
-        map.put(23, 0);
-        map.put(24, 0);
-        map.put(25, 0);
-        map.put(26, 0);
-        map.put(27, 0);
-        map.put(28, 0);
-        map.put(29, 0);
-        map.put(30, 0);
-        map.put(31, 0);
-        return map;
     }
 
     private List<FeelingRankResponse> mockFeelingRankResponse() {

@@ -2,7 +2,6 @@ package great.job.mytamin.domain.myday.controller;
 
 import great.job.mytamin.domain.myday.dto.request.DaynoteRequest;
 import great.job.mytamin.domain.myday.dto.request.DaynoteUpdateRequest;
-import great.job.mytamin.domain.myday.dto.response.DaynoteListResponse;
 import great.job.mytamin.domain.myday.dto.response.DaynoteResponse;
 import great.job.mytamin.domain.myday.service.DaynoteService;
 import great.job.mytamin.domain.user.entity.User;
@@ -12,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -23,10 +25,10 @@ public class DaynoteController {
 
     private final DaynoteService daynoteService;
 
-    @GetMapping("/check/{performedAt}")
+    @GetMapping("/check/{date}")
     public ResponseEntity<Object> canCreateDaynote(@AuthenticationPrincipal User user,
-                                                   @PathVariable String performedAt) {
-        Boolean canCreate = daynoteService.canCreateDaynote(user, performedAt);
+                                                   @PathVariable String date) {
+        Boolean canCreate = daynoteService.canCreateDaynote(user, date);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("데이노트 작성 가능 여부", canCreate));
@@ -62,7 +64,7 @@ public class DaynoteController {
     
     @GetMapping("/list")
     public ResponseEntity<Object> getDaynoteList(@AuthenticationPrincipal User user) {
-        DaynoteListResponse daynoteListResponse = daynoteService.getDaynoteList(user);
+        Map<Integer, List<DaynoteResponse>> daynoteListResponse = daynoteService.getDaynoteList(user);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("데이노트 리스트 조회", daynoteListResponse));

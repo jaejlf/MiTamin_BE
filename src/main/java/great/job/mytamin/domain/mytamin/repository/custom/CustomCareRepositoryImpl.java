@@ -17,7 +17,6 @@ import java.util.List;
 public class CustomCareRepositoryImpl implements CustomCareRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
-//    private final TimeUtil timeUtil;
 
     QCare care = QCare.care;
 
@@ -28,7 +27,6 @@ public class CustomCareRepositoryImpl implements CustomCareRepository {
                 .where(
                         eqUser(user),
                         eqCategory(careSearchFilter.getCareCategoryCodeList())
-//                        betweenqDate(careSearchFilter.getDate())
                 )
                 .orderBy(sorting())
                 .fetch();
@@ -48,15 +46,6 @@ public class CustomCareRepositoryImpl implements CustomCareRepository {
         }
         return booleanBuilder;
     }
-
-//    // 날짜
-//    private BooleanExpression betweenqDate(String date) {
-//        if (date == null) return null;
-//        LocalDateTime target = timeUtil.convertRawToLocalDateTime(date);
-//        LocalDateTime start = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), 1, 0, 0);
-//        LocalDateTime end = timeUtil.getLastDayOfMonth(target);
-//        return care.takeAt.between(start, end);
-//    }
 
     // 정렬
     private OrderSpecifier<?> sorting() {

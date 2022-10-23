@@ -2,7 +2,7 @@ package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
 import great.job.mytamin.domain.mytamin.dto.request.CareSearchFilter;
-import great.job.mytamin.domain.mytamin.dto.response.CareHistoryListResponse;
+import great.job.mytamin.domain.mytamin.dto.response.CareHistoryResponse;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
 import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
 import great.job.mytamin.domain.mytamin.service.CareService;
@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -62,7 +65,7 @@ public class CareController {
     @GetMapping("/list")
     public ResponseEntity<Object> getCareHistroy(@AuthenticationPrincipal User user,
                                                  @RequestBody CareSearchFilter careSearchFilter) {
-        CareHistoryListResponse careHistoryListResponse = careService.getCareHistroy(user, careSearchFilter);
+        Map<String, List<CareHistoryResponse>> careHistoryListResponse = careService.getCareHistroy(user, careSearchFilter);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("칭찬 처방 히스토리 조회", careHistoryListResponse));
