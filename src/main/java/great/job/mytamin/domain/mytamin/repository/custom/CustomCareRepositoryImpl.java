@@ -9,7 +9,6 @@ import great.job.mytamin.domain.mytamin.dto.request.CareSearchFilter;
 import great.job.mytamin.domain.mytamin.entity.Care;
 import great.job.mytamin.domain.mytamin.entity.QCare;
 import great.job.mytamin.domain.user.entity.User;
-import great.job.mytamin.domain.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 public class CustomCareRepositoryImpl implements CustomCareRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final TimeUtil timeUtil;
+//    private final TimeUtil timeUtil;
 
     QCare care = QCare.care;
 
@@ -43,7 +42,6 @@ public class CustomCareRepositoryImpl implements CustomCareRepository {
     // 칭찬 카테고리
     private BooleanBuilder eqCategory(List<Integer> careCategoryCodeList) {
         if (careCategoryCodeList == null) return null;
-
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         for (Integer careCategory : careCategoryCodeList) {
             booleanBuilder.or(care.careCategoryCode.eq(careCategory));
@@ -51,7 +49,7 @@ public class CustomCareRepositoryImpl implements CustomCareRepository {
         return booleanBuilder;
     }
 
-    // 날짜
+//    // 날짜
 //    private BooleanExpression betweenqDate(String date) {
 //        if (date == null) return null;
 //        LocalDateTime target = timeUtil.convertRawToLocalDateTime(date);

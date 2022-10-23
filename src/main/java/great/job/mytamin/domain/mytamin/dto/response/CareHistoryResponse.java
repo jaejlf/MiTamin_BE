@@ -32,7 +32,7 @@ public class CareHistoryResponse {
                 .careMsg1(care.getCareMsg1())
                 .careMsg2(care.getCareMsg2())
                 .takeAt(target.format(DateTimeFormatter.ofPattern("MM.dd")) + "." + dayOfWeek)
-                .title(target.format(DateTimeFormatter.ofPattern("yyyy년 MM월")))
+                .title(target.getYear() + "년 " + target.getMonth().getValue() + "월")
                 .build();
     }
 
