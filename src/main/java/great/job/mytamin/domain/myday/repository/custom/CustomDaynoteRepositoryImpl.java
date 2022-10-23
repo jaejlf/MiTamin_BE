@@ -36,7 +36,7 @@ public class CustomDaynoteRepositoryImpl implements CustomDaynoteRepository{
 
     // 정렬
     private OrderSpecifier<?> sorting() {
-        return new OrderSpecifier<>(Order.DESC, daynote.date); // 최신 순
+        return new OrderSpecifier<>(Order.DESC, daynote.performedAt); // 최신 순
     }
 
 }

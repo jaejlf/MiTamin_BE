@@ -35,18 +35,18 @@ public class Daynote {
     private String note;
 
     private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime date;
+    private LocalDateTime performedAt;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
-    public Daynote(List<String> imgUrlList, Wish wish, String note, LocalDateTime date, User user) {
+    public Daynote(List<String> imgUrlList, Wish wish, String note, LocalDateTime performedAt, User user) {
         this.imgUrlList = imgUrlList;
         this.wish = wish;
         this.wishText = wish.getWishText();
         this.note = note;
-        this.date = date;
+        this.performedAt = performedAt;
         this.user = user;
     }
 

@@ -23,7 +23,7 @@ public class DaynoteResponse {
     String note;
 
     public static DaynoteResponse of(Daynote daynote) {
-        LocalDateTime rawPerformedAt = daynote.getDate();
+        LocalDateTime rawPerformedAt = daynote.getPerformedAt();
         return DaynoteResponse.builder()
                 .daynoteId(daynote.getDaynoteId())
                 .imgList(daynote.getImgUrlList())

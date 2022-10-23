@@ -3461,7 +3461,7 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 442
+Content-Length: 549
 
 {
   "statusCode" : 200,
@@ -3470,10 +3470,12 @@ Content-Length: 442
     "2022년 10월" : [ {
       "careMsg1" : "오늘 할 일을 전부 했어",
       "careMsg2" : "성실히 노력하는 내 모습이 좋아",
+      "careCategory" : "#이루어 낸 일",
       "takeAt" : "10.13.Thu"
     }, {
       "careMsg1" : "꾸준히 칭찬 기록 중이야",
       "careMsg2" : "꾸준한 내 모습을 칭찬해 !",
+      "careCategory" : "#긍정적인 변화나 깨달음",
       "takeAt" : "10.19.Wed"
     } ]
   }
@@ -3591,6 +3593,11 @@ Content-Length: 490
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].careMsg2</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].careCategory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 카테고리</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data..*[].takeAt</code></p></td>
@@ -4188,7 +4195,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@8d11a2c, org.springframework.mock.web.MockMultipartFile@63838642]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@746169cd, org.springframework.mock.web.MockMultipartFile@72294513]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -4411,7 +4418,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@11f2be38, org.springframework.mock.web.MockMultipartFile@4613274d]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@24d02ed9, org.springframework.mock.web.MockMultipartFile@6402f6b1]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;

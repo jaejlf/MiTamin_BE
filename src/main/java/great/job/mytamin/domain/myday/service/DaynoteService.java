@@ -35,8 +35,8 @@ public class DaynoteService {
     */
     @Transactional(readOnly = true)
     public Boolean canCreateDaynote(User user, String date) {
-        LocalDateTime rawDate = timeUtil.convertRawToLocalDateTime(date);
-        return daynoteRepository.findByUserAndDate(user, rawDate).isEmpty();
+        LocalDateTime performedAt = timeUtil.convertRawToLocalDateTime(date);
+        return daynoteRepository.findByUserAndPerformedAt(user, performedAt).isEmpty();
     }
 
     /*

@@ -413,6 +413,7 @@ class CareControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.*[]").description("년/월로 그룹핑된 칭찬 처방 리스트"),
                                 fieldWithPath("data.*[].careMsg1").description("칭찬 처방 메세지 1"),
                                 fieldWithPath("data.*[].careMsg2").description("칭찬 처방 메세지 2"),
+                                fieldWithPath("data.*[].careCategory").description("칭찬 카테고리"),
                                 fieldWithPath("data..*[].takeAt").description("마이타민 섭취 날짜")
                         ))
                 );
@@ -423,11 +424,13 @@ class CareControllerTest extends CommonControllerTest {
         list_oct.add(CareHistoryResponse.builder()
                 .careMsg1("오늘 할 일을 전부 했어")
                 .careMsg2("성실히 노력하는 내 모습이 좋아")
+                .careCategory("#이루어 낸 일")
                 .takeAt("10.13.Thu")
                 .build());
         list_oct.add(CareHistoryResponse.builder()
                 .careMsg1("꾸준히 칭찬 기록 중이야")
                 .careMsg2("꾸준한 내 모습을 칭찬해 !")
+                .careCategory("#긍정적인 변화나 깨달음")
                 .takeAt("10.19.Wed")
                 .build());
 
