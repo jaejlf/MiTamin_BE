@@ -1,10 +1,11 @@
 package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
+import great.job.mytamin.domain.mytamin.dto.response.MonthlyMytaminResponse;
 import great.job.mytamin.domain.mytamin.dto.response.MytaminResponse;
-import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
 import great.job.mytamin.domain.mytamin.enumerate.MentalCondition;
+import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +32,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -157,6 +162,51 @@ class MytaminControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.care.careMsg2").description("칭찬 처방 메세지 2")
                         ))
                 );
+    }
+
+    @DisplayName("월간 마이타민 기록 조회")
+    @Test
+    void getMonthlyMytamin(TestInfo testInfo) throws Exception {
+        //given
+       String date = "2022.10";
+
+        given(mytaminService.getMonthlyMytamin(any(), any())).willReturn(mockMonthlyMytaminResponse());
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/mytamin/monthly/{date}", date)
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        pathParameters(
+                                parameterWithName("date").description("*조회할 month (yyyy.MM)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data[].mytaminId").description("마이타민 id"),
+                                fieldWithPath("data[].day").description("날짜"),
+                                fieldWithPath("data[].mentalConditionCode").description("마음 컨디션 코드")
+                        ))
+                );
+    }
+
+    private List<MonthlyMytaminResponse> mockMonthlyMytaminResponse() {
+        List<MonthlyMytaminResponse> monthlyMytaminResponseList = new ArrayList<>();
+        monthlyMytaminResponseList.add(MonthlyMytaminResponse.builder().mytaminId(1L).day(19).mentalConditionCode(1).build());
+        monthlyMytaminResponseList.add(MonthlyMytaminResponse.builder().mytaminId(2L).day(20).mentalConditionCode(5).build());
+        monthlyMytaminResponseList.add(MonthlyMytaminResponse.builder().mytaminId(3L).day(21).mentalConditionCode(3).build());
+        monthlyMytaminResponseList.add(MonthlyMytaminResponse.builder().mytaminId(4L).day(22).mentalConditionCode(9).build());
+        monthlyMytaminResponseList.add(MonthlyMytaminResponse.builder().mytaminId(5L).day(23).mentalConditionCode(9).build());
+        return monthlyMytaminResponseList;
     }
 
 }

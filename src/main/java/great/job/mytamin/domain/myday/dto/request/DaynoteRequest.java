@@ -17,5 +17,5 @@ public class DaynoteRequest {
     List<MultipartFile> fileList;
     @NotBlank String wishText;
     @NotBlank String note;
-    @NotBlank String performedAt;
+    @NotBlank String date;
 }

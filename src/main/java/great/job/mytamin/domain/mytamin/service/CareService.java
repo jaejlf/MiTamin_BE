@@ -2,7 +2,6 @@ package great.job.mytamin.domain.mytamin.service;
 
 import great.job.mytamin.domain.mytamin.dto.request.CareRequest;
 import great.job.mytamin.domain.mytamin.dto.request.CareSearchFilter;
-import great.job.mytamin.domain.mytamin.dto.response.CareHistoryListResponse;
 import great.job.mytamin.domain.mytamin.dto.response.CareHistoryResponse;
 import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
 import great.job.mytamin.domain.mytamin.dto.response.RandomCareResponse;
@@ -97,15 +96,10 @@ public class CareService {
     칭찬 처방 히스토리 조회
     */
     @Transactional(readOnly = true)
-    public CareHistoryListResponse getCareHistroy(User user, CareSearchFilter careSearchFilter) {
-        List<Care> careList = careRepository.searchCareHistory(careSearchFilter);
-        Map<String, List<CareHistoryResponse>> careHistory =
-                careList.stream().map(CareHistoryResponse::of).collect(Collectors.toList()) // DTO 변환
-                        .stream().collect(Collectors.groupingBy(CareHistoryResponse::getTitle)); // title로 그룹핑
-
-        // 정렬 조건 추가 필요
-        
-        return CareHistoryListResponse.of(careHistory);
+    public Map<String, List<CareHistoryResponse>> getCareHistroy(User user, CareSearchFilter careSearchFilter) {
+        List<Care> careList = careRepository.searchCareHistory(user, careSearchFilter);
+        return careList.stream().map(CareHistoryResponse::of).collect(Collectors.toList()) // DTO 변환
+                .stream().collect(Collectors.groupingBy(CareHistoryResponse::getTitle)); // title로 그룹핃
     }
 
     private Care findCareById(Long careId) {
