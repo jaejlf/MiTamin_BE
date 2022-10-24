@@ -1717,7 +1717,6 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Disposition: inline;filename=f.txt
 Content-Type: application/json;charset=UTF-8
 Content-Length: 484
 
@@ -1832,7 +1831,10 @@ Content-Length: 484
 <p>date는 yyyy.MM.dd 형식으로 요청한다. (ex. 22년 1월 1일 → 2022.01.01)</p>
 </li>
 <li>
-<p>date가 포함된 week의 월 ~ 금요일의 마이타민 기록을 조회한다.</p>
+<p>date가 포함된 week의 월 ~ 일요일의 마이타민 기록을 '날짜:마이타민' 형태로 조회한다.</p>
+</li>
+<li>
+<p>마이타민 기록이 없는 날은 null로 리턴된다. (ex. data.날짜 : null)</p>
 </li>
 <li>
 <p>하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다.</p>
@@ -1855,101 +1857,73 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Disposition: inline;filename=f.txt
 Content-Type: application/json;charset=UTF-8
-Content-Length: 2745
+Content-Length: 889
 
 {
   "statusCode" : 200,
   "message" : "주간 마이타민 기록 조회",
-  "data" : [ {
-    "mytaminId" : 1,
-    "takeAt" : "10.17.Mon",
-    "report" : null,
-    "care" : {
-      "careId" : 1,
-      "canEdit" : false,
-      "careCategory" : "이루어 낸 일",
-      "careMsg1" : "오늘 할 일을 전부 했어",
-      "careMsg2" : "성실히 노력하는 내 모습이 좋아"
-    }
-  }, {
-    "mytaminId" : 2,
-    "takeAt" : "10.18.Tue",
-    "report" : {
-      "reportId" : 1,
-      "canEdit" : false,
-      "mentalConditionCode" : 5,
-      "mentalCondition" : "매우 좋아요 !",
-      "feelingTag" : "#신나는",
-      "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
+  "data" : {
+    "17" : {
+      "mytaminId" : 1,
+      "takeAt" : "10월 17일의 마이타민",
+      "report" : {
+        "reportId" : 1,
+        "canEdit" : false,
+        "mentalConditionCode" : 5,
+        "mentalCondition" : "매우 좋아요 !",
+        "feelingTag" : "#신나는",
+        "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
+      },
+      "care" : null
     },
-    "care" : null
-  }, {
-    "mytaminId" : 3,
-    "takeAt" : "10.19.Wed",
-    "report" : {
-      "reportId" : 2,
-      "canEdit" : false,
-      "mentalConditionCode" : 4,
-      "mentalCondition" : "좋은 편이에요 :)",
-      "feelingTag" : "#즐거운 #행복한",
-      "todayReport" : "즐겁고 행복한 수요일"
+    "18" : {
+      "mytaminId" : 2,
+      "takeAt" : "10월 18일의 마이타민",
+      "report" : null,
+      "care" : {
+        "careId" : 1,
+        "canEdit" : false,
+        "careCategory" : "이루어 낸 일",
+        "careMsg1" : "오늘 할 일을 전부 했어",
+        "careMsg2" : "성실히 노력하는 내 모습이 좋아"
+      }
     },
-    "care" : {
-      "careId" : 2,
-      "canEdit" : false,
-      "careCategory" : "이루어 낸 일",
-      "careMsg1" : "늦잠자고 싶었지만 그러지 않았어",
-      "careMsg2" : "그래서 여유롭게 커피를 먹을 수 있었어"
-    }
-  }, {
-    "mytaminId" : 4,
-    "takeAt" : "10.20.Thu",
-    "report" : null,
-    "care" : {
-      "careId" : 3,
-      "canEdit" : false,
-      "careCategory" : "잘한 일이나 행동",
-      "careMsg1" : "사고 싶은게 있었지만 잘 참았어",
-      "careMsg2" : "충동구매를 하지 않는 모습.. 멋져 !"
-    }
-  }, {
-    "mytaminId" : 5,
-    "takeAt" : "10.21.Fri",
-    "report" : {
-      "reportId" : 3,
-      "canEdit" : false,
-      "mentalConditionCode" : 3,
-      "mentalCondition" : "그럭저럭이에요",
-      "feelingTag" : "#평온한 #지루한 #권태로운",
-      "todayReport" : "별거 없었던 오늘의 하루"
+    "19" : null,
+    "20" : {
+      "mytaminId" : 3,
+      "takeAt" : "10월 20일의 마이타민",
+      "report" : null,
+      "care" : {
+        "careId" : 1,
+        "canEdit" : false,
+        "careCategory" : "노력하고 있는 부분",
+        "careMsg1" : "너무 늦게 잠들지 않기 위해 노력 중이야",
+        "careMsg2" : "치만 오늘도 해가 뜰 때쯤 잠들었어"
+      }
     },
-    "care" : null
-  }, {
-    "mytaminId" : 6,
-    "takeAt" : "10.22.Sat",
-    "report" : null,
-    "care" : {
-      "careId" : 4,
-      "canEdit" : false,
-      "careCategory" : "노력하고 있는 부분",
-      "careMsg1" : "너무 늦게 잠들지 않기 위해 노력 중이야",
-      "careMsg2" : "그치만 오늘도 해가 뜰 때쯤 잠들었어"
-    }
-  }, {
-    "mytaminId" : 7,
-    "takeAt" : "10.23.Sun",
-    "report" : {
-      "reportId" : 4,
-      "canEdit" : false,
-      "mentalConditionCode" : 5,
-      "mentalCondition" : "매우 좋아요 !",
-      "feelingTag" : "#신나는",
-      "todayReport" : "해압삐한 일요일이다 !"
+    "21" : {
+      "mytaminId" : 4,
+      "takeAt" : "10월 21일의 마이타민",
+      "report" : {
+        "reportId" : 1,
+        "canEdit" : false,
+        "mentalConditionCode" : 3,
+        "mentalCondition" : "그럭저럭 이에요",
+        "feelingTag" : "#평온한 #무념무상의",
+        "todayReport" : "별거 없었던 오늘의 하루"
+      },
+      "care" : {
+        "careId" : 1,
+        "canEdit" : false,
+        "careCategory" : "노력하고 있는 부분",
+        "careMsg1" : "너무 늦게 잠들지 않기 위해 노력 중이야",
+        "careMsg2" : "그치만 오늘도 해가 뜰 때쯤 잠들었어"
+      }
     },
-    "care" : null
-  } ]
+    "22" : null,
+    "23" : null
+  }
 }</code></pre>
 </div>
 </div>
@@ -2024,67 +1998,72 @@ Content-Length: 2745
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].mytaminId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.mytaminId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].takeAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.takeAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 날짜</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].report.reportId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.report.reportId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">하루 진단 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].report.canEdit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.report.canEdit</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">'하루 진단' 수정 가능 여부</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].report.mentalConditionCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.report.mentalConditionCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마음 컨디션 코드</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].report.mentalCondition</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.report.mentalCondition</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마음 컨디션 메세지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].report.feelingTag</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.report.feelingTag</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">감정 태그</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].report.todayReport</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.report.todayReport</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">하루 진단</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].care.careId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.care.careId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].care.canEdit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.care.canEdit</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">'칭찬 처방' 수정 가능 여부</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].care.careCategory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.care.careCategory</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 카테고리</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].care.careMsg1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.care.careMsg1</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].care.careMsg2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*.care.careMsg2</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 2</p></td>
 </tr>
@@ -4691,7 +4670,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@6288199, org.springframework.mock.web.MockMultipartFile@79f8af90]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@5496cd02, org.springframework.mock.web.MockMultipartFile@700cc0e6]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -4914,7 +4893,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@3200f6e5, org.springframework.mock.web.MockMultipartFile@1703b09a]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@483eff43, org.springframework.mock.web.MockMultipartFile@6671ec3b]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;

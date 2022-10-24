@@ -2,6 +2,7 @@ package great.job.mytamin.domain.mytamin.controller;
 
 import great.job.mytamin.domain.mytamin.dto.response.MonthlyMytaminResponse;
 import great.job.mytamin.domain.mytamin.dto.response.MytaminResponse;
+import great.job.mytamin.domain.mytamin.dto.response.WeeklyMytaminResponse;
 import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.dto.response.NoDataResponse;
@@ -12,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -58,10 +60,10 @@ public class MytaminController {
     @GetMapping("/weekly/{date}")
     public ResponseEntity<Object> getWeeklyMytamin(@AuthenticationPrincipal User user,
                                                    @PathVariable String date) {
-        List<MytaminResponse> mytaminResponseList = mytaminService.getWeeklyMytamin(user, date);
+        Map<Integer, WeeklyMytaminResponse> weeklyMytaminResponseMap = mytaminService.getWeeklyMytamin(user, date);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("주간 마이타민 기록 조회", mytaminResponseList));
+                .body(ResultResponse.ok("주간 마이타민 기록 조회", weeklyMytaminResponseMap));
     }
 
     @DeleteMapping("/{mytaminId}")
