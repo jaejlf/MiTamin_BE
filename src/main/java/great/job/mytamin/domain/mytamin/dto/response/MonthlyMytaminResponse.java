@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MonthlyMytaminResponse {
-    Long mytaminId;
     int day;
     int mentalConditionCode;
 }
