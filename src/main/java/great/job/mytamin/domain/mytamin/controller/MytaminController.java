@@ -64,4 +64,13 @@ public class MytaminController {
                 .body(ResultResponse.ok("주간 마이타민 기록 조회", mytaminResponseList));
     }
 
+    @DeleteMapping("/{mytaminId}")
+    public ResponseEntity<Object> deleteMytamin(@AuthenticationPrincipal User user,
+                                                @PathVariable Long mytaminId) {
+        mytaminService.deleteMytamin(user, mytaminId);
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("마이타민 삭제"));
+    }
+
 }

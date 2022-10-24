@@ -34,6 +34,9 @@ public enum ErrorMap {
     CARE_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 5001, "CARE_ALREADY_DONE_ERROR", "오늘의 '칭찬 처방하기'를 이미 완료했습니다."),
     CARE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 5002, "CARE_NOT_FOUND_ERROR", "존재하지 않는 careId 입니다."),
 
+    // Mytamin 5xxx
+    MYTAMIN_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 5003, "MYTAMIN_NOT_FOUND_ERROR", "존재하지 않는 mytaminId 입니다."),
+
     // S3 6xxx
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 6000, "FILE_UPLOAD_ERROR", "파일 업로드에 실패했습니다."),
     FILE_EXTENTION_ERROR(HttpStatus.BAD_REQUEST, 6001, "FILE_EXTENTION_ERROR", ".jpg, .png, .jpeg 파일만 업로드할 수 있습니다."),

@@ -11,6 +11,7 @@ import great.job.mytamin.domain.mytamin.repository.MytaminRepository;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.util.ReportUtil;
 import great.job.mytamin.domain.util.TimeUtil;
+import great.job.mytamin.global.exception.MytaminException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static great.job.mytamin.global.exception.ErrorMap.*;
 
 @Service
 @RequiredArgsConstructor
@@ -131,6 +134,16 @@ public class MytaminService {
         return mytaminResponseList;
     }
 
+    /*
+    마이타민 삭제
+    */
+    @Transactional
+    public void deleteMytamin(User user, Long mytaminId) {
+        Mytamin mytamin = findMytaminById(mytaminId);
+        hasAuthorized(mytamin, user);
+        mytaminRepository.delete(mytamin);
+    }
+
     private List<Mytamin> getMonthlyMytaminList(User user, LocalDateTime target) {
         LocalDateTime start = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), 1, 0, 0);
         LocalDateTime end = timeUtil.getLastDayOfMonth(target);
@@ -170,6 +183,17 @@ public class MytaminService {
             careResponse = CareResponse.of(care, timeUtil.canEditCare(care));
         }
         return careResponse;
+    }
+
+    private void hasAuthorized(Mytamin mytamin, User user) {
+        if (!mytamin.getUser().equals(user)) {
+            throw new MytaminException(NO_AUTH_ERROR);
+        }
+    }
+
+    private Mytamin findMytaminById(Long mytaminId) {
+        return mytaminRepository.findById(mytaminId)
+                .orElseThrow(() -> new MytaminException(MYTAMIN_NOT_FOUND_ERROR));
     }
 
 }
