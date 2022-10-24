@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface DaynoteRepository extends JpaRepository<Daynote, Long>, CustomDaynoteRepository {
     int countByWish(Wish wish);
     Optional<Daynote> findByUserAndPerformedAt(User user, LocalDateTime performedAt);
+    void deleteAllByUser(User user);
 }

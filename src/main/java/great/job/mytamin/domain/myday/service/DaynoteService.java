@@ -89,6 +89,14 @@ public class DaynoteService {
                 .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
     }
 
+    /*
+    데이노트 전체 삭제
+    */
+    @Transactional
+    public void deleteAll(User user) {
+        daynoteRepository.deleteAllByUser(user);
+    }
+
     private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, User user) {
         Daynote daynote = new Daynote(
                 awsS3Service.uploadImageList(daynoteRequest.getFileList(), "DN"),

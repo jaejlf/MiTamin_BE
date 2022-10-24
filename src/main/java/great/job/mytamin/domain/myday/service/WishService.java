@@ -99,6 +99,14 @@ public class WishService {
         return wish.get();
     }
 
+    /*
+    위시 전체 삭제
+    */
+    @Transactional
+    public void deleteAll(User user) {
+        wishRepository.deleteAllByUser(user);
+    }
+
     private void updateWish(Wish wish, WishRequest wishRequest) {
         String text = wishRequest.getWishText();
         boolean isHidden = wishRequest.getIsHidden();

@@ -12,4 +12,5 @@ public interface MytaminRepository extends JpaRepository<Mytamin, Long> {
     Optional<Mytamin> findByUserAndTakeAt(User user, LocalDateTime takeAt);
     Mytamin findFirstByUserOrderByMytaminIdDesc(User user);
     List<Mytamin> findAllByUserAndTakeAtBetween(User user, LocalDateTime start, LocalDateTime end);
+    void deleteAllByUser(User user);
 }

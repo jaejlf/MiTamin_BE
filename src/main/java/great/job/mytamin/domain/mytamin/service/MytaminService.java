@@ -148,6 +148,14 @@ public class MytaminService {
         mytaminRepository.delete(mytamin);
     }
 
+    /*
+    마이타민 전체 삭제
+    */
+    @Transactional
+    public void deleteAll(User user) {
+        mytaminRepository.deleteAllByUser(user);
+    }
+
     private List<Mytamin> getMonthlyMytaminList(User user, LocalDateTime target) {
         LocalDateTime start = LocalDateTime.of(target.getYear(), target.getMonth().getValue(), 1, 0, 0);
         LocalDateTime end = timeUtil.getLastDayOfMonth(target);
