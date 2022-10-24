@@ -147,6 +147,14 @@ public class User implements UserDetails {
     }
 
     /*
+    기록 초기화
+    */
+    public void initData() {
+        this.breathTime = LocalDateTime.of(1999, 1, 1, 0, 0);
+        this.senseTime = LocalDateTime.of(1999, 1, 1, 0, 0);
+    }
+
+    /*
     UserDetails Method
     */
     @ElementCollection(fetch = LAZY)

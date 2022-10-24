@@ -57,4 +57,38 @@ public class UserController {
                 .body(ResultResponse.ok("가입 날짜 조회", map));
     }
 
+    @GetMapping("/manage")
+    public ResponseEntity<Object> manageUser(@AuthenticationPrincipal User user) {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("email", user.getEmail());
+        map.put("provider", user.getProvider().getInfo());
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("유저 정보 조회", map));
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<Object> logout(@AuthenticationPrincipal User user) {
+        userService.logout(user);
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("로그아웃"));
+    }
+
+    @DeleteMapping("/init")
+    public ResponseEntity<Object> deleteAll(@AuthenticationPrincipal User user) {
+        userService.deleteAll(user);
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("기록 초기화"));
+    }
+
+    @DeleteMapping("/withdrawal")
+    public ResponseEntity<Object> withdraw(@AuthenticationPrincipal User user) {
+        userService.withdraw(user);
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("회원 탈퇴"));
+    }
+
 }

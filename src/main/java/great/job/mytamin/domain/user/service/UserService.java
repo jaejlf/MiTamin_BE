@@ -1,5 +1,8 @@
 package great.job.mytamin.domain.user.service;
 
+import great.job.mytamin.domain.myday.service.DaynoteService;
+import great.job.mytamin.domain.myday.service.WishService;
+import great.job.mytamin.domain.mytamin.service.MytaminService;
 import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.entity.User;
@@ -22,6 +25,9 @@ public class UserService {
 
     private final UserUtil userUtil;
     private final AwsS3Service awsS3Service;
+    private final DaynoteService daynoteService;
+    private final WishService wishService;
+    private final MytaminService mytaminService;
     private final UserRepository userRepository;
 
     /*
@@ -42,6 +48,37 @@ public class UserService {
         updateBeMyMessage(user, profileUpdateRequest.getBeMyMessage());
 
         userRepository.save(user);
+    }
+
+    /*
+    로그아웃
+    */
+    @Transactional
+    public void logout(User user) {
+        user.updateRefreshToken(""); // 리프레쉬 토큰 삭제
+        userRepository.save(user);
+    }
+
+    /*
+    기록 초기화
+    */
+    @Transactional
+    public void deleteAll(User user) {
+        user.initData(); // 숨 고르기, 감각 꺠우기 데이터 초기화
+        mytaminService.deleteAll(user); // 마이타민 (칭찬 처방, 하루 진단) 삭제
+        daynoteService.deleteAll(user); // 데이노트 삭제
+        wishService.deleteAll(user); // 위시 삭제
+        userRepository.save(user);
+    }
+
+    /*
+    회원 탈퇴
+    */
+    @Transactional
+    public void withdraw(User user) {
+        deleteAll(user); // 기록 초기화
+        awsS3Service.deleteImg(user.getProfileImgUrl()); // 프로필 이미지 삭제
+        userRepository.delete(user); // 유저 삭제
     }
 
     private void updateProfileImg(User user, MultipartFile file) {

@@ -10,6 +10,6 @@ public enum Provider {
     DEFAULT("일반 회원"),
     KAKAO("카카오톡 회원");
 
-    private final String provider;
+    private final String info;
 
 }
