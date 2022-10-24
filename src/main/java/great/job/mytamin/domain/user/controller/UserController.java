@@ -11,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -40,6 +44,17 @@ public class UserController {
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("프로필 편집 완료"));
+    }
+
+    @GetMapping("/created-at")
+    public ResponseEntity<Object> getCreatedAt(@AuthenticationPrincipal User user) {
+        LocalDateTime createdAt = user.getCreatedAt();
+        Map<String, Integer> map = new LinkedHashMap<>();
+        map.put("year", createdAt.getYear());
+        map.put("month", createdAt.getMonth().getValue());
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("가입 날짜 조회", map));
     }
 
 }
