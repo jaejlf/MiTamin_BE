@@ -1,9 +1,6 @@
 package great.job.mytamin.domain.mytamin.service;
 
-import great.job.mytamin.domain.mytamin.dto.response.CareResponse;
-import great.job.mytamin.domain.mytamin.dto.response.MonthlyMytaminResponse;
-import great.job.mytamin.domain.mytamin.dto.response.MytaminResponse;
-import great.job.mytamin.domain.mytamin.dto.response.ReportResponse;
+import great.job.mytamin.domain.mytamin.dto.response.*;
 import great.job.mytamin.domain.mytamin.entity.Care;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.entity.Report;
@@ -18,9 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import static great.job.mytamin.global.exception.ErrorMap.*;
+import static great.job.mytamin.global.exception.ErrorMap.MYTAMIN_NOT_FOUND_ERROR;
+import static great.job.mytamin.global.exception.ErrorMap.NO_AUTH_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -116,22 +116,26 @@ public class MytaminService {
     주간 마이타민 조회
     */
     @Transactional(readOnly = true)
-    public List<MytaminResponse> getWeeklyMytamin(User user, String date) {
+    public Map<Integer, WeeklyMytaminResponse> getWeeklyMytamin(User user, String date) {
         LocalDateTime target = timeUtil.convertRawDDToLocalDateTime(date);
         LocalDateTime monday = target.minusDays(target.getDayOfWeek().getValue() - 1);
 
-        List<MytaminResponse> mytaminResponseList = new ArrayList<>();
+        Map<Integer, WeeklyMytaminResponse> map = new LinkedHashMap<>();
         for (int i = 0; i < 7; i++) {
-            Mytamin mytamin = findMytamin(user, monday.plusDays(i));
+            target = monday.plusDays(i);
+            Mytamin mytamin = findMytamin(user, target);
             if (mytamin != null) {
-                mytaminResponseList.add(MytaminResponse.withId(
-                        mytamin,
-                        getReportResponse(mytamin),
-                        getCareResponse(mytamin)
-                ));
+                map.put(target.getDayOfMonth(),
+                        WeeklyMytaminResponse.of(
+                                mytamin,
+                                getReportResponse(mytamin),
+                                getCareResponse(mytamin)
+                        ));
+            } else {
+                map.put(target.getDayOfMonth(), null);
             }
         }
-        return mytaminResponseList;
+        return map;
     }
 
     /*
