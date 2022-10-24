@@ -48,11 +48,29 @@ public class MytaminController {
 
     @GetMapping("/monthly/{date}")
     public ResponseEntity<Object> getMonthlyMytamin(@AuthenticationPrincipal User user,
-                                                         @PathVariable String date) {
+                                                    @PathVariable String date) {
         List<MonthlyMytaminResponse> monthlyMytaminResponseList = mytaminService.getMonthlyMytamin(user, date);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("월간 마이타민 기록 조회", monthlyMytaminResponseList));
+    }
+
+    @GetMapping("/weekly/{date}")
+    public ResponseEntity<Object> getWeeklyMytamin(@AuthenticationPrincipal User user,
+                                                   @PathVariable String date) {
+        List<MytaminResponse> mytaminResponseList = mytaminService.getWeeklyMytamin(user, date);
+        return ResponseEntity
+                .status(OK)
+                .body(ResultResponse.ok("주간 마이타민 기록 조회", mytaminResponseList));
+    }
+
+    @DeleteMapping("/{mytaminId}")
+    public ResponseEntity<Object> deleteMytamin(@AuthenticationPrincipal User user,
+                                                @PathVariable Long mytaminId) {
+        mytaminService.deleteMytamin(user, mytaminId);
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("마이타민 삭제"));
     }
 
 }

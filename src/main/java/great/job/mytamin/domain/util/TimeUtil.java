@@ -33,12 +33,25 @@ public class TimeUtil {
     }
 
     /*
-    yyyy.MM 포맷터
-    performedAt -> LocalDateTime
+    yyyy.MM -> LocalDateTime
     */
-    public LocalDateTime convertRawToLocalDateTime(String performedAt) {
+    public LocalDateTime convertRawToLocalDateTime(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
-        LocalDateTime rawPerformedAt = LocalDateTime.parse(performedAt + ".10.10.00", formatter); // 10일.10시.00분으로 임의 설정
+        LocalDateTime rawPerformedAt = LocalDateTime.parse(date + ".10.10.00", formatter); // 10일.10시.00분으로 임의 설정
+
+        // 2020년 이전 or 올해 년도 이후
+        if (rawPerformedAt.getYear() < 2020 || rawPerformedAt.getYear() > LocalDateTime.now().getYear()) {
+            throw new MytaminException(DATETIME_PARSE_ERROR);
+        }
+        return rawPerformedAt;
+    }
+
+    /*
+    yyyy.MM.dd -> LocalDateTime
+    */
+    public LocalDateTime convertRawDDToLocalDateTime(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm");
+        LocalDateTime rawPerformedAt = LocalDateTime.parse(date + ".10.00", formatter); // 10시.00분으로 임의 설정
 
         // 2020년 이전 or 올해 년도 이후
         if (rawPerformedAt.getYear() < 2020 || rawPerformedAt.getYear() > LocalDateTime.now().getYear()) {

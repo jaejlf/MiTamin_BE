@@ -24,15 +24,16 @@ public enum ErrorMap {
     PASSWORD_MISMATCH_ERROR(HttpStatus.BAD_REQUEST, 3001, "PASSWORD_MISMATCH_ERROR", "잘못된 비밀번호입니다."),
     INVALID_MYDAY_ALARM_CODE_ERROR(HttpStatus.BAD_REQUEST, 3002, "INVALID_MYDAY_ALARM_CODE_ERROR", "마이데이 알림 코드는 0 ~ 3 사이의 값이어야 합니다."),
 
-    // Report 4xxx
+    // Mytamin (Report & Care) 4xxx, 5xxx
     INVALID_CONDITION_CODE_ERROR(HttpStatus.BAD_REQUEST, 4000, "INVALID_CONDITION_CODE_ERROR", "마음 컨디션 코드는 1 ~ 5 사이의 값이어야 합니다."),
     REPORT_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 4001, "REPORT_ALREADY_DONE_ERROR", "오늘의 '하루 진단하기'를 이미 완료했습니다."),
     REPORT_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 4002, "REPORT_NOT_FOUND_ERROR", "존재하지 않는 reportId 입니다."),
 
-    // Care 5xxx
     INVALID_CATEGORY_CODE_ERROR(HttpStatus.BAD_REQUEST, 5000, "INVALID_CATEGORY_CODE_ERROR", "카테고리 코드는 1 ~ 7 사이의 값이어야 합니다."),
     CARE_ALREADY_DONE_ERROR(HttpStatus.CONFLICT, 5001, "CARE_ALREADY_DONE_ERROR", "오늘의 '칭찬 처방하기'를 이미 완료했습니다."),
     CARE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 5002, "CARE_NOT_FOUND_ERROR", "존재하지 않는 careId 입니다."),
+
+    MYTAMIN_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, 5003, "MYTAMIN_NOT_FOUND_ERROR", "존재하지 않는 mytaminId 입니다."),
 
     // S3 6xxx
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 6000, "FILE_UPLOAD_ERROR", "파일 업로드에 실패했습니다."),

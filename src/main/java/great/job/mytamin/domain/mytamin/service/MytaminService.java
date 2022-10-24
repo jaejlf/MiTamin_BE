@@ -11,6 +11,7 @@ import great.job.mytamin.domain.mytamin.repository.MytaminRepository;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.util.ReportUtil;
 import great.job.mytamin.domain.util.TimeUtil;
+import great.job.mytamin.global.exception.MytaminException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static great.job.mytamin.global.exception.ErrorMap.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,25 +53,10 @@ public class MytaminService {
     public MytaminResponse getLatestMytamin(User user) {
         Mytamin mytamin = mytaminRepository.findFirstByUserOrderByMytaminIdDesc(user);
         if (mytamin == null) return null;
-
-        // Report
-        Report report = mytamin.getReport();
-        ReportResponse reportResponse = null;
-        if (report != null) {
-            reportResponse = ReportResponse.of(
-                    report,
-                    reportUtil.concatFeelingTag(report),
-                    timeUtil.canEditReport(report));
-        }
-
-        // Care
-        Care care = mytamin.getCare();
-        CareResponse careResponse = null;
-        if (care != null) {
-            careResponse = CareResponse.of(care, timeUtil.canEditCare(care));
-        }
-
-        return MytaminResponse.of(mytamin, reportResponse, careResponse);
+        return MytaminResponse.of(
+                mytamin,
+                getReportResponse(mytamin),
+                getCareResponse(mytamin));
     }
 
     /*
@@ -115,7 +103,6 @@ public class MytaminService {
             monthlyMytaminResponseList.set(
                     index,
                     MonthlyMytaminResponse.builder()
-                            .mytaminId(mytamin.getMytaminId())
                             .day(tmp.getDay())
                             .mentalConditionCode(mytamin.getReport() == null ? 9 : mytamin.getReport().getMentalConditionCode()) // 칭찬 처방만 존재하는 경우 -> 9
                             .build()
@@ -123,6 +110,38 @@ public class MytaminService {
         }
 
         return monthlyMytaminResponseList;
+    }
+
+    /*
+    주간 마이타민 조회
+    */
+    @Transactional(readOnly = true)
+    public List<MytaminResponse> getWeeklyMytamin(User user, String date) {
+        LocalDateTime target = timeUtil.convertRawDDToLocalDateTime(date);
+        LocalDateTime monday = target.minusDays(target.getDayOfWeek().getValue() - 1);
+
+        List<MytaminResponse> mytaminResponseList = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            Mytamin mytamin = findMytamin(user, monday.plusDays(i));
+            if (mytamin != null) {
+                mytaminResponseList.add(MytaminResponse.withId(
+                        mytamin,
+                        getReportResponse(mytamin),
+                        getCareResponse(mytamin)
+                ));
+            }
+        }
+        return mytaminResponseList;
+    }
+
+    /*
+    마이타민 삭제
+    */
+    @Transactional
+    public void deleteMytamin(User user, Long mytaminId) {
+        Mytamin mytamin = findMytaminById(mytaminId);
+        hasAuthorized(mytamin, user);
+        mytaminRepository.delete(mytamin);
     }
 
     private List<Mytamin> getMonthlyMytaminList(User user, LocalDateTime target) {
@@ -137,13 +156,44 @@ public class MytaminService {
         for (int i = 1; i <= lastDay; i++) {
             monthlyMytaminResponseList.add(
                     MonthlyMytaminResponse.builder()
-                            .mytaminId(null)
                             .day(i)
                             .mentalConditionCode(0)
                             .build()
             );
         }
         return monthlyMytaminResponseList;
+    }
+
+    private ReportResponse getReportResponse(Mytamin mytamin) {
+        Report report = mytamin.getReport();
+        ReportResponse reportResponse = null;
+        if (report != null) {
+            reportResponse = ReportResponse.of(
+                    report,
+                    reportUtil.concatFeelingTag(report),
+                    timeUtil.canEditReport(report));
+        }
+        return reportResponse;
+    }
+
+    private CareResponse getCareResponse(Mytamin mytamin) {
+        Care care = mytamin.getCare();
+        CareResponse careResponse = null;
+        if (care != null) {
+            careResponse = CareResponse.of(care, timeUtil.canEditCare(care));
+        }
+        return careResponse;
+    }
+
+    private void hasAuthorized(Mytamin mytamin, User user) {
+        if (!mytamin.getUser().equals(user)) {
+            throw new MytaminException(NO_AUTH_ERROR);
+        }
+    }
+
+    private Mytamin findMytaminById(Long mytaminId) {
+        return mytaminRepository.findById(mytaminId)
+                .orElseThrow(() -> new MytaminException(MYTAMIN_NOT_FOUND_ERROR));
     }
 
 }

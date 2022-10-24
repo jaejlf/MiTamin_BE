@@ -26,11 +26,11 @@ public class Mytamin {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "reportId")
     private Report report;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "careId")
     private Care care;
 
