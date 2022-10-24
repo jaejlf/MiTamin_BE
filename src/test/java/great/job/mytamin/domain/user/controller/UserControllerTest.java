@@ -25,8 +25,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -77,14 +76,14 @@ class UserControllerTest extends CommonControllerTest {
     @DisplayName("프로필 편집")
     class UpdateProfileTest {
 
-        MockMultipartFile file = new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "mock1.jpg", "image/jpg", "<<image>>" .getBytes());
         ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest(
                 file,
                 "T",
                 "멘탈짱",
                 "꾸준히 글을 쓰는"
         );
-        
+
         @DisplayName("성공")
         @Test
         void updateProfile(TestInfo testInfo) throws Exception {
@@ -190,6 +189,110 @@ class UserControllerTest extends CommonControllerTest {
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.year").description("가입한 year"),
                                 fieldWithPath("data.month").description("가입한 month")
+                        ))
+                );
+    }
+
+    @DisplayName("유저 정보 조회")
+    @Test
+    void manageUser(TestInfo testInfo) throws Exception {
+        //given & when
+        ResultActions actions = mockMvc.perform(get("/user/manage")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data.email").description("이메일"),
+                                fieldWithPath("data.provider").description("가입 경로")
+                        ))
+                );
+    }
+
+    @DisplayName("로그아웃")
+    @Test
+    void logout(TestInfo testInfo) throws Exception {
+        //given
+        doNothing().when(userService).logout(any());
+
+        // when
+        ResultActions actions = mockMvc.perform(delete("/user/logout")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지")
+                        ))
+                );
+    }
+
+    @DisplayName("기록 초기화")
+    @Test
+    void deleteAll(TestInfo testInfo) throws Exception {
+        //given
+        doNothing().when(userService).deleteAll(any());
+
+        // when
+        ResultActions actions = mockMvc.perform(delete("/user/init")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지")
+                        ))
+                );
+    }
+
+    @DisplayName("회원 탈퇴")
+    @Test
+    void withdraw(TestInfo testInfo) throws Exception {
+        //given
+        doNothing().when(userService).withdraw(any());
+
+        // when
+        ResultActions actions = mockMvc.perform(delete("/user/withdrawal")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지")
                         ))
                 );
     }
