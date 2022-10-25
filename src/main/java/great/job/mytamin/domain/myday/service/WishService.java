@@ -1,13 +1,12 @@
 package great.job.mytamin.domain.myday.service;
 
-import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.domain.myday.dto.request.WishRequest;
 import great.job.mytamin.domain.myday.dto.response.WishResponse;
-import great.job.mytamin.domain.myday.dto.response.WishlistResponse;
 import great.job.mytamin.domain.myday.entity.Wish;
 import great.job.mytamin.domain.myday.repository.DaynoteRepository;
 import great.job.mytamin.domain.myday.repository.WishRepository;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.global.exception.MytaminException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,39 +28,35 @@ public class WishService {
     위시 리스트 조회
     */
     @Transactional(readOnly = true)
-    public WishlistResponse getWishlist(User user) {
-        List<Wish> publishedList = wishRepository.findAllByUserAndIsHidden(user, false);
-        List<Wish> hiddenList = wishRepository.findAllByUserAndIsHidden(user, true);
+    public List<WishResponse> getWishlist(User user) {
 
-        publishedList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));
-        hiddenList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));
+        // 정렬 조건 미정
+        // publishedList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));
 
-        return WishlistResponse.of(entityToDto(publishedList), entityToDto(hiddenList));
+        return entityToDto(wishRepository.findAllByUserAndIsHidden(user, false));
     }
 
     /*
-    위시 리스트 수정
+    위시 수정
     */
     @Transactional
-    public void updateWishlist(User user, List<WishRequest> wishRequestList) {
-        for (WishRequest wishRequest : wishRequestList) {
-            if (wishRequest.getWishId() == null) createWish(wishRequest, user);
-            else {
-                Wish wish = findWishById(wishRequest.getWishId());
-                hasAuthorized(wish, user);
-                updateWish(wish, wishRequest);
-            }
-        }
+    public void updateWish(User user, Long wishId, WishRequest wishRequest) {
+        Wish wish = findWishById(wishId);
+        hasAuthorized(wish, user);
+        wish.updateWishText(wishRequest.getWishText());
+        wishRepository.save(wish);
     }
 
     /*
-    위시 리스트 삭제
+    위시 삭제
     */
     @Transactional
-    public void deleteWishlist(User user, List<Long> deleteIdList) {
-        for (Long wishId : deleteIdList) {
-            Wish wish = findWishById(wishId);
-            hasAuthorized(wish, user);
+    public void deleteWish(User user, Long wishId) {
+        Wish wish = findWishById(wishId);
+        hasAuthorized(wish, user);
+        if (getWishCount(wish) != 0) {
+            wish.updateIsHiddenTrue();
+        } else {
             wishRepository.delete(wish);
         }
     }
@@ -70,12 +65,9 @@ public class WishService {
     위시 생성
     */
     @Transactional
-    public Wish createWish(WishRequest wishRequest, User user) {
-        checkExistence(user, wishRequest.getWishText());
+    public Wish createWish(User user, String wishText) {
         Wish wish = new Wish(
-                wishRequest.getWishText(),
-                wishRequest.getIsHidden(),
-                wishRequest.getOrderId(),
+                wishText,
                 user
         );
         return wishRepository.save(wish);
@@ -88,13 +80,7 @@ public class WishService {
     public Wish findWishOrElseNew(User user, String wishText) {
         Optional<Wish> wish = wishRepository.findByUserAndWishText(user, wishText);
         if (wish.isEmpty()) {
-            WishRequest wishRequest = new WishRequest(
-                    null,
-                    wishText,
-                    false,
-                    999
-            );
-            return createWish(wishRequest, user);
+            return createWish(user, wishText);
         }
         return wish.get();
     }
@@ -105,13 +91,6 @@ public class WishService {
     @Transactional
     public void deleteAll(User user) {
         wishRepository.deleteAllByUser(user);
-    }
-
-    private void updateWish(Wish wish, WishRequest wishRequest) {
-        String text = wishRequest.getWishText();
-        boolean isHidden = wishRequest.getIsHidden();
-        int orderId = wishRequest.getOrderId();
-        wish.updateWish(text, isHidden, orderId);
     }
 
     private void hasAuthorized(Wish wish, User user) {

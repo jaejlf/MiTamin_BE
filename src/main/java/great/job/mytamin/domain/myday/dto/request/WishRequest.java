@@ -10,8 +10,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WishRequest {
-    Long wishId;
     @NotBlank String wishText;
-    @NotBlank Boolean isHidden;
-    @NotBlank int orderId;
+    // @NotBlank int orderId;
 }

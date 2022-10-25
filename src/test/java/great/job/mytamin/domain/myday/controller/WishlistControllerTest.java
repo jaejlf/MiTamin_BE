@@ -1,7 +1,6 @@
 package great.job.mytamin.domain.myday.controller;
 
 import great.job.mytamin.domain.myday.dto.response.WishResponse;
-import great.job.mytamin.domain.myday.dto.response.WishlistResponse;
 import great.job.mytamin.domain.myday.service.WishService;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -59,41 +58,32 @@ class WishlistControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data.published[]").description("공개된 위시 리스트"),
-                                fieldWithPath("data.hidden[]").description("숨겨진 위시 리스트"),
-                                fieldWithPath("data.*[].wishId").description("위시 리스트 id"),
-                                fieldWithPath("data.*[].wishText").description("위시 텍스트"),
-                                fieldWithPath("data.*[].count").description("위시가 기록된 횟수")
+                                fieldWithPath("data[]").description("위시 리스트"),
+                                fieldWithPath("data[].wishId").description("위시 리스트 id"),
+                                fieldWithPath("data[].wishText").description("위시 텍스트"),
+                                fieldWithPath("data[].count").description("위시가 기록된 횟수")
                         ))
                 );
     }
 
-    private WishlistResponse mockWishlistResponse() {
-        List<WishResponse> published = new ArrayList<>();
-        published.add(WishResponse.builder()
+    private List<WishResponse> mockWishlistResponse() {
+        List<WishResponse> wishResponseList = new ArrayList<>();
+        wishResponseList.add(WishResponse.builder()
                 .wishId(1L)
                 .wishText("소품샵 다녀오기")
                 .count(3)
                 .build());
-        published.add(WishResponse.builder()
+        wishResponseList.add(WishResponse.builder()
                 .wishId(2L)
                 .wishText("도서관에 가서 책 한권 빌려오기")
                 .count(0)
                 .build());
-        published.add(WishResponse.builder()
+        wishResponseList.add(WishResponse.builder()
                 .wishId(3L)
                 .wishText("빵 나오는 시간에 맞춰서 갓 나온 빵 사기")
                 .count(1)
                 .build());
-
-        List<WishResponse> hidden = new ArrayList<>();
-        hidden.add(WishResponse.builder()
-                .wishId(4L)
-                .wishText("영화관에서 제일 빠른 영화 하나 보기")
-                .count(0)
-                .build());
-
-        return WishlistResponse.of(published, hidden);
+        return wishResponseList;
     }
 
 }
