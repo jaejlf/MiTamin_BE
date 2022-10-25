@@ -41,8 +41,7 @@ public class WishService {
     */
     @Transactional
     public void updateWish(User user, Long wishId, WishRequest wishRequest) {
-        Wish wish = findWishById(wishId);
-        hasAuthorized(wish, user);
+        Wish wish = findWishById(user, wishId);
         wish.updateWishText(wishRequest.getWishText());
         wishRepository.save(wish);
     }
@@ -52,10 +51,9 @@ public class WishService {
     */
     @Transactional
     public void deleteWish(User user, Long wishId) {
-        Wish wish = findWishById(wishId);
-        hasAuthorized(wish, user);
+        Wish wish = findWishById(user, wishId);
         if (getWishCount(wish) != 0) {
-            wish.updateIsHiddenTrue();
+            wish.updateIsHidden(true); // 연관된 데이노트가 존재할 경우, 삭제가 아닌 숨김 처리
         } else {
             wishRepository.delete(wish);
         }
@@ -65,12 +63,20 @@ public class WishService {
     위시 생성
     */
     @Transactional
-    public Wish createWish(User user, String wishText) {
-        Wish wish = new Wish(
-                wishText,
-                user
-        );
-        return wishRepository.save(wish);
+    public WishResponse createWish(User user, String wishText) {
+        Wish wish = wishRepository.findByUserAndWishText(user, wishText).orElse(null);
+        if (wish != null) {
+            if (wish.getIsHidden()) {
+                wish.updateIsHidden(false); // 숨김 처리된 위시 리스트였다면 복원
+                wishRepository.save(wish);
+            } else throw new MytaminException(WISH_ALREADY_EXIST_ERROR);
+        } else {
+            wish = wishRepository.save(new Wish(
+                    wishText,
+                    user
+            ));
+        }
+        return WishResponse.of(wish, getWishCount(wish));
     }
 
     /*
@@ -80,7 +86,10 @@ public class WishService {
     public Wish findWishOrElseNew(User user, String wishText) {
         Optional<Wish> wish = wishRepository.findByUserAndWishText(user, wishText);
         if (wish.isEmpty()) {
-            return createWish(user, wishText);
+            return wishRepository.save(new Wish(
+                    wishText,
+                    user
+            ));
         }
         return wish.get();
     }
@@ -93,21 +102,9 @@ public class WishService {
         wishRepository.deleteAllByUser(user);
     }
 
-    private void hasAuthorized(Wish wish, User user) {
-        if (!wish.getUser().equals(user)) {
-            throw new MytaminException(NO_AUTH_ERROR);
-        }
-    }
-
-    private Wish findWishById(Long wishId) {
-        return wishRepository.findById(wishId)
+    private Wish findWishById(User user, Long wishId) {
+        return wishRepository.findByUserAndWishId(user, wishId)
                 .orElseThrow(() -> new MytaminException(WISH_NOT_FOUND_ERROR));
-    }
-
-    private void checkExistence(User user, String wishText) {
-        if (wishRepository.findByUserAndWishText(user, wishText).isPresent()) {
-            throw new MytaminException(WISH_ALREADY_EXIST_ERROR);
-        }
     }
 
     private List<WishResponse> entityToDto(List<Wish> wishList) {

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface WishRepository extends JpaRepository<Wish, Long> {
     List<Wish> findAllByUserAndIsHidden(User user, Boolean isHidden);
+    Optional<Wish> findByUserAndWishId(User user, Long wishId);
     Optional<Wish> findByUserAndWishText(User user, String wishText);
     void deleteAllByUser(User user);
 }
