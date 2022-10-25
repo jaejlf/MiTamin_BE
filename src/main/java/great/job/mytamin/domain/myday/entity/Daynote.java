@@ -29,7 +29,6 @@ public class Daynote {
     @OneToOne
     @JoinColumn(name = "wishId")
     private Wish wish;
-    private String wishText; // 연관관계 삭제되었을 경우 -> raw text 활용
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String note;
@@ -44,7 +43,6 @@ public class Daynote {
     public Daynote(List<String> imgUrlList, Wish wish, String note, LocalDateTime performedAt, User user) {
         this.imgUrlList = imgUrlList;
         this.wish = wish;
-        this.wishText = wish.getWishText();
         this.note = note;
         this.performedAt = performedAt;
         this.user = user;
@@ -53,12 +51,7 @@ public class Daynote {
     public void updateAll(List<String> imgUrlList, Wish wish, String note) {
         this.imgUrlList = imgUrlList;
         this.wish = wish;
-        this.wishText = wish.getWishText();
         this.note = note;
-    }
-
-    public void updateWish(Wish wish) {
-        this.wishText = wish.getWishText();
     }
 
 }

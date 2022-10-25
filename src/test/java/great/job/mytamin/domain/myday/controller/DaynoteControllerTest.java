@@ -46,43 +46,36 @@ class DaynoteControllerTest extends CommonControllerTest {
     @MockBean
     private DaynoteService daynoteService;
 
-    @Nested
     @DisplayName("데이노트 작성 가능 여부")
-    class CanCreateDaynoteTest {
-
+    @Test
+    void canCreateDaynote(TestInfo testInfo) throws Exception {
+        //given
         String date = "2022.10";
+        given(daynoteService.canCreateDaynote(any(), any())).willReturn(true);
 
-        @DisplayName("성공")
-        @Test
-        void canCreateDaynote(TestInfo testInfo) throws Exception {
-            //given
-            given(daynoteService.canCreateDaynote(any(), any())).willReturn(true);
+        //when
+        ResultActions actions = mockMvc.perform(get("/daynote/check/{date}", date)
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .contentType(APPLICATION_JSON));
 
-            //when
-            ResultActions actions = mockMvc.perform(get("/daynote/check/{date}", date)
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                    .contentType(APPLICATION_JSON));
-
-            //then
-            actions
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("data").exists())
-                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            requestHeaders(
-                                    headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                            ),
-                            pathParameters(
-                                    parameterWithName("date").description("*데이노트 수행 날짜 (yyyy.MM)")
-                            ),
-                            responseFields(
-                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("message").description("결과 메세지"),
-                                    fieldWithPath("data").description("데이노트 작성 가능 여부")
-                            ))
-                    );
-        }
-
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        pathParameters(
+                                parameterWithName("date").description("*데이노트 수행 날짜 (yyyy.MM)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data").description("데이노트 작성 가능 여부")
+                        ))
+                );
     }
 
     @Nested

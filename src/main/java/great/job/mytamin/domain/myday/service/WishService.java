@@ -1,13 +1,12 @@
 package great.job.mytamin.domain.myday.service;
 
-import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.domain.myday.dto.request.WishRequest;
 import great.job.mytamin.domain.myday.dto.response.WishResponse;
-import great.job.mytamin.domain.myday.dto.response.WishlistResponse;
 import great.job.mytamin.domain.myday.entity.Wish;
 import great.job.mytamin.domain.myday.repository.DaynoteRepository;
 import great.job.mytamin.domain.myday.repository.WishRepository;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.global.exception.MytaminException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,39 +28,33 @@ public class WishService {
     위시 리스트 조회
     */
     @Transactional(readOnly = true)
-    public WishlistResponse getWishlist(User user) {
-        List<Wish> publishedList = wishRepository.findAllByUserAndIsHidden(user, false);
-        List<Wish> hiddenList = wishRepository.findAllByUserAndIsHidden(user, true);
+    public List<WishResponse> getWishlist(User user) {
 
-        publishedList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));
-        hiddenList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));
+        // 정렬 조건 미정
+        // publishedList.sort((a, b) -> (int) (a.getOrderId() - b.getOrderId()));
 
-        return WishlistResponse.of(entityToDto(publishedList), entityToDto(hiddenList));
+        return entityToDto(wishRepository.findAllByUserAndIsHidden(user, false));
     }
 
     /*
-    위시 리스트 수정
+    위시 수정
     */
     @Transactional
-    public void updateWishlist(User user, List<WishRequest> wishRequestList) {
-        for (WishRequest wishRequest : wishRequestList) {
-            if (wishRequest.getWishId() == null) createWish(wishRequest, user);
-            else {
-                Wish wish = findWishById(wishRequest.getWishId());
-                hasAuthorized(wish, user);
-                updateWish(wish, wishRequest);
-            }
-        }
+    public void updateWish(User user, Long wishId, WishRequest wishRequest) {
+        Wish wish = findWishById(user, wishId);
+        wish.updateWishText(wishRequest.getWishText());
+        wishRepository.save(wish);
     }
 
     /*
-    위시 리스트 삭제
+    위시 삭제
     */
     @Transactional
-    public void deleteWishlist(User user, List<Long> deleteIdList) {
-        for (Long wishId : deleteIdList) {
-            Wish wish = findWishById(wishId);
-            hasAuthorized(wish, user);
+    public void deleteWish(User user, Long wishId) {
+        Wish wish = findWishById(user, wishId);
+        if (getWishCount(wish) != 0) {
+            wish.updateIsHidden(true); // 연관된 데이노트가 존재할 경우, 삭제가 아닌 숨김 처리
+        } else {
             wishRepository.delete(wish);
         }
     }
@@ -70,15 +63,20 @@ public class WishService {
     위시 생성
     */
     @Transactional
-    public Wish createWish(WishRequest wishRequest, User user) {
-        checkExistence(user, wishRequest.getWishText());
-        Wish wish = new Wish(
-                wishRequest.getWishText(),
-                wishRequest.getIsHidden(),
-                wishRequest.getOrderId(),
-                user
-        );
-        return wishRepository.save(wish);
+    public WishResponse createWish(User user, String wishText) {
+        Wish wish = wishRepository.findByUserAndWishText(user, wishText).orElse(null);
+        if (wish != null) {
+            if (wish.getIsHidden()) {
+                wish.updateIsHidden(false); // 숨김 처리된 위시 리스트였다면 복원
+                wishRepository.save(wish);
+            } else throw new MytaminException(WISH_ALREADY_EXIST_ERROR);
+        } else {
+            wish = wishRepository.save(new Wish(
+                    wishText,
+                    user
+            ));
+        }
+        return WishResponse.of(wish, getWishCount(wish));
     }
 
     /*
@@ -88,13 +86,10 @@ public class WishService {
     public Wish findWishOrElseNew(User user, String wishText) {
         Optional<Wish> wish = wishRepository.findByUserAndWishText(user, wishText);
         if (wish.isEmpty()) {
-            WishRequest wishRequest = new WishRequest(
-                    null,
+            return wishRepository.save(new Wish(
                     wishText,
-                    false,
-                    999
-            );
-            return createWish(wishRequest, user);
+                    user
+            ));
         }
         return wish.get();
     }
@@ -107,28 +102,9 @@ public class WishService {
         wishRepository.deleteAllByUser(user);
     }
 
-    private void updateWish(Wish wish, WishRequest wishRequest) {
-        String text = wishRequest.getWishText();
-        boolean isHidden = wishRequest.getIsHidden();
-        int orderId = wishRequest.getOrderId();
-        wish.updateWish(text, isHidden, orderId);
-    }
-
-    private void hasAuthorized(Wish wish, User user) {
-        if (!wish.getUser().equals(user)) {
-            throw new MytaminException(NO_AUTH_ERROR);
-        }
-    }
-
-    private Wish findWishById(Long wishId) {
-        return wishRepository.findById(wishId)
+    private Wish findWishById(User user, Long wishId) {
+        return wishRepository.findByUserAndWishId(user, wishId)
                 .orElseThrow(() -> new MytaminException(WISH_NOT_FOUND_ERROR));
-    }
-
-    private void checkExistence(User user, String wishText) {
-        if (wishRepository.findByUserAndWishText(user, wishText).isPresent()) {
-            throw new MytaminException(WISH_ALREADY_EXIST_ERROR);
-        }
     }
 
     private List<WishResponse> entityToDto(List<Wish> wishList) {

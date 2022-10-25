@@ -1,15 +1,16 @@
 package great.job.mytamin.domain.user.controller;
 
+import great.job.mytamin.domain.user.dto.request.EmailCheckRequest;
 import great.job.mytamin.domain.user.dto.request.LoginRequest;
 import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
 import great.job.mytamin.domain.user.service.AuthService;
+import great.job.mytamin.domain.user.service.EmailService;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
-import great.job.mytamin.domain.user.service.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,9 +19,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -37,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest extends CommonControllerTest {
 
     String docId = "/auth/";
-    
+
     @MockBean
     private AuthService authService;
 
@@ -460,6 +465,69 @@ class AuthControllerTest extends CommonControllerTest {
                     );
         }
 
+    }
+
+    @DisplayName("이메일 인증 코드 전송")
+    @Test
+    void sendAuthCode(TestInfo testInfo) throws Exception {
+        //given
+        Map<String, String> map = new HashMap<>();
+        map.put("email", "mytamin@naver.com");
+
+        doNothing().when(emailService).sendAuthCode(any());
+
+        //when
+        ResultActions actions = mockMvc.perform(post("/auth/code")
+                .content(objectMapper.writeValueAsString(map))
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestFields(
+                                fieldWithPath("email").description("*인증할 이메일")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지")
+                        ))
+                );
+    }
+
+    @DisplayName("이메일 인증 코드 확인")
+    @Test
+    void confirmAuthCode(TestInfo testInfo) throws Exception {
+        //given
+        EmailCheckRequest emailCheckRequest = new EmailCheckRequest(
+                "mytamin@naver.com",
+                "xx0m98Fw"
+        );
+
+        given(emailService.confirmAuthCode(any())).willReturn(true);
+
+        //when
+        ResultActions actions = mockMvc.perform(get("/auth/code")
+                .content(objectMapper.writeValueAsString(emailCheckRequest))
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data").exists())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestFields(
+                                fieldWithPath("email").description("*인증할 이메일"),
+                                fieldWithPath("authCode").description("*사용자가 입력한 인증번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지"),
+                                fieldWithPath("data").description("인증 코드 일치 여부")
+                        ))
+                );
     }
 
 }

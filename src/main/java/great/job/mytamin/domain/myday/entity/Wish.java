@@ -30,17 +30,18 @@ public class Wish {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Wish(String wishText, Boolean isHidden, int orderId, User user) {
+    public Wish(String wishText, User user) {
         this.wishText = wishText;
-        this.isHidden = isHidden;
-        this.orderId = orderId;
+        this.isHidden = false;
         this.user = user;
     }
 
-    public void updateWish(String text, Boolean isHidden, int orderId) {
+    public void updateWishText(String text) {
         this.wishText = text;
+    }
+
+    public void updateIsHidden(Boolean isHidden) {
         this.isHidden = isHidden;
-        this.orderId = orderId;
     }
 
 }

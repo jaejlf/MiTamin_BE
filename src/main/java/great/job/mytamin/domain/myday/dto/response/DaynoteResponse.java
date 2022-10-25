@@ -29,7 +29,7 @@ public class DaynoteResponse {
                 .imgList(daynote.getImgUrlList())
                 .year(rawPerformedAt.getYear())
                 .month(rawPerformedAt.getMonth().getValue())
-                .wishText(daynote.getWishText())
+                .wishText(daynote.getWish().getWishText())
                 .note(daynote.getNote())
                 .build();
     }
