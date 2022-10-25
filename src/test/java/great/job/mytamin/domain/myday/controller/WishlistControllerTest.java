@@ -79,7 +79,7 @@ class WishlistControllerTest extends CommonControllerTest {
     class CreateWishTest {
 
         WishRequest wishRequest = new WishRequest(
-                "소품샵 가기"
+                "소품샵 다녀오기"
         );
 
         @DisplayName("성공")
