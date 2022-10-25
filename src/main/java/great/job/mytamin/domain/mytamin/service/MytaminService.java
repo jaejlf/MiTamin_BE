@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import static great.job.mytamin.global.exception.ErrorMap.MYTAMIN_NOT_FOUND_ERROR;
-import static great.job.mytamin.global.exception.ErrorMap.NO_AUTH_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -143,8 +142,7 @@ public class MytaminService {
     */
     @Transactional
     public void deleteMytamin(User user, Long mytaminId) {
-        Mytamin mytamin = findMytaminById(mytaminId);
-        hasAuthorized(mytamin, user);
+        Mytamin mytamin = findMytaminById(user, mytaminId);
         mytaminRepository.delete(mytamin);
     }
 
@@ -197,14 +195,8 @@ public class MytaminService {
         return careResponse;
     }
 
-    private void hasAuthorized(Mytamin mytamin, User user) {
-        if (!mytamin.getUser().equals(user)) {
-            throw new MytaminException(NO_AUTH_ERROR);
-        }
-    }
-
-    private Mytamin findMytaminById(Long mytaminId) {
-        return mytaminRepository.findById(mytaminId)
+    private Mytamin findMytaminById(User user, Long mytaminId) {
+        return mytaminRepository.findByUserAndMytaminId(user, mytaminId)
                 .orElseThrow(() -> new MytaminException(MYTAMIN_NOT_FOUND_ERROR));
     }
 

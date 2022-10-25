@@ -49,8 +49,7 @@ public class CareService {
     */
     @Transactional
     public void updateCare(User user, Long careId, CareRequest careRequest) {
-        Care care = findCareById(careId);
-        hasAuthorized(care, user);
+        Care care = findCareById(user, careId);
         canEdit(care);
 
         care.updateAll(
@@ -65,8 +64,8 @@ public class CareService {
     칭찬 처방 조회
     */
     @Transactional(readOnly = true)
-    public CareResponse getCare(Long careId) {
-        Care care = findCareById(careId);
+    public CareResponse getCare(User user, Long careId) {
+        Care care = findCareById(user, careId);
         return CareResponse.of(care, timeUtil.canEditCare(care));
     }
 
@@ -102,15 +101,9 @@ public class CareService {
                 .stream().collect(Collectors.groupingBy(CareHistoryResponse::getTitle)); // title로 그룹핃
     }
 
-    private Care findCareById(Long careId) {
-        return careRepository.findById(careId)
+    private Care findCareById(User user, Long careId) {
+        return careRepository.findByUserAndCareId(user, careId)
                 .orElseThrow(() -> new MytaminException(CARE_NOT_FOUND_ERROR));
-    }
-
-    private void hasAuthorized(Care care, User user) {
-        if (!care.getUser().equals(user)) {
-            throw new MytaminException(NO_AUTH_ERROR);
-        }
     }
 
     private void canEdit(Care care) {

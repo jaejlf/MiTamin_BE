@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static great.job.mytamin.global.exception.ErrorMap.*;
+import static great.job.mytamin.global.exception.ErrorMap.DAYNOTE_ALREADY_EXIST_ERROR;
+import static great.job.mytamin.global.exception.ErrorMap.DAYNOTE_NOT_FOUND_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -55,8 +56,7 @@ public class DaynoteService {
     */
     @Transactional
     public void updateDaynote(User user, Long daynoteId, DaynoteUpdateRequest daynoteUpdateRequest) {
-        Daynote daynote = findDaynoteById(daynoteId);
-        hasAuthorized(daynote, user);
+        Daynote daynote = findDaynoteById(user, daynoteId);
         awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
 
         Wish wish = wishService.findWishOrElseNew(user, daynoteUpdateRequest.getWishText());
@@ -73,8 +73,7 @@ public class DaynoteService {
     */
     @Transactional
     public void deleteDaynote(User user, Long daynoteId) {
-        Daynote daynote = findDaynoteById(daynoteId);
-        hasAuthorized(daynote, user);
+        Daynote daynote = findDaynoteById(user, daynoteId);
         awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
         daynoteRepository.delete(daynote);
     }
@@ -108,15 +107,9 @@ public class DaynoteService {
         return daynoteRepository.save(daynote);
     }
 
-    private Daynote findDaynoteById(Long daynoteId) {
-        return daynoteRepository.findById(daynoteId)
+    private Daynote findDaynoteById(User user, Long daynoteId) {
+        return daynoteRepository.findByUserAndDaynoteId(user, daynoteId)
                 .orElseThrow(() -> new MytaminException(DAYNOTE_NOT_FOUND_ERROR));
-    }
-
-    private void hasAuthorized(Daynote daynote, User user) {
-        if (!daynote.getUser().equals(user)) {
-            throw new MytaminException(NO_AUTH_ERROR);
-        }
     }
 
 }

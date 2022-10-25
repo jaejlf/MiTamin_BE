@@ -37,8 +37,9 @@ public class CareController {
     }
 
     @GetMapping("/{careId}")
-    public ResponseEntity<Object> getCare(@PathVariable Long careId) {
-        CareResponse careResponse = careService.getCare(careId);
+    public ResponseEntity<Object> getCare(@AuthenticationPrincipal User user,
+                                          @PathVariable Long careId) {
+        CareResponse careResponse = careService.getCare(user, careId);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("칭찬 처방 조회", careResponse));

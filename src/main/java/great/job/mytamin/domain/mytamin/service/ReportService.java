@@ -50,8 +50,7 @@ public class ReportService {
     */
     @Transactional
     public void updateReport(User user, Long reportId, ReportRequest reportRequest) {
-        Report report = findReportById(reportId);
-        hasAuthorized(report, user);
+        Report report = findReportById(user, reportId);
         canEdit(report);
 
         report.updateAll(
@@ -68,8 +67,8 @@ public class ReportService {
     하루 진단 조회
     */
     @Transactional(readOnly = true)
-    public ReportResponse getReport(Long reportId) {
-        Report report = findReportById(reportId);
+    public ReportResponse getReport(User user, Long reportId) {
+        Report report = findReportById(user, reportId);
         return ReportResponse.of(
                 report,
                 reportUtil.concatFeelingTag(report),
@@ -111,15 +110,9 @@ public class ReportService {
         else return feelingRankResponseList;
     }
 
-    private Report findReportById(Long reportId) {
-        return reportRepository.findById(reportId)
+    private Report findReportById(User user, Long reportId) {
+        return reportRepository.findByUserAndReportId(user, reportId)
                 .orElseThrow(() -> new MytaminException(REPORT_NOT_FOUND_ERROR));
-    }
-
-    private void hasAuthorized(Report report, User user) {
-        if (!report.getUser().equals(user)) {
-            throw new MytaminException(NO_AUTH_ERROR);
-        }
     }
 
     private void canEdit(Report report) {
