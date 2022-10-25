@@ -70,12 +70,20 @@ public class AuthController {
                 .body(ResultResponse.ok("토큰 재발급", tokenResponse));
     }
 
-    @PostMapping("/code")
-    public ResponseEntity<Object> sendAuthCode(@RequestBody Map<String, String> map) throws MessagingException {
-        emailService.sendAuthCode(map.get("email"));
+    @PostMapping("/signup/code")
+    public ResponseEntity<Object> sendAuthCodeForSignUp(@RequestBody Map<String, String> map) throws MessagingException {
+        emailService.sendAuthCodeForSignUp(map.get("email"));
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("이메일 인증 코드 전송"));
+                .body(NoDataResponse.ok("회원가입을 위한 이메일 인증"));
+    }
+
+    @PostMapping("/reset/code")
+    public ResponseEntity<Object> sendAuthCodeForResetPW(@RequestBody Map<String, String> map) throws MessagingException {
+        authService.sendAuthCodeForResetPW(map.get("email"));
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("비밀번호 재설정을 위한 이메일 인증"));
     }
 
     @GetMapping("/code")
@@ -84,6 +92,14 @@ public class AuthController {
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("이메일 인증 코드 확인", isValidate));
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<Object> resetPassword(@RequestBody Map<String, String> map) {
+        authService.resetPassword(map.get("email"), map.get("password"));
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("비밀번호 재설정"));
     }
 
 }

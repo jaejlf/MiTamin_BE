@@ -26,10 +26,10 @@ import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -467,17 +467,46 @@ class AuthControllerTest extends CommonControllerTest {
 
     }
 
-    @DisplayName("이메일 인증 코드 전송")
+    @DisplayName("회원 가입을 위한 이메일 인증 코드 전송")
     @Test
-    void sendAuthCode(TestInfo testInfo) throws Exception {
+    void sendAuthCodeForSignUp(TestInfo testInfo) throws Exception {
         //given
         Map<String, String> map = new HashMap<>();
         map.put("email", "mytamin@naver.com");
 
-        doNothing().when(emailService).sendAuthCode(any());
+        doNothing().when(emailService).sendAuthCodeForSignUp(any());
 
         //when
-        ResultActions actions = mockMvc.perform(post("/auth/code")
+        ResultActions actions = mockMvc.perform(post("/auth/signup/code")
+                .content(objectMapper.writeValueAsString(map))
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestFields(
+                                fieldWithPath("email").description("*인증할 이메일")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지")
+                        ))
+                );
+    }
+
+    @DisplayName("비밀번호 재설정을 위한 이메일 인증 코드 전송")
+    @Test
+    void sendAuthCodeForReset(TestInfo testInfo) throws Exception {
+        //given
+        Map<String, String> map = new HashMap<>();
+        map.put("email", "mytamin@naver.com");
+
+        doNothing().when(emailService).sendAuthCodeForSignUp(any());
+
+        //when
+        ResultActions actions = mockMvc.perform(post("/auth/reset/code")
                 .content(objectMapper.writeValueAsString(map))
                 .contentType(APPLICATION_JSON));
 
@@ -528,6 +557,74 @@ class AuthControllerTest extends CommonControllerTest {
                                 fieldWithPath("data").description("인증 코드 일치 여부")
                         ))
                 );
+    }
+
+    @Nested
+    @DisplayName("비밀번호 재설정")
+    class ResetPasswordTest {
+
+        @DisplayName("성공")
+        @Test
+        void resetPassword(TestInfo testInfo) throws Exception {
+            //given
+            Map<String, String> map = new HashMap<>();
+            map.put("email", "mytamin@naver.com");
+            map.put("password", "newnew1234!");
+
+            doNothing().when(authService).resetPassword(any(), any());
+
+            //when
+            ResultActions actions = mockMvc.perform(put("/auth/password")
+                    .content(objectMapper.writeValueAsString(map))
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            requestFields(
+                                    fieldWithPath("email").description("*이메일"),
+                                    fieldWithPath("password").description("*재설정할 비밀번호 (8 ~ 30자)")
+                            ),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("결과 메세지")
+                            ))
+                    );
+        }
+
+        @DisplayName("가입되지 않은 유저")
+        @Test
+        void resetPassword_3000(TestInfo testInfo) throws Exception {
+            //given
+            Map<String, String> map = new HashMap<>();
+            map.put("email", "mytamin@naver.com");
+            map.put("password", "newnew1234!");
+
+            doThrow(new MytaminException(USER_NOT_FOUND_ERROR)).when(authService).resetPassword(any(), any());
+
+            //when
+            ResultActions actions = mockMvc.perform(put("/auth/password")
+                    .content(objectMapper.writeValueAsString(map))
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(3000))
+                    .andExpect(jsonPath("errorName").value("USER_NOT_FOUND_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
     }
 
 }

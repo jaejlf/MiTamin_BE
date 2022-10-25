@@ -111,6 +111,10 @@ public class User implements UserDetails {
         this.beMyMessage = beMyMessage;
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
     /*
     마이타민 알림 설정
     */
