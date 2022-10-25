@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,7 @@ import static great.job.mytamin.global.exception.ErrorMap.*;
 public class AuthService {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final EmailService emailService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserUtil userUtil;
     private final MydayUtil mydayUtil;
@@ -95,6 +97,22 @@ public class AuthService {
         }
     }
 
+    /*
+    비밀번호 재설정을 위한 이메일 인증 코드 전송
+    */
+    public void sendAuthCodeForResetPW(String email) throws MessagingException {
+        emailService.sendAuthCodeForSignUp(email);
+    }
+
+    /*
+    비밀번호 변경(또는 재설정)
+    */
+    public void resetPassword(String email, String password) {
+        User user = findUserByEmail(email);
+        user.updatePassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
     private User findUserByEmail(String email) {
         return customUserDetailsService.loadUserByUsername(email);
     }
@@ -104,9 +122,11 @@ public class AuthService {
         validatePasswordPattern(signUpRequest.getPassword());
 
         if (userUtil.isEmailDuplicate(signUpRequest.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.isNicknameDuplicate(signUpRequest.getNickname())) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        if (userUtil.isNicknameDuplicate(signUpRequest.getNickname()))
+            throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
 
-        if (signUpRequest.getMytaminHour() != null) timeUtil.isTimeValid(signUpRequest.getMytaminHour(), signUpRequest.getMytaminMin());
+        if (signUpRequest.getMytaminHour() != null)
+            timeUtil.isTimeValid(signUpRequest.getMytaminHour(), signUpRequest.getMytaminMin());
     }
 
     private void validateRefreshToken(String refreshToken, User user) {
