@@ -175,7 +175,7 @@ class ReportControllerTest extends CommonControllerTest {
         @Test
         void getReport(TestInfo testInfo) throws Exception {
             //given
-            given(reportService.getReport(any())).willReturn(
+            given(reportService.getReport(any(), any())).willReturn(
                     ReportResponse.builder()
                             .reportId(1L)
                             .canEdit(true)
@@ -220,7 +220,7 @@ class ReportControllerTest extends CommonControllerTest {
         @Test
         void getReport_4002(TestInfo testInfo) throws Exception {
             //given
-            given(reportService.getReport(any())).willThrow(new MytaminException(REPORT_NOT_FOUND_ERROR));
+            given(reportService.getReport(any(), any())).willThrow(new MytaminException(REPORT_NOT_FOUND_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(get("/report/{reportId}", reportId)

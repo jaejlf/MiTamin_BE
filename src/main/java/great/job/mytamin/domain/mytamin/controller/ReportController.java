@@ -35,8 +35,9 @@ public class ReportController {
     }
 
     @GetMapping("/{reportId}")
-    public ResponseEntity<Object> getReport(@PathVariable Long reportId) {
-        ReportResponse reportResponse = reportService.getReport(reportId);
+    public ResponseEntity<Object> getReport(@AuthenticationPrincipal User user,
+                                            @PathVariable Long reportId) {
+        ReportResponse reportResponse = reportService.getReport(user, reportId);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("하루 진단 조회", reportResponse));

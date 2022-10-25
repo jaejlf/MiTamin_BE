@@ -171,7 +171,7 @@ class CareControllerTest extends CommonControllerTest {
         @Test
         void getCare(TestInfo testInfo) throws Exception {
             //given
-            given(careService.getCare(any())).willReturn(
+            given(careService.getCare(any(), any())).willReturn(
                     CareResponse.builder()
                             .careId(1L)
                             .canEdit(true)
@@ -214,7 +214,7 @@ class CareControllerTest extends CommonControllerTest {
         @Test
         void getCare_5002(TestInfo testInfo) throws Exception {
             //given
-            given(careService.getCare(any())).willThrow(new MytaminException(CARE_NOT_FOUND_ERROR));
+            given(careService.getCare(any(), any())).willThrow(new MytaminException(CARE_NOT_FOUND_ERROR));
 
             //when
             ResultActions actions = mockMvc.perform(get("/care/{careId}", careId)
