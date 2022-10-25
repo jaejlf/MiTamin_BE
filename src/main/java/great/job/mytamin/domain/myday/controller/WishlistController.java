@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -33,10 +34,10 @@ public class WishlistController {
     @PostMapping("/new")
     public ResponseEntity<Object> createWish(@AuthenticationPrincipal User user,
                                              @RequestBody WishRequest wishRequest) {
-        wishService.createWish(user, wishRequest.getWishText());
+        WishResponse wishResponse = wishService.createWish(user, wishRequest.getWishText());
         return ResponseEntity
-                .status(OK)
-                .body(NoDataResponse.ok("위시 생성"));
+                .status(CREATED)
+                .body(ResultResponse.create("위시 생성", wishResponse));
     }
 
     @PutMapping("/{wishId}")

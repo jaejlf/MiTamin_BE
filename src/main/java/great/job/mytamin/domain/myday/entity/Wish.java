@@ -40,8 +40,8 @@ public class Wish {
         this.wishText = text;
     }
 
-    public void updateIsHiddenTrue() {
-        this.isHidden = true;
+    public void updateIsHidden(Boolean isHidden) {
+        this.isHidden = isHidden;
     }
 
 }
