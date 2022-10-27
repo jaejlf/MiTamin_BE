@@ -171,7 +171,7 @@ video {
 <div class="title">25일 기준 진행상황입니다</div>
 <ul>
 <li>
-<p>히스토리 탭에 필요한 API 개발 완료 (정렬 등 세부사항 수정 예정)</p>
+<p>히스토리 탭에 필요한 API 개발 완료</p>
 </li>
 <li>
 <p>데이노트 날짜 선택 휠에 필요한 &#8594; 가입 날짜 조회 API 개발 완료</p>
@@ -180,12 +180,32 @@ video {
 <p>계정 관리탭에서 필요한 API 개발 완료</p>
 </li>
 <li>
-<p>위시리스트 생성/수정/삭제 API 개발 완료 (순서 변경 관련해서는 더 논의 필요. 아직 반영 X)</p>
+<p>위시리스트 생성/수정/삭제 API 개발 완료</p>
 </li>
 <li>
 <p>이메일 인증 기능 관련 API 개발 완료</p>
 </li>
 </ul>
+</div>
+<div class="ulist">
+<div class="title">개발 예정</div>
+<ul>
+<li>
+<p>문서에 #TODO 태그된 내용 수정 예정</p>
+</li>
+<li>
+<p>비밀번호 변경 API</p>
+</li>
+<li>
+<p>소셜 로그인 (애플/구글/네이버/카카오)</p>
+</li>
+<li>
+<p>푸시 알림 서버 구축</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>(이 외에 빠진 부분 있다면 알려주세요)</p>
 </div>
 <hr>
 </div>
@@ -1846,7 +1866,7 @@ Content-Length: 670
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "10.26.Wed",
+    "takeAt" : "10.27.Thu",
     "report" : {
       "reportId" : 1,
       "canEdit" : true,
@@ -4937,6 +4957,9 @@ Content-Length: 57
 </div>
 <div class="sect2">
 <h3 id="_기록_초기화">기록 초기화</h3>
+<div class="paragraph">
+<p>#TODO : 기록 초기화 하루진단/칭찬처방/데이노트 개별 선택으로 세분화됨에 따라 변경 예정</p>
+</div>
 <div class="sect3">
 <h4 id="_기록_초기화_http_request">HTTP request</h4>
 <div class="listingblock">
@@ -5359,6 +5382,9 @@ Content-Length: 96
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>#TODO : 데이노트 작성 시 '위시 추가' 기능 사라짐에 따라 wishText 대신 wishId를 전송하도록 변경할 예정</p>
+</div>
 <div class="sect3">
 <h4 id="_데이노트_작성_http_request">HTTP request</h4>
 <div class="listingblock">
@@ -5381,7 +5407,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@147b758f, org.springframework.mock.web.MockMultipartFile@61e33118]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@60b201c, org.springframework.mock.web.MockMultipartFile@630fa11e]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5604,7 +5630,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@69231217, org.springframework.mock.web.MockMultipartFile@7356f0e0]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@56b37d59, org.springframework.mock.web.MockMultipartFile@69c4bbfe]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5878,9 +5904,12 @@ Content-Length: 152
 <div class="ulist">
 <ul>
 <li>
-<p>연도별로 그룹핑하여 최신순으로 리턴한다. (! 정렬 로직 수정 예정)</p>
+<p>연도별로 그룹핑하여 최신순으로 리턴한다.</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>#TODO : 최신순 정렬 (아직 최신순으로 정렬이 제대로 되지 않은 채로 데이터가 리턴될 수도 있으나, 최신순으로 수정할 예정이므로 리턴받은 데이터 순서대로 출력하도록 개발하면 됩니다 !)</p>
 </div>
 <div class="sect3">
 <h4 id="_데이노트_리스트_조회_http_request">HTTP request</h4>
@@ -6049,6 +6078,9 @@ Content-Length: 706
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_위시_리스트_조회">위시 리스트 조회</h3>
+<div class="paragraph">
+<p>#TODO : 순서 변경 로직 X / 다른 기능 우선적으로 개발 후 다시 논의</p>
+</div>
 <div class="sect3">
 <h4 id="_위시_리스트_조회_http_request">HTTP request</h4>
 <div class="listingblock">
@@ -7427,7 +7459,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-25 20:15:35 +0900
+Last updated 2022-10-27 19:38:31 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
