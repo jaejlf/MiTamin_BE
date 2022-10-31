@@ -45,7 +45,7 @@ public class DaynoteService {
     */
     @Transactional
     public DaynoteResponse createDaynote(User user, DaynoteRequest daynoteRequest) {
-        Wish wish = wishService.findWishOrElseNew(user, daynoteRequest.getWishText());
+        Wish wish = wishService.findWishById(user, Long.parseLong(daynoteRequest.getWishId()));
         if (!canCreateDaynote(user, daynoteRequest.getDate()))
             throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
         return DaynoteResponse.of(saveNewDaynote(daynoteRequest, wish, user));
@@ -59,7 +59,7 @@ public class DaynoteService {
         Daynote daynote = findDaynoteById(user, daynoteId);
         awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
 
-        Wish wish = wishService.findWishOrElseNew(user, daynoteUpdateRequest.getWishText());
+        Wish wish = wishService.findWishById(user, Long.parseLong(daynoteUpdateRequest.getWishId()));
         daynote.updateAll(
                 awsS3Service.uploadImageList(daynoteUpdateRequest.getFileList(), "DN"),
                 wish,

@@ -188,6 +188,20 @@ video {
 </ul>
 </div>
 <div class="ulist">
+<div class="title">#TODO 수정 완료된 부분</div>
+<ul>
+<li>
+<p>데이노트 작성 시</p>
+</li>
+<li>
+<p>wishText 대신 wishId를 전송하도록 변경</p>
+</li>
+<li>
+<p>기존에 존재하지 않는 위시로 데이노트 작성 불가</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
 <div class="title">개발 예정</div>
 <ul>
 <li>
@@ -1866,7 +1880,7 @@ Content-Length: 670
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "10.27.Thu",
+    "takeAt" : "10.31.Mon",
     "report" : {
       "reportId" : 1,
       "canEdit" : true,
@@ -5377,13 +5391,7 @@ Content-Length: 96
 <li>
 <p>date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 &#8594; 2022.01)</p>
 </li>
-<li>
-<p>wishText가 기존에 존재하지 않는 위시라면 자동으로 생성한다.</p>
-</li>
 </ul>
-</div>
-<div class="paragraph">
-<p>#TODO : 데이노트 작성 시 '위시 추가' 기능 사라짐에 따라 wishText 대신 wishId를 전송하도록 변경할 예정</p>
 </div>
 <div class="sect3">
 <h4 id="_데이노트_작성_http_request">HTTP request</h4>
@@ -5395,9 +5403,9 @@ X-AUTH-TOKEN: {{ACCESS_TOKEN}}
 Host: MY-TAMIN-URL
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=wishText
+Content-Disposition: form-data; name=wishId
 
-빵 나오는 시간에 맞춰서 갓 나온 빵 사기
+1
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=note
 
@@ -5407,7 +5415,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@60b201c, org.springframework.mock.web.MockMultipartFile@630fa11e]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@5b293cc9, org.springframework.mock.web.MockMultipartFile@6c551798]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5495,8 +5503,8 @@ Content-Length: 413
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>wishText</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*위시 텍스트</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>wishId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*위시 id</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>note</code></p></td>
@@ -5586,6 +5594,20 @@ Content-Length: 173
 </div>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 146
+
+{
+  "statusCode" : 404,
+  "errorCode" : 8000,
+  "errorName" : "WISH_NOT_FOUND_ERROR",
+  "message" : "존재하지 않는 wishId 입니다."
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
 Content-Type: application/json;charset=UTF-8
 Content-Length: 169
@@ -5622,15 +5644,15 @@ X-AUTH-TOKEN: {{ACCESS_TOKEN}}
 Host: MY-TAMIN-URL
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=wishText
+Content-Disposition: form-data; name=wishId
 
-빵 나오는 시간에 맞춰서 갓 나온 빵 사기
+1
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@56b37d59, org.springframework.mock.web.MockMultipartFile@69c4bbfe]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@346ea2ed, org.springframework.mock.web.MockMultipartFile@2dda91b3]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5710,8 +5732,8 @@ Content-Length: 71
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>wishText</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">*위시 텍스트</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>wishId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*위시 id</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>note</code></p></td>
@@ -5762,6 +5784,20 @@ Content-Length: 152
   "errorCode" : 8003,
   "errorName" : "DAYNOTE_NOT_FOUND_ERROR",
   "message" : "존재하지 않는 daynoteId 입니다."
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 146
+
+{
+  "statusCode" : 404,
+  "errorCode" : 8000,
+  "errorName" : "WISH_NOT_FOUND_ERROR",
+  "message" : "존재하지 않는 wishId 입니다."
 }</code></pre>
 </div>
 </div>
@@ -7459,7 +7495,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-10-27 19:38:31 +0900
+Last updated 2022-10-31 10:48:22 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
