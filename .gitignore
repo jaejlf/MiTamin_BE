@@ -7,7 +7,6 @@ build/
 
 application-secret.yml
 /BOOT-INF/
-/src/docs/custom
 
 ### STS ###
 .apt_generated
