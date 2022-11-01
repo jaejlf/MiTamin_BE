@@ -26,11 +26,6 @@ include::{snippets}/user/updateProfile_2003/http-response.adoc[]
 operation::user/getCreatedAt[snippets='http-request,http-response']
 operation::user/getCreatedAt[snippets='request-headers,response-fields']
 
-=== 유저 정보 조회
-
-operation::user/getProfile[snippets='http-request,http-response']
-operation::user/getProfile[snippets='request-headers,response-fields']
-
 === 로그아웃
 
 operation::user/logout[snippets='http-request,http-response']

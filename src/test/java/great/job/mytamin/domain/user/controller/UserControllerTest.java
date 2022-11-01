@@ -67,7 +67,8 @@ class UserControllerTest extends CommonControllerTest {
                                 fieldWithPath("message").description("결과 메세지"),
                                 fieldWithPath("data.nickname").description("닉네임"),
                                 fieldWithPath("data.profileImgUrl").description("프로필 이미지 URL"),
-                                fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지")
+                                fieldWithPath("data.beMyMessage").description("'되고싶은 내 모습' 메세지"),
+                                fieldWithPath("data.provider").description("가입 경로")
                         ))
                 );
     }
@@ -193,31 +194,31 @@ class UserControllerTest extends CommonControllerTest {
                 );
     }
 
-    @DisplayName("유저 정보 조회")
-    @Test
-    void manageUser(TestInfo testInfo) throws Exception {
-        //given & when
-        ResultActions actions = mockMvc.perform(get("/user/manage")
-                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                .contentType(APPLICATION_JSON));
-
-        //then
-        actions
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("data").exists())
-                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                        requestHeaders(
-                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-                        ),
-                        responseFields(
-                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data.email").description("이메일"),
-                                fieldWithPath("data.provider").description("가입 경로")
-                        ))
-                );
-    }
+//    @DisplayName("유저 정보 조회")
+//    @Test
+//    void manageUser(TestInfo testInfo) throws Exception {
+//        //given & when
+//        ResultActions actions = mockMvc.perform(get("/user/manage")
+//                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+//                .contentType(APPLICATION_JSON));
+//
+//        //then
+//        actions
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("data").exists())
+//                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+//                        requestHeaders(
+//                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+//                                fieldWithPath("message").description("결과 메세지"),
+//                                fieldWithPath("data.email").description("이메일"),
+//                                fieldWithPath("data.provider").description("가입 경로")
+//                        ))
+//                );
+//    }
 
     @DisplayName("로그아웃")
     @Test
