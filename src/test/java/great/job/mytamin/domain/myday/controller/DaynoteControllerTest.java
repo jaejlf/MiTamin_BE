@@ -139,6 +139,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     fieldWithPath("data.imgList[]").description("데이노트 이미지 리스트"),
                                     fieldWithPath("data.year").description("데이노트가 작성된 year"),
                                     fieldWithPath("data.month").description("데이노트가 작성된 month"),
+                                    fieldWithPath("data.wishId").description("위시 id"),
                                     fieldWithPath("data.wishText").description("위시 텍스트"),
                                     fieldWithPath("data.note").description("데이노트 코멘트")
                             ))
@@ -510,6 +511,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                 fieldWithPath("data.*[].imgList[]").description("데이노트 이미지 리스트"),
                                 fieldWithPath("data.*[].year").description("데이노트가 작성된 year"),
                                 fieldWithPath("data.*[].month").description("데이노트가 작성된 month"),
+                                fieldWithPath("data.*[].wishId").description("위시 id"),
                                 fieldWithPath("data.*[].wishText").description("위시 텍스트"),
                                 fieldWithPath("data.*[].note").description("데이노트 코멘트")
                         ))
@@ -526,6 +528,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                 .imgList(imgList)
                 .year(2022)
                 .month(10)
+                .wishId(1L)
                 .wishText("도서관에 가서 책 한권 빌려오기")
                 .note("백만년만에 도서관에 가서 책을 빌렸다. 이번엔 연체되기 전에 꼭 다 읽고 반납해야겠다 *_*")
                 .build();
@@ -542,6 +545,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                 .imgList(imgList)
                 .year(2021)
                 .month(12)
+                .wishId(1L)
                 .wishText("도서관에 가서 책 한권 빌려오기")
                 .note("백만년만에 도서관에 가서 책을 빌렸다. 이번엔 연체되기 전에 꼭 다 읽고 반납해야겠다 *_*")
                 .build());
@@ -552,6 +556,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                 .imgList(imgList)
                 .year(2022)
                 .month(10)
+                .wishId(2L)
                 .wishText("소품샵 가기")
                 .note("소품샵 가서 귀여운 비누를 샀다.")
                 .build());
@@ -560,6 +565,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                 .imgList(imgList)
                 .year(2022)
                 .month(9)
+                .wishId(3L)
                 .wishText("빵 나오는 시간에 맞춰서 갓 나온 빵 사먹기")
                 .note("따끈따끈한 식빵에 우유는 역시 최고 !")
                 .build());

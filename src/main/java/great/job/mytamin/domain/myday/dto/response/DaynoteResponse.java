@@ -19,6 +19,7 @@ public class DaynoteResponse {
     List<String> imgList;
     int year;
     int month;
+    Long wishId;
     String wishText;
     String note;
 
@@ -29,6 +30,7 @@ public class DaynoteResponse {
                 .imgList(daynote.getImgUrlList())
                 .year(rawPerformedAt.getYear())
                 .month(rawPerformedAt.getMonth().getValue())
+                .wishId(daynote.getWish().getWishId())
                 .wishText(daynote.getWish().getWishText())
                 .note(daynote.getNote())
                 .build();

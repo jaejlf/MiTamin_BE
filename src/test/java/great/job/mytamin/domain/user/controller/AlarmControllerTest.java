@@ -147,13 +147,13 @@ class AlarmControllerTest extends CommonControllerTest {
 
     @Nested
     @DisplayName("마이데이 알림 ON")
-    class TurnOnmydayAlarmTest {
+    class TurnOnMydayAlarmTest {
 
         int code = 1;
 
         @DisplayName("성공")
         @Test
-        void turnOnmydayAlarm(TestInfo testInfo) throws Exception {
+        void turnOnMydayAlarm(TestInfo testInfo) throws Exception {
             //given
             doNothing().when(alarmService).turnOnMydayAlarm(any(), anyInt());
 
@@ -182,7 +182,7 @@ class AlarmControllerTest extends CommonControllerTest {
 
         @DisplayName("알림 지정 시간 코드 오류")
         @Test
-        void turnOnmydayAlarm_3002(TestInfo testInfo) throws Exception {
+        void turnOnMydayAlarm_3002(TestInfo testInfo) throws Exception {
             //given
             doThrow(new MytaminException(INVALID_MYDAY_ALARM_CODE_ERROR)).when(alarmService).turnOnMydayAlarm(any(), anyInt());
 
