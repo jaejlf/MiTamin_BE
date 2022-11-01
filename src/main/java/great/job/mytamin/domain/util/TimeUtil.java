@@ -100,15 +100,15 @@ public class TimeUtil {
         LocalDateTime now = LocalDateTime.now();
 
         if (now.getHour() <= 4) {
-            start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth() - 1, 5, 0);
-            end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth() - 1, 23, 59);
-            start2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 0, 0);
-            end2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 4, 59);
+            start1 = now.minusDays(1).withHour(5).withMinute(0);
+            end1 = now.minusDays(1).withHour(23).withMinute(59);
+            start2 = now.withHour(0).withMinute(0);
+            end2 = now.withHour(4).withMinute(59);
         } else {
-            start1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 5, 0);
-            end1 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), 23, 59);
-            start2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth() + 1, 0, 0);
-            end2 = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth() + 1, 4, 59);
+            start1 = now.withHour(5).withMinute(0);
+            end1 = now.withHour(23).withMinute(59);
+            start2 = now.plusDays(1).withHour(0).withMinute(0);
+            end2 = now.plusDays(1).withHour(4).withMinute(59);
         }
 
         return isInRange(target, start1, end1) || isInRange(target, start2, end2);
