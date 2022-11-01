@@ -1,0 +1,87 @@
+ifndef::snippets[]
+:snippets: /MyTamin_BE/build/generated-snippets
+endif::[]
+:custom: /../../src/docs/custom
+
+=== 회원 가입
+* mytaminHour은 24시간 단위(0 ~ 23)의 값으로 요청한다. (ex. 오후 3시 -> "15")
+
+operation::auth/signUp[snippets='http-request,http-response']
+operation::auth/signUp[snippets='request-fields,response-fields']
+
+==== Exception response
+* EMAIL_PATTERN_ERROR : 이메일 형식이 정해진 패턴("^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\w+\.)+\w+$") 과 다를 경우
+* PASSWORD_PATTERN_ERROR : 비밀번호가 정해진 패턴("^(?=.\*[0-9])(?=.*[A-Za-z]).{8,30}$") 과 다를 경우
+
+include::{snippets}/auth/signUp_2000/http-response.adoc[]
+include::{snippets}/auth/signUp_2001/http-response.adoc[]
+include::{snippets}/auth/signUp_2002/http-response.adoc[]
+include::{snippets}/auth/signUp_2003/http-response.adoc[]
+
+=== 기본 로그인
+* 로그인 성공 시 accessToken과 refreshToken을 발급한다.
+
+operation::auth/defaultLogin[snippets='http-request,http-response']
+operation::auth/defaultLogin[snippets='request-fields,response-fields']
+
+==== Exception response
+include::{snippets}/auth/defaultLogin_3000/http-response.adoc[]
+include::{snippets}/auth/defaultLogin_3001/http-response.adoc[]
+
+=== 이메일 중복 체크
+* 중복된 이메일이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.
+
+operation::auth/isEmailDuplicate[snippets='http-request,http-response']
+operation::auth/isEmailDuplicate[snippets='path-parameters,response-fields']
+
+=== 닉네임 중복 체크
+* 중복된 닉네임이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.
+
+operation::auth/isNicknameDuplicate[snippets='http-request,http-response']
+operation::auth/isNicknameDuplicate[snippets='path-parameters,response-fields']
+
+=== 토큰 재발급
+* 새로 발급한 accessToken과 기존의 refreshToken을 리턴한다.
+** refreshToken의 만료 기간이 2일 이내로 남았을 경우 refreshToken 또한 새로 발급한다.
+* 만약 403 응답(= INVALID_TOKEN_ERROR)일 경우에는 재로그인하도록 한다.
+
+operation::auth/reissueToken[snippets='http-request,http-response']
+operation::auth/reissueToken[snippets='request-fields,response-fields']
+
+==== Exception response
+* INVALID_TOKEN_ERROR
+    ** DB에 저장된 refreshToken과 일치하지 않는 경우
+    ** refreshToken 자체가 잘못 되었거나 만료된 경우
+
+include::{snippets}/auth/reissueToken_1001/http-response.adoc[]
+include::{snippets}/auth/reissueToken_3000/http-response.adoc[]
+
+=== 이메일 인증 코드 전송 1
+* 회원 가입을 위한 이메일 인증 코드 전송 API이다.
+
+operation::auth/sendAuthCodeForSignUp[snippets='http-request,http-response']
+operation::auth/sendAuthCodeForSignUp[snippets='request-fields,response-fields']
+
+=== 이메일 인증 코드 전송 2
+* 비밀번호 재설정을 위한 이메일 인증 코드 전송 API이다.
+* '이메일 인증 코드 전송 1' API와 다르게, 가입된 유저인지 확인하는 로직이 추가적으로 존재하므로, 두 API를 구분하여 사용한다.
+
+operation::auth/sendAuthCodeForReset[snippets='http-request,http-response']
+operation::auth/sendAuthCodeForReset[snippets='request-fields,response-fields']
+
+=== 이메일 인증 코드 확인
+* 인증이 완료되었을 경우 true, 완료되지 않았을 경우 false를 리턴한다.
+* '이메일 인증 코드 전송 1', ''이메일 인증 코드 전송 2' API에서 전송한 인증 코드를 확인하는 로직은 동일하므로, 같은 API를 사용하여 인증한다.
+
+operation::auth/confirmAuthCode[snippets='http-request,http-response']
+operation::auth/confirmAuthCode[snippets='request-fields,response-fields']
+
+=== 비밀번호 재설정
+* 유저가 비밀번호를 잊어버렸을 경우 해당 API를 사용해 비밀번호를 재설정한다.
+* 비밀번호 재설정 이전, 이메일 인증 과정을 거쳤다고 가정한다.
+
+operation::auth/resetPassword[snippets='http-request,http-response']
+operation::auth/resetPassword[snippets='request-fields,response-fields']
+
+==== Exception response
+include::{snippets}/auth/resetPassword_3000/http-response.adoc[]

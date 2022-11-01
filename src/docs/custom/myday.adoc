@@ -1,0 +1,64 @@
+ifndef::snippets[]
+:snippets: /MyTamin_BE/build/generated-snippets
+endif::[]
+:custom: /../../src/docs/custom
+
+=== 이번 달의 마이데이
+* 매달 랜덤으로 마이데이 날짜가 지정된다.
+* comment
+    ** 마이데이 이전 : "이번 마이데이에는 무엇을 해볼까요 ?"
+    ** 마이데이 3일 전 : "두근두근 ! 마이데이가 머지 않았어요",
+    ** 마이데이 당일 : "기분 좋은 마이데이 되세요 !",
+    ** 마이데이 이후 : "이번 마이데이는 어떤 하루였나요 ?"
+
+operation::myday/getMyday[snippets='http-request,http-response']
+operation::myday/getMyday[snippets='request-headers,response-fields']
+
+=== 데이노트 작성 가능 여부
+* date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 → 2022.01)
+* date에 해당하는 날짜에 데이노트 작성이 가능하면 true, 불가능하면 false를 리턴한다.
+
+operation::daynote/canCreateDaynote[snippets='http-request,http-response']
+operation::daynote/canCreateDaynote[snippets='request-headers,path-parameters,response-fields']
+
+=== 데이노트 작성
+* fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+* 이미지는 최대 5장까지 첨부할 수 있다.
+* date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 → 2022.01)
+
+operation::daynote/createDaynote[snippets='http-request,http-response']
+operation::daynote/createDaynote[snippets='request-headers,request-parts,request-parameters,response-fields']
+
+==== Exception response
+include::{snippets}/daynote/createDaynote_8004/http-response.adoc[]
+include::{snippets}/daynote/createDaynote_8000/http-response.adoc[]
+include::{snippets}/daynote/createDaynote_6003/http-response.adoc[]
+
+=== 데이노트 수정
+* fileList 내 이미지의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+* 이미지는 최대 5장까지 첨부할 수 있다.
+
+operation::daynote/updateDaynote[snippets='http-request,http-response']
+operation::daynote/updateDaynote[snippets='request-headers,request-parts,request-parameters,response-fields']
+
+==== Exception response
+include::{snippets}/daynote/updateDaynote_8003/http-response.adoc[]
+include::{snippets}/daynote/updateDaynote_8000/http-response.adoc[]
+include::{snippets}/daynote/updateDaynote_6003/http-response.adoc[]
+
+=== 데이노트 삭제
+
+operation::daynote/deleteDaynote[snippets='http-request,http-response']
+operation::daynote/deleteDaynote[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+include::{snippets}/daynote/deleteDaynote_8003/http-response.adoc[]
+
+=== 데이노트 리스트 조회
+* 연도별로 그룹핑하여 최신순으로 리턴한다.
+
+#TODO : 최신순 정렬 (아직 최신순으로 정렬이 제대로 되지 않은 채로 데이터가 리턴될 수도 있으나, 최신순으로 수정할 예정이므로 리턴받은 데이터 순서대로 출력하도록 개발하면 됩니다 !)
+
+operation::daynote/getDaynoteList[snippets='http-request,http-response']
+operation::{custom}/daynote/getDaynoteList[snippets='other-response']
+operation::daynote/getDaynoteList[snippets='request-headers,response-fields']

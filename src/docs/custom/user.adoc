@@ -1,0 +1,48 @@
+ifndef::snippets[]
+:snippets: /MyTamin_BE/build/generated-snippets
+endif::[]
+:custom: /../../src/docs/custom
+
+=== 프로필 조회
+* 설정된 프로필 이미지가 없을 경우, profileImgUrl은 null로 리턴된다.
+
+operation::user/getProfile[snippets='http-request,http-response']
+operation::user/getProfile[snippets='request-headers,response-fields']
+
+=== 프로필 편집
+* file의 확장자는 .png, .jpg, .jpeg 또는 null 중 하나여야 한다.
+* isImgEdited는 프로필 이미지가 수정되었을 경우 "T", 수정되지 않았을 경우 "F"를 전송한다.
+** isImgEdited가 "T"가 아닌 경우에는 이미지와 관련된 작업을 아예 진행하지 않으므로, file에는 어떤 값을 넣어도 무관하다. (null 또는 기존 이미지 등)
+* nickname, beMyMessage는 수정되지 않았더라도 항상 전송한다.
+
+operation::user/updateProfile[snippets='http-request,http-response']
+operation::user/updateProfile[snippets='request-headers,request-parts,request-parameters,response-fields']
+
+==== Exception response
+include::{snippets}/user/updateProfile_2003/http-response.adoc[]
+
+=== 가입 날짜 조회
+
+operation::user/getCreatedAt[snippets='http-request,http-response']
+operation::user/getCreatedAt[snippets='request-headers,response-fields']
+
+=== 유저 정보 조회
+
+operation::user/getProfile[snippets='http-request,http-response']
+operation::user/getProfile[snippets='request-headers,response-fields']
+
+=== 로그아웃
+
+operation::user/logout[snippets='http-request,http-response']
+operation::user/logout[snippets='request-headers,response-fields']
+
+=== 기록 초기화
+#TODO : 기록 초기화 하루진단/칭찬처방/데이노트 개별 선택으로 세분화됨에 따라 변경 예정
+
+operation::user/deleteAll[snippets='http-request,http-response']
+operation::user/deleteAll[snippets='request-headers,response-fields']
+
+=== 회원 탈퇴
+
+operation::user/withdraw[snippets='http-request,http-response']
+operation::user/withdraw[snippets='request-headers,response-fields']

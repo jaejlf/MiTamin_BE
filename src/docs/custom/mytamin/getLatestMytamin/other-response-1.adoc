@@ -1,0 +1,14 @@
+* 최근 섭취한 마이타민이 없을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 670
+
+{
+  "statusCode" : 200,
+  "message" : "최근 섭취한 마이타민",
+  "data" : null
+}
+----

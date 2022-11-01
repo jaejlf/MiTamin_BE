@@ -1,0 +1,72 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 889
+
+{
+  "statusCode" : 200,
+  "message" : "주간 마이타민 기록 조회",
+  "data" : {
+    "17" : {
+      "mytaminId" : 1,
+      "takeAt" : "10월 17일의 마이타민",
+      "report" : {
+        "reportId" : 1,
+        "canEdit" : false,
+        "mentalConditionCode" : 5,
+        "mentalCondition" : "매우 좋아요 !",
+        "feelingTag" : "#신나는",
+        "todayReport" : "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
+      },
+      "care" : null
+    },
+    "18" : {
+      "mytaminId" : 2,
+      "takeAt" : "10월 18일의 마이타민",
+      "report" : null,
+      "care" : {
+        "careId" : 1,
+        "canEdit" : false,
+        "careCategory" : "이루어 낸 일",
+        "careMsg1" : "오늘 할 일을 전부 했어",
+        "careMsg2" : "성실히 노력하는 내 모습이 좋아"
+      }
+    },
+    "19" : null,
+    "20" : {
+      "mytaminId" : 3,
+      "takeAt" : "10월 20일의 마이타민",
+      "report" : null,
+      "care" : {
+        "careId" : 1,
+        "canEdit" : false,
+        "careCategory" : "노력하고 있는 부분",
+        "careMsg1" : "너무 늦게 잠들지 않기 위해 노력 중이야",
+        "careMsg2" : "치만 오늘도 해가 뜰 때쯤 잠들었어"
+      }
+    },
+    "21" : {
+      "mytaminId" : 4,
+      "takeAt" : "10월 21일의 마이타민",
+      "report" : {
+        "reportId" : 1,
+        "canEdit" : false,
+        "mentalConditionCode" : 3,
+        "mentalCondition" : "그럭저럭 이에요",
+        "feelingTag" : "#평온한 #무념무상의",
+        "todayReport" : "별거 없었던 오늘의 하루"
+      },
+      "care" : {
+        "careId" : 1,
+        "canEdit" : false,
+        "careCategory" : "노력하고 있는 부분",
+        "careMsg1" : "너무 늦게 잠들지 않기 위해 노력 중이야",
+        "careMsg2" : "그치만 오늘도 해가 뜰 때쯤 잠들었어"
+      }
+    },
+    "22" : null,
+    "23" : null
+  }
+}
+----

@@ -1,0 +1,14 @@
+* 이번 달 느낀 감정이 하나도 없을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 270
+
+{
+    "statusCode" : 200,
+    "message" : "이번 달 가장 많이 느낀 감정",
+    "data" : []
+}
+----

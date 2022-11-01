@@ -1,0 +1,58 @@
+ifndef::snippets[]
+:snippets: /MyTamin_BE/build/generated-snippets
+endif::[]
+:custom: /../../src/docs/custom
+
+=== 숨 고르기 완료
+* 유저가 '숨 고르기' 행동을 완료했다면 해당 API를 요청한다.
+* 해당 API를 요청하면 유저가 '숨 고르기'를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.
+
+operation::mytamin/completeBreath[snippets='http-request,http-response']
+operation::mytamin/completeBreath[snippets='request-headers,response-fields']
+
+=== 감각 깨우기 완료
+* 유저가 '감각 깨우기' 행동을 완료했다면 해당 API를 요청한다.
+* 해당 API를 요청하면 유저가 '감각 깨우기'를 완료한 최종 시간이 업데이트되고, 이 정보는 행동 완료 상태 API에서 유저가 행동을 완료했는지 여부를 계산하는 데에 활용된다.
+
+operation::mytamin/completeSense[snippets='http-request,http-response']
+operation::mytamin/completeSense[snippets='request-headers,response-fields']
+
+=== 최근 섭취한 마이타민
+* 하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다.
+* 하루 진단/칭찬 처방은 작성 후 24시간 이내일 경우 수정이 가능하다.
+** report.canEdit, care.canEdit은 수정 가능할 경우 true, 불가능할 경우 false를 리턴한다.
+include::{snippets}{custom}/enumerate/mentalConditionCode.adoc[]
+
+operation::mytamin/getLatestMytamin[snippets='http-request,http-response']
+operation::{custom}/mytamin/getLatestMytamin[snippets='other-response-1,other-response-2']
+operation::mytamin/getLatestMytamin[snippets='request-headers,response-fields']
+
+=== 월간 마이타민 기록 조회
+* date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 → 2022.01)
+* date의 모든 날짜(1일 ~ 마지막날)의 마이타민 기록을 조회한다.
+* 해당하는 날짜에
+    ** 하루 진단 기록이 있는 경우 → mentalConditionCode : 하루 진단에 기록되어있는 마음 컨디션 코드
+    ** 칭찬 처방 기록만 있는 경우 → mentalConditionCode : 9
+    ** 하루 진단/칭찬 처방 기록이 모두 없는 경우 → mentalConditionCode : 0
+include::{snippets}{custom}/enumerate/mentalConditionCode.adoc[]
+
+operation::mytamin/getMonthlyMytamin[snippets='http-request']
+operation::{custom}/mytamin/getMonthlyMytamin[snippets='http-response']
+operation::mytamin/getMonthlyMytamin[snippets='request-headers,path-parameters,response-fields']
+
+=== 주간 마이타민 기록 조회
+* date는 yyyy.MM.dd 형식으로 요청한다. (ex. 22년 1월 1일 → 2022.01.01)
+* date가 포함된 week의 월 ~ 일요일의 마이타민 기록을 '날짜:마이타민' 형태로 조회한다.
+* 마이타민 기록이 없는 날은 null로 리턴된다. (ex. data.날짜 : null)
+* 하루 진단 or 칭찬 처방 중 완료하지 않은 행동이 있다면 null로 리턴된다.
+
+operation::mytamin/getWeeklyMytamin[snippets='http-request']
+operation::{custom}/mytamin/getWeeklyMytamin[snippets='http-response']
+operation::mytamin/getWeeklyMytamin[snippets='request-headers,path-parameters,response-fields']
+
+=== 마이타민 삭제
+operation::mytamin/deleteMytamin[snippets='http-request,http-response']
+operation::mytamin/deleteMytamin[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+include::{snippets}/mytamin/deleteMytamin_5003/http-response.adoc[]

@@ -1,0 +1,14 @@
+* 칭찬 처방 기록이 하나도 없는 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 237
+
+{
+  "statusCode" : 200,
+  "message" : "칭찬 처방 랜덤 조회",
+  "data" : null
+}
+----

@@ -1,0 +1,21 @@
+* 마이타민, 마이데이 알림이 모두 꺼져있을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 243
+
+{
+  "statusCode" : 200,
+  "message" : "알림 설정 상태 조회",
+  "data" : {
+    "mytamin" : {
+      "isOn" : false
+    },
+    "myday" : {
+      "isOn" : false
+    }
+  }
+}
+----

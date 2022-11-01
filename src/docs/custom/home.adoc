@@ -1,0 +1,27 @@
+ifndef::snippets[]
+:snippets: /MyTamin_BE/build/generated-snippets
+endif::[]
+:custom: /../../src/docs/custom
+
+=== 웰컴 메세지
+* 조건에 따라 웰컴 메시지를 리턴한다.
+* 조건 1, 2, 3 순으로 높은 우선 순위가 적용된다.
+* 조건
+** 조건 1. 마이타민 섭취 완료
+    *** 오늘 하루도 수고 많았어요 :)
+** 조건 2. 마이타민 섭취 지정 시간 및 섭취 여부
+    *** 섭취 지정 시간 2시간 전 : 오늘의 마이타민 섭취를 잊지마세요 :)
+    *** 섭취 지정 시간 2시간 후 : 마이타민 섭취.. 잊으시면 안 돼요 !
+** 조건 3. 시간에 따른 웰컴 메세지
+    *** am 5:00 ~ am 11:59 : 오늘도 힘차게 시작해볼까요 ?
+    *** pm 12:00 ~ pm 18:59 : 어떤 하루를 보내고 계신가요 ?
+    *** pm 19:00 ~ am 4:59 : 푹 쉬고 내일 만나요
+
+operation::home/welcome[snippets='http-request,http-response']
+operation::home/welcome[snippets='request-headers,response-fields']
+
+=== 행동 완료 상태
+* 1 ~ 4번 행동에 대해 유저가 행동을 완료했다면 true, 완료하지 않았다면 false를 리턴한다.
+
+operation::home/getProgressStatus[snippets='http-request,http-response']
+operation::home/getProgressStatus[snippets='request-headers,response-fields']

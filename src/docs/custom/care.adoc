@@ -1,0 +1,53 @@
+ifndef::snippets[]
+:snippets: /MyTamin_BE/build/generated-snippets
+endif::[]
+:custom: /../../src/docs/custom
+
+=== 칭찬 처방하기
+* 칭찬 처방하기는 하루에 한 번만 가능하다. (하루 기준 : AM 5:00 ~ AM 4:59)
+* 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
+include::{snippets}{custom}/enumerate/careCategoryCode.adoc[]
+
+operation::care/createCare[snippets='http-request,http-response']
+operation::care/createCare[snippets='request-headers,request-fields,response-fields']
+
+==== Exception response
+include::{snippets}/care/createCare_5000/http-response.adoc[]
+include::{snippets}/care/createCare_5001/http-response.adoc[]
+
+=== 칭찬 처방 조회
+* '칭찬 처방' 작성 시 발급받은 careId를 통해 데이터를 조회한다.
+
+operation::care/getCare[snippets='http-request,http-response']
+operation::care/getCare[snippets='request-headers,path-parameters,response-fields']
+
+==== Exception response
+include::{snippets}/care/getCare_5002/http-response.adoc[]
+
+=== 칭찬 처방 수정
+operation::care/updateCare[snippets='http-request,http-response']
+operation::care/updateCare[snippets='request-headers,path-parameters,request-fields,response-fields']
+
+==== Exception response
+* EDIT_TIMEOUT_ERROR : 작성 시간 기준, 24시간이 지났다면 수정이 불가능하다.
+
+include::{snippets}/care/updateCare_5002/http-response.adoc[]
+include::{snippets}/care/updateCare_7000/http-response.adoc[]
+
+=== 칭찬 처방 랜덤 조회
+* 전체 칭찬 처방 기록 중 랜덤으로 하나를 리턴한다.
+
+operation::care/getRandomCare[snippets='http-request,http-response']
+operation::{custom}/care/getRandomCare[snippets='other-response']
+operation::care/getRandomCare[snippets='request-headers,response-fields']
+
+=== 칭찬 처방 히스토리 조회
+* 년/월을 기준으로 그룹핑하여 최신순으로 리턴한다.
+* date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 → 2022.01)
+* careCategoryCodeList에 잘못된 값이 들어올 경우 따로 오류가 발생하지는 않지만, 해당 조건은 적용되지 않는다.
+* 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
+include::{snippets}{custom}/enumerate/careCategoryCode.adoc[]
+
+operation::care/getCareHistroy[snippets='http-request,http-response']
+operation::{custom}/care/getCareHistroy[snippets='other-response']
+operation::care/getCareHistroy[snippets='request-headers,request-fields,response-fields']

@@ -1,0 +1,24 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 484
+
+{
+    "statusCode" : 200,
+    "message" : "월간 마이타민 기록 조회",
+    "data" : [
+        // 1 ~ 18일 데이터 생략 ...
+        {
+        "day" : 18,
+        "mentalConditionCode" : 0
+        }, {
+        "day" : 19,
+        "mentalConditionCode" : 5
+        }, {
+        "day" : 20,
+        "mentalConditionCode" : 9
+        // 21 ~ 31일 데이터 생략 ...
+    } ]
+}
+----

@@ -1,0 +1,13 @@
+* 위시 리스트가 존재하지 않을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 596
+{
+  "statusCode" : 200,
+  "message" : "위시 리스트 조회",
+  "data" : []
+}
+----

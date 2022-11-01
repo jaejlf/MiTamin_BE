@@ -14,8 +14,8 @@ endif::[]
 
 .#TODO 수정 완료된 부분
 * 데이노트 작성 시
-    * wishText 대신 wishId를 전송하도록 변경
-    * 기존에 존재하지 않는 위시로 데이노트 작성 불가
+    ** wishText 대신 wishId를 전송하도록 변경
+    ** 기존에 존재하지 않는 위시로 데이노트 작성 불가
 
 .개발 예정
 * 문서에 #TODO 태그된 내용 수정 예정
@@ -47,7 +47,6 @@ include::{snippets}{custom}/user.adoc[]
 
 == Myday
 include::{snippets}{custom}/myday.adoc[]
-include::{snippets}{custom}/daynote.adoc[]
 
 == Wish
 include::{snippets}{custom}/wish.adoc[]

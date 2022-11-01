@@ -1,0 +1,15 @@
+* 조회할 데이터가 하나도 없을 경우
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 490
+{
+  "statusCode" : 200,
+  "message" : "칭찬 처방 히스토리 조회",
+  "data" : {
+    "careHistory" : {}
+  }
+}
+----

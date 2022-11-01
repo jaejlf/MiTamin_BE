@@ -1,0 +1,39 @@
+ifndef::snippets[]
+:snippets: /MyTamin_BE/build/generated-snippets
+endif::[]
+:custom: /../../src/docs/custom
+
+=== 알림 설정 상태 조회
+
+operation::alarm/getAlarmSettingStatus[snippets='http-request,http-response']
+operation::{custom}/alarm/getAlarmSettingStatus[snippets='other-response']
+operation::alarm/getAlarmSettingStatus[snippets='request-headers,response-fields']
+
+=== 마이타민 알림 ON
+* mytaminHour은 24시간 단위(0 ~ 23)의 값으로 요청한다. (ex. 오후 3시 → "15")
+
+operation::alarm/turnOnMytaminAlarm[snippets='http-request,http-response']
+operation::alarm/turnOnMytaminAlarm[snippets='request-headers,request-fields,response-fields']
+
+=== 마이타민 알림 OFF
+
+operation::alarm/turnOffMytaminAlarm[snippets='http-request,http-response']
+operation::alarm/turnOffMytaminAlarm[snippets='request-headers,response-fields']
+
+=== 마이데이 알림 ON
+* 마이데이 지정 시간은 각 시간에 해당하는 int 타입의 코드를 보낸다.
+* code
+    ** 0 : "없음"
+    ** 1 : "당일"
+    ** 2 : "하루 전"
+    ** 3 : "일주일 전"
+
+operation::alarm/turnOnMydayAlarm[snippets='http-request,http-response']
+operation::alarm/turnOnMydayAlarm[snippets='request-headers,response-fields']
+
+==== Exception response
+include::{snippets}/alarm/turnOnMydayAlarm_3002/http-response.adoc[]
+
+=== 마이데이 알림 OFF
+operation::alarm/turnOffMydayAlarm[snippets='http-request,http-response']
+operation::alarm/turnOffMydayAlarm[snippets='request-headers,response-fields']
