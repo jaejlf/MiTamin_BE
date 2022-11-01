@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static great.job.mytamin.global.exception.ErrorMap.*;
+import static great.job.mytamin.global.exception.ErrorMap.WISH_ALREADY_EXIST_ERROR;
+import static great.job.mytamin.global.exception.ErrorMap.WISH_NOT_FOUND_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -83,15 +83,9 @@ public class WishService {
     위시 가져오기 + 없다면 생성
     */
     @Transactional
-    public Wish findWishOrElseNew(User user, String wishText) {
-        Optional<Wish> wish = wishRepository.findByUserAndWishText(user, wishText);
-        if (wish.isEmpty()) {
-            return wishRepository.save(new Wish(
-                    wishText,
-                    user
-            ));
-        }
-        return wish.get();
+    public Wish findWishById(User user, Long wishId) {
+        return wishRepository.findByUserAndWishId(user, wishId)
+                .orElseThrow(() -> new MytaminException(WISH_NOT_FOUND_ERROR));
     }
 
     /*
@@ -100,11 +94,6 @@ public class WishService {
     @Transactional
     public void deleteAll(User user) {
         wishRepository.deleteAllByUser(user);
-    }
-
-    private Wish findWishById(User user, Long wishId) {
-        return wishRepository.findByUserAndWishId(user, wishId)
-                .orElseThrow(() -> new MytaminException(WISH_NOT_FOUND_ERROR));
     }
 
     private List<WishResponse> entityToDto(List<Wish> wishList) {

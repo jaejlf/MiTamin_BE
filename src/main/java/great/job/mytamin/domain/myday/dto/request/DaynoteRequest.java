@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DaynoteRequest {
     List<MultipartFile> fileList;
-    @NotBlank String wishText;
+    @NotBlank String wishId;
     @NotBlank String note;
     @NotBlank String date;
 }

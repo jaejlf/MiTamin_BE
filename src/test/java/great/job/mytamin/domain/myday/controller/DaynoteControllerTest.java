@@ -95,7 +95,7 @@ class DaynoteControllerTest extends CommonControllerTest {
 
         DaynoteRequest daynoteRequest = new DaynoteRequest(
                 fileList,
-                "빵 나오는 시간에 맞춰서 갓 나온 빵 사기",
+                "1",
                 "따끈따끈한 빵을 샀다. 맛있었따 :0",
                 "2022.10"
         );
@@ -109,7 +109,7 @@ class DaynoteControllerTest extends CommonControllerTest {
             //when
             ResultActions actions = mockMvc.perform(multipart("/daynote/new")
                     .file(multipartFileList)
-                    .param("wishText", daynoteRequest.getWishText())
+                    .param("wishId", daynoteRequest.getWishId())
                     .param("note", daynoteRequest.getNote())
                     .param("date", daynoteRequest.getDate())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
@@ -125,7 +125,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)")
                             ),
                             requestParameters(
-                                    parameterWithName("wishText").description("*위시 텍스트"),
+                                    parameterWithName("wishId").description("*위시 id"),
                                     parameterWithName("note").description("*데이노트 코멘트"),
                                     parameterWithName("date").description("*데이노트 수행 날짜 (yyyy.MM)")
                             ),
@@ -154,7 +154,7 @@ class DaynoteControllerTest extends CommonControllerTest {
             //when
             ResultActions actions = mockMvc.perform(multipart("/daynote/new")
                     .file(multipartFileList)
-                    .param("wishText", daynoteRequest.getWishText())
+                    .param("wishId", daynoteRequest.getWishId())
                     .param("note", daynoteRequest.getNote())
                     .param("date", daynoteRequest.getDate())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
@@ -185,7 +185,7 @@ class DaynoteControllerTest extends CommonControllerTest {
             //when
             ResultActions actions = mockMvc.perform(multipart("/daynote/new")
                     .file(multipartFileList)
-                    .param("wishText", daynoteRequest.getWishText())
+                    .param("wishId", daynoteRequest.getWishId())
                     .param("note", daynoteRequest.getNote())
                     .param("date", daynoteRequest.getDate())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
@@ -197,6 +197,37 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("errorCode").value(6003))
                     .andExpect(jsonPath("errorName").value("FILE_MAXIMUM_EXCEED"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+        @DisplayName("존재하지 않는 위시 id")
+        @Test
+        void createDaynote_8000(TestInfo testInfo) throws Exception {
+            //given
+            doThrow(new MytaminException(WISH_NOT_FOUND_ERROR)).when(daynoteService).createDaynote(any(), any());
+
+            //when
+            ResultActions actions = mockMvc.perform(multipart("/daynote/new")
+                    .file(multipartFileList)
+                    .param("wishId", daynoteRequest.getWishId())
+                    .param("note", daynoteRequest.getNote())
+                    .param("date", daynoteRequest.getDate())
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(8000))
+                    .andExpect(jsonPath("errorName").value("WISH_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -228,7 +259,7 @@ class DaynoteControllerTest extends CommonControllerTest {
 
         DaynoteUpdateRequest daynoteUpdateRequest = new DaynoteUpdateRequest(
                 fileList,
-                "빵 나오는 시간에 맞춰서 갓 나온 빵 사기",
+                "1",
                 "따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,"
         );
 
@@ -247,7 +278,7 @@ class DaynoteControllerTest extends CommonControllerTest {
 
             ResultActions actions = mockMvc.perform(builder
                     .file(multipartFileList)
-                    .param("wishText", daynoteUpdateRequest.getWishText())
+                    .param("wishId", daynoteUpdateRequest.getWishId())
                     .param("note", daynoteUpdateRequest.getNote())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                     .contentType(MULTIPART_FORM_DATA));
@@ -261,7 +292,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                                     partWithName("fileList").description("*업로드할 이미지 리스트 (.png, .jpg, .jpeg)")
                             ),
                             requestParameters(
-                                    parameterWithName("wishText").description("*위시 텍스트"),
+                                    parameterWithName("wishId").description("*위시 id"),
                                     parameterWithName("note").description("*데이노트 코멘트")
                             ),
                             requestHeaders(
@@ -292,7 +323,7 @@ class DaynoteControllerTest extends CommonControllerTest {
 
             ResultActions actions = mockMvc.perform(builder
                     .file(multipartFileList)
-                    .param("wishText", daynoteUpdateRequest.getWishText())
+                    .param("wishId", daynoteUpdateRequest.getWishId())
                     .param("note", daynoteUpdateRequest.getNote())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                     .contentType(MULTIPART_FORM_DATA));
@@ -328,7 +359,7 @@ class DaynoteControllerTest extends CommonControllerTest {
 
             ResultActions actions = mockMvc.perform(builder
                     .file(multipartFileList)
-                    .param("wishText", daynoteUpdateRequest.getWishText())
+                    .param("wishId", daynoteUpdateRequest.getWishId())
                     .param("note", daynoteUpdateRequest.getNote())
                     .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                     .contentType(MULTIPART_FORM_DATA));
@@ -339,6 +370,42 @@ class DaynoteControllerTest extends CommonControllerTest {
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("errorCode").value(6003))
                     .andExpect(jsonPath("errorName").value("FILE_MAXIMUM_EXCEED"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
+        @DisplayName("존재하지 않는 위시 id")
+        @Test
+        void updateDaynote_8000(TestInfo testInfo) throws Exception {
+            //given
+            doThrow(new MytaminException(WISH_NOT_FOUND_ERROR)).when(daynoteService).updateDaynote(any(), any(), any());
+
+            //when
+            MockMultipartHttpServletRequestBuilder builder = multipart("/daynote/{daynoteId}", daynoteId);
+            builder.with(request -> {
+                request.setMethod("PUT");
+                return request;
+            });
+
+            ResultActions actions = mockMvc.perform(builder
+                    .file(multipartFileList)
+                    .param("wishId", daynoteUpdateRequest.getWishId())
+                    .param("note", daynoteUpdateRequest.getNote())
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .contentType(MULTIPART_FORM_DATA));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("errorCode").value(8000))
+                    .andExpect(jsonPath("errorName").value("WISH_NOT_FOUND_ERROR"))
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
