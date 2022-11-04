@@ -11,6 +11,7 @@ import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +30,7 @@ public class UserService {
     private final WishService wishService;
     private final MytaminService mytaminService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /*
     프로필 조회
@@ -79,6 +81,16 @@ public class UserService {
         deleteAll(user); // 기록 초기화
         awsS3Service.deleteImg(user.getProfileImgUrl()); // 프로필 이미지 삭제
         userRepository.delete(user); // 유저 삭제
+    }
+
+    /*
+    비밀번호 변경
+    */
+    @Transactional
+    public void changePassword(User user, String password) {
+        userUtil.validatePasswordPattern(password);
+        user.updatePassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     private void updateProfileImg(User user, MultipartFile file) {
