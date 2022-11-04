@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -82,10 +83,14 @@ public class DaynoteService {
     데이노트 리스트 조회
     */
     @Transactional(readOnly = true)
-    public Map<Integer, List<DaynoteResponse>> getDaynoteList(User user) {
+    public List<Object> getDaynoteList(User user) {
         List<Daynote> daynoteList = daynoteRepository.searchDaynoteList(user);
-        return daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()) // DTO 변환
-                .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)); // year로 그룹핑
+        List<Object> list = daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()) // DTO 변환
+                .stream().collect(Collectors.groupingBy(DaynoteResponse::getYear)) // year로 그룹핑
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+        Collections.reverse(list);
+        return list;
     }
 
     /*
