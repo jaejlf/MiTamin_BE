@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -506,14 +507,14 @@ class DaynoteControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data.*[]").description("연도별로 그룹핑된 데이노트 리스트"),
-                                fieldWithPath("data.*[].daynoteId").description("데이노트 id"),
-                                fieldWithPath("data.*[].imgList[]").description("데이노트 이미지 리스트"),
-                                fieldWithPath("data.*[].year").description("데이노트가 작성된 year"),
-                                fieldWithPath("data.*[].month").description("데이노트가 작성된 month"),
-                                fieldWithPath("data.*[].wishId").description("위시 id"),
-                                fieldWithPath("data.*[].wishText").description("위시 텍스트"),
-                                fieldWithPath("data.*[].note").description("데이노트 코멘트")
+                                fieldWithPath("data[].*[]").description("연도별로 그룹핑된 데이노트 리스트"),
+                                fieldWithPath("data[].*[].daynoteId").description("데이노트 id"),
+                                fieldWithPath("data[].*[].imgList[]").description("데이노트 이미지 리스트"),
+                                fieldWithPath("data[].*[].year").description("데이노트가 작성된 year"),
+                                fieldWithPath("data[].*[].month").description("데이노트가 작성된 month"),
+                                fieldWithPath("data[].*[].wishId").description("위시 id"),
+                                fieldWithPath("data[].*[].wishText").description("위시 텍스트"),
+                                fieldWithPath("data[].*[].note").description("데이노트 코멘트")
                         ))
                 );
     }
@@ -534,7 +535,7 @@ class DaynoteControllerTest extends CommonControllerTest {
                 .build();
     }
 
-    private Map<Integer, List<DaynoteResponse>> mockDaynoteListResponse() {
+    private List<Object> mockDaynoteListResponse() {
         List<String> imgList = new ArrayList<>();
         imgList.add("{{IMAGE_URL_1}}");
         imgList.add("{{IMAGE_URL_2}}");
@@ -573,7 +574,7 @@ class DaynoteControllerTest extends CommonControllerTest {
         Map<Integer, List<DaynoteResponse>> daynoteListMap = new LinkedHashMap<>();
         daynoteListMap.put(2022, list_2022);
         daynoteListMap.put(2021, list_2021);
-        return daynoteListMap;
+        return daynoteListMap.entrySet().stream().collect(Collectors.toList());
     }
 
 }
