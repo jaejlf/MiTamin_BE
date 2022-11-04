@@ -18,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -96,14 +97,17 @@ public class CareService {
     칭찬 처방 히스토리 조회
     */
     @Transactional(readOnly = true)
-    public List<Object> getCareHistroy(User user, CareSearchFilter careSearchFilter) {
+    public Map<String, List<CareHistoryResponse>> getCareHistroy(User user, CareSearchFilter careSearchFilter) {
         List<Care> careList = careRepository.searchCareHistory(user, careSearchFilter);
-        List<Object> list = careList.stream().map(CareHistoryResponse::of).collect(Collectors.toList()) // DTO 변환
-                .stream().collect(Collectors.groupingBy(CareHistoryResponse::getTitle)) // title로 그룹핑
-                .entrySet().stream()
-                .sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
-        Collections.reverse(list);
-        return list;
+        List<CareHistoryResponse> careHistoryResponseList = careList.stream().map(CareHistoryResponse::of).collect(Collectors.toList()); // DTO 변환
+
+        Map<String, List<CareHistoryResponse>> map = new LinkedHashMap<>();
+        for (CareHistoryResponse careHistory : careHistoryResponseList) {
+            List<CareHistoryResponse> list = map.getOrDefault(careHistory.getTitle(), new ArrayList<>());
+            list.add(careHistory);
+            map.put(careHistory.getTitle(), list);
+        }
+        return map;
     }
 
     private Care findCareById(User user, Long careId) {

@@ -4266,12 +4266,12 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 553
+Content-Length: 549
 
 {
   "statusCode" : 200,
   "message" : "칭찬 처방 히스토리 조회",
-  "data" : [ {
+  "data" : {
     "2022년 10월" : [ {
       "careMsg1" : "오늘 할 일을 전부 했어",
       "careMsg2" : "성실히 노력하는 내 모습이 좋아",
@@ -4283,7 +4283,7 @@ Content-Length: 553
       "careCategory" : "#긍정적인 변화나 깨달음",
       "takeAt" : "10.19.Wed"
     } ]
-  } ]
+  }
 }</code></pre>
 </div>
 </div>
@@ -4382,27 +4382,27 @@ Content-Length: 490
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">년/월로 그룹핑된 칭찬 처방 리스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].careMsg1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].careMsg1</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].careMsg2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].careMsg2</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 처방 메세지 2</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].careCategory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].careCategory</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">칭찬 카테고리</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].takeAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].takeAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">마이타민 섭취 날짜</p></td>
 </tr>
@@ -5330,7 +5330,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@34e9de8d, org.springframework.mock.web.MockMultipartFile@33a8f553]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@6fcafcfe, org.springframework.mock.web.MockMultipartFile@561f013f]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5573,7 +5573,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@7c200e57, org.springframework.mock.web.MockMultipartFile@1d0f7bcf]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@6d41b46a, org.springframework.mock.web.MockMultipartFile@7f055e1]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5885,12 +5885,12 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1078
+Content-Length: 1067
 
 {
   "statusCode" : 200,
   "message" : "데이노트 리스트 조회",
-  "data" : [ {
+  "data" : {
     "2022" : [ {
       "daynoteId" : 3,
       "imgList" : [ "{{IMAGE_URL_1}}", "{{IMAGE_URL_2}}" ],
@@ -5907,8 +5907,7 @@ Content-Length: 1078
       "wishId" : 3,
       "wishText" : "빵 나오는 시간에 맞춰서 갓 나온 빵 사먹기",
       "note" : "따끈따끈한 식빵에 우유는 역시 최고 !"
-    } ]
-  }, {
+    } ],
     "2021" : [ {
       "daynoteId" : 1,
       "imgList" : [ "{{IMAGE_URL_1}}", "{{IMAGE_URL_2}}" ],
@@ -5918,7 +5917,7 @@ Content-Length: 1078
       "wishText" : "도서관에 가서 책 한권 빌려오기",
       "note" : "백만년만에 도서관에 가서 책을 빌렸다. 이번엔 연체되기 전에 꼭 다 읽고 반납해야겠다 *_*"
     } ]
-  } ]
+  }
 }</code></pre>
 </div>
 </div>
@@ -5993,42 +5992,42 @@ Content-Length: 706
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">연도별로 그룹핑된 데이노트 리스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].daynoteId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].daynoteId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].imgList[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].imgList[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 이미지 리스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].year</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].year</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">데이노트가 작성된 year</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].month</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].month</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">데이노트가 작성된 month</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].wishId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].wishId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">위시 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].wishText</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].wishText</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">위시 텍스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].*[].note</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.*[].note</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">데이노트 코멘트</p></td>
 </tr>
@@ -7401,7 +7400,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-11-04 22:54:36 +0900
+Last updated 2022-11-05 00:02:26 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

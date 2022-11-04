@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -411,16 +410,16 @@ class CareControllerTest extends CommonControllerTest {
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
                                 fieldWithPath("message").description("결과 메세지"),
-                                fieldWithPath("data[].*[]").description("년/월로 그룹핑된 칭찬 처방 리스트"),
-                                fieldWithPath("data[].*[].careMsg1").description("칭찬 처방 메세지 1"),
-                                fieldWithPath("data[].*[].careMsg2").description("칭찬 처방 메세지 2"),
-                                fieldWithPath("data[].*[].careCategory").description("칭찬 카테고리"),
-                                fieldWithPath("data[].*[].takeAt").description("마이타민 섭취 날짜")
+                                fieldWithPath("data.*[]").description("년/월로 그룹핑된 칭찬 처방 리스트"),
+                                fieldWithPath("data.*[].careMsg1").description("칭찬 처방 메세지 1"),
+                                fieldWithPath("data.*[].careMsg2").description("칭찬 처방 메세지 2"),
+                                fieldWithPath("data.*[].careCategory").description("칭찬 카테고리"),
+                                fieldWithPath("data.*[].takeAt").description("마이타민 섭취 날짜")
                         ))
                 );
     }
 
-    private List<Object> mockCareHistoryResponse() {
+    private Map<String, List<CareHistoryResponse>> mockCareHistoryResponse() {
         List<CareHistoryResponse> list_oct = new ArrayList<>();
         list_oct.add(CareHistoryResponse.builder()
                 .careMsg1("오늘 할 일을 전부 했어")
@@ -437,7 +436,7 @@ class CareControllerTest extends CommonControllerTest {
 
         Map<String, List<CareHistoryResponse>> careHistory = new HashMap<>();
         careHistory.put("2022년 10월", list_oct);
-        return careHistory.entrySet().stream().collect(Collectors.toList());
+        return careHistory;
     }
 
 }
