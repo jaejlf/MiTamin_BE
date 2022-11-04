@@ -41,8 +41,3 @@ operation::user/deleteAll[snippets='request-headers,response-fields']
 
 operation::user/withdraw[snippets='http-request,http-response']
 operation::user/withdraw[snippets='request-headers,response-fields']
-
-=== 비밀번호 변경
-
-operation::user/changePassword[snippets='http-request,http-response']
-operation::user/changePassword[snippets='request-headers,request-fields,response-fields']

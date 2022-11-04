@@ -421,7 +421,7 @@ class ReportControllerTest extends CommonControllerTest {
         weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("일", 0));
         weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("월", 3));
         weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("화", 2));
-        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("수", 5));
+        weeklyMentalReportResponseList.add(WeeklyMentalReportResponse.of("오늘", 5));
         return weeklyMentalReportResponseList;
     }
 

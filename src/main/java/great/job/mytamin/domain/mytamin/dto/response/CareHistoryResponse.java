@@ -35,7 +35,7 @@ public class CareHistoryResponse {
                 .careMsg2(care.getCareMsg2())
                 .careCategory("#" + CareCategory.convertCodeToMsg(care.getCareCategoryCode()))
                 .takeAt(target.format(DateTimeFormatter.ofPattern("MM.dd")) + "." + dayOfWeek)
-                .title(target.format(DateTimeFormatter.ofPattern("yyyy년 MM월")))
+                .title(target.getYear() + "년 " + target.getMonth().getValue() + "월")
                 .build();
     }
 

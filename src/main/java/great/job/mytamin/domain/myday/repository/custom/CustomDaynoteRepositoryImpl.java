@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class CustomDaynoteRepositoryImpl implements CustomDaynoteRepository{
+public class CustomDaynoteRepositoryImpl implements CustomDaynoteRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -21,12 +21,12 @@ public class CustomDaynoteRepositoryImpl implements CustomDaynoteRepository{
     @Override
     public List<Daynote> searchDaynoteList(User user) {
         return jpaQueryFactory
-                .selectFrom(daynote)
-                .where(
-                        eqUser(user)
-                )
-                .orderBy(sorting())
-                .fetch();
+                        .selectFrom(daynote)
+                        .where(
+                                eqUser(user)
+                        )
+                        .orderBy(sorting())
+                        .fetch();
     }
 
     // 유저

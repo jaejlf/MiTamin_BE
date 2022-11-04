@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static great.job.mytamin.global.exception.ErrorMap.*;
 
@@ -107,7 +109,6 @@ public class AuthService {
     */
     public void resetPassword(String email, String password) {
         User user = findUserByEmail(email);
-        userUtil.validatePasswordPattern(password);
         user.updatePassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
@@ -117,8 +118,8 @@ public class AuthService {
     }
 
     private void validateRequest(SignUpRequest signUpRequest) {
-        userUtil.validateEmailPattern(signUpRequest.getEmail());
-        userUtil.validatePasswordPattern(signUpRequest.getPassword());
+        validateEmailPattern(signUpRequest.getEmail());
+        validatePasswordPattern(signUpRequest.getPassword());
 
         if (userUtil.isEmailDuplicate(signUpRequest.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
         if (userUtil.isNicknameDuplicate(signUpRequest.getNickname()))
@@ -138,6 +139,20 @@ public class AuthService {
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new MytaminException(INVALID_TOKEN_ERROR);
         }
+    }
+
+    private void validateEmailPattern(String email) {
+        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"; // XXX@XXX.XXX
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(email);
+        if (!m.matches()) throw new MytaminException(EMAIL_PATTERN_ERROR);
+    }
+
+    private void validatePasswordPattern(String password) {
+        String regex = "^(?=.*[0-9])(?=.*[A-Za-z]).{8,30}$"; // 영문, 숫자를 포함한 8 ~ 30자리
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(password);
+        if (!m.matches() || password.contains(" ")) throw new MytaminException(PASSWORD_PATTERN_ERROR);
     }
 
     private Boolean isMytaminAlarmOn(String mytaminHour) {
