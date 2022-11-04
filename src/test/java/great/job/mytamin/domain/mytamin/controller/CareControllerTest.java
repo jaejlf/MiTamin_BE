@@ -437,7 +437,7 @@ class CareControllerTest extends CommonControllerTest {
 
         Map<String, List<CareHistoryResponse>> careHistory = new HashMap<>();
         careHistory.put("2022년 10월", list_oct);
-        return careHistory.entrySet().stream().collect(Collectors.toList());
+        return new ArrayList<>(careHistory.entrySet());
     }
 
 }

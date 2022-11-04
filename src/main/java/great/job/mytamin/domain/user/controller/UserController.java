@@ -57,15 +57,14 @@ public class UserController {
                 .body(ResultResponse.ok("가입 날짜 조회", map));
     }
 
-//    @GetMapping("/manage")
-//    public ResponseEntity<Object> manageUser(@AuthenticationPrincipal User user) {
-//        Map<String, String> map = new LinkedHashMap<>();
-//        map.put("email", user.getEmail());
-//        map.put("provider", user.getProvider().getInfo());
-//        return ResponseEntity
-//                .status(OK)
-//                .body(ResultResponse.ok("유저 정보 조회", map));
-//    }
+    @PutMapping("/password")
+    public ResponseEntity<Object> changePassword(@AuthenticationPrincipal User user,
+                                                 @RequestBody Map<String, String> map) {
+        userService.changePassword(user, map.get("password"));
+        return ResponseEntity
+                .status(OK)
+                .body(NoDataResponse.ok("비밀번호 변경"));
+    }
 
     @DeleteMapping("/logout")
     public ResponseEntity<Object> logout(@AuthenticationPrincipal User user) {

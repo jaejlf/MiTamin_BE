@@ -574,7 +574,7 @@ class DaynoteControllerTest extends CommonControllerTest {
         Map<Integer, List<DaynoteResponse>> daynoteListMap = new LinkedHashMap<>();
         daynoteListMap.put(2022, list_2022);
         daynoteListMap.put(2021, list_2021);
-        return daynoteListMap.entrySet().stream().collect(Collectors.toList());
+        return new ArrayList<>(daynoteListMap.entrySet());
     }
 
 }
