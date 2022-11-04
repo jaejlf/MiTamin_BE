@@ -15,6 +15,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static great.job.mytamin.global.exception.ErrorMap.NICKNAME_DUPLICATE_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -26,8 +29,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -194,31 +196,36 @@ class UserControllerTest extends CommonControllerTest {
                 );
     }
 
-//    @DisplayName("유저 정보 조회")
-//    @Test
-//    void manageUser(TestInfo testInfo) throws Exception {
-//        //given & when
-//        ResultActions actions = mockMvc.perform(get("/user/manage")
-//                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-//                .contentType(APPLICATION_JSON));
-//
-//        //then
-//        actions
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("data").exists())
-//                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-//                        requestHeaders(
-//                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
-//                        ),
-//                        responseFields(
-//                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
-//                                fieldWithPath("message").description("결과 메세지"),
-//                                fieldWithPath("data.email").description("이메일"),
-//                                fieldWithPath("data.provider").description("가입 경로")
-//                        ))
-//                );
-//    }
+    @DisplayName("비밀번호 변경")
+    @Test
+    void changePassword(TestInfo testInfo) throws Exception {
+        //given
+        Map<String, String> map = new HashMap<>();
+        map.put("password", "newnew1234!");
+
+        //when
+        ResultActions actions = mockMvc.perform(put("/user/password")
+                .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .content(objectMapper.writeValueAsString(map))
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                        requestHeaders(
+                                headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("password").description("*변경할 비밀번호 (8 ~ 30자)")
+                        ),
+                        responseFields(
+                                fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                fieldWithPath("message").description("결과 메세지")
+                        ))
+                );
+    }
 
     @DisplayName("로그아웃")
     @Test
