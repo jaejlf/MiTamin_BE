@@ -206,6 +206,12 @@ video {
 <li>
 <p>데이노트 리스트, 칭찬 처방 히스토리 &#8594; 정렬 완료</p>
 </li>
+<li>
+<p>비밀번호 변경 API 개발 완료</p>
+</li>
+<li>
+<p>기록 초기화 요청 데이터 추가</p>
+</li>
 </ul>
 </div>
 <div class="ulist">
@@ -213,9 +219,6 @@ video {
 <ul>
 <li>
 <p>문서에 #TODO 태그된 내용 수정 예정</p>
-</li>
-<li>
-<p>비밀번호 변경 API</p>
 </li>
 <li>
 <p>소셜 로그인 (애플/구글/네이버/카카오)</p>
@@ -4887,8 +4890,15 @@ Content-Length: 57
 </div>
 <div class="sect2">
 <h3 id="_기록_초기화">기록 초기화</h3>
-<div class="paragraph">
-<p>#TODO : 기록 초기화 하루진단/칭찬처방/데이노트 개별 선택으로 세분화됨에 따라 변경 예정</p>
+<div class="ulist">
+<ul>
+<li>
+<p>초기화할 데이터는 true, 그렇지 않은 데이터는 false를 넣어 요청한다.</p>
+</li>
+<li>
+<p>#TODO : 하루진단/칭찬처방 초기화 로직은 개발 중으로, initReport와 initCare에 true가 들어오더라도 숨고르기/감각깨우기 데이터만 초기화됨.</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="_기록_초기화_http_request">HTTP request</h4>
@@ -4897,7 +4907,14 @@ Content-Length: 57
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /user/init HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 X-AUTH-TOKEN: {{ACCESS_TOKEN}}
-Host: MY-TAMIN-URL</code></pre>
+Content-Length: 73
+Host: MY-TAMIN-URL
+
+{
+  "initReport" : true,
+  "initCare" : true,
+  "initMyday" : false
+}</code></pre>
 </div>
 </div>
 </div>
@@ -4933,6 +4950,40 @@ Content-Length: 61
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_기록_초기화_request_fields">Request fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>initReport</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*'하루 진단' 초기화 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>initCare</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*'칭찬 처방' 초기화 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>initMyday</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*'마이 데이' 초기화 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -5439,7 +5490,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@2dfc833b, org.springframework.mock.web.MockMultipartFile@33e2808e]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@5b293cc9, org.springframework.mock.web.MockMultipartFile@6c551798]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5682,7 +5733,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@49a2f134, org.springframework.mock.web.MockMultipartFile@3d020409]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@346ea2ed, org.springframework.mock.web.MockMultipartFile@2dda91b3]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -7509,7 +7560,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-11-05 00:54:45 +0900
+Last updated 2022-11-05 01:20:29 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

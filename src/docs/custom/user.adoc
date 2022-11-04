@@ -32,10 +32,11 @@ operation::user/logout[snippets='http-request,http-response']
 operation::user/logout[snippets='request-headers,response-fields']
 
 === 기록 초기화
-#TODO : 기록 초기화 하루진단/칭찬처방/데이노트 개별 선택으로 세분화됨에 따라 변경 예정
+* 초기화할 데이터는 true, 그렇지 않은 데이터는 false를 넣어 요청한다.
+* #TODO : 하루진단/칭찬처방 초기화 로직은 개발 중으로, initReport와 initCare에 true가 들어오더라도 숨고르기/감각깨우기 데이터만 초기화됨.
 
-operation::user/deleteAll[snippets='http-request,http-response']
-operation::user/deleteAll[snippets='request-headers,response-fields']
+operation::user/initData[snippets='http-request,http-response']
+operation::user/initData[snippets='request-headers,request-fields,response-fields']
 
 === 회원 탈퇴
 
