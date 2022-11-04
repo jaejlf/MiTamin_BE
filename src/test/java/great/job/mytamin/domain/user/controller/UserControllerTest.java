@@ -1,5 +1,6 @@
 package great.job.mytamin.domain.user.controller;
 
+import great.job.mytamin.domain.user.dto.request.InitRequest;
 import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.service.UserService;
@@ -255,13 +256,19 @@ class UserControllerTest extends CommonControllerTest {
 
     @DisplayName("기록 초기화")
     @Test
-    void deleteAll(TestInfo testInfo) throws Exception {
+    void initData(TestInfo testInfo) throws Exception {
         //given
-        doNothing().when(userService).deleteAll(any());
+        InitRequest initRequest = new InitRequest(
+                true,
+                true,
+                false
+        );
+        doNothing().when(userService).initData(any(), any());
 
         // when
         ResultActions actions = mockMvc.perform(delete("/user/init")
                 .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .content(objectMapper.writeValueAsString(initRequest))
                 .contentType(APPLICATION_JSON));
 
         //then
@@ -271,6 +278,11 @@ class UserControllerTest extends CommonControllerTest {
                 .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                         requestHeaders(
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("initReport").description("*'하루 진단' 초기화 여부"),
+                                fieldWithPath("initCare").description("*'칭찬 처방' 초기화 여부"),
+                                fieldWithPath("initMyday").description("*'마이 데이' 초기화 여부")
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),

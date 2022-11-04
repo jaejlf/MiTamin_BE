@@ -1,5 +1,6 @@
 package great.job.mytamin.domain.user.controller;
 
+import great.job.mytamin.domain.user.dto.request.InitRequest;
 import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.entity.User;
@@ -75,8 +76,9 @@ public class UserController {
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<Object> deleteAll(@AuthenticationPrincipal User user) {
-        userService.deleteAll(user);
+    public ResponseEntity<Object> initData(@AuthenticationPrincipal User user,
+                                            @RequestBody InitRequest initRequest) {
+        userService.initData(user, initRequest);
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("기록 초기화"));
