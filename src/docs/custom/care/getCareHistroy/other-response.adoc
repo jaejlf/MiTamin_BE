@@ -8,6 +8,6 @@ Content-Length: 490
 {
   "statusCode" : 200,
   "message" : "칭찬 처방 히스토리 조회",
-  "data" : []
+  "data" : {}
 }
 ----
