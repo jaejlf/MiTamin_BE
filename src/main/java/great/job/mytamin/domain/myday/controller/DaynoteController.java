@@ -13,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -64,7 +63,7 @@ public class DaynoteController {
     
     @GetMapping("/list")
     public ResponseEntity<Object> getDaynoteList(@AuthenticationPrincipal User user) {
-        Map<Integer, List<DaynoteResponse>> daynoteListResponse = daynoteService.getDaynoteList(user);
+        List<Object> daynoteListResponse = daynoteService.getDaynoteList(user);
         return ResponseEntity
                 .status(OK)
                 .body(ResultResponse.ok("데이노트 리스트 조회", daynoteListResponse));
