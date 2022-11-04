@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static great.job.mytamin.domain.mytamin.enumerate.CareCategory.validateCode;
 import static great.job.mytamin.global.exception.ErrorMap.*;
@@ -99,15 +98,32 @@ public class CareService {
     @Transactional(readOnly = true)
     public Map<String, List<CareHistoryResponse>> getCareHistroy(User user, CareSearchFilter careSearchFilter) {
         List<Care> careList = careRepository.searchCareHistory(user, careSearchFilter);
-        List<CareHistoryResponse> careHistoryResponseList = careList.stream().map(CareHistoryResponse::of).collect(Collectors.toList()); // DTO 변환
 
         Map<String, List<CareHistoryResponse>> map = new LinkedHashMap<>();
-        for (CareHistoryResponse careHistory : careHistoryResponseList) {
-            List<CareHistoryResponse> list = map.getOrDefault(careHistory.getTitle(), new ArrayList<>());
-            list.add(careHistory);
-            map.put(careHistory.getTitle(), list);
+        for (Care care : careList) {
+            CareHistoryResponse careRes = CareHistoryResponse.of(care); // DTO 변환
+            List<CareHistoryResponse> list = map.getOrDefault(careRes.getTitle(), new ArrayList<>());
+            list.add(careRes);
+            map.put(careRes.getTitle(), list);
         }
+
         return map;
+    }
+
+    /*
+    칭찬 처방 전체 삭제
+    */
+    @Transactional
+    public void deleteAll(User user) {
+        List<Care> careList = careRepository.findAllByUser(user);
+        for (Care care : careList) {
+            Mytamin mytamin = care.getMytamin();
+            mytamin.updateCare(null); // Mytamin과 연관관계 끊기
+            careRepository.delete(care);
+
+            // 마이타민과 연관된 데이터가 하나도 없다면 -> 마이타민도 삭제
+            if (mytamin.getReport() == null) mytaminService.deleteMytamin(user, mytamin.getMytaminId());
+        }
     }
 
     private Care findCareById(User user, Long careId) {

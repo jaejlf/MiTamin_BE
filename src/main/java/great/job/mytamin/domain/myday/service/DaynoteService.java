@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static great.job.mytamin.global.exception.ErrorMap.DAYNOTE_ALREADY_EXIST_ERROR;
 import static great.job.mytamin.global.exception.ErrorMap.DAYNOTE_NOT_FOUND_ERROR;
@@ -76,7 +75,7 @@ public class DaynoteService {
     @Transactional
     public void deleteDaynote(User user, Long daynoteId) {
         Daynote daynote = findDaynoteById(user, daynoteId);
-        awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
+        awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
         daynoteRepository.delete(daynote);
     }
 
@@ -86,13 +85,15 @@ public class DaynoteService {
     @Transactional(readOnly = true)
     public Map<Integer, List<DaynoteResponse>> getDaynoteList(User user) {
         List<Daynote> daynoteList = daynoteRepository.searchDaynoteList(user);
-        List<DaynoteResponse> daynoteResponseList = daynoteList.stream().map(DaynoteResponse::of).collect(Collectors.toList()); // DTO 변환
+
         Map<Integer, List<DaynoteResponse>> map = new LinkedHashMap<>();
-        for (DaynoteResponse daynote : daynoteResponseList) {
-            List<DaynoteResponse> list = map.getOrDefault(daynote.getYear(), new ArrayList<>());
-            list.add(daynote);
-            map.put(daynote.getYear(), list);
+        for (Daynote daynote : daynoteList) {
+            DaynoteResponse daynoteRes = DaynoteResponse.of(daynote); // DTO 변환
+            List<DaynoteResponse> list = map.getOrDefault(daynoteRes.getYear(), new ArrayList<>());
+            list.add(daynoteRes);
+            map.put(daynoteRes.getYear(), list);
         }
+
         return map;
     }
 
@@ -101,7 +102,11 @@ public class DaynoteService {
     */
     @Transactional
     public void deleteAll(User user) {
-        daynoteRepository.deleteAllByUser(user);
+        List<Daynote> daynoteList = daynoteRepository.findAllByUser(user);
+        for (Daynote daynote : daynoteList) {
+            awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
+            daynoteRepository.delete(daynote);
+        }
     }
 
     private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, User user) {

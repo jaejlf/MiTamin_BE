@@ -2,7 +2,8 @@ package great.job.mytamin.domain.user.service;
 
 import great.job.mytamin.domain.myday.service.DaynoteService;
 import great.job.mytamin.domain.myday.service.WishService;
-import great.job.mytamin.domain.mytamin.service.MytaminService;
+import great.job.mytamin.domain.mytamin.service.CareService;
+import great.job.mytamin.domain.mytamin.service.ReportService;
 import great.job.mytamin.domain.user.dto.request.InitRequest;
 import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
@@ -29,7 +30,8 @@ public class UserService {
     private final AwsS3Service awsS3Service;
     private final DaynoteService daynoteService;
     private final WishService wishService;
-    private final MytaminService mytaminService;
+    private final ReportService reportService;
+    private final CareService careService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -67,19 +69,15 @@ public class UserService {
     */
     @Transactional
     public void initData(User user, InitRequest initRequest) {
-        //mytaminService.deleteAll(user); // 마이타민 (칭찬 처방, 하루 진단) 삭제
-        
         if(initRequest.isInitReport()) {
             user.initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
             userRepository.save(user);
-            
-            // Report 초기화 로직
+            reportService.deleteAll(user);
         }
         if(initRequest.isInitCare()) {
             user.initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
             userRepository.save(user);
-            
-            // Care 초기화 로직
+            careService.deleteAll(user);
         }
         if(initRequest.isInitMyday()) {
             daynoteService.deleteAll(user);
