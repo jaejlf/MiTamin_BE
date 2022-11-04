@@ -8,8 +8,6 @@ Content-Length: 706
 {
   "statusCode" : 200,
   "message" : "데이노트 리스트 조회",
-  "data" : {
-    "daynoteList" : {}
-  }
+  "data" : []
 }
 ----

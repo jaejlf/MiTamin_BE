@@ -56,8 +56,7 @@ include::{snippets}/daynote/deleteDaynote_8003/http-response.adoc[]
 
 === 데이노트 리스트 조회
 * 연도별로 그룹핑하여 최신순으로 리턴한다.
-
-#TODO : 최신순 정렬 (아직 최신순으로 정렬이 제대로 되지 않은 채로 데이터가 리턴될 수도 있으나, 최신순으로 수정할 예정이므로 리턴받은 데이터 순서대로 출력하도록 개발하면 됩니다 !)
+* 년/월을 기준으로 그룹핑하여 최신순으로 리턴한다.
 
 operation::daynote/getDaynoteList[snippets='http-request,http-response']
 operation::{custom}/daynote/getDaynoteList[snippets='other-response']
