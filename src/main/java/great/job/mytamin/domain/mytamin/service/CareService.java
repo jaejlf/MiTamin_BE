@@ -110,6 +110,22 @@ public class CareService {
         return map;
     }
 
+    /*
+    칭찬 처방 전체 삭제
+    */
+    @Transactional
+    public void deleteAll(User user) {
+        List<Care> careList = careRepository.findAllByUser(user);
+        for (Care care : careList) {
+            Mytamin mytamin = care.getMytamin();
+            mytamin.updateCare(null); // Mytamin과 연관관계 끊기
+            careRepository.delete(care);
+
+            // 마이타민과 연관된 데이터가 하나도 없다면 -> 마이타민도 삭제
+            if (mytamin.getReport() == null) mytaminService.deleteMytamin(user, mytamin.getMytaminId());
+        }
+    }
+
     private Care findCareById(User user, Long careId) {
         return careRepository.findByUserAndCareId(user, careId)
                 .orElseThrow(() -> new MytaminException(CARE_NOT_FOUND_ERROR));

@@ -110,6 +110,22 @@ public class ReportService {
         else return feelingRankResponseList;
     }
 
+    /*
+    하루 진단 전체 삭제
+    */
+    @Transactional
+    public void deleteAll(User user) {
+        List<Report> reportList = reportRepository.findAllByUser(user);
+        for (Report report : reportList) {
+            Mytamin mytamin = report.getMytamin();
+            mytamin.updateReport(null);  // Mytamin과 연관관계 끊기
+            reportRepository.delete(report);
+
+            // 마이타민과 연관된 데이터가 하나도 없다면 -> 마이타민도 삭제
+            if (mytamin.getCare() == null) mytaminService.deleteMytamin(user, mytamin.getMytaminId());
+        }
+    }
+
     private Report findReportById(User user, Long reportId) {
         return reportRepository.findByUserAndReportId(user, reportId)
                 .orElseThrow(() -> new MytaminException(REPORT_NOT_FOUND_ERROR));

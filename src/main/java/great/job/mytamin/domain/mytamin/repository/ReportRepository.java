@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findAllByUserAndTakeAtBetween(User user, LocalDateTime start, LocalDateTime end);
     Optional<Report> findByUserAndReportId(User user, Long reportId);
+    List<Report> findAllByUser(User user);
 }

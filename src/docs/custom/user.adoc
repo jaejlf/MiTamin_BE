@@ -33,7 +33,6 @@ operation::user/logout[snippets='request-headers,response-fields']
 
 === 기록 초기화
 * 초기화할 데이터는 true, 그렇지 않은 데이터는 false를 넣어 요청한다.
-* #TODO : 하루진단/칭찬처방 초기화 로직은 개발 중으로, initReport와 initCare에 true가 들어오더라도 숨고르기/감각깨우기 데이터만 초기화됨.
 
 operation::user/initData[snippets='http-request,http-response']
 operation::user/initData[snippets='request-headers,request-fields,response-fields']

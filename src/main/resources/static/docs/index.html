@@ -168,49 +168,16 @@ video {
 <div id="preamble">
 <div class="sectionbody">
 <div class="ulist">
-<div class="title">25일 기준 진행상황입니다</div>
+<div class="title">11/05 기준 진행상황입니다</div>
 <ul>
 <li>
-<p>히스토리 탭에 필요한 API 개발 완료</p>
-</li>
-<li>
-<p>데이노트 날짜 선택 휠에 필요한 &#8594; 가입 날짜 조회 API 개발 완료</p>
-</li>
-<li>
-<p>계정 관리탭에서 필요한 API 개발 완료</p>
-</li>
-<li>
-<p>위시리스트 생성/수정/삭제 API 개발 완료</p>
-</li>
-<li>
-<p>이메일 인증 기능 관련 API 개발 완료</p>
-</li>
-</ul>
-</div>
-<div class="ulist">
-<div class="title">#TODO 수정 완료된 부분</div>
-<ul>
-<li>
-<p>데이노트 작성 시</p>
-<div class="ulist">
-<ul>
-<li>
-<p>wishText 대신 wishId를 전송하도록 변경</p>
-</li>
-<li>
-<p>기존에 존재하지 않는 위시로 데이노트 작성 불가</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>데이노트 리스트, 칭찬 처방 히스토리 &#8594; 정렬 완료</p>
+<p>데이노트 리스트, 칭찬 처방 히스토리 데이터 구조 변경 및 정렬 수정</p>
 </li>
 <li>
 <p>비밀번호 변경 API 개발 완료</p>
 </li>
 <li>
-<p>기록 초기화 요청 데이터 추가</p>
+<p>기록 초기화 API 개발 완료</p>
 </li>
 </ul>
 </div>
@@ -218,13 +185,13 @@ video {
 <div class="title">개발 예정</div>
 <ul>
 <li>
-<p>문서에 #TODO 태그된 내용 수정 예정</p>
-</li>
-<li>
 <p>소셜 로그인 (애플/구글/네이버/카카오)</p>
 </li>
 <li>
 <p>푸시 알림 서버 구축</p>
+</li>
+<li>
+<p>[우선순위 나중] 칭찬 처방 히스토리 무한 스크롤 구현</p>
 </li>
 </ul>
 </div>
@@ -4309,7 +4276,7 @@ Content-Length: 490
 {
   "statusCode" : 200,
   "message" : "칭찬 처방 히스토리 조회",
-  "data" : []
+  "data" : {}
 }</code></pre>
 </div>
 </div>
@@ -4894,9 +4861,6 @@ Content-Length: 57
 <ul>
 <li>
 <p>초기화할 데이터는 true, 그렇지 않은 데이터는 false를 넣어 요청한다.</p>
-</li>
-<li>
-<p>#TODO : 하루진단/칭찬처방 초기화 로직은 개발 중으로, initReport와 initCare에 true가 들어오더라도 숨고르기/감각깨우기 데이터만 초기화됨.</p>
 </li>
 </ul>
 </div>
@@ -5490,7 +5454,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@5b293cc9, org.springframework.mock.web.MockMultipartFile@6c551798]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@19b0f61c, org.springframework.mock.web.MockMultipartFile@5d1ddb65]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5733,7 +5697,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@346ea2ed, org.springframework.mock.web.MockMultipartFile@2dda91b3]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@5dd52021, org.springframework.mock.web.MockMultipartFile@24fb6521]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -6099,7 +6063,7 @@ Content-Length: 706
 {
   "statusCode" : 200,
   "message" : "데이노트 리스트 조회",
-  "data" : []
+  "data" : {}
 }</code></pre>
 </div>
 </div>
@@ -7560,7 +7524,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-11-05 01:20:29 +0900
+Last updated 2022-11-05 02:06:49 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
