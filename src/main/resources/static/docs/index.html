@@ -780,7 +780,7 @@ Content-Length: 86
 <h4 id="_토큰_재발급_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/reissue HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/reissue HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 78
 Host: MY-TAMIN-URL
@@ -1133,7 +1133,7 @@ Content-Length: 94
 <h4 id="_이메일_인증_코드_확인_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /auth/code HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/code HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 65
 Host: MY-TAMIN-URL
@@ -1857,7 +1857,7 @@ Content-Length: 670
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "11.04.Fri",
+    "takeAt" : "11.06.Sun",
     "report" : {
       "reportId" : 1,
       "canEdit" : true,
@@ -4219,7 +4219,7 @@ Content-Length: 237
 <h4 id="_칭찬_처방_히스토리_조회_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /care/list HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /care/list HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 X-AUTH-TOKEN: {{ACCESS_TOKEN}}
 Content-Length: 41
@@ -5454,7 +5454,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@19b0f61c, org.springframework.mock.web.MockMultipartFile@5d1ddb65]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@2bdd6203, org.springframework.mock.web.MockMultipartFile@7489bca4]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5697,7 +5697,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@5dd52021, org.springframework.mock.web.MockMultipartFile@24fb6521]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@1a26f595, org.springframework.mock.web.MockMultipartFile@2e7bcd52]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -7524,7 +7524,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-11-05 02:06:49 +0900
+Last updated 2022-11-05 02:23:23 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
