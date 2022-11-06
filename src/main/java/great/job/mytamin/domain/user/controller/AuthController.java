@@ -62,7 +62,7 @@ public class AuthController {
                 .body(ResultResponse.ok("닉네임 중복 체크", isDuplicate));
     }
 
-    @GetMapping("/reissue")
+    @PostMapping("/reissue")
     public ResponseEntity<Object> reissueToken(@RequestBody ReissueRequest reissueRequest) {
         TokenResponse tokenResponse = authService.reissueToken(reissueRequest);
         return ResponseEntity
@@ -86,7 +86,7 @@ public class AuthController {
                 .body(NoDataResponse.ok("비밀번호 재설정을 위한 이메일 인증"));
     }
 
-    @GetMapping("/code")
+    @PostMapping("/code")
     public ResponseEntity<Object> confirmAuthCode(@RequestBody EmailCheckRequest emailCheckRequest) {
         boolean isValidate = emailService.confirmAuthCode(emailCheckRequest);
         return ResponseEntity

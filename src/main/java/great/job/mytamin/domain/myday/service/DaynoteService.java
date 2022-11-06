@@ -58,7 +58,7 @@ public class DaynoteService {
     @Transactional
     public void updateDaynote(User user, Long daynoteId, DaynoteUpdateRequest daynoteUpdateRequest) {
         Daynote daynote = findDaynoteById(user, daynoteId);
-        awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
+        awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
 
         Wish wish = wishService.findWishById(user, Long.parseLong(daynoteUpdateRequest.getWishId()));
         daynote.updateAll(
@@ -104,7 +104,7 @@ public class DaynoteService {
     public void deleteAll(User user) {
         List<Daynote> daynoteList = daynoteRepository.findAllByUser(user);
         for (Daynote daynote : daynoteList) {
-            awsS3Service.deleteImgList(daynote.getImgUrlList()); //기존 이미지 삭제
+            awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
             daynoteRepository.delete(daynote);
         }
     }

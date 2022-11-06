@@ -63,7 +63,7 @@ public class CareController {
                 .body(ResultResponse.ok("칭찬 처방 랜덤 조회", randomCareResponse));
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<Object> getCareHistroy(@AuthenticationPrincipal User user,
                                                  @RequestBody CareSearchFilter careSearchFilter) {
         Map<String, List<CareHistoryResponse>> careHistoryListResponse = careService.getCareHistroy(user, careSearchFilter);

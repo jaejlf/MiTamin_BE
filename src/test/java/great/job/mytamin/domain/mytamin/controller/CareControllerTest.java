@@ -390,7 +390,7 @@ class CareControllerTest extends CommonControllerTest {
         given(careService.getCareHistroy(any(), any())).willReturn(mockCareHistoryResponse());
 
         //when
-        ResultActions actions = mockMvc.perform(get("/care/list")
+        ResultActions actions = mockMvc.perform(post("/care/list")
                 .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
                 .content(objectMapper.writeValueAsString(careSearchFilter))
                 .contentType(APPLICATION_JSON));

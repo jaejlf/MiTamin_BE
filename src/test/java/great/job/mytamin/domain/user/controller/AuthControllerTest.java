@@ -388,7 +388,7 @@ class AuthControllerTest extends CommonControllerTest {
             );
 
             //when
-            ResultActions actions = mockMvc.perform(get("/auth/reissue")
+            ResultActions actions = mockMvc.perform(post("/auth/reissue")
                     .content(objectMapper.writeValueAsString(tokenRequest))
                     .contentType(APPLICATION_JSON));
 
@@ -418,7 +418,7 @@ class AuthControllerTest extends CommonControllerTest {
             given(authService.reissueToken(any())).willThrow(new MytaminException(USER_NOT_FOUND_ERROR));
 
             //when
-            ResultActions actions = mockMvc.perform(get("/auth/reissue")
+            ResultActions actions = mockMvc.perform(post("/auth/reissue")
                     .content(objectMapper.writeValueAsString(tokenRequest))
                     .contentType(APPLICATION_JSON));
 
@@ -445,7 +445,7 @@ class AuthControllerTest extends CommonControllerTest {
             given(authService.reissueToken(any())).willThrow(new MytaminException(INVALID_TOKEN_ERROR));
 
             //when
-            ResultActions actions = mockMvc.perform(get("/auth/reissue")
+            ResultActions actions = mockMvc.perform(post("/auth/reissue")
                     .content(objectMapper.writeValueAsString(tokenRequest))
                     .contentType(APPLICATION_JSON));
 
@@ -537,7 +537,7 @@ class AuthControllerTest extends CommonControllerTest {
         given(emailService.confirmAuthCode(any())).willReturn(true);
 
         //when
-        ResultActions actions = mockMvc.perform(get("/auth/code")
+        ResultActions actions = mockMvc.perform(post("/auth/code")
                 .content(objectMapper.writeValueAsString(emailCheckRequest))
                 .contentType(APPLICATION_JSON));
 
