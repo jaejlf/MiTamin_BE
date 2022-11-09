@@ -2,7 +2,6 @@ package great.job.mytamin.global.controller;
 
 import great.job.mytamin.global.service.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,8 @@ public class HealthController {
 
     private final RedisService redisService;
 
-    @Value("${spring.profiles.active}")
-    private String profile;
+//    @Value("${spring.profiles.active}")
+//    private String profile;
 
     @GetMapping
     public String health() {
@@ -28,9 +27,9 @@ public class HealthController {
         return redisService.getValues(email);
     }
 
-    @GetMapping("/profile")
-    public String getCurProfile() {
-        return profile;
-    }
+//    @GetMapping("/profile")
+//    public String getCurProfile() {
+//        return profile;
+//    }
 
 }

@@ -4,7 +4,6 @@ server:
 spring:
   profiles:
     include: secret
-    active: ${profile}
   jpa:
     show-sql: true
     hibernate.ddl-auto: update
