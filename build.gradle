@@ -132,3 +132,12 @@ build {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// 서브모듈 설정
+task copyPrivate(type: Copy) {
+    copy {
+        from './Mytamin_Sub/security'
+        include "*.yml"
+        into 'src/main/resources'
+    }
+}

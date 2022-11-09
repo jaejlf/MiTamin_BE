@@ -6,6 +6,9 @@ build/
 !**/src/test/**/build/
 
 application-secret.yml
+application-local.yml
+application-prod.yml
+
 /BOOT-INF/
 
 ### STS ###
