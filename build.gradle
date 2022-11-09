@@ -136,7 +136,7 @@ tasks.named('test') {
 // 서브모듈 설정
 task copyPrivate(type: Copy) {
     copy {
-        from './Mytamin_Sub/security'
+        from './Mytamin_Sub'
         include "*.yml"
         into 'src/main/resources'
     }
