@@ -41,8 +41,9 @@ public class CareService {
     public CareResponse createCare(User user, CareRequest request) {
         Mytamin mytamin = mytaminService.findMytaminOrNew(user);
         if (mytamin.getCare() != null) throw new MytaminException(CARE_ALREADY_DONE_ERROR);
-        Care newCare = saveNewCare(user, request, mytamin);
-        return CareResponse.of(newCare, timeUtil.canEditCare(newCare));
+
+        Care care = save(user, request, mytamin);
+        return CareResponse.of(care, timeUtil.canEditCare(care));
     }
 
     /*
@@ -52,13 +53,7 @@ public class CareService {
     public void updateCare(User user, Long careId, CareRequest request) {
         Care care = findCareById(user, careId);
         canEdit(care);
-
-        care.updateAll(
-                validateCode(request.getCareCategoryCode()),
-                request.getCareMsg1(),
-                request.getCareMsg2()
-        );
-        careRepository.save(care);
+        update(request, care);
     }
 
     /*
@@ -78,13 +73,7 @@ public class CareService {
         long count = careRepository.countByUser(user);
         int randomIndex = (int) (Math.random() * count);
 
-        // 페이징하여 하나만 추출
-        Page<Care> carePage = careRepository
-                .findAllByUser(
-                        user,
-                        PageRequest.of(randomIndex, 1)
-                );
-
+        Page<Care> carePage = getRandomOne(user, randomIndex); // 랜덤한 하나만 추출
         if (carePage.hasContent()) {
             return RandomCareResponse.of(carePage.getContent().get(0));
         } else {
@@ -98,16 +87,7 @@ public class CareService {
     @Transactional(readOnly = true)
     public Map<String, List<CareHistoryResponse>> getCareHistroy(User user, CareSearchFilter filter) {
         List<Care> careList = careRepository.searchCareHistory(user, filter);
-
-        Map<String, List<CareHistoryResponse>> map = new LinkedHashMap<>();
-        for (Care care : careList) {
-            CareHistoryResponse careRes = CareHistoryResponse.of(care); // DTO 변환
-            List<CareHistoryResponse> list = map.getOrDefault(careRes.getTitle(), new ArrayList<>());
-            list.add(careRes);
-            map.put(careRes.getTitle(), list);
-        }
-
-        return map;
+        return getCareListDto(careList);
     }
 
     /*
@@ -118,8 +98,7 @@ public class CareService {
         List<Care> careList = careRepository.findAllByUser(user);
         for (Care care : careList) {
             Mytamin mytamin = care.getMytamin();
-            mytamin.updateCare(null); // Mytamin과 연관관계 끊기
-            careRepository.delete(care);
+            delete(care, mytamin);
 
             // 마이타민과 연관된 데이터가 하나도 없다면 -> 마이타민도 삭제
             if (mytamin.getReport() == null) mytaminService.deleteMytamin(user, mytamin.getMytaminId());
@@ -137,7 +116,7 @@ public class CareService {
         }
     }
 
-    private Care saveNewCare(User user, CareRequest careRequest, Mytamin mytamin) {
+    private Care save(User user, CareRequest careRequest, Mytamin mytamin) {
         Care care = new Care(
                 user,
                 validateCode(careRequest.getCareCategoryCode()),
@@ -148,6 +127,39 @@ public class CareService {
         Care newCare = careRepository.save(care);
         mytamin.updateCare(newCare);
         return newCare;
+    }
+
+    private void update(CareRequest request, Care care) {
+        care.updateAll(
+                validateCode(request.getCareCategoryCode()),
+                request.getCareMsg1(),
+                request.getCareMsg2()
+        );
+        careRepository.save(care);
+    }
+
+    private void delete(Care care, Mytamin mytamin) {
+        mytamin.updateCare(null); // Mytamin과 연관관계 끊기
+        careRepository.delete(care);
+    }
+
+    private Page<Care> getRandomOne(User user, int randomIndex) {
+        return careRepository
+                .findAllByUser(
+                        user,
+                        PageRequest.of(randomIndex, 1)
+                );
+    }
+
+    private Map<String, List<CareHistoryResponse>> getCareListDto(List<Care> careList) {
+        Map<String, List<CareHistoryResponse>> map = new LinkedHashMap<>();
+        for (Care care : careList) {
+            CareHistoryResponse careResponse = CareHistoryResponse.of(care);
+            List<CareHistoryResponse> list = map.getOrDefault(careResponse.getTitle(), new ArrayList<>());
+            list.add(careResponse);
+            map.put(careResponse.getTitle(), list);
+        }
+        return map;
     }
 
 }

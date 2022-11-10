@@ -94,21 +94,10 @@ public class MytaminService {
     public List<MonthlyMytaminResponse> getMonthlyMytamin(User user, String date) {
         LocalDateTime target = timeUtil.convertRawToLocalDateTime(date);
         List<Mytamin> mytaminList = getMonthlyMytaminList(user, target);
+        List<MonthlyMytaminResponse> monthlyMytaminList = initList(target);
 
-        List<MonthlyMytaminResponse> monthlyMytaminResponseList = initList(target);
-        for (Mytamin mytamin : mytaminList) {
-            int index = mytamin.getTakeAt().getDayOfMonth() - 1;
-            MonthlyMytaminResponse tmp = monthlyMytaminResponseList.get(index);
-            monthlyMytaminResponseList.set(
-                    index,
-                    MonthlyMytaminResponse.builder()
-                            .day(tmp.getDay())
-                            .mentalConditionCode(mytamin.getReport() == null ? 9 : mytamin.getReport().getMentalConditionCode()) // 칭찬 처방만 존재하는 경우 -> 9
-                            .build()
-            );
-        }
-
-        return monthlyMytaminResponseList;
+        setMonthlyMytaminData(mytaminList, monthlyMytaminList); // 마이타민 데이터가 있는 경우 List 업데이트
+        return monthlyMytaminList;
     }
 
     /*
@@ -117,22 +106,13 @@ public class MytaminService {
     @Transactional(readOnly = true)
     public Map<Integer, WeeklyMytaminResponse> getWeeklyMytamin(User user, String date) {
         LocalDateTime target = timeUtil.convertRawDDToLocalDateTime(date);
-        LocalDateTime monday = target.minusDays(target.getDayOfWeek().getValue() - 1);
+        LocalDateTime monday = target.minusDays(target.getDayOfWeek().getValue() - 1); // target 주차의 월요일
 
         Map<Integer, WeeklyMytaminResponse> map = new LinkedHashMap<>();
         for (int i = 0; i < 7; i++) {
             target = monday.plusDays(i);
             Mytamin mytamin = findMytamin(user, target);
-            if (mytamin != null) {
-                map.put(target.getDayOfMonth(),
-                        WeeklyMytaminResponse.of(
-                                mytamin,
-                                getReportResponse(mytamin),
-                                getCareResponse(mytamin)
-                        ));
-            } else {
-                map.put(target.getDayOfMonth(), null);
-            }
+            setWeeklyMytaminData(target, map, mytamin);
         }
         return map;
     }
@@ -154,16 +134,16 @@ public class MytaminService {
 
     private List<MonthlyMytaminResponse> initList(LocalDateTime target) {
         int lastDay = timeUtil.getLastDayOfMonth(target).getDayOfMonth();
-        List<MonthlyMytaminResponse> monthlyMytaminResponseList = new ArrayList<>();
+        List<MonthlyMytaminResponse> monthlyMytaminList = new ArrayList<>();
         for (int i = 1; i <= lastDay; i++) {
-            monthlyMytaminResponseList.add(
+            monthlyMytaminList.add(
                     MonthlyMytaminResponse.builder()
                             .day(i)
-                            .mentalConditionCode(0)
+                            .mentalConditionCode(0) // 날짜 + 마음 컨디션 0 으로 초기화
                             .build()
             );
         }
-        return monthlyMytaminResponseList;
+        return monthlyMytaminList;
     }
 
     private ReportResponse getReportResponse(Mytamin mytamin) {
@@ -190,6 +170,32 @@ public class MytaminService {
     private Mytamin findMytaminById(User user, Long mytaminId) {
         return mytaminRepository.findByUserAndMytaminId(user, mytaminId)
                 .orElseThrow(() -> new MytaminException(MYTAMIN_NOT_FOUND_ERROR));
+    }
+
+    private void setMonthlyMytaminData(List<Mytamin> mytaminList, List<MonthlyMytaminResponse> monthlyMytaminList) {
+        for (Mytamin mytamin : mytaminList) {
+            int index = mytamin.getTakeAt().getDayOfMonth() - 1;
+            monthlyMytaminList.set(
+                    index,
+                    MonthlyMytaminResponse.builder()
+                            .day(monthlyMytaminList.get(index).getDay())
+                            .mentalConditionCode(mytamin.getReport() == null ? 9 : mytamin.getReport().getMentalConditionCode()) // report X, care 데이터만 존재하는 경우 -> 9
+                            .build()
+            );
+        }
+    }
+
+    private void setWeeklyMytaminData(LocalDateTime target, Map<Integer, WeeklyMytaminResponse> map, Mytamin mytamin) {
+        if (mytamin != null) {
+            map.put(target.getDayOfMonth(),
+                    WeeklyMytaminResponse.of(
+                            mytamin,
+                            getReportResponse(mytamin),
+                            getCareResponse(mytamin)
+                    ));
+        } else {
+            map.put(target.getDayOfMonth(), null);
+        }
     }
 
 }

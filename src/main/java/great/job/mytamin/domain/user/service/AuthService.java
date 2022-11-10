@@ -69,7 +69,6 @@ public class AuthService {
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
         String refreshToken = jwtTokenProvider.createRefreshToken(user);
-
         return TokenResponse.of(accessToken, refreshToken);
     }
 
@@ -91,12 +90,6 @@ public class AuthService {
         }
 
         return TokenResponse.of(accessToken, refreshToken);
-    }
-
-    private void checkPasswordMatching(String requestPw, String realPw) {
-        if (!passwordEncoder.matches(requestPw, realPw)) {
-            throw new MytaminException(PASSWORD_MISMATCH_ERROR);
-        }
     }
 
     /*
@@ -124,11 +117,8 @@ public class AuthService {
         validatePasswordPattern(request.getPassword());
 
         if (userUtil.isEmailDuplicate(request.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.isNicknameDuplicate(request.getNickname()))
-            throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
-
-        if (request.getMytaminHour() != null)
-            timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
+        if (userUtil.isNicknameDuplicate(request.getNickname())) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        if (request.getMytaminHour() != null) timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
     }
 
     private void validateRefreshToken(String refreshToken, User user) {
@@ -159,6 +149,12 @@ public class AuthService {
 
     private Boolean isMytaminAlarmOn(String mytaminHour) {
         return mytaminHour != null;
+    }
+
+    private void checkPasswordMatching(String requestPw, String realPw) {
+        if (!passwordEncoder.matches(requestPw, realPw)) {
+            throw new MytaminException(PASSWORD_MISMATCH_ERROR);
+        }
     }
 
 }

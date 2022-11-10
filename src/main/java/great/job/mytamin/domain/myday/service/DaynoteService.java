@@ -46,10 +46,11 @@ public class DaynoteService {
     */
     @Transactional
     public DaynoteResponse createDaynote(User user, DaynoteRequest request) {
+        if (!canCreateDaynote(user, request.getDate())) throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
+
         Wish wish = wishService.findWishById(user, Long.parseLong(request.getWishId()));
-        if (!canCreateDaynote(user, request.getDate()))
-            throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
-        return DaynoteResponse.of(saveNewDaynote(request, wish, user));
+        Daynote daynote = save(request, wish, user);
+        return DaynoteResponse.of(daynote);
     }
 
     /*
@@ -58,15 +59,8 @@ public class DaynoteService {
     @Transactional
     public void updateDaynote(User user, Long daynoteId, DaynoteUpdateRequest request) {
         Daynote daynote = findDaynoteById(user, daynoteId);
-        awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
-
         Wish wish = wishService.findWishById(user, Long.parseLong(request.getWishId()));
-        daynote.updateAll(
-                awsS3Service.uploadImageList(request.getFileList(), "DN"),
-                wish,
-                request.getNote()
-        );
-        daynoteRepository.save(daynote);
+        update(request, daynote, wish);
     }
 
     /*
@@ -75,8 +69,7 @@ public class DaynoteService {
     @Transactional
     public void deleteDaynote(User user, Long daynoteId) {
         Daynote daynote = findDaynoteById(user, daynoteId);
-        awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
-        daynoteRepository.delete(daynote);
+        delete(daynote);
     }
 
     /*
@@ -85,16 +78,7 @@ public class DaynoteService {
     @Transactional(readOnly = true)
     public Map<Integer, List<DaynoteResponse>> getDaynoteList(User user) {
         List<Daynote> daynoteList = daynoteRepository.searchDaynoteList(user);
-
-        Map<Integer, List<DaynoteResponse>> map = new LinkedHashMap<>();
-        for (Daynote daynote : daynoteList) {
-            DaynoteResponse daynoteRes = DaynoteResponse.of(daynote); // DTO 변환
-            List<DaynoteResponse> list = map.getOrDefault(daynoteRes.getYear(), new ArrayList<>());
-            list.add(daynoteRes);
-            map.put(daynoteRes.getYear(), list);
-        }
-
-        return map;
+        return getDaynoteListDto(daynoteList);
     }
 
     /*
@@ -104,12 +88,11 @@ public class DaynoteService {
     public void deleteAll(User user) {
         List<Daynote> daynoteList = daynoteRepository.findAllByUser(user);
         for (Daynote daynote : daynoteList) {
-            awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
-            daynoteRepository.delete(daynote);
+            delete(daynote);
         }
     }
 
-    private Daynote saveNewDaynote(DaynoteRequest daynoteRequest, Wish wish, User user) {
+    private Daynote save(DaynoteRequest daynoteRequest, Wish wish, User user) {
         Daynote daynote = new Daynote(
                 awsS3Service.uploadImageList(daynoteRequest.getFileList(), "DN"),
                 wish,
@@ -118,6 +101,32 @@ public class DaynoteService {
                 user
         );
         return daynoteRepository.save(daynote);
+    }
+
+    private void update(DaynoteUpdateRequest request, Daynote daynote, Wish wish) {
+        awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
+        daynote.updateAll(
+                awsS3Service.uploadImageList(request.getFileList(), "DN"),
+                wish,
+                request.getNote()
+        );
+        daynoteRepository.save(daynote);
+    }
+
+    private void delete(Daynote daynote) {
+        awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
+        daynoteRepository.delete(daynote);
+    }
+
+    private Map<Integer, List<DaynoteResponse>> getDaynoteListDto(List<Daynote> daynoteList) {
+        Map<Integer, List<DaynoteResponse>> map = new LinkedHashMap<>();
+        for (Daynote daynote : daynoteList) {
+            DaynoteResponse daynoteResponse = DaynoteResponse.of(daynote);
+            List<DaynoteResponse> list = map.getOrDefault(daynoteResponse.getYear(), new ArrayList<>());
+            list.add(daynoteResponse);
+            map.put(daynoteResponse.getYear(), list);
+        }
+        return map;
     }
 
     private Daynote findDaynoteById(User user, Long daynoteId) {
