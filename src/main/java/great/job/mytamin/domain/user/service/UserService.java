@@ -70,12 +70,12 @@ public class UserService {
     @Transactional
     public void initData(User user, InitRequest initRequest) {
         if(initRequest.isInitReport()) {
-            user.initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
+            user.getAction().initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
             userRepository.save(user);
             reportService.deleteAll(user);
         }
         if(initRequest.isInitCare()) {
-            user.initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
+            user.getAction().initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
             userRepository.save(user);
             careService.deleteAll(user);
         }

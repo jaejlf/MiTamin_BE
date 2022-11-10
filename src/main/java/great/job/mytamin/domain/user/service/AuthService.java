@@ -5,6 +5,8 @@ import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
+import great.job.mytamin.domain.user.entity.Action;
+import great.job.mytamin.domain.user.entity.Alarm;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
@@ -49,11 +51,11 @@ public class AuthService {
                 passwordEncoder.encode(signUpRequest.getPassword()),
                 signUpRequest.getNickname(),
                 Provider.DEFAULT,
-                signUpRequest.getMytaminHour(),
-                signUpRequest.getMytaminMin(),
-                isMytaminAlarmOn(signUpRequest.getMytaminHour())
+                new Alarm(signUpRequest.getMytaminHour(), signUpRequest.getMytaminMin(), isMytaminAlarmOn(signUpRequest.getMytaminHour())),
+                new Action()
         );
-        user.updateDateOfMyday(mydayUtil.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
+
+        user.getAlarm().updateDateOfMyday(mydayUtil.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
         return UserResponse.of(userRepository.save(user));
     }
 

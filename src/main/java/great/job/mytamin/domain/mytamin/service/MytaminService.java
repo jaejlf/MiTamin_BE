@@ -34,7 +34,7 @@ public class MytaminService {
     */
     @Transactional
     public void completeBreath(User user) {
-        user.updateBreathTime();
+        user.getAction().updateBreathTime();
     }
 
     /*
@@ -42,7 +42,7 @@ public class MytaminService {
     */
     @Transactional
     public void completeSense(User user) {
-        user.updateSenseTime();
+        user.getAction().updateSenseTime();
     }
 
     /*

@@ -31,9 +31,9 @@ public class HomeService {
 
         if (mytamin != null) comment = TAKE_MYTAMIN_DONE.getComment();
         else {
-            if (user.getMydayAlarmOn()) {
-                int mytaminHour = Integer.parseInt(user.getMytaminHour());
-                int mytaminMin = Integer.parseInt(user.getMytaminMin());
+            if (user.getAlarm().getMytaminAlarmOn()) {
+                int mytaminHour = Integer.parseInt(user.getAlarm().getMytaminHour());
+                int mytaminMin = Integer.parseInt(user.getAlarm().getMytaminMin());
                 comment = getCommentByMytaminTime(mytaminHour, mytaminMin);
             } else {
                 comment = getCommentByCurrentTime();
@@ -47,8 +47,8 @@ public class HomeService {
     */
     @Transactional(readOnly = true)
     public ActiveResponse getProgressStatus(User user) {
-        Boolean breathIsDone = timeUtil.isToday(user.getBreathTime());
-        Boolean senseIsDone = timeUtil.isToday(user.getSenseTime());
+        Boolean breathIsDone = timeUtil.isToday(user.getAction().getBreathTime());
+        Boolean senseIsDone = timeUtil.isToday(user.getAction().getSenseTime());
 
         Mytamin mytamin = mytaminService.findMytamin(user, LocalDateTime.now());
         Boolean reportIsDone = mytamin != null && mytamin.getReport() != null;

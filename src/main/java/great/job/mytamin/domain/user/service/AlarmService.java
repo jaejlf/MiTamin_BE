@@ -26,14 +26,14 @@ public class AlarmService {
     public SettingResponse getAlarmSettingStatus(User user) {
         // 마이타민
         String mytaminWhen = null;
-        Boolean mytaminAlarmOn = user.getMytaminAlarmOn();
-        if (mytaminAlarmOn) mytaminWhen = timeUtil.convertToAlarmFormat(user.getMytaminHour(), user.getMytaminMin());
+        Boolean mytaminAlarmOn = user.getAlarm().getMytaminAlarmOn();
+        if (mytaminAlarmOn) mytaminWhen = timeUtil.convertToAlarmFormat(user.getAlarm().getMytaminHour(), user.getAlarm().getMytaminMin());
         SettingInfoResponse mytamin = SettingInfoResponse.of(mytaminAlarmOn, mytaminWhen);
 
         // 마이데이
         String mydayWhen = null;
-        Boolean mydayAlarmOn = user.getMydayAlarmOn();
-        if (mydayAlarmOn) mydayWhen = user.getMydayWhen();
+        Boolean mydayAlarmOn = user.getAlarm().getMydayAlarmOn();
+        if (mydayAlarmOn) mydayWhen = user.getAlarm().getMydayWhen();
         SettingInfoResponse myday = SettingInfoResponse.of(mydayAlarmOn, mydayWhen);
 
         return SettingResponse.of(mytamin, myday);
@@ -45,8 +45,8 @@ public class AlarmService {
     @Transactional
     public void turnOnMytaminAlarm(User user, MytaminAlarmRequest mytaminAlarmRequest) {
         timeUtil.isTimeValid(mytaminAlarmRequest.getMytaminHour(), mytaminAlarmRequest.getMytaminMin());
-        user.updateMytaminAlarmOn(true);
-        user.updateMytaminWhen(
+        user.getAlarm().updateMytaminAlarmOn(true);
+        user.getAlarm().updateMytaminWhen(
                 mytaminAlarmRequest.getMytaminHour(),
                 mytaminAlarmRequest.getMytaminMin()
         );
@@ -58,7 +58,7 @@ public class AlarmService {
     */
     @Transactional
     public void turnOffMytaminAlarm(User user) {
-        user.updateMytaminAlarmOn(false);
+        user.getAlarm().updateMytaminAlarmOn(false);
         userRepository.save(user);
     }
 
@@ -67,8 +67,8 @@ public class AlarmService {
     */
     @Transactional
     public void turnOnMydayAlarm(User user, int code) {
-        user.updateMydayAlarmOn(true);
-        user.updateMydayWhen(convertCodeToMsg(code));
+        user.getAlarm().updateMydayAlarmOn(true);
+        user.getAlarm().updateMydayWhen(convertCodeToMsg(code));
         userRepository.save(user);
     }
 
@@ -77,7 +77,7 @@ public class AlarmService {
     */
     @Transactional
     public void turnOffMydayAlarm(User user) {
-        user.updateMydayAlarmOn(false);
+        user.getAlarm().updateMydayAlarmOn(false);
         userRepository.save(user);
     }
 

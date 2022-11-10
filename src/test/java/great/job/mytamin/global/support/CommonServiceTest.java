@@ -8,6 +8,8 @@ import great.job.mytamin.domain.mytamin.enumerate.MentalCondition;
 import great.job.mytamin.domain.mytamin.repository.CareRepository;
 import great.job.mytamin.domain.mytamin.repository.MytaminRepository;
 import great.job.mytamin.domain.mytamin.repository.ReportRepository;
+import great.job.mytamin.domain.user.entity.Action;
+import great.job.mytamin.domain.user.entity.Alarm;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +30,14 @@ public class CommonServiceTest {
 
     public MockMvc mockMvc;
 
-    @Autowired public UserRepository userRepository;
-    @Autowired public MytaminRepository mytaminRepository;
-    @Autowired public CareRepository careRepository;
-    @Autowired public ReportRepository reportRepository;
+    @Autowired
+    public UserRepository userRepository;
+    @Autowired
+    public MytaminRepository mytaminRepository;
+    @Autowired
+    public CareRepository careRepository;
+    @Autowired
+    public ReportRepository reportRepository;
 
     // Mock Data
     public User user;
@@ -49,9 +55,8 @@ public class CommonServiceTest {
                 "{{ENCODED_PASSWORD}}",
                 "테스터",
                 DEFAULT,
-                null,
-                null,
-                false
+                new Alarm(null, null, false),
+                new Action()
         );
         userRepository.save(user);
 

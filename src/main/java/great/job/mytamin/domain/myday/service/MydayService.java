@@ -24,7 +24,7 @@ public class MydayService {
     */
     @Transactional(readOnly = true)
     public MydayResponse getMyday(User user) {
-        LocalDateTime dateOfMyday = user.getDateOfMyday();
+        LocalDateTime dateOfMyday = user.getAlarm().getDateOfMyday();
         if (!timeUtil.isCurrentMonth(dateOfMyday)) dateOfMyday = updateDateOfMyday(user);
 
         Map<String, String> map = timeUtil.getMyDayInfo(user.getNickname(), dateOfMyday);
@@ -36,7 +36,7 @@ public class MydayService {
 
     private LocalDateTime updateDateOfMyday(User user) {
         LocalDateTime dateOfMyday = mydayUtil.randomizeDateOfMyday();
-        user.updateDateOfMyday(dateOfMyday);
+        user.getAlarm().updateDateOfMyday(dateOfMyday);
         return dateOfMyday;
     }
 
