@@ -43,15 +43,15 @@ public class AuthService {
     회원가입
     */
     @Transactional
-    public UserResponse signUp(SignUpRequest signUpRequest) {
-        validateRequest(signUpRequest);
+    public UserResponse signUp(SignUpRequest request) {
+        validateRequest(request);
 
         User user = new User(
-                signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getNickname(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getNickname(),
                 Provider.DEFAULT,
-                new Alarm(signUpRequest.getMytaminHour(), signUpRequest.getMytaminMin(), isMytaminAlarmOn(signUpRequest.getMytaminHour())),
+                new Alarm(request.getMytaminHour(), request.getMytaminMin(), isMytaminAlarmOn(request.getMytaminHour())),
                 new Action()
         );
 
@@ -63,9 +63,9 @@ public class AuthService {
     기본 로그인
     */
     @Transactional
-    public TokenResponse defaultLogin(LoginRequest loginRequest) {
-        User user = findUserByEmail(loginRequest.getEmail());
-        checkPasswordMatching(loginRequest.getPassword(), user.getPassword());
+    public TokenResponse defaultLogin(LoginRequest request) {
+        User user = findUserByEmail(request.getEmail());
+        checkPasswordMatching(request.getPassword(), user.getPassword());
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
         String refreshToken = jwtTokenProvider.createRefreshToken(user);
@@ -77,9 +77,9 @@ public class AuthService {
     토큰 재발급
     */
     @Transactional
-    public TokenResponse reissueToken(ReissueRequest reissueRequest) {
-        User user = findUserByEmail(reissueRequest.getEmail());
-        String refreshToken = reissueRequest.getRefreshToken();
+    public TokenResponse reissueToken(ReissueRequest request) {
+        User user = findUserByEmail(request.getEmail());
+        String refreshToken = request.getRefreshToken();
 
         validateRefreshToken(refreshToken, user);
 
@@ -119,16 +119,16 @@ public class AuthService {
         return customUserDetailsService.loadUserByUsername(email);
     }
 
-    private void validateRequest(SignUpRequest signUpRequest) {
-        validateEmailPattern(signUpRequest.getEmail());
-        validatePasswordPattern(signUpRequest.getPassword());
+    private void validateRequest(SignUpRequest request) {
+        validateEmailPattern(request.getEmail());
+        validatePasswordPattern(request.getPassword());
 
-        if (userUtil.isEmailDuplicate(signUpRequest.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.isNicknameDuplicate(signUpRequest.getNickname()))
+        if (userUtil.isEmailDuplicate(request.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
+        if (userUtil.isNicknameDuplicate(request.getNickname()))
             throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
 
-        if (signUpRequest.getMytaminHour() != null)
-            timeUtil.isTimeValid(signUpRequest.getMytaminHour(), signUpRequest.getMytaminMin());
+        if (request.getMytaminHour() != null)
+            timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
     }
 
     private void validateRefreshToken(String refreshToken, User user) {

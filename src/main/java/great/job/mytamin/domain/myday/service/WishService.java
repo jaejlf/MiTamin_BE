@@ -40,9 +40,9 @@ public class WishService {
     위시 수정
     */
     @Transactional
-    public void updateWish(User user, Long wishId, WishRequest wishRequest) {
+    public void updateWish(User user, Long wishId, WishRequest request) {
         Wish wish = findWishById(user, wishId);
-        wish.updateWishText(wishRequest.getWishText());
+        wish.updateWishText(request.getWishText());
         wishRepository.save(wish);
     }
 

@@ -35,10 +35,10 @@ public class ReportService {
     하루 진단하기
     */
     @Transactional
-    public ReportResponse createReport(User user, ReportRequest reportRequest) {
+    public ReportResponse createReport(User user, ReportRequest request) {
         Mytamin mytamin = mytaminService.findMytaminOrNew(user);
         if (mytamin.getReport() != null) throw new MytaminException(REPORT_ALREADY_DONE_ERROR);
-        Report newReport = saveNewReport(user, reportRequest, mytamin);
+        Report newReport = saveNewReport(user, request, mytamin);
         return ReportResponse.of(
                 newReport,
                 reportUtil.concatFeelingTag(newReport),
@@ -49,16 +49,16 @@ public class ReportService {
     하루 진단 수정
     */
     @Transactional
-    public void updateReport(User user, Long reportId, ReportRequest reportRequest) {
+    public void updateReport(User user, Long reportId, ReportRequest request) {
         Report report = findReportById(user, reportId);
         canEdit(report);
 
         report.updateAll(
-                validateCode(reportRequest.getMentalConditionCode()),
-                reportRequest.getTag1(),
-                reportRequest.getTag2(),
-                reportRequest.getTag3(),
-                reportRequest.getTodayReport()
+                validateCode(request.getMentalConditionCode()),
+                request.getTag1(),
+                request.getTag2(),
+                request.getTag3(),
+                request.getTodayReport()
         );
         reportRepository.save(report);
     }
@@ -137,14 +137,14 @@ public class ReportService {
         }
     }
 
-    private Report saveNewReport(User user, ReportRequest reportRequest, Mytamin mytamin) {
+    private Report saveNewReport(User user, ReportRequest request, Mytamin mytamin) {
         Report report = new Report(
                 user,
-                validateCode(reportRequest.getMentalConditionCode()),
-                reportRequest.getTag1(),
-                reportRequest.getTag2(),
-                reportRequest.getTag3(),
-                reportRequest.getTodayReport(),
+                validateCode(request.getMentalConditionCode()),
+                request.getTag1(),
+                request.getTag2(),
+                request.getTag3(),
+                request.getTodayReport(),
                 mytamin
         );
         Report newReport = reportRepository.save(report);

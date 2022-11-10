@@ -45,26 +45,26 @@ public class DaynoteService {
     데이노트 작성하기
     */
     @Transactional
-    public DaynoteResponse createDaynote(User user, DaynoteRequest daynoteRequest) {
-        Wish wish = wishService.findWishById(user, Long.parseLong(daynoteRequest.getWishId()));
-        if (!canCreateDaynote(user, daynoteRequest.getDate()))
+    public DaynoteResponse createDaynote(User user, DaynoteRequest request) {
+        Wish wish = wishService.findWishById(user, Long.parseLong(request.getWishId()));
+        if (!canCreateDaynote(user, request.getDate()))
             throw new MytaminException(DAYNOTE_ALREADY_EXIST_ERROR);
-        return DaynoteResponse.of(saveNewDaynote(daynoteRequest, wish, user));
+        return DaynoteResponse.of(saveNewDaynote(request, wish, user));
     }
 
     /*
     데이노트 수정
     */
     @Transactional
-    public void updateDaynote(User user, Long daynoteId, DaynoteUpdateRequest daynoteUpdateRequest) {
+    public void updateDaynote(User user, Long daynoteId, DaynoteUpdateRequest request) {
         Daynote daynote = findDaynoteById(user, daynoteId);
         awsS3Service.deleteImgList(daynote.getImgUrlList()); // 기존 이미지 삭제
 
-        Wish wish = wishService.findWishById(user, Long.parseLong(daynoteUpdateRequest.getWishId()));
+        Wish wish = wishService.findWishById(user, Long.parseLong(request.getWishId()));
         daynote.updateAll(
-                awsS3Service.uploadImageList(daynoteUpdateRequest.getFileList(), "DN"),
+                awsS3Service.uploadImageList(request.getFileList(), "DN"),
                 wish,
-                daynoteUpdateRequest.getNote()
+                request.getNote()
         );
         daynoteRepository.save(daynote);
     }

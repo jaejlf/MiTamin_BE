@@ -22,16 +22,16 @@ public class AlarmController {
 
     @GetMapping("/status")
     public ResponseEntity<Object> getAlarmSettingStatus(@AuthenticationPrincipal User user) {
-        SettingResponse settingResponse = alarmService.getAlarmSettingStatus(user);
+        SettingResponse result = alarmService.getAlarmSettingStatus(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("알림 설정 상태 조회", settingResponse));
+                .body(ResultResponse.ok("알림 설정 상태 조회", result));
     }
 
     @PatchMapping("/mytamin/on")
     public ResponseEntity<Object> turnOnMytaminAlarm(@AuthenticationPrincipal User user,
-                                                     @RequestBody MytaminAlarmRequest mytaminAlarmRequest) {
-        alarmService.turnOnMytaminAlarm(user, mytaminAlarmRequest);
+                                                     @RequestBody MytaminAlarmRequest request) {
+        alarmService.turnOnMytaminAlarm(user, request);
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("마이타민 알림 ON"));

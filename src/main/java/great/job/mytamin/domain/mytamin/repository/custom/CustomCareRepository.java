@@ -7,5 +7,5 @@ import great.job.mytamin.domain.user.entity.User;
 import java.util.List;
 
 public interface CustomCareRepository {
-    List<Care> searchCareHistory(User user, CareSearchFilter careSearchFilter);
+    List<Care> searchCareHistory(User user, CareSearchFilter filter);
 }

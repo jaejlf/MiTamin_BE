@@ -43,12 +43,12 @@ public class AlarmService {
     마이타민 알림 ON
     */
     @Transactional
-    public void turnOnMytaminAlarm(User user, MytaminAlarmRequest mytaminAlarmRequest) {
-        timeUtil.isTimeValid(mytaminAlarmRequest.getMytaminHour(), mytaminAlarmRequest.getMytaminMin());
+    public void turnOnMytaminAlarm(User user, MytaminAlarmRequest request) {
+        timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
         user.getAlarm().updateMytaminAlarmOn(true);
         user.getAlarm().updateMytaminWhen(
-                mytaminAlarmRequest.getMytaminHour(),
-                mytaminAlarmRequest.getMytaminMin()
+                request.getMytaminHour(),
+                request.getMytaminMin()
         );
         userRepository.save(user);
     }

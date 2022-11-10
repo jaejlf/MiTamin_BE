@@ -42,28 +42,28 @@ public class MytaminController {
 
     @GetMapping("/latest")
     public ResponseEntity<Object> getLatestMytamin(@AuthenticationPrincipal User user) {
-        MytaminResponse mytaminResponse = mytaminService.getLatestMytamin(user);
+        MytaminResponse result = mytaminService.getLatestMytamin(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("최근 섭취한 마이타민", mytaminResponse));
+                .body(ResultResponse.ok("최근 섭취한 마이타민", result));
     }
 
     @GetMapping("/monthly/{date}")
     public ResponseEntity<Object> getMonthlyMytamin(@AuthenticationPrincipal User user,
                                                     @PathVariable String date) {
-        List<MonthlyMytaminResponse> monthlyMytaminResponseList = mytaminService.getMonthlyMytamin(user, date);
+        List<MonthlyMytaminResponse> result = mytaminService.getMonthlyMytamin(user, date);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("월간 마이타민 기록 조회", monthlyMytaminResponseList));
+                .body(ResultResponse.ok("월간 마이타민 기록 조회", result));
     }
 
     @GetMapping("/weekly/{date}")
     public ResponseEntity<Object> getWeeklyMytamin(@AuthenticationPrincipal User user,
                                                    @PathVariable String date) {
-        Map<Integer, WeeklyMytaminResponse> weeklyMytaminResponseMap = mytaminService.getWeeklyMytamin(user, date);
+        Map<Integer, WeeklyMytaminResponse> result = mytaminService.getWeeklyMytamin(user, date);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("주간 마이타민 기록 조회", weeklyMytaminResponseMap));
+                .body(ResultResponse.ok("주간 마이타민 기록 조회", result));
     }
 
     @DeleteMapping("/{mytaminId}")
@@ -72,7 +72,7 @@ public class MytaminController {
         mytaminService.deleteMytamin(user, mytaminId);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("마이타민 삭제"));
+                .body(NoDataResponse.ok(mytaminId + "번 마이타민 삭제"));
     }
 
 }

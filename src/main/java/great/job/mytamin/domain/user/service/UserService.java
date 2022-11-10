@@ -47,10 +47,10 @@ public class UserService {
     프로필 편집
     */
     @Transactional
-    public void updateProfile(User user, ProfileUpdateRequest profileUpdateRequest) {
-        if (profileUpdateRequest.getIsImgEdited().equals("T")) updateProfileImg(user, profileUpdateRequest.getFile());
-        updateNickname(user, profileUpdateRequest.getNickname());
-        updateBeMyMessage(user, profileUpdateRequest.getBeMyMessage());
+    public void updateProfile(User user, ProfileUpdateRequest request) {
+        if (request.getIsImgEdited().equals("T")) updateProfileImg(user, request.getFile());
+        updateNickname(user, request.getNickname());
+        updateBeMyMessage(user, request.getBeMyMessage());
 
         userRepository.save(user);
     }
@@ -68,18 +68,18 @@ public class UserService {
     기록 초기화
     */
     @Transactional
-    public void initData(User user, InitRequest initRequest) {
-        if(initRequest.isInitReport()) {
+    public void initData(User user, InitRequest request) {
+        if(request.isInitReport()) {
             user.getAction().initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
             userRepository.save(user);
             reportService.deleteAll(user);
         }
-        if(initRequest.isInitCare()) {
+        if(request.isInitCare()) {
             user.getAction().initData(); // 숨 고르기, 감각 깨우기 데이터 초기화
             userRepository.save(user);
             careService.deleteAll(user);
         }
-        if(initRequest.isInitMyday()) {
+        if(request.isInitMyday()) {
             daynoteService.deleteAll(user);
             wishService.deleteAll(user);
         }

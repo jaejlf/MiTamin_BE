@@ -101,20 +101,20 @@ video {
 </li>
 <li><a href="#_report">Report</a>
 <ul class="sectlevel2">
-<li><a href="#_하루_진단하기">하루 진단하기</a></li>
+<li><a href="#_하루_진단">하루 진단</a></li>
 <li><a href="#_하루_진단_조회">하루 진단 조회</a></li>
 <li><a href="#_하루_진단_수정">하루 진단 수정</a></li>
 <li><a href="#_주간_마음_컨디션_조회">주간 마음 컨디션 조회</a></li>
-<li><a href="#_이번_달_가장_많이_느낀_감정">이번 달 가장 많이 느낀 감정</a></li>
+<li><a href="#_이번_달_감정_top3">이번 달 감정 TOP3</a></li>
 </ul>
 </li>
 <li><a href="#_care">Care</a>
 <ul class="sectlevel2">
-<li><a href="#_칭찬_처방하기">칭찬 처방하기</a></li>
+<li><a href="#_칭찬_처방">칭찬 처방</a></li>
 <li><a href="#_칭찬_처방_조회">칭찬 처방 조회</a></li>
 <li><a href="#_칭찬_처방_수정">칭찬 처방 수정</a></li>
 <li><a href="#_칭찬_처방_랜덤_조회">칭찬 처방 랜덤 조회</a></li>
-<li><a href="#_칭찬_처방_히스토리_조회">칭찬 처방 히스토리 조회</a></li>
+<li><a href="#_칭찬_처방_히스토리">칭찬 처방 히스토리</a></li>
 </ul>
 </li>
 <li><a href="#_user">User</a>
@@ -1857,7 +1857,7 @@ Content-Length: 670
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "11.06.Sun",
+    "takeAt" : "11.10.Thu",
     "report" : {
       "reportId" : 1,
       "canEdit" : true,
@@ -2485,11 +2485,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 64
+Content-Length: 69
 
 {
   "statusCode" : 200,
-  "message" : "마이타민 삭제"
+  "message" : "1번 마이타민 삭제"
 }</code></pre>
 </div>
 </div>
@@ -2590,7 +2590,7 @@ Content-Length: 152
 <h2 id="_report">Report</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_하루_진단하기">하루 진단하기</h3>
+<h3 id="_하루_진단">하루 진단</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2624,7 +2624,7 @@ Content-Length: 152
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_하루_진단하기_http_request">HTTP request</h4>
+<h4 id="_하루_진단_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /report/new HTTP/1.1
@@ -2644,16 +2644,16 @@ Host: MY-TAMIN-URL
 </div>
 </div>
 <div class="sect3">
-<h4 id="_하루_진단하기_http_response">HTTP response</h4>
+<h4 id="_하루_진단_http_response">HTTP response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 358
+Content-Length: 352
 
 {
   "statusCode" : 201,
-  "message" : "하루 진단하기",
+  "message" : "하루 진단",
   "data" : {
     "reportId" : 1,
     "canEdit" : true,
@@ -2667,7 +2667,7 @@ Content-Length: 358
 </div>
 </div>
 <div class="sect3">
-<h4 id="_하루_진단하기_request_headers">Request headers</h4>
+<h4 id="_하루_진단_request_headers">Request headers</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2688,7 +2688,7 @@ Content-Length: 358
 </table>
 </div>
 <div class="sect3">
-<h4 id="_하루_진단하기_request_fields">Request fields</h4>
+<h4 id="_하루_진단_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -2732,7 +2732,7 @@ Content-Length: 358
 </table>
 </div>
 <div class="sect3">
-<h4 id="_하루_진단하기_response_fields">Response fields</h4>
+<h4 id="_하루_진단_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -2848,11 +2848,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 359
+Content-Length: 364
 
 {
   "statusCode" : 200,
-  "message" : "하루 진단 조회",
+  "message" : "1번 하루 진단 조회",
   "data" : {
     "reportId" : 1,
     "canEdit" : true,
@@ -3013,11 +3013,11 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 72
+Content-Length: 70
 
 {
   "statusCode" : 200,
-  "message" : "하루 진단 수정 완료"
+  "message" : "1번 하루 진단 수정"
 }</code></pre>
 </div>
 </div>
@@ -3228,11 +3228,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 607
+Content-Length: 614
 
 {
   "statusCode" : 200,
-  "message" : "주간 마음 컨디션",
+  "message" : "주간 마음 컨디션 조회",
   "data" : [ {
     "dayOfWeek" : "수",
     "mentalConditionCode" : 0
@@ -3324,7 +3324,7 @@ Content-Length: 607
 </div>
 </div>
 <div class="sect2">
-<h3 id="_이번_달_가장_많이_느낀_감정">이번 달 가장 많이 느낀 감정</h3>
+<h3 id="_이번_달_감정_top3">이번 달 감정 TOP3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -3333,7 +3333,7 @@ Content-Length: 607
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_이번_달_가장_많이_느낀_감정_http_request">HTTP request</h4>
+<h4 id="_이번_달_감정_top3_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /report/feeling/rank HTTP/1.1
@@ -3344,16 +3344,16 @@ Host: MY-TAMIN-URL</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_이번_달_가장_많이_느낀_감정_http_response">HTTP response</h4>
+<h4 id="_이번_달_감정_top3_http_response">HTTP response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 270
+Content-Length: 254
 
 {
   "statusCode" : 200,
-  "message" : "이번 달 가장 많이 느낀 감정",
+  "message" : "이번 달 감정 TOP3",
   "data" : [ {
     "feeling" : "신나는",
     "count" : 5
@@ -3369,7 +3369,7 @@ Content-Length: 270
 </div>
 </div>
 <div class="sect3">
-<h4 id="_이번_달_가장_많이_느낀_감정_other_response-1">Other response-1</h4>
+<h4 id="_이번_달_감정_top3_other_response-1">Other response-1</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -3382,9 +3382,10 @@ Content-Length: 270
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Content-Length: 270
+
 {
   "statusCode" : 200,
-  "message" : "이번 달 가장 많이 느낀 감정",
+  "message" : "이번 달 감정 TOP3",
   "data" : [{
     "feeling" : "신나는",
     "count" : 5
@@ -3394,7 +3395,7 @@ Content-Length: 270
 </div>
 </div>
 <div class="sect3">
-<h4 id="_이번_달_가장_많이_느낀_감정_other_response-2">Other response-2</h4>
+<h4 id="_이번_달_감정_top3_other_response-2">Other response-2</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -3410,14 +3411,14 @@ Content-Length: 270
 
 {
     "statusCode" : 200,
-    "message" : "이번 달 가장 많이 느낀 감정",
+    "message" : "이번 달 감정 TOP3",
     "data" : []
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_이번_달_가장_많이_느낀_감정_request_headers">Request headers</h4>
+<h4 id="_이번_달_감정_top3_request_headers">Request headers</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3438,7 +3439,7 @@ Content-Length: 270
 </table>
 </div>
 <div class="sect3">
-<h4 id="_이번_달_가장_많이_느낀_감정_response_fields">Response fields</h4>
+<h4 id="_이번_달_감정_top3_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -3483,7 +3484,7 @@ Content-Length: 270
 <h2 id="_care">Care</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_칭찬_처방하기">칭찬 처방하기</h3>
+<h3 id="_칭찬_처방">칭찬 처방</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -3523,7 +3524,7 @@ Content-Length: 270
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방하기_http_request">HTTP request</h4>
+<h4 id="_칭찬_처방_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /care/new HTTP/1.1
@@ -3541,16 +3542,16 @@ Host: MY-TAMIN-URL
 </div>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방하기_http_response">HTTP response</h4>
+<h4 id="_칭찬_처방_http_response">HTTP response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 286
+Content-Length: 280
 
 {
   "statusCode" : 201,
-  "message" : "칭찬 처방하기",
+  "message" : "칭찬 처방",
   "data" : {
     "careId" : 1,
     "canEdit" : true,
@@ -3563,7 +3564,7 @@ Content-Length: 286
 </div>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방하기_request_headers">Request headers</h4>
+<h4 id="_칭찬_처방_request_headers">Request headers</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3584,7 +3585,7 @@ Content-Length: 286
 </table>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방하기_request_fields">Request fields</h4>
+<h4 id="_칭찬_처방_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -3618,7 +3619,7 @@ Content-Length: 286
 </table>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방하기_response_fields">Response fields</h4>
+<h4 id="_칭찬_처방_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -3729,11 +3730,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 287
+Content-Length: 292
 
 {
   "statusCode" : 200,
-  "message" : "칭찬 처방 조회",
+  "message" : "1번 칭찬 처방 조회",
   "data" : {
     "careId" : 1,
     "canEdit" : true,
@@ -3886,11 +3887,11 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 72
+Content-Length: 70
 
 {
   "statusCode" : 200,
-  "message" : "칭찬 처방 수정 완료"
+  "message" : "1번 칭찬 처방 수정"
 }</code></pre>
 </div>
 </div>
@@ -4170,7 +4171,7 @@ Content-Length: 237
 </div>
 </div>
 <div class="sect2">
-<h3 id="_칭찬_처방_히스토리_조회">칭찬 처방 히스토리 조회</h3>
+<h3 id="_칭찬_처방_히스토리">칭찬 처방 히스토리</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -4216,7 +4217,7 @@ Content-Length: 237
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방_히스토리_조회_http_request">HTTP request</h4>
+<h4 id="_칭찬_처방_히스토리_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /care/list HTTP/1.1
@@ -4232,16 +4233,16 @@ Host: MY-TAMIN-URL
 </div>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방_히스토리_조회_http_response">HTTP response</h4>
+<h4 id="_칭찬_처방_히스토리_http_response">HTTP response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 549
+Content-Length: 542
 
 {
   "statusCode" : 200,
-  "message" : "칭찬 처방 히스토리 조회",
+  "message" : "칭찬 처방 히스토리",
   "data" : {
     "2022년 10월" : [ {
       "careMsg1" : "오늘 할 일을 전부 했어",
@@ -4260,7 +4261,7 @@ Content-Length: 549
 </div>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방_히스토리_조회_other_response">Other response</h4>
+<h4 id="_칭찬_처방_히스토리_other_response">Other response</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -4273,16 +4274,17 @@ Content-Length: 549
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Content-Length: 490
+
 {
   "statusCode" : 200,
-  "message" : "칭찬 처방 히스토리 조회",
+  "message" : "칭찬 처방 히스토리",
   "data" : {}
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방_히스토리_조회_request_headers">Request headers</h4>
+<h4 id="_칭찬_처방_히스토리_request_headers">Request headers</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -4303,7 +4305,7 @@ Content-Length: 490
 </table>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방_히스토리_조회_request_fields">Request fields</h4>
+<h4 id="_칭찬_처방_히스토리_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -4327,7 +4329,7 @@ Content-Length: 490
 </table>
 </div>
 <div class="sect3">
-<h4 id="_칭찬_처방_히스토리_조회_response_fields">Response fields</h4>
+<h4 id="_칭찬_처방_히스토리_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 36.3636%;">
@@ -4556,11 +4558,11 @@ Content-Type: image/jpg
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 68
+Content-Length: 61
 
 {
   "statusCode" : 200,
-  "message" : "프로필 편집 완료"
+  "message" : "프로필 편집"
 }</code></pre>
 </div>
 </div>
@@ -5454,7 +5456,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@2bdd6203, org.springframework.mock.web.MockMultipartFile@7489bca4]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@57927f4f, org.springframework.mock.web.MockMultipartFile@e937569]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5468,11 +5470,11 @@ Content-Type: image/jpg
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 432
+Content-Length: 426
 
 {
   "statusCode" : 201,
-  "message" : "데이노트 작성하기",
+  "message" : "데이노트 작성",
   "data" : {
     "daynoteId" : 1,
     "imgList" : [ "{{IMAGE_URL_1}}", "{{IMAGE_URL_2}}" ],
@@ -5697,7 +5699,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@1a26f595, org.springframework.mock.web.MockMultipartFile@2e7bcd52]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@4b16671e, org.springframework.mock.web.MockMultipartFile@6203cec]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5711,11 +5713,11 @@ Content-Type: image/jpg
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 71
+Content-Length: 69
 
 {
   "statusCode" : 200,
-  "message" : "데이노트 수정 완료"
+  "message" : "1번 데이노트 수정"
 }</code></pre>
 </div>
 </div>
@@ -5881,11 +5883,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 71
+Content-Length: 69
 
 {
   "statusCode" : 200,
-  "message" : "데이노트 삭제 완료"
+  "message" : "1번 데이노트 삭제"
 }</code></pre>
 </div>
 </div>
@@ -6060,6 +6062,7 @@ Content-Length: 1067
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Content-Length: 706
+
 {
   "statusCode" : 200,
   "message" : "데이노트 리스트 조회",
@@ -6222,6 +6225,7 @@ Content-Length: 402
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Content-Length: 596
+
 {
   "statusCode" : 200,
   "message" : "위시 리스트 조회",
@@ -6477,11 +6481,11 @@ Host: MY-TAMIN-URL
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 58
+Content-Length: 63
 
 {
   "statusCode" : 200,
-  "message" : "위시 수정"
+  "message" : "1번 위시 수정"
 }</code></pre>
 </div>
 </div>
@@ -6619,11 +6623,11 @@ Host: MY-TAMIN-URL</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 58
+Content-Length: 63
 
 {
   "statusCode" : 200,
-  "message" : "위시 삭제"
+  "message" : "1번 위시 삭제"
 }</code></pre>
 </div>
 </div>
@@ -7524,7 +7528,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-11-05 02:23:23 +0900
+Last updated 2022-11-09 18:11:56 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

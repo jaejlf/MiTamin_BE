@@ -21,12 +21,12 @@ public class CustomCareRepositoryImpl implements CustomCareRepository {
     QCare care = QCare.care;
 
     @Override
-    public List<Care> searchCareHistory(User user, CareSearchFilter careSearchFilter) {
+    public List<Care> searchCareHistory(User user, CareSearchFilter filter) {
         return jpaQueryFactory
                 .selectFrom(care)
                 .where(
                         eqUser(user),
-                        eqCategory(careSearchFilter.getCareCategoryCodeList())
+                        eqCategory(filter.getCareCategoryCodeList())
                 )
                 .orderBy(sorting())
                 .fetch();

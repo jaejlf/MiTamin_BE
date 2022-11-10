@@ -3,7 +3,7 @@ ifndef::snippets[]
 endif::[]
 :custom: /../../src/docs/custom
 
-=== 칭찬 처방하기
+=== 칭찬 처방
 * 칭찬 처방하기는 하루에 한 번만 가능하다. (하루 기준 : AM 5:00 ~ AM 4:59)
 * 칭찬 카테고리는 각 카테고리에 해당하는 int 타입의 코드를 보낸다.
 include::{snippets}{custom}/enumerate/careCategoryCode.adoc[]
@@ -41,7 +41,7 @@ operation::care/getRandomCare[snippets='http-request,http-response']
 operation::{custom}/care/getRandomCare[snippets='other-response']
 operation::care/getRandomCare[snippets='request-headers,response-fields']
 
-=== 칭찬 처방 히스토리 조회
+=== 칭찬 처방 히스토리
 * 년/월을 기준으로 그룹핑하여 최신순으로 리턴한다.
 * date는 yyyy.MM 형식으로 요청한다. (ex. 22년 1월 → 2022.01)
 * careCategoryCodeList에 잘못된 값이 들어올 경우 따로 오류가 발생하지는 않지만, 해당 조건은 적용되지 않는다.

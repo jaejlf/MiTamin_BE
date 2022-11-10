@@ -27,46 +27,46 @@ public class ReportController {
 
     @PostMapping("/new")
     public ResponseEntity<Object> createReport(@AuthenticationPrincipal User user,
-                                               @RequestBody ReportRequest reportRequest) {
-        ReportResponse reportResponse = reportService.createReport(user, reportRequest);
+                                               @RequestBody ReportRequest request) {
+        ReportResponse result = reportService.createReport(user, request);
         return ResponseEntity
                 .status(CREATED)
-                .body(ResultResponse.create("하루 진단하기", reportResponse));
+                .body(ResultResponse.create("하루 진단", result));
     }
 
     @GetMapping("/{reportId}")
     public ResponseEntity<Object> getReport(@AuthenticationPrincipal User user,
                                             @PathVariable Long reportId) {
-        ReportResponse reportResponse = reportService.getReport(user, reportId);
+        ReportResponse result = reportService.getReport(user, reportId);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("하루 진단 조회", reportResponse));
+                .body(ResultResponse.ok(reportId + "번 하루 진단 조회", result));
     }
 
     @PutMapping("/{reportId}")
     public ResponseEntity<Object> updateReport(@AuthenticationPrincipal User user,
                                                @PathVariable Long reportId,
-                                               @RequestBody ReportRequest reportRequest) {
-        reportService.updateReport(user, reportId, reportRequest);
+                                               @RequestBody ReportRequest request) {
+        reportService.updateReport(user, reportId, request);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("하루 진단 수정 완료"));
+                .body(NoDataResponse.ok(reportId + "번 하루 진단 수정"));
     }
 
     @GetMapping("/weekly/mental")
     public ResponseEntity<Object> getWeeklyMentalReport(@AuthenticationPrincipal User user) {
-        List<WeeklyMentalReportResponse> weeklyMentalReportResponseList = reportService.getWeeklyMentalReport(user);
+        List<WeeklyMentalReportResponse> result = reportService.getWeeklyMentalReport(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("주간 마음 컨디션", weeklyMentalReportResponseList));
+                .body(ResultResponse.ok("주간 마음 컨디션 조회", result));
     }
 
     @GetMapping("/feeling/rank")
     public ResponseEntity<Object> getMonthlyFeelingRank(@AuthenticationPrincipal User user) {
-        List<FeelingRankResponse> feelingRankResponseList = reportService.getMonthlyFeelingRank(user);
+        List<FeelingRankResponse> result = reportService.getMonthlyFeelingRank(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("이번 달 가장 많이 느낀 감정", feelingRankResponseList));
+                .body(ResultResponse.ok("이번 달 감정 TOP3", result));
     }
 
 }

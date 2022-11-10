@@ -38,10 +38,10 @@ public class CareService {
     칭찬 처방하기
     */
     @Transactional
-    public CareResponse createCare(User user, CareRequest careRequest) {
+    public CareResponse createCare(User user, CareRequest request) {
         Mytamin mytamin = mytaminService.findMytaminOrNew(user);
         if (mytamin.getCare() != null) throw new MytaminException(CARE_ALREADY_DONE_ERROR);
-        Care newCare = saveNewCare(user, careRequest, mytamin);
+        Care newCare = saveNewCare(user, request, mytamin);
         return CareResponse.of(newCare, timeUtil.canEditCare(newCare));
     }
 
@@ -49,14 +49,14 @@ public class CareService {
     칭찬 처방 수정
     */
     @Transactional
-    public void updateCare(User user, Long careId, CareRequest careRequest) {
+    public void updateCare(User user, Long careId, CareRequest request) {
         Care care = findCareById(user, careId);
         canEdit(care);
 
         care.updateAll(
-                validateCode(careRequest.getCareCategoryCode()),
-                careRequest.getCareMsg1(),
-                careRequest.getCareMsg2()
+                validateCode(request.getCareCategoryCode()),
+                request.getCareMsg1(),
+                request.getCareMsg2()
         );
         careRepository.save(care);
     }
@@ -96,8 +96,8 @@ public class CareService {
     칭찬 처방 히스토리 조회
     */
     @Transactional(readOnly = true)
-    public Map<String, List<CareHistoryResponse>> getCareHistroy(User user, CareSearchFilter careSearchFilter) {
-        List<Care> careList = careRepository.searchCareHistory(user, careSearchFilter);
+    public Map<String, List<CareHistoryResponse>> getCareHistroy(User user, CareSearchFilter filter) {
+        List<Care> careList = careRepository.searchCareHistory(user, filter);
 
         Map<String, List<CareHistoryResponse>> map = new LinkedHashMap<>();
         for (Care care : careList) {
