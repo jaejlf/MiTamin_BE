@@ -29,47 +29,47 @@ public class CareController {
 
     @PostMapping("/new")
     public ResponseEntity<Object> createCare(@AuthenticationPrincipal User user,
-                                             @RequestBody CareRequest careRequest) {
-        CareResponse careResponse = careService.createCare(user, careRequest);
+                                             @RequestBody CareRequest request) {
+        CareResponse result = careService.createCare(user, request);
         return ResponseEntity
                 .status(CREATED)
-                .body(ResultResponse.create("칭찬 처방하기", careResponse));
+                .body(ResultResponse.create("칭찬 처방", result));
     }
 
     @GetMapping("/{careId}")
     public ResponseEntity<Object> getCare(@AuthenticationPrincipal User user,
                                           @PathVariable Long careId) {
-        CareResponse careResponse = careService.getCare(user, careId);
+        CareResponse result = careService.getCare(user, careId);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("칭찬 처방 조회", careResponse));
+                .body(ResultResponse.ok(careId + "번 칭찬 처방 조회", result));
     }
 
     @PutMapping("/{careId}")
     public ResponseEntity<Object> updateCare(@AuthenticationPrincipal User user,
                                              @PathVariable Long careId,
-                                             @RequestBody CareRequest careRequest) {
-        careService.updateCare(user, careId, careRequest);
+                                             @RequestBody CareRequest request) {
+        careService.updateCare(user, careId, request);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("칭찬 처방 수정 완료"));
+                .body(NoDataResponse.ok(careId + "번 칭찬 처방 수정"));
     }
 
     @GetMapping("/random")
     public ResponseEntity<Object> getRandomCare(@AuthenticationPrincipal User user) {
-        RandomCareResponse randomCareResponse = careService.getRandomCare(user);
+        RandomCareResponse result = careService.getRandomCare(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("칭찬 처방 랜덤 조회", randomCareResponse));
+                .body(ResultResponse.ok("칭찬 처방 랜덤 조회", result));
     }
 
     @PostMapping("/list")
     public ResponseEntity<Object> getCareHistroy(@AuthenticationPrincipal User user,
-                                                 @RequestBody CareSearchFilter careSearchFilter) {
-        Map<String, List<CareHistoryResponse>> careHistoryListResponse = careService.getCareHistroy(user, careSearchFilter);
+                                                 @RequestBody CareSearchFilter filter) {
+        Map<String, List<CareHistoryResponse>> result = careService.getCareHistroy(user, filter);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("칭찬 처방 히스토리 조회", careHistoryListResponse));
+                .body(ResultResponse.ok("칭찬 처방 히스토리", result));
     }
 
 }

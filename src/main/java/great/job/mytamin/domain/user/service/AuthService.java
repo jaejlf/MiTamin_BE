@@ -5,6 +5,8 @@ import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
+import great.job.mytamin.domain.user.entity.Action;
+import great.job.mytamin.domain.user.entity.Alarm;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
@@ -41,19 +43,19 @@ public class AuthService {
     회원가입
     */
     @Transactional
-    public UserResponse signUp(SignUpRequest signUpRequest) {
-        validateRequest(signUpRequest);
+    public UserResponse signUp(SignUpRequest request) {
+        validateRequest(request);
 
         User user = new User(
-                signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getNickname(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getNickname(),
                 Provider.DEFAULT,
-                signUpRequest.getMytaminHour(),
-                signUpRequest.getMytaminMin(),
-                isMytaminAlarmOn(signUpRequest.getMytaminHour())
+                new Alarm(request.getMytaminHour(), request.getMytaminMin(), isMytaminAlarmOn(request.getMytaminHour())),
+                new Action()
         );
-        user.updateDateOfMyday(mydayUtil.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
+
+        user.getAlarm().updateDateOfMyday(mydayUtil.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
         return UserResponse.of(userRepository.save(user));
     }
 
@@ -61,13 +63,12 @@ public class AuthService {
     기본 로그인
     */
     @Transactional
-    public TokenResponse defaultLogin(LoginRequest loginRequest) {
-        User user = findUserByEmail(loginRequest.getEmail());
-        checkPasswordMatching(loginRequest.getPassword(), user.getPassword());
+    public TokenResponse defaultLogin(LoginRequest request) {
+        User user = findUserByEmail(request.getEmail());
+        checkPasswordMatching(request.getPassword(), user.getPassword());
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
         String refreshToken = jwtTokenProvider.createRefreshToken(user);
-
         return TokenResponse.of(accessToken, refreshToken);
     }
 
@@ -75,9 +76,9 @@ public class AuthService {
     토큰 재발급
     */
     @Transactional
-    public TokenResponse reissueToken(ReissueRequest reissueRequest) {
-        User user = findUserByEmail(reissueRequest.getEmail());
-        String refreshToken = reissueRequest.getRefreshToken();
+    public TokenResponse reissueToken(ReissueRequest request) {
+        User user = findUserByEmail(request.getEmail());
+        String refreshToken = request.getRefreshToken();
 
         validateRefreshToken(refreshToken, user);
 
@@ -89,12 +90,6 @@ public class AuthService {
         }
 
         return TokenResponse.of(accessToken, refreshToken);
-    }
-
-    private void checkPasswordMatching(String requestPw, String realPw) {
-        if (!passwordEncoder.matches(requestPw, realPw)) {
-            throw new MytaminException(PASSWORD_MISMATCH_ERROR);
-        }
     }
 
     /*
@@ -117,16 +112,13 @@ public class AuthService {
         return customUserDetailsService.loadUserByUsername(email);
     }
 
-    private void validateRequest(SignUpRequest signUpRequest) {
-        validateEmailPattern(signUpRequest.getEmail());
-        validatePasswordPattern(signUpRequest.getPassword());
+    private void validateRequest(SignUpRequest request) {
+        validateEmailPattern(request.getEmail());
+        validatePasswordPattern(request.getPassword());
 
-        if (userUtil.isEmailDuplicate(signUpRequest.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.isNicknameDuplicate(signUpRequest.getNickname()))
-            throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
-
-        if (signUpRequest.getMytaminHour() != null)
-            timeUtil.isTimeValid(signUpRequest.getMytaminHour(), signUpRequest.getMytaminMin());
+        if (userUtil.isEmailDuplicate(request.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
+        if (userUtil.isNicknameDuplicate(request.getNickname())) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        if (request.getMytaminHour() != null) timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
     }
 
     private void validateRefreshToken(String refreshToken, User user) {
@@ -157,6 +149,12 @@ public class AuthService {
 
     private Boolean isMytaminAlarmOn(String mytaminHour) {
         return mytaminHour != null;
+    }
+
+    private void checkPasswordMatching(String requestPw, String realPw) {
+        if (!passwordEncoder.matches(requestPw, realPw)) {
+            throw new MytaminException(PASSWORD_MISMATCH_ERROR);
+        }
     }
 
 }

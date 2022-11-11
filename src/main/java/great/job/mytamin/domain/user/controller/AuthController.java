@@ -31,72 +31,72 @@ public class AuthController {
     private final EmailService emailService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signUp(@RequestBody SignUpRequest signUpRequest) {
-        UserResponse userResponse = authService.signUp(signUpRequest);
+    public ResponseEntity<Object> signUp(@RequestBody SignUpRequest request) {
+        UserResponse result = authService.signUp(request);
         return ResponseEntity
                 .status(CREATED)
-                .body(ResultResponse.create("회원 가입", userResponse));
+                .body(ResultResponse.create("회원 가입", result));
     }
 
     @PostMapping("/default/login")
-    public ResponseEntity<Object> defaultLogin(@RequestBody LoginRequest loginRequest) {
-        TokenResponse tokenResponse = authService.defaultLogin(loginRequest);
+    public ResponseEntity<Object> defaultLogin(@RequestBody LoginRequest request) {
+        TokenResponse result = authService.defaultLogin(request);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("기본 로그인", tokenResponse));
+                .body(ResultResponse.ok("기본 로그인", result));
     }
 
     @GetMapping("/check/email/{email}")
     public ResponseEntity<Object> isEmailDuplicate(@PathVariable String email) {
-        Boolean isDuplicate = userUtil.isEmailDuplicate(email);
+        Boolean result = userUtil.isEmailDuplicate(email);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("이메일 중복 체크", isDuplicate));
+                .body(ResultResponse.ok("이메일 중복 체크", result));
     }
 
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<Object> isNicknameDuplicate(@PathVariable String nickname) {
-        Boolean isDuplicate = userUtil.isNicknameDuplicate(nickname);
+        Boolean result = userUtil.isNicknameDuplicate(nickname);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("닉네임 중복 체크", isDuplicate));
+                .body(ResultResponse.ok("닉네임 중복 체크", result));
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<Object> reissueToken(@RequestBody ReissueRequest reissueRequest) {
-        TokenResponse tokenResponse = authService.reissueToken(reissueRequest);
+    public ResponseEntity<Object> reissueToken(@RequestBody ReissueRequest request) {
+        TokenResponse result = authService.reissueToken(request);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("토큰 재발급", tokenResponse));
+                .body(ResultResponse.ok("토큰 재발급", result));
     }
 
     @PostMapping("/signup/code")
-    public ResponseEntity<Object> sendAuthCodeForSignUp(@RequestBody Map<String, String> map) throws MessagingException {
-        emailService.sendAuthCodeForSignUp(map.get("email"));
+    public ResponseEntity<Object> sendAuthCodeForSignUp(@RequestBody Map<String, String> request) throws MessagingException {
+        emailService.sendAuthCodeForSignUp(request.get("email"));
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("회원가입을 위한 이메일 인증"));
     }
 
     @PostMapping("/reset/code")
-    public ResponseEntity<Object> sendAuthCodeForResetPW(@RequestBody Map<String, String> map) throws MessagingException {
-        authService.sendAuthCodeForResetPW(map.get("email"));
+    public ResponseEntity<Object> sendAuthCodeForResetPW(@RequestBody Map<String, String> request) throws MessagingException {
+        authService.sendAuthCodeForResetPW(request.get("email"));
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("비밀번호 재설정을 위한 이메일 인증"));
     }
 
     @PostMapping("/code")
-    public ResponseEntity<Object> confirmAuthCode(@RequestBody EmailCheckRequest emailCheckRequest) {
-        boolean isValidate = emailService.confirmAuthCode(emailCheckRequest);
+    public ResponseEntity<Object> confirmAuthCode(@RequestBody EmailCheckRequest request) {
+        boolean result = emailService.confirmAuthCode(request);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("이메일 인증 코드 확인", isValidate));
+                .body(ResultResponse.ok("이메일 인증 코드 확인", result));
     }
 
     @PutMapping("/password")
-    public ResponseEntity<Object> resetPassword(@RequestBody Map<String, String> map) {
-        authService.resetPassword(map.get("email"), map.get("password"));
+    public ResponseEntity<Object> resetPassword(@RequestBody Map<String, String> request) {
+        authService.resetPassword(request.get("email"), request.get("password"));
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("비밀번호 재설정"));

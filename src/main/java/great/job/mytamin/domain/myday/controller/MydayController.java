@@ -22,10 +22,10 @@ public class MydayController {
 
     @GetMapping("/info")
     public ResponseEntity<Object> getMyday(@AuthenticationPrincipal User user) {
-        MydayResponse mydayResponse = mydayService.getMyday(user);
+        MydayResponse result = mydayService.getMyday(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("이번 달의 마이데이", mydayResponse));
+                .body(ResultResponse.ok("이번 달의 마이데이", result));
     }
 
 }

@@ -24,18 +24,8 @@ public class AlarmService {
     */
     @Transactional(readOnly = true)
     public SettingResponse getAlarmSettingStatus(User user) {
-        // 마이타민
-        String mytaminWhen = null;
-        Boolean mytaminAlarmOn = user.getMytaminAlarmOn();
-        if (mytaminAlarmOn) mytaminWhen = timeUtil.convertToAlarmFormat(user.getMytaminHour(), user.getMytaminMin());
-        SettingInfoResponse mytamin = SettingInfoResponse.of(mytaminAlarmOn, mytaminWhen);
-
-        // 마이데이
-        String mydayWhen = null;
-        Boolean mydayAlarmOn = user.getMydayAlarmOn();
-        if (mydayAlarmOn) mydayWhen = user.getMydayWhen();
-        SettingInfoResponse myday = SettingInfoResponse.of(mydayAlarmOn, mydayWhen);
-
+        SettingInfoResponse mytamin = getMytaminSettingStatus(user);
+        SettingInfoResponse myday = getMydaySettingStatus(user);
         return SettingResponse.of(mytamin, myday);
     }
 
@@ -43,12 +33,12 @@ public class AlarmService {
     마이타민 알림 ON
     */
     @Transactional
-    public void turnOnMytaminAlarm(User user, MytaminAlarmRequest mytaminAlarmRequest) {
-        timeUtil.isTimeValid(mytaminAlarmRequest.getMytaminHour(), mytaminAlarmRequest.getMytaminMin());
-        user.updateMytaminAlarmOn(true);
-        user.updateMytaminWhen(
-                mytaminAlarmRequest.getMytaminHour(),
-                mytaminAlarmRequest.getMytaminMin()
+    public void turnOnMytaminAlarm(User user, MytaminAlarmRequest request) {
+        timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
+        user.getAlarm().updateMytaminAlarmOn(true);
+        user.getAlarm().updateMytaminWhen(
+                request.getMytaminHour(),
+                request.getMytaminMin()
         );
         userRepository.save(user);
     }
@@ -58,7 +48,7 @@ public class AlarmService {
     */
     @Transactional
     public void turnOffMytaminAlarm(User user) {
-        user.updateMytaminAlarmOn(false);
+        user.getAlarm().updateMytaminAlarmOn(false);
         userRepository.save(user);
     }
 
@@ -67,8 +57,8 @@ public class AlarmService {
     */
     @Transactional
     public void turnOnMydayAlarm(User user, int code) {
-        user.updateMydayAlarmOn(true);
-        user.updateMydayWhen(convertCodeToMsg(code));
+        user.getAlarm().updateMydayAlarmOn(true);
+        user.getAlarm().updateMydayWhen(convertCodeToMsg(code));
         userRepository.save(user);
     }
 
@@ -77,8 +67,26 @@ public class AlarmService {
     */
     @Transactional
     public void turnOffMydayAlarm(User user) {
-        user.updateMydayAlarmOn(false);
+        user.getAlarm().updateMydayAlarmOn(false);
         userRepository.save(user);
+    }
+
+    private SettingInfoResponse getMytaminSettingStatus(User user) {
+        String mytaminWhen = null;
+        Boolean mytaminAlarmOn = user.getAlarm().getMytaminAlarmOn();
+
+        if (mytaminAlarmOn) mytaminWhen = timeUtil.convertToAlarmFormat( // 알림이 켜져있는 경우 시간 정보 설정
+                user.getAlarm().getMytaminHour(),
+                user.getAlarm().getMytaminMin());
+        return SettingInfoResponse.of(mytaminAlarmOn, mytaminWhen);
+    }
+
+    private SettingInfoResponse getMydaySettingStatus(User user) {
+        String mydayWhen = null;
+        Boolean mydayAlarmOn = user.getAlarm().getMydayAlarmOn();
+
+        if (mydayAlarmOn) mydayWhen = user.getAlarm().getMydayWhen(); // 알림이 켜져있는 경우 시간 정보 설정
+        return SettingInfoResponse.of(mydayAlarmOn, mydayWhen);
     }
 
 }

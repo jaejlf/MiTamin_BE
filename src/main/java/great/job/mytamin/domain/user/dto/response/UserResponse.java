@@ -25,8 +25,8 @@ public class UserResponse {
                 .nickname(user.getNickname())
                 .profileImgUrl(user.getProfileImgUrl())
                 .beMyMessage(user.getBeMyMessage())
-                .mytaminHour(user.getMytaminHour())
-                .mytaminMin(user.getMytaminMin())
+                .mytaminHour(user.getAlarm().getMytaminHour())
+                .mytaminMin(user.getAlarm().getMytaminMin())
                 .build();
     }
 

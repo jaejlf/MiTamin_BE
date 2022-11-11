@@ -159,7 +159,7 @@ public class TimeUtil {
     /*
     마이데이 디데이 & 메세지 계산
     */
-    public Map<String, String> getMyDayInfo(String nickname, LocalDateTime dateOfMyDay) {
+    public Map<String, String> getMydayInfo(String nickname, LocalDateTime dateOfMyDay) {
         LocalDateTime now = LocalDateTime.now();
         int dday = now.getDayOfMonth() - dateOfMyDay.getDayOfMonth();
 

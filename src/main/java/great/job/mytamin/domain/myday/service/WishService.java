@@ -40,10 +40,9 @@ public class WishService {
     위시 수정
     */
     @Transactional
-    public void updateWish(User user, Long wishId, WishRequest wishRequest) {
+    public void updateWish(User user, Long wishId, WishRequest request) {
         Wish wish = findWishById(user, wishId);
-        wish.updateWishText(wishRequest.getWishText());
-        wishRepository.save(wish);
+        update(request, wish);
     }
 
     /*
@@ -52,11 +51,7 @@ public class WishService {
     @Transactional
     public void deleteWish(User user, Long wishId) {
         Wish wish = findWishById(user, wishId);
-        if (getWishCount(wish) != 0) {
-            wish.updateIsHidden(true); // 연관된 데이노트가 존재할 경우, 삭제가 아닌 숨김 처리
-        } else {
-            wishRepository.delete(wish);
-        }
+        delete(wish);
     }
 
     /*
@@ -65,22 +60,13 @@ public class WishService {
     @Transactional
     public WishResponse createWish(User user, String wishText) {
         Wish wish = wishRepository.findByUserAndWishText(user, wishText).orElse(null);
-        if (wish != null) {
-            if (wish.getIsHidden()) {
-                wish.updateIsHidden(false); // 숨김 처리된 위시 리스트였다면 복원
-                wishRepository.save(wish);
-            } else throw new MytaminException(WISH_ALREADY_EXIST_ERROR);
-        } else {
-            wish = wishRepository.save(new Wish(
-                    wishText,
-                    user
-            ));
-        }
+        if (wish != null) restore(wish);
+        else wish = save(user, wishText);
         return WishResponse.of(wish, getWishCount(wish));
     }
 
     /*
-    위시 가져오기 + 없다면 생성
+    위시 가져오기
     */
     @Transactional
     public Wish findWishById(User user, Long wishId) {
@@ -102,6 +88,35 @@ public class WishService {
 
     private int getWishCount(Wish wish) {
         return daynoteRepository.countByWish(wish);
+    }
+
+    private Wish save(User user, String wishText) {
+        Wish wish;
+        wish = wishRepository.save(new Wish(
+                wishText,
+                user
+        ));
+        return wish;
+    }
+
+    private void restore(Wish wish) {
+        if (wish.getIsHidden()) {
+            wish.updateIsHidden(false); // 숨김 처리된 위시 리스트였다면 복원
+            wishRepository.save(wish);
+        } else throw new MytaminException(WISH_ALREADY_EXIST_ERROR);
+    }
+
+    private void update(WishRequest request, Wish wish) {
+        wish.updateWishText(request.getWishText());
+        wishRepository.save(wish);
+    }
+
+    private void delete(Wish wish) {
+        if (getWishCount(wish) != 0) {
+            wish.updateIsHidden(true); // 연관된 데이노트가 존재할 경우, 삭제가 아닌 숨김 처리
+        } else {
+            wishRepository.delete(wish);
+        }
     }
 
 }

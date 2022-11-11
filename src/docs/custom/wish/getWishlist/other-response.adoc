@@ -5,6 +5,7 @@
 HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Content-Length: 596
+
 {
   "statusCode" : 200,
   "message" : "위시 리스트 조회",

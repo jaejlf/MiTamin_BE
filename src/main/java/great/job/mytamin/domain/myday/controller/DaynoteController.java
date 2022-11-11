@@ -28,29 +28,29 @@ public class DaynoteController {
     @GetMapping("/check/{date}")
     public ResponseEntity<Object> canCreateDaynote(@AuthenticationPrincipal User user,
                                                    @PathVariable String date) {
-        Boolean canCreate = daynoteService.canCreateDaynote(user, date);
+        Boolean result = daynoteService.canCreateDaynote(user, date);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("데이노트 작성 가능 여부", canCreate));
+                .body(ResultResponse.ok("데이노트 작성 가능 여부", result));
     }
 
     @PostMapping("/new")
     public ResponseEntity<Object> createDaynote(@AuthenticationPrincipal User user,
-                                                @ModelAttribute DaynoteRequest daynoteRequest) {
-        DaynoteResponse daynoteResponse = daynoteService.createDaynote(user, daynoteRequest);
+                                                @ModelAttribute DaynoteRequest request) {
+        DaynoteResponse result = daynoteService.createDaynote(user, request);
         return ResponseEntity
                 .status(CREATED)
-                .body(ResultResponse.create("데이노트 작성하기", daynoteResponse));
+                .body(ResultResponse.create("데이노트 작성", result));
     }
 
     @PutMapping("/{daynoteId}")
     public ResponseEntity<Object> updateDaynote(@AuthenticationPrincipal User user,
                                                 @PathVariable Long daynoteId,
-                                                @ModelAttribute DaynoteUpdateRequest daynoteUpdateRequest) {
-        daynoteService.updateDaynote(user, daynoteId, daynoteUpdateRequest);
+                                                @ModelAttribute DaynoteUpdateRequest request) {
+        daynoteService.updateDaynote(user, daynoteId, request);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("데이노트 수정 완료"));
+                .body(NoDataResponse.ok(daynoteId + "번 데이노트 수정"));
     }
 
     @DeleteMapping("/{daynoteId}")
@@ -59,15 +59,15 @@ public class DaynoteController {
         daynoteService.deleteDaynote(user, daynoteId);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("데이노트 삭제 완료"));
+                .body(NoDataResponse.ok(daynoteId + "번 데이노트 삭제"));
     }
     
     @GetMapping("/list")
     public ResponseEntity<Object> getDaynoteList(@AuthenticationPrincipal User user) {
-        Map<Integer, List<DaynoteResponse>> daynoteListResponse = daynoteService.getDaynoteList(user);
+        Map<Integer, List<DaynoteResponse>> result = daynoteService.getDaynoteList(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("데이노트 리스트 조회", daynoteListResponse));
+                .body(ResultResponse.ok("데이노트 리스트 조회", result));
     }
 
 }

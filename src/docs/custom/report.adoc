@@ -3,7 +3,7 @@ ifndef::snippets[]
 endif::[]
 :custom: /../../src/docs/custom
 
-=== 하루 진단하기
+=== 하루 진단
 * 하루 진단하기는 하루에 한 번만 가능하다. (하루 기준 : AM 5:00 ~ AM 4:59)
 * 마음 컨디션은 각 마음 컨디션에 해당하는 int 타입의 코드를 보낸다.
 include::{snippets}{custom}/enumerate/mentalConditionCode.adoc[]
@@ -42,7 +42,7 @@ include::{snippets}{custom}/enumerate/mentalConditionCode.adoc[]
 operation::report/getWeeklyMentalReport[snippets='http-request,http-response']
 operation::report/getWeeklyMentalReport[snippets='request-headers,response-fields']
 
-=== 이번 달 가장 많이 느낀 감정
+=== 이번 달 감정 TOP3
 * 이번 달을 기준으로, 가장 많이 태그된 감정 1 ~ 3순위를 감정이 기록된 횟수가 높은 순으로 리턴한다.
 
 operation::report/getMonthlyFeelingRank[snippets='http-request,http-response']

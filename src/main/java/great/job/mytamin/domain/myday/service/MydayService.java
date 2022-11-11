@@ -24,20 +24,25 @@ public class MydayService {
     */
     @Transactional(readOnly = true)
     public MydayResponse getMyday(User user) {
-        LocalDateTime dateOfMyday = user.getDateOfMyday();
-        if (!timeUtil.isCurrentMonth(dateOfMyday)) dateOfMyday = updateDateOfMyday(user);
-
-        Map<String, String> map = timeUtil.getMyDayInfo(user.getNickname(), dateOfMyday);
-        return MydayResponse.of(
-                dateOfMyday.format(DateTimeFormatter.ofPattern("MM월 dd일")),
-                map.get("dday"),
-                map.get("comment"));
+        LocalDateTime dateOfMyday = user.getAlarm().getDateOfMyday();
+        if (!timeUtil.isCurrentMonth(dateOfMyday)) {
+            dateOfMyday = updateDateOfMyday(user); // 저장된 데이터가 이번 달의 날짜가 아니라면 업데이트
+        }
+        return getMydayDto(user, dateOfMyday);
     }
 
     private LocalDateTime updateDateOfMyday(User user) {
         LocalDateTime dateOfMyday = mydayUtil.randomizeDateOfMyday();
-        user.updateDateOfMyday(dateOfMyday);
+        user.getAlarm().updateDateOfMyday(dateOfMyday);
         return dateOfMyday;
+    }
+
+    private MydayResponse getMydayDto(User user, LocalDateTime dateOfMyday) {
+        Map<String, String> map = timeUtil.getMydayInfo(user.getNickname(), dateOfMyday);
+        return MydayResponse.of(
+                dateOfMyday.format(DateTimeFormatter.ofPattern("MM월 dd일")),
+                map.get("dday"),
+                map.get("comment"));
     }
 
 }

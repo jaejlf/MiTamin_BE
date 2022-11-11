@@ -32,36 +32,36 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<Object> getProfile(@AuthenticationPrincipal User user) {
-        ProfileResponse profileResponse = userService.getProfile(user);
+        ProfileResponse result = userService.getProfile(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("프로필 조회", profileResponse));
+                .body(ResultResponse.ok("프로필 조회", result));
     }
 
     @PutMapping("/profile")
     public ResponseEntity<Object> updateProfile(@AuthenticationPrincipal User user,
-                                                @ModelAttribute ProfileUpdateRequest profileUpdateRequest) {
-        userService.updateProfile(user, profileUpdateRequest);
+                                                @ModelAttribute ProfileUpdateRequest request) {
+        userService.updateProfile(user, request);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("프로필 편집 완료"));
+                .body(NoDataResponse.ok("프로필 편집"));
     }
 
     @GetMapping("/created-at")
     public ResponseEntity<Object> getCreatedAt(@AuthenticationPrincipal User user) {
         LocalDateTime createdAt = user.getCreatedAt();
-        Map<String, Integer> map = new LinkedHashMap<>();
-        map.put("year", createdAt.getYear());
-        map.put("month", createdAt.getMonth().getValue());
+        Map<String, Integer> result = new LinkedHashMap<>();
+        result.put("year", createdAt.getYear());
+        result.put("month", createdAt.getMonth().getValue());
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("가입 날짜 조회", map));
+                .body(ResultResponse.ok("가입 날짜 조회", result));
     }
 
     @PutMapping("/password")
     public ResponseEntity<Object> changePassword(@AuthenticationPrincipal User user,
-                                                 @RequestBody Map<String, String> map) {
-        userService.changePassword(user, map.get("password"));
+                                                 @RequestBody Map<String, String> request) {
+        userService.changePassword(user, request.get("password"));
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("비밀번호 변경"));
@@ -77,8 +77,8 @@ public class UserController {
 
     @DeleteMapping("/init")
     public ResponseEntity<Object> initData(@AuthenticationPrincipal User user,
-                                            @RequestBody InitRequest initRequest) {
-        userService.initData(user, initRequest);
+                                           @RequestBody InitRequest request) {
+        userService.initData(user, request);
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("기록 초기화"));

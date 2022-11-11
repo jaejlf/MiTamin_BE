@@ -25,29 +25,29 @@ public class WishlistController {
 
     @GetMapping("/list")
     public ResponseEntity<Object> getWishlist(@AuthenticationPrincipal User user) {
-        List<WishResponse> wishResponseList = wishService.getWishlist(user);
+        List<WishResponse> result = wishService.getWishlist(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("위시 리스트 조회", wishResponseList));
+                .body(ResultResponse.ok("위시 리스트 조회", result));
     }
 
     @PostMapping("/new")
     public ResponseEntity<Object> createWish(@AuthenticationPrincipal User user,
-                                             @RequestBody WishRequest wishRequest) {
-        WishResponse wishResponse = wishService.createWish(user, wishRequest.getWishText());
+                                             @RequestBody WishRequest request) {
+        WishResponse result = wishService.createWish(user, request.getWishText());
         return ResponseEntity
                 .status(CREATED)
-                .body(ResultResponse.create("위시 생성", wishResponse));
+                .body(ResultResponse.create("위시 생성", result));
     }
 
     @PutMapping("/{wishId}")
     public ResponseEntity<Object> updateWish(@AuthenticationPrincipal User user,
                                              @PathVariable Long wishId,
-                                             @RequestBody WishRequest wishRequest) {
-        wishService.updateWish(user, wishId, wishRequest);
+                                             @RequestBody WishRequest request) {
+        wishService.updateWish(user, wishId, request);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("위시 수정"));
+                .body(NoDataResponse.ok(wishId + "번 위시 수정"));
     }
 
     @DeleteMapping("/{wishId}")
@@ -56,7 +56,7 @@ public class WishlistController {
         wishService.deleteWish(user, wishId);
         return ResponseEntity
                 .status(OK)
-                .body(NoDataResponse.ok("위시 삭제"));
+                .body(NoDataResponse.ok(wishId + "번 위시 삭제"));
     }
 
 }

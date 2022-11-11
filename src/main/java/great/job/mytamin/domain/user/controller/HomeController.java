@@ -23,18 +23,18 @@ public class HomeController {
 
     @GetMapping("/welcome")
     public ResponseEntity<Object> welcome(@AuthenticationPrincipal User user) {
-        WelcomeResponse welcomeResponse = homeService.welcome(user);
+        WelcomeResponse result = homeService.welcome(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("웰컴 메세지", welcomeResponse));
+                .body(ResultResponse.ok("웰컴 메세지", result));
     }
 
     @GetMapping("/progress/status")
     public ResponseEntity<Object> getProgressStatus(@AuthenticationPrincipal User user) {
-        ActiveResponse activeResponse = homeService.getProgressStatus(user);
+        ActiveResponse result = homeService.getProgressStatus(user);
         return ResponseEntity
                 .status(OK)
-                .body(ResultResponse.ok("행동 완료 상태", activeResponse));
+                .body(ResultResponse.ok("행동 완료 상태", result));
     }
 
 }

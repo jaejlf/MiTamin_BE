@@ -5,9 +5,10 @@
 HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
 Content-Length: 270
+
 {
   "statusCode" : 200,
-  "message" : "이번 달 가장 많이 느낀 감정",
+  "message" : "이번 달 감정 TOP3",
   "data" : [{
     "feeling" : "신나는",
     "count" : 5

@@ -36,7 +36,7 @@ class MytaminServiceTest extends CommonServiceTest {
     void completeBreath() {
         //given & when
         mytaminService.completeBreath(user);
-        String result = user.getBreathTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+        String result = user.getAction().getBreathTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
         //then
         String expected = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
@@ -48,7 +48,7 @@ class MytaminServiceTest extends CommonServiceTest {
     void completeSense() {
         //given & when
         mytaminService.completeSense(user);
-        String result = user.getSenseTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+        String result = user.getAction().getSenseTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
 
         //then
         String expected = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
