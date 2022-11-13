@@ -1821,7 +1821,7 @@ Content-Length: 670
   "statusCode" : 200,
   "message" : "최근 섭취한 마이타민",
   "data" : {
-    "takeAt" : "11.12.Sat",
+    "takeAt" : "11.13.Sun",
     "report" : {
       "reportId" : 1,
       "canEdit" : true,
@@ -5420,7 +5420,7 @@ Content-Disposition: form-data; name=date
 
 2022.10
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@5872376d, org.springframework.mock.web.MockMultipartFile@7231547f]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@1ea29e40, org.springframework.mock.web.MockMultipartFile@422ecb83]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -5663,7 +5663,7 @@ Content-Disposition: form-data; name=note
 
 따끈따끈한 빵을 샀다. 맛있었따 :0 **수정수정** 다시 생각해보니까 그냥 그랬다,,
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@75600bdb, org.springframework.mock.web.MockMultipartFile@7bf56370]
+Content-Disposition: form-data; name=fileList; filename=[org.springframework.mock.web.MockMultipartFile@3c10ba31, org.springframework.mock.web.MockMultipartFile@5db05003]
 Content-Type: image/jpg
 
 &lt;&lt;image&gt;&gt;
@@ -6563,6 +6563,20 @@ Content-Length: 146
   "errorCode" : 8000,
   "errorName" : "WISH_NOT_FOUND_ERROR",
   "message" : "존재하지 않는 wishId 입니다."
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 409 Conflict
+Content-Type: application/json;charset=UTF-8
+Content-Length: 159
+
+{
+  "statusCode" : 409,
+  "errorCode" : 8001,
+  "errorName" : "WISH_ALREADY_EXIST_ERROR",
+  "message" : "이미 존재하는 위시 리스트입니다."
 }</code></pre>
 </div>
 </div>
@@ -7492,7 +7506,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2022-11-12 17:46:21 +0900
+Last updated 2022-11-13 13:00:02 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

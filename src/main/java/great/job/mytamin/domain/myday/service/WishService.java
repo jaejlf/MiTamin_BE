@@ -41,6 +41,10 @@ public class WishService {
     */
     @Transactional
     public void updateWish(User user, Long wishId, WishRequest request) {
+        if (wishRepository.findByUserAndWishText(user, request.getWishText()).isPresent()) {
+            throw new MytaminException(WISH_ALREADY_EXIST_ERROR);
+        }
+
         Wish wish = findWishById(user, wishId);
         update(request, wish);
     }

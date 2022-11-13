@@ -27,6 +27,7 @@ operation::wish/updateWish[snippets='request-headers,path-parameters,request-fie
 
 ==== Exception response
 include::{snippets}/wish/updateWish_8000/http-response.adoc[]
+include::{snippets}/wish/updateWish_8001/http-response.adoc[]
 
 === 위시 삭제
 

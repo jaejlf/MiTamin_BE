@@ -217,6 +217,34 @@ class WishlistControllerTest extends CommonControllerTest {
                     );
         }
 
+        @DisplayName("이미 존재하는 위시 리스트")
+        @Test
+        void updateWish_8001(TestInfo testInfo) throws Exception {
+            //given
+            doThrow(new MytaminException(WISH_ALREADY_EXIST_ERROR)).when(wishService).updateWish(any(), any(), any());
+
+            //when
+            ResultActions actions = mockMvc.perform(put("/wish/{wishId}", wishId)
+                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                    .content(objectMapper.writeValueAsString(wishRequest))
+                    .contentType(APPLICATION_JSON));
+
+            //then
+            actions
+                    .andDo(print())
+                    .andExpect(status().isConflict())
+                    .andExpect(jsonPath("errorCode").value(8001))
+                    .andExpect(jsonPath("errorName").value("WISH_ALREADY_EXIST_ERROR"))
+                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+                            responseFields(
+                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+                                    fieldWithPath("errorName").description("오류 이름"),
+                                    fieldWithPath("message").description("오류 메세지")
+                            ))
+                    );
+        }
+
     }
 
     @Nested
