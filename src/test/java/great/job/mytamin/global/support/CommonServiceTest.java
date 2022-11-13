@@ -1,5 +1,6 @@
 package great.job.mytamin.global.support;
 
+import great.job.mytamin.domain.myday.repository.WishRepository;
 import great.job.mytamin.domain.mytamin.entity.Care;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.mytamin.entity.Report;
@@ -38,6 +39,8 @@ public class CommonServiceTest {
     public CareRepository careRepository;
     @Autowired
     public ReportRepository reportRepository;
+    @Autowired
+    public WishRepository wishRepository;
 
     // Mock Data
     public User user;

@@ -38,18 +38,18 @@ class ReportServiceTest extends CommonServiceTest {
     @DisplayName("하루 진단하기")
     class CreateReportTest {
 
+        ReportRequest reportRequest = new ReportRequest(
+                5,
+                "신나는",
+                "즐거운",
+                "재밌는",
+                "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
+        );
+
         @DisplayName("성공")
         @Test
         void createReport() {
             //given
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
-            );
-
             given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(reportUtil.concatFeelingTag(any())).willReturn("#신나는 #즐거운 #재밌는");
             given(timeUtil.canEditReport(any())).willReturn(true);
@@ -79,14 +79,6 @@ class ReportServiceTest extends CommonServiceTest {
         @Test
         void createReport_4001() {
             //given
-            ReportRequest reportRequest = new ReportRequest(
-                    5,
-                    "신나는",
-                    "즐거운",
-                    "재밌는",
-                    "아무래도 아침형 인간이 되는건 너무 어려운 것 같다."
-            );
-
             given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(reportUtil.concatFeelingTag(any())).willReturn("#신나는 #즐거운 #재밌는");
             given(timeUtil.canEditReport(any())).willReturn(true);

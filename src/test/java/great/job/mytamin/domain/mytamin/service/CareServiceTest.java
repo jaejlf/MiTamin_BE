@@ -33,16 +33,16 @@ class CareServiceTest extends CommonServiceTest {
     @DisplayName("칭찬 처방하기")
     class CreateCareTest {
 
+        CareRequest careRequest = new CareRequest(
+                1,
+                "오늘 할 일을 전부 했어",
+                "성실히 노력하는 내 모습이 좋아"
+        );
+
         @DisplayName("성공")
         @Test
         void createCare() {
             //given
-            CareRequest careRequest = new CareRequest(
-                    1,
-                    "오늘 할 일을 전부 했어",
-                    "성실히 노력하는 내 모습이 좋아"
-            );
-
             given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(timeUtil.canEditCare(any())).willReturn(true);
 
@@ -70,12 +70,6 @@ class CareServiceTest extends CommonServiceTest {
         @Test
         void createCare_5001() {
             //given
-            CareRequest careRequest = new CareRequest(
-                    1,
-                    "오늘 할 일을 전부 했어",
-                    "성실히 노력하는 내 모습이 좋아"
-            );
-
             given(mytaminService.findMytaminOrNew(any())).willReturn(mytamin);
             given(timeUtil.canEditCare(any())).willReturn(true);
             mytamin.updateCare(care); // CARE ALREADY DONE
