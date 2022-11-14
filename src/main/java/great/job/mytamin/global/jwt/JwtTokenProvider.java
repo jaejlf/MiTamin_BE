@@ -48,9 +48,7 @@ public class JwtTokenProvider {
     }
 
     public String createRefreshToken(User user) {
-        String refreshToken = createToken(user.getEmail(), refreshTokenValidTime);
-        user.updateRefreshToken(refreshToken);
-        return refreshToken;
+        return createToken(user.getEmail(), refreshTokenValidTime);
     }
 
     public String createToken(String email, Long tokenValidTime) {

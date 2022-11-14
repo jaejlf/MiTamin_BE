@@ -31,19 +31,3 @@ include::{snippets}{custom}/wish.adoc[]
 
 == Alarm
 include::{snippets}{custom}/alarm.adoc[]
-
-== Image
-* Multipart 타입으로 이미지를 전송한다.
-
-=== 단일 이미지 업로드
-* 하나의 이미지를 업로드 후, 이미지 URL을 리턴한다.
-
-operation::img/uploadImgOne[snippets='http-request,http-response']
-operation::img/uploadImgOne[snippets='request-headers,request-parts,response-fields']
-
-=== 이미지 리스트 업로드
-* 하나 이상의 이미지를 업로드 후, 이미지 URL을 리턴한다.
-
-operation::img/uploadImgList[snippets='http-request,http-response']
-operation::img/uploadImgList[snippets='request-headers,request-parts,response-fields']
-

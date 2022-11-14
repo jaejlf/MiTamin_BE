@@ -9,6 +9,7 @@ import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.repository.UserRepository;
+import great.job.mytamin.domain.util.FcmUtil;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.service.AwsS3Service;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.Objects;
 
 import static great.job.mytamin.global.exception.ErrorMap.NICKNAME_DUPLICATE_ERROR;
@@ -27,6 +29,7 @@ import static great.job.mytamin.global.exception.ErrorMap.NICKNAME_DUPLICATE_ERR
 public class UserService {
 
     private final UserUtil userUtil;
+    private final FcmUtil fcmUtil;
     private final AwsS3Service awsS3Service;
     private final DaynoteService daynoteService;
     private final WishService wishService;
@@ -58,8 +61,9 @@ public class UserService {
     로그아웃
     */
     @Transactional
-    public void logout(User user) {
+    public void logout(User user, Map<String, String> request) {
         user.updateRefreshToken(""); // 리프레쉬 토큰 삭제
+        fcmUtil.deleteFcmToken(user, request.get("fcmToekn")); // FCM 토큰 삭제
         userRepository.save(user);
     }
 
