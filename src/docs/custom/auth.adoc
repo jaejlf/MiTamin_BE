@@ -19,6 +19,7 @@ include::{snippets}/auth/signUp_2002/http-response.adoc[]
 
 === 기본 로그인
 * 로그인 성공 시 accessToken과 refreshToken을 발급한다.
+* #TIP FCM 토큰 관련 세부 내용은 구현 전이므로, 만약 FCM 토큰이 없다면 "abc" 와 같은 임의의 문자열을 넣어 요청을 보내도 무관하다.
 
 operation::auth/defaultLogin[snippets='http-request,http-response']
 operation::auth/defaultLogin[snippets='request-fields,response-fields']
@@ -34,6 +35,7 @@ operation::auth/isEmailDuplicate[snippets='http-request,http-response']
 operation::auth/isEmailDuplicate[snippets='path-parameters,response-fields']
 
 === 닉네임 중복 체크
+* #TIP '닉네임 중복' 조건을 더이상 체크하지 않기 때문에, FE에 반영된 후 삭제될 예정
 * 중복된 닉네임이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.
 
 operation::auth/isNicknameDuplicate[snippets='http-request,http-response']

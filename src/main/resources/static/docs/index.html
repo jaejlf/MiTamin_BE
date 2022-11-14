@@ -379,6 +379,9 @@ Content-Length: 146
 <li>
 <p>로그인 성공 시 accessToken과 refreshToken을 발급한다.</p>
 </li>
+<li>
+<p>#TIP FCM 토큰 관련 세부 내용은 구현 전이므로, 만약 FCM 토큰이 없다면 "abc" 와 같은 임의의 문자열을 넣어 요청을 보내도 무관하다.</p>
+</li>
 </ul>
 </div>
 <div class="sect3">
@@ -619,6 +622,9 @@ Content-Length: 86
 <h3 id="_닉네임_중복_체크">닉네임 중복 체크</h3>
 <div class="ulist">
 <ul>
+<li>
+<p>#TIP '닉네임 중복' 조건을 더이상 체크하지 않기 때문에, FE에 반영된 후 삭제될 예정</p>
+</li>
 <li>
 <p>중복된 닉네임이 존재할 경우 true, 존재하지 않을 경우 false를 리턴한다.</p>
 </li>
@@ -4761,6 +4767,30 @@ Content-Length: 57
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>X-AUTH-TOKEN</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">*액세스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_로그아웃_request_fields">Request fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 36.3636%;">
+<col style="width: 18.1818%;">
+<col style="width: 45.4546%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fcmToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*FCM 토큰</p></td>
 </tr>
 </tbody>
 </table>

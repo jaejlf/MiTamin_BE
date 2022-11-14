@@ -26,7 +26,7 @@ operation::user/getCreatedAt[snippets='request-headers,response-fields']
 === 로그아웃
 
 operation::user/logout[snippets='http-request,http-response']
-operation::user/logout[snippets='request-headers,response-fields']
+operation::user/logout[snippets='request-headers,request-fields,response-fields']
 
 === 기록 초기화
 * 초기화할 데이터는 true, 그렇지 않은 데이터는 false를 넣어 요청한다.
