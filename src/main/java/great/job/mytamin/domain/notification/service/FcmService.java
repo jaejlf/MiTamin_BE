@@ -1,6 +1,5 @@
 package great.job.mytamin.domain.notification.service;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -21,7 +20,10 @@ import java.util.Objects;
 public class FcmService {
 
     @Value("${fcm.url}")
-    private String API_URL;
+    private String apiUrl;
+
+    @Value("${fcm.logo}")
+    private String logoImageUrl;
 
     private final ObjectMapper objectMapper;
 
@@ -30,7 +32,7 @@ public class FcmService {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder()
-                .url(API_URL)
+                .url(apiUrl)
                 .post(requestBody)
                 .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
@@ -40,16 +42,19 @@ public class FcmService {
         System.out.println(Objects.requireNonNull(response.body()).string());
     }
 
-    private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
-                .message(FcmMessage.Message.builder()
-                        .token(targetToken)
-                        .notification(FcmMessage.Notification.builder()
-                                .title(title)
-                                .body(body)
-                                .image(null)
-                                .build()
-                        ).build()).validateOnly(false).build();
+                .message(
+                        FcmMessage.Message.builder()
+                                .token(targetToken)
+                                .notification(FcmMessage.Notification.builder()
+                                        .title(title)
+                                        .body(body)
+                                        .image(logoImageUrl)
+                                        .build()
+                                ).build())
+                .validateOnly(false)
+                .build();
 
         return objectMapper.writeValueAsString(fcmMessage);
     }

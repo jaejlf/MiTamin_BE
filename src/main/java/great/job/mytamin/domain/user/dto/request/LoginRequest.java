@@ -12,4 +12,5 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequest {
     @NotBlank String email;
     @NotBlank String password;
+    @NotBlank String fcmToken;
 }

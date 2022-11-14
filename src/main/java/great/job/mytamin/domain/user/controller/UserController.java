@@ -68,8 +68,9 @@ public class UserController {
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<Object> logout(@AuthenticationPrincipal User user) {
-        userService.logout(user);
+    public ResponseEntity<Object> logout(@AuthenticationPrincipal User user,
+                                         @RequestBody Map<String, String> request) {
+        userService.logout(user, request);
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("로그아웃"));

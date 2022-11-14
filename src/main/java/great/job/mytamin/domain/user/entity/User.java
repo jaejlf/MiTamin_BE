@@ -49,6 +49,9 @@ public class User implements UserDetails {
     private String refreshToken = "";
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @ElementCollection
+    private List<String> fcmTokenList = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
@@ -92,6 +95,10 @@ public class User implements UserDetails {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateFcmTokenList(List<String> fcmTokenList) {
+        this.fcmTokenList = fcmTokenList;
     }
 
     /*

@@ -232,11 +232,15 @@ class UserControllerTest extends CommonControllerTest {
     @Test
     void logout(TestInfo testInfo) throws Exception {
         //given
-        doNothing().when(userService).logout(any());
+        Map<String, String> map = new HashMap<>();
+        map.put("fcmToken", "{{FCM TOKEN}}");
+
+        doNothing().when(userService).logout(any(), any());
 
         // when
         ResultActions actions = mockMvc.perform(delete("/user/logout")
                 .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .content(objectMapper.writeValueAsString(map))
                 .contentType(APPLICATION_JSON));
 
         //then
@@ -246,6 +250,9 @@ class UserControllerTest extends CommonControllerTest {
                 .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                         requestHeaders(
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("fcmToken").description("*FCM 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),
