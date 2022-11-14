@@ -11,7 +11,6 @@ import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.FcmUtil;
 import great.job.mytamin.domain.util.UserUtil;
-import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 import java.util.Objects;
-
-import static great.job.mytamin.global.exception.ErrorMap.NICKNAME_DUPLICATE_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -106,7 +103,7 @@ public class UserService {
 
     private void updateNickname(User user, String nickname) {
         if (Objects.equals(user.getNickname(), nickname)) return; // 변경되지 않았다면
-        if (userUtil.isNicknameDuplicate(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        // if (userUtil.isNicknameDuplicate(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
         user.updateNickname(nickname);
     }
 

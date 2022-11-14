@@ -18,9 +18,6 @@ operation::user/getProfile[snippets='request-headers,response-fields']
 operation::user/updateProfile[snippets='http-request,http-response']
 operation::user/updateProfile[snippets='request-headers,request-parts,request-parameters,response-fields']
 
-==== Exception response
-include::{snippets}/user/updateProfile_2003/http-response.adoc[]
-
 === 가입 날짜 조회
 
 operation::user/getCreatedAt[snippets='http-request,http-response']

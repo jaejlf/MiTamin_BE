@@ -128,7 +128,7 @@ public class AuthService {
         validatePasswordPattern(request.getPassword());
 
         if (userUtil.isEmailDuplicate(request.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        if (userUtil.isNicknameDuplicate(request.getNickname())) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
+        // if (userUtil.isNicknameDuplicate(request.getNickname())) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
         if (request.getMytaminHour() != null) timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
     }
 

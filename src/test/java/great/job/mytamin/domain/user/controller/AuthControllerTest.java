@@ -182,32 +182,32 @@ class AuthControllerTest extends CommonControllerTest {
                     );
         }
 
-        @DisplayName("이미 사용 중인 닉네임")
-        @Test
-        void signUp_2003(TestInfo testInfo) throws Exception {
-            //given
-            given(authService.signUp(any())).willThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR));
-
-            //when
-            ResultActions actions = mockMvc.perform(post("/auth/signup")
-                    .content(objectMapper.writeValueAsString(signUpRequest))
-                    .contentType(APPLICATION_JSON));
-
-            //then
-            actions
-                    .andDo(print())
-                    .andExpect(status().isConflict())
-                    .andExpect(jsonPath("errorCode").value(2003))
-                    .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
-                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            responseFields(
-                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("errorCode").description("고유 에러 코드"),
-                                    fieldWithPath("errorName").description("오류 이름"),
-                                    fieldWithPath("message").description("오류 메세지")
-                            ))
-                    );
-        }
+//        @DisplayName("이미 사용 중인 닉네임")
+//        @Test
+//        void signUp_2003(TestInfo testInfo) throws Exception {
+//            //given
+//            given(authService.signUp(any())).willThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR));
+//
+//            //when
+//            ResultActions actions = mockMvc.perform(post("/auth/signup")
+//                    .content(objectMapper.writeValueAsString(signUpRequest))
+//                    .contentType(APPLICATION_JSON));
+//
+//            //then
+//            actions
+//                    .andDo(print())
+//                    .andExpect(status().isConflict())
+//                    .andExpect(jsonPath("errorCode").value(2003))
+//                    .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
+//                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+//                            responseFields(
+//                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+//                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+//                                    fieldWithPath("errorName").description("오류 이름"),
+//                                    fieldWithPath("message").description("오류 메세지")
+//                            ))
+//                    );
+//        }
 
     }
 

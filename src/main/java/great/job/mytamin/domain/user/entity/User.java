@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private String password;
 
     @Length(min = 1, max = 9)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nickname;
 
     @Length(max = 300)
