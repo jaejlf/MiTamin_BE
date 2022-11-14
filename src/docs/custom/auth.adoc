@@ -16,7 +16,6 @@ operation::auth/signUp[snippets='request-fields,response-fields']
 include::{snippets}/auth/signUp_2000/http-response.adoc[]
 include::{snippets}/auth/signUp_2001/http-response.adoc[]
 include::{snippets}/auth/signUp_2002/http-response.adoc[]
-include::{snippets}/auth/signUp_2003/http-response.adoc[]
 
 === 기본 로그인
 * 로그인 성공 시 accessToken과 refreshToken을 발급한다.

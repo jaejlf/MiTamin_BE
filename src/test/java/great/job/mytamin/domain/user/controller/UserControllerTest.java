@@ -4,7 +4,6 @@ import great.job.mytamin.domain.user.dto.request.InitRequest;
 import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.service.UserService;
-import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,11 +18,9 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import java.util.HashMap;
 import java.util.Map;
 
-import static great.job.mytamin.global.exception.ErrorMap.NICKNAME_DUPLICATE_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -132,42 +129,42 @@ class UserControllerTest extends CommonControllerTest {
                     );
         }
 
-        @DisplayName("이미 사용 중인 닉네임")
-        @Test
-        void updateProfile_2003(TestInfo testInfo) throws Exception {
-            //given
-            doThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR)).when(userService).updateProfile(any(), any());
-
-            // when
-            MockMultipartHttpServletRequestBuilder builder = multipart("/user/profile");
-            builder.with(request -> {
-                request.setMethod("PUT");
-                return request;
-            });
-
-            ResultActions actions = mockMvc.perform(builder
-                    .file(file)
-                    .param("isImgEdited", profileUpdateRequest.getIsImgEdited())
-                    .param("nickname", profileUpdateRequest.getNickname())
-                    .param("beMyMessage", profileUpdateRequest.getBeMyMessage())
-                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
-                    .contentType(MULTIPART_FORM_DATA));
-
-            //then
-            actions
-                    .andDo(print())
-                    .andExpect(status().isConflict())
-                    .andExpect(jsonPath("errorCode").value(2003))
-                    .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
-                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-                            responseFields(
-                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-                                    fieldWithPath("errorCode").description("고유 에러 코드"),
-                                    fieldWithPath("errorName").description("오류 이름"),
-                                    fieldWithPath("message").description("오류 메세지")
-                            ))
-                    );
-        }
+//        @DisplayName("이미 사용 중인 닉네임")
+//        @Test
+//        void updateProfile_2003(TestInfo testInfo) throws Exception {
+//            //given
+//            doThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR)).when(userService).updateProfile(any(), any());
+//
+//            // when
+//            MockMultipartHttpServletRequestBuilder builder = multipart("/user/profile");
+//            builder.with(request -> {
+//                request.setMethod("PUT");
+//                return request;
+//            });
+//
+//            ResultActions actions = mockMvc.perform(builder
+//                    .file(file)
+//                    .param("isImgEdited", profileUpdateRequest.getIsImgEdited())
+//                    .param("nickname", profileUpdateRequest.getNickname())
+//                    .param("beMyMessage", profileUpdateRequest.getBeMyMessage())
+//                    .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+//                    .contentType(MULTIPART_FORM_DATA));
+//
+//            //then
+//            actions
+//                    .andDo(print())
+//                    .andExpect(status().isConflict())
+//                    .andExpect(jsonPath("errorCode").value(2003))
+//                    .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
+//                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
+//                            responseFields(
+//                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
+//                                    fieldWithPath("errorCode").description("고유 에러 코드"),
+//                                    fieldWithPath("errorName").description("오류 이름"),
+//                                    fieldWithPath("message").description("오류 메세지")
+//                            ))
+//                    );
+//        }
 
     }
 
