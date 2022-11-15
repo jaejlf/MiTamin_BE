@@ -1,6 +1,6 @@
 # 마음 면역력을 키우는 멘탈케어 서비스, 마이타민
 
-![image](https://user-images.githubusercontent.com/78673570/201472445-f5ccbde5-711e-42e2-b9a1-8dd89c6c721d.png)
+![image](https://user-images.githubusercontent.com/78673570/201825604-6b8cfee0-6e08-4d38-be59-728529356de1.png)
 
 ## 💊 프로젝트 소개
 
@@ -16,25 +16,32 @@
 
 <br>
 
+## 🔗 Download
+- Play Store. https://bit.ly/mitamin_aos 
+- App  Store. https://bit.ly/mitamin_ios
+
+<br>
+
 ## 🛠 기술 스택
 
-- `Spring Boot(Java)` 를 사용하여 API 를 개발하였고, `JPA`와 `QueryDSL` 기술을 사용하였습니다.
+- `Spring Boot(Java)` 를 사용하여 API 를 개발하였고, `JPA` 와 `QueryDSL` 기술을 사용하였습니다.
 - 데이터베이스로는 `AWS RDS(MySQL)` 를 사용하였고, `AWS EC2` 를 통해 서버 배포를 진행하였습니다.
 - 이미지 업로드를 위해 `AWS S3` 버킷을 사용하였습니다.
-- 협업 및 코드 버전 관리를 위해 `Github` 및 `Jira`, API 문서 관리를 위해 `Spring Rest Docs`를 사용하였습니다.
+- 협업 및 코드 버전 관리를 위해 `Github` 및 `Jira`, API 문서 관리를 위해 `Spring Rest Docs` 를 사용하였습니다.
 - `Nginx` 를 통해 무중단 배포 환경을 구성하였습니다.
 
 <br>
 
 ## 👩‍💻 개발 내용
 
-- 회원 - JWT + Spring Security를 통한 로그인
+- JWT + Spring Security를 통한 로그인
+- 이메일 인증 기능
 - 조건에 따른 칭찬 처방 기록 필터링 검색
 - 칭찬 처방 기록 랜덤 조회
 - 데이노트(= 게시글) 관련 기능
 - 이번 달의 감정 랭킹 TOP3
 - 날짜에 따른 월간/주간 감정 통계 기록 조회
-- 기록 초기화
+- 사용자 정의 시간에 따른 섭취 푸시 알림
 
 <br>
 
