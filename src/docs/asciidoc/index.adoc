@@ -3,7 +3,7 @@ ifndef::snippets[]
 endif::[]
 :custom: /../../src/docs/custom
 
-= 💊 My Tamin API Document
+= MiTamin API Document
 
 == Auth
 include::{snippets}{custom}/auth.adoc[]
