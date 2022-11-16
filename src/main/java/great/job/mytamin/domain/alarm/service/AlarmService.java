@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 import static great.job.mytamin.domain.alarm.enumerate.MydayAlarm.NONE;
 import static great.job.mytamin.domain.alarm.enumerate.MydayAlarm.convertCodeToMsg;
 
@@ -46,9 +48,10 @@ public class AlarmService {
     마이타민 알림 OFF
     */
     @Transactional
-    public void turnOffMytaminAlarm(User user) {
+    public void turnOffMytaminAlarm(User user, Map<String, String> request) {
         user.getAlarm().updateMytaminAlarmOn(false);
         userRepository.save(user);
+        fcmOnRepository.deleteByFcmToken(request.get("fcmToken")); // FCM 토큰 삭제
     }
 
     /*
