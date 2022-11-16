@@ -1,4 +1,4 @@
-package great.job.mytamin.domain.user.enumerate;
+package great.job.mytamin.domain.myday.enumerate;
 
 import great.job.mytamin.global.exception.MytaminException;
 import lombok.Getter;

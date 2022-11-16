@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static great.job.mytamin.domain.user.enumerate.MydayAlarm.convertCodeToMsg;
+import static great.job.mytamin.domain.myday.enumerate.MydayAlarm.NONE;
+import static great.job.mytamin.domain.myday.enumerate.MydayAlarm.convertCodeToMsg;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +69,7 @@ public class AlarmService {
     @Transactional
     public void turnOffMydayAlarm(User user) {
         user.getAlarm().updateMydayAlarmOn(false);
+        user.getAlarm().updateMydayWhen(NONE.getMsg());
         userRepository.save(user);
     }
 

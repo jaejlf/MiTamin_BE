@@ -24,9 +24,15 @@ public class Myday {
     이번 달의 마이 데이
     */
     private LocalDateTime dateOfMyday;
+    private LocalDateTime today;
+    private LocalDateTime dayAgo;
+    private LocalDateTime weekAgo;
 
-    public Myday(LocalDateTime dateOfMyday) {
+    public Myday(LocalDateTime dateOfMyday, LocalDateTime today, LocalDateTime dayAgo, LocalDateTime weekAgo) {
         this.dateOfMyday = dateOfMyday;
+        this.today = today;
+        this.dayAgo = dayAgo;
+        this.weekAgo = weekAgo;
     }
 
     /*

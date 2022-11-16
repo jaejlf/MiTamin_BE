@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -35,6 +32,9 @@ public class Alarm {
     */
     private Boolean mytaminAlarmOn;
     private Boolean mydayAlarmOn = false;
+
+    @OneToOne(mappedBy = "alarm")
+    private User user;
 
     public Alarm(String mytaminHour, String mytaminMin, Boolean mytaminAlarmOn) {
         this.mytaminHour = mytaminHour;

@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import static great.job.mytamin.domain.user.enumerate.MydayMessage.*;
+import static great.job.mytamin.domain.myday.enumerate.MydayMessage.*;
 
 @Slf4j
 @Service
@@ -44,6 +44,8 @@ public class MydayService {
     @Scheduled(cron = "0 0 0 1 * *") // 매월 1일 정각
     public void updateDateOfMyday() {
 
+        log.info("### 마이데이 스케쥴러 실행 중 ... ###");
+
         // 15일 ~ 30일 중 랜덤 일자 생성
         int rangeStart = 15;
         int rangeEnd = 30;
@@ -61,7 +63,7 @@ public class MydayService {
         myday.updateDateOfMyday(dateOfMyday);
         mydayRepository.save(myday);
 
-        log.info(now + " 마이데이 날짜 업데이트 완료");
+        log.info(now.format(DateTimeFormatter.ofPattern("yy년 MM월의 마이데이 날짜 업데이트 완료")));
 
     }
 
@@ -97,14 +99,5 @@ public class MydayService {
 
         return map;
     }
-    
-    /*
-    ** 마이데이 초기 데이터 생성
-    ** 초기값 : 22.11.21 00:00 으로 임의 설정
-    */
-    public void init() {
-        Myday myday = new Myday(LocalDateTime.of(2022, 11, 21, 0, 0));
-        mydayRepository.save(myday);
-    }
-    
+
 }
