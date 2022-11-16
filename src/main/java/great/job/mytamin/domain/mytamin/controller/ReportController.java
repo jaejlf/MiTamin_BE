@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -27,7 +28,7 @@ public class ReportController {
 
     @PostMapping("/new")
     public ResponseEntity<Object> createReport(@AuthenticationPrincipal User user,
-                                               @RequestBody ReportRequest request) {
+                                               @RequestBody @Valid ReportRequest request) {
         ReportResponse result = reportService.createReport(user, request);
         return ResponseEntity
                 .status(CREATED)
@@ -46,7 +47,7 @@ public class ReportController {
     @PutMapping("/{reportId}")
     public ResponseEntity<Object> updateReport(@AuthenticationPrincipal User user,
                                                @PathVariable Long reportId,
-                                               @RequestBody ReportRequest request) {
+                                               @RequestBody @Valid ReportRequest request) {
         reportService.updateReport(user, reportId, request);
         return ResponseEntity
                 .status(OK)

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class CareController {
 
     @PostMapping("/new")
     public ResponseEntity<Object> createCare(@AuthenticationPrincipal User user,
-                                             @RequestBody CareRequest request) {
+                                             @RequestBody @Valid CareRequest request) {
         CareResponse result = careService.createCare(user, request);
         return ResponseEntity
                 .status(CREATED)
@@ -48,7 +49,7 @@ public class CareController {
     @PutMapping("/{careId}")
     public ResponseEntity<Object> updateCare(@AuthenticationPrincipal User user,
                                              @PathVariable Long careId,
-                                             @RequestBody CareRequest request) {
+                                             @RequestBody @Valid CareRequest request) {
         careService.updateCare(user, careId, request);
         return ResponseEntity
                 .status(OK)
@@ -65,7 +66,7 @@ public class CareController {
 
     @PostMapping("/list")
     public ResponseEntity<Object> getCareHistroy(@AuthenticationPrincipal User user,
-                                                 @RequestBody CareSearchFilter filter) {
+                                                 @RequestBody @Valid CareSearchFilter filter) {
         Map<String, List<CareHistoryResponse>> result = careService.getCareHistroy(user, filter);
         return ResponseEntity
                 .status(OK)

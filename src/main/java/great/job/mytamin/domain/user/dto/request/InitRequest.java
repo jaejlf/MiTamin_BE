@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class InitRequest {
-    @NotBlank boolean initReport;
-    @NotBlank boolean initCare;
-    @NotBlank boolean initMyday;
+    @NotNull boolean initReport;
+    @NotNull boolean initCare;
+    @NotNull boolean initMyday;
 }

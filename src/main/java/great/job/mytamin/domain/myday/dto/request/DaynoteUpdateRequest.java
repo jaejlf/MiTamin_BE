@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class DaynoteUpdateRequest {
     List<MultipartFile> fileList;
-//    @NotBlank String isImgEdited;
     @NotBlank String wishId;
     @NotBlank String note;
 }

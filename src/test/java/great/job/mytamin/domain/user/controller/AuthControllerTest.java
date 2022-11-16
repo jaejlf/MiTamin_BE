@@ -186,8 +186,7 @@ class AuthControllerTest extends CommonControllerTest {
 
         LoginRequest loginRequest = new LoginRequest(
                 "mytamin@naver.com",
-                "password1234",
-                "{{FCM_TOKEN}}"
+                "password1234"
         );
 
         @DisplayName("성공")
@@ -214,8 +213,7 @@ class AuthControllerTest extends CommonControllerTest {
                     .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
-                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
-                                    fieldWithPath("fcmToken").description("*FCM 토큰")
+                                    fieldWithPath("password").description("*비밀번호 (8 ~ 30자)")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
