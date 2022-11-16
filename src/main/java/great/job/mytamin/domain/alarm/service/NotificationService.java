@@ -1,12 +1,11 @@
-package great.job.mytamin.domain.notification.service;
+package great.job.mytamin.domain.alarm.service;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
-import great.job.mytamin.domain.alarm.service.FcmService;
+import great.job.mytamin.domain.alarm.entity.FcmOn;
+import great.job.mytamin.domain.alarm.enumerate.MydayAlarm;
+import great.job.mytamin.domain.alarm.repository.FcmOnRepository;
 import great.job.mytamin.domain.myday.entity.Myday;
-import great.job.mytamin.domain.myday.enumerate.MydayAlarm;
 import great.job.mytamin.domain.myday.repository.MydayRepository;
-import great.job.mytamin.domain.user.entity.FcmOn;
-import great.job.mytamin.domain.user.repository.FcmOnRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static great.job.mytamin.domain.myday.enumerate.MydayAlarm.*;
+import static great.job.mytamin.domain.alarm.enumerate.MydayAlarm.*;
 
 @Slf4j
 @Service
@@ -61,7 +60,7 @@ public class NotificationService {
         else if (target.equals(myday.getWeekAgo())) mydayAlarm = WEEK_AGO;
 
         if (mydayAlarm != NONE) {
-            fcmService.sendTopicMessage(mydayAlarm.getTopic(), "마이데이 " + mydayAlarm.getMsg(), "마이데이가 곧 시작됩니다!");
+            fcmService.sendTopicMessage(mydayAlarm.getTopic(), "마이데이 " + mydayAlarm.getMsg(), mydayAlarm.getBody());
             log.info(">>> 마이데이 섭취 시간 알림 발송 완료 <<<");
         }
     }

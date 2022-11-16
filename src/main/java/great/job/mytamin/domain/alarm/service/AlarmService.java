@@ -1,19 +1,19 @@
-package great.job.mytamin.domain.user.service;
+package great.job.mytamin.domain.alarm.service;
 
 import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingInfoResponse;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
-import great.job.mytamin.domain.user.entity.FcmOn;
+import great.job.mytamin.domain.alarm.entity.FcmOn;
 import great.job.mytamin.domain.user.entity.User;
-import great.job.mytamin.domain.user.repository.FcmOnRepository;
+import great.job.mytamin.domain.alarm.repository.FcmOnRepository;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static great.job.mytamin.domain.myday.enumerate.MydayAlarm.NONE;
-import static great.job.mytamin.domain.myday.enumerate.MydayAlarm.convertCodeToMsg;
+import static great.job.mytamin.domain.alarm.enumerate.MydayAlarm.NONE;
+import static great.job.mytamin.domain.alarm.enumerate.MydayAlarm.convertCodeToMsg;
 
 @Service
 @RequiredArgsConstructor

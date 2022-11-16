@@ -1,5 +1,6 @@
-package great.job.mytamin.domain.user.entity;
+package great.job.mytamin.domain.alarm.entity;
 
+import great.job.mytamin.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

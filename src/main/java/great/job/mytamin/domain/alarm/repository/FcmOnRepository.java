@@ -1,6 +1,6 @@
-package great.job.mytamin.domain.user.repository;
+package great.job.mytamin.domain.alarm.repository;
 
-import great.job.mytamin.domain.user.entity.FcmOn;
+import great.job.mytamin.domain.alarm.entity.FcmOn;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

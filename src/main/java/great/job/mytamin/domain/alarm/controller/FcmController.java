@@ -1,8 +1,8 @@
-package great.job.mytamin.domain.notification.controller;
+package great.job.mytamin.domain.alarm.controller;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import great.job.mytamin.domain.alarm.service.FcmService;
-import great.job.mytamin.domain.notification.dto.request.FcmRequest;
+import great.job.mytamin.domain.alarm.dto.request.FcmRequest;
 import great.job.mytamin.global.dto.response.NoDataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

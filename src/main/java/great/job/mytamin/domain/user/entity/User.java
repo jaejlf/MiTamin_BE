@@ -1,6 +1,8 @@
 package great.job.mytamin.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import great.job.mytamin.domain.alarm.entity.Alarm;
+import great.job.mytamin.domain.alarm.entity.FcmOn;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import lombok.AllArgsConstructor;

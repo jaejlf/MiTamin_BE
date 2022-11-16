@@ -1,4 +1,4 @@
-package great.job.mytamin.domain.notification.dto.request;
+package great.job.mytamin.domain.alarm.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

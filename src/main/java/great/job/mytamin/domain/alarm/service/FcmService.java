@@ -33,10 +33,6 @@ public class FcmService {
         this.instance.send(message);
     }
 
-    public BatchResponse sendMessage(MulticastMessage message) throws FirebaseMessagingException {
-        return this.instance.sendMulticast(message);
-    }
-
     @PostConstruct
     public void firebaseSetting() throws IOException {
         String firebaseConfigPath = "firebase/firebase-key.json";

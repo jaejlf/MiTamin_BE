@@ -8,7 +8,7 @@ import great.job.mytamin.domain.user.dto.request.InitRequest;
 import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.entity.User;
-import great.job.mytamin.domain.user.repository.FcmOnRepository;
+import great.job.mytamin.domain.alarm.repository.FcmOnRepository;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.service.AwsS3Service;

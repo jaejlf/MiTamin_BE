@@ -1,9 +1,9 @@
-package great.job.mytamin.domain.user.controller;
+package great.job.mytamin.domain.alarm.controller;
 
 import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
 import great.job.mytamin.domain.user.entity.User;
-import great.job.mytamin.domain.user.service.AlarmService;
+import great.job.mytamin.domain.alarm.service.AlarmService;
 import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
