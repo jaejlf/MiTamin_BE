@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,11 +24,6 @@ public class Alarm {
     */
     private String mytaminHour;
     private String mytaminMin;
-
-    /*
-    이번 달의 마이 데이
-    */
-    private LocalDateTime dateOfMyday;
 
     /*
     마이데이 알림 지정 시간
@@ -69,13 +63,6 @@ public class Alarm {
 
     public void updateMydayAlarmOn(Boolean isOn) {
         this.mydayAlarmOn = isOn;
-    }
-
-    /*
-    마이데이 날짜 업데이트
-    */
-    public void updateDateOfMyday(LocalDateTime dateOfMyday) {
-        this.dateOfMyday = dateOfMyday;
     }
 
 }

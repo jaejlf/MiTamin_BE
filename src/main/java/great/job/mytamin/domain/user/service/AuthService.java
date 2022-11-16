@@ -11,7 +11,6 @@ import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.FcmUtil;
-import great.job.mytamin.domain.util.MydayUtil;
 import great.job.mytamin.domain.util.TimeUtil;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
@@ -36,7 +35,6 @@ public class AuthService {
     private final EmailService emailService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserUtil userUtil;
-    private final MydayUtil mydayUtil;
     private final TimeUtil timeUtil;
     private final FcmUtil fcmUtil;
     private final UserRepository userRepository;
@@ -58,7 +56,6 @@ public class AuthService {
                 new Action()
         );
 
-        user.getAlarm().updateDateOfMyday(mydayUtil.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
         return UserResponse.of(userRepository.save(user));
     }
 
