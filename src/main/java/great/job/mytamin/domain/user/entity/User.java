@@ -47,10 +47,8 @@ public class User implements UserDetails {
     private String beMyMessage = "마음 면역력이 높아질";
 
     private String refreshToken = "";
+    private String fcmToken = "";
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    @ElementCollection
-    private List<String> fcmTokenList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
@@ -97,8 +95,8 @@ public class User implements UserDetails {
         this.refreshToken = refreshToken;
     }
 
-    public void updateFcmTokenList(List<String> fcmTokenList) {
-        this.fcmTokenList = fcmTokenList;
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
     /*

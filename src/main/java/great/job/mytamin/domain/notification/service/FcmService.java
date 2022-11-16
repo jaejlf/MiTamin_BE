@@ -22,9 +22,6 @@ public class FcmService {
     @Value("${fcm.url}")
     private String apiUrl;
 
-    @Value("${fcm.logo}")
-    private String logoImageUrl;
-
     private final ObjectMapper objectMapper;
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
@@ -50,7 +47,7 @@ public class FcmService {
                                 .notification(FcmMessage.Notification.builder()
                                         .title(title)
                                         .body(body)
-                                        .image(logoImageUrl)
+                                        .image(null)
                                         .build()
                                 ).build())
                 .validateOnly(false)

@@ -10,7 +10,6 @@ import great.job.mytamin.domain.user.entity.Alarm;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
-import great.job.mytamin.domain.util.FcmUtil;
 import great.job.mytamin.domain.util.TimeUtil;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +34,6 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserUtil userUtil;
     private final TimeUtil timeUtil;
-    private final FcmUtil fcmUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -70,11 +67,10 @@ public class AuthService {
         // 토큰 업데이트
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
         String refreshToken = jwtTokenProvider.createRefreshToken(user);
-        List<String> fcmTokenList = fcmUtil.addFcmToken(user, request.getFcmToken());
         
         // DB 업데이트
         user.updateRefreshToken(refreshToken);
-        user.updateFcmTokenList(fcmTokenList);
+        user.updateFcmToken(request.getFcmToken());
         userRepository.save(user);
 
         return TokenResponse.of(accessToken, refreshToken);

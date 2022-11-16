@@ -9,7 +9,6 @@ import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.repository.UserRepository;
-import great.job.mytamin.domain.util.FcmUtil;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ import java.util.Objects;
 public class UserService {
 
     private final UserUtil userUtil;
-    private final FcmUtil fcmUtil;
     private final AwsS3Service awsS3Service;
     private final DaynoteService daynoteService;
     private final WishService wishService;
@@ -60,7 +58,7 @@ public class UserService {
     @Transactional
     public void logout(User user, Map<String, String> request) {
         user.updateRefreshToken(""); // 리프레쉬 토큰 삭제
-        fcmUtil.deleteFcmToken(user, request.get("fcmToekn")); // FCM 토큰 삭제
+        user.updateFcmToken(""); // FCM 토큰 삭제
         userRepository.save(user);
     }
 
