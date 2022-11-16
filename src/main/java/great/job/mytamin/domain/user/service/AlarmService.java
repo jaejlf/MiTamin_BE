@@ -3,7 +3,9 @@ package great.job.mytamin.domain.user.service;
 import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingInfoResponse;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
+import great.job.mytamin.domain.user.entity.FcmOn;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.repository.FcmOnRepository;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class AlarmService {
 
     private final TimeUtil timeUtil;
     private final UserRepository userRepository;
+    private final FcmOnRepository fcmOnRepository;
 
     /*
     알림 설정 상태 조회
@@ -35,13 +38,8 @@ public class AlarmService {
     */
     @Transactional
     public void turnOnMytaminAlarm(User user, MytaminAlarmRequest request) {
-        timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
-        user.getAlarm().updateMytaminAlarmOn(true);
-        user.getAlarm().updateMytaminWhen(
-                request.getMytaminHour(),
-                request.getMytaminMin()
-        );
-        userRepository.save(user);
+        updateMytaminWhen(user, request);
+        updateFcmOn(user, request);
     }
 
     /*
@@ -89,6 +87,26 @@ public class AlarmService {
 
         if (mydayAlarmOn) mydayWhen = user.getAlarm().getMydayWhen(); // 알림이 켜져있는 경우 시간 정보 설정
         return SettingInfoResponse.of(mydayAlarmOn, mydayWhen);
+    }
+
+    private void updateMytaminWhen(User user, MytaminAlarmRequest request) {
+        timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
+        user.getAlarm().updateMytaminAlarmOn(true);
+        user.getAlarm().updateMytaminWhen(
+                request.getMytaminHour(),
+                request.getMytaminMin()
+        );
+        userRepository.save(user);
+    }
+
+    private void updateFcmOn(User user, MytaminAlarmRequest request) {
+        String fcmToken = request.getFcmToken();
+        FcmOn fcmOn = fcmOnRepository.findByFcmToken(fcmToken);
+        if (fcmOn == null) {
+            fcmOnRepository.save(new FcmOn(user, fcmToken));
+        } else {
+            fcmOn.updateMytaminWhen(user);
+        }
     }
 
 }

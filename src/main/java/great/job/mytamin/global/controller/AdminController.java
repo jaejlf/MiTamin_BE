@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 import static great.job.mytamin.global.exception.ErrorMap.UNAUTHORIZED_ERROR;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -32,14 +30,14 @@ public class AdminController {
                 .body(NoDataResponse.create("마이데이 초기 데이터 생성"));
     }
 
-    @GetMapping("/fcm/push/list")
-    public ResponseEntity<Object> getPusyList(@AuthenticationPrincipal User user) throws IOException {
-        if (!user.getRoles().contains("ROLE_ADMIN")) throw new MytaminException(UNAUTHORIZED_ERROR);
-        adminService.getMytaminPushList();
-        adminService.getMydayPushList();
-        return ResponseEntity
-                .status(CREATED)
-                .body(NoDataResponse.create("푸시 알림 리스트 테스트"));
-    }
+//    @GetMapping("/fcm/push/list")
+//    public ResponseEntity<Object> getPusyList(@AuthenticationPrincipal User user) throws IOException {
+//        if (!user.getRoles().contains("ROLE_ADMIN")) throw new MytaminException(UNAUTHORIZED_ERROR);
+//        adminService.getMytaminPushList();
+//        adminService.getMydayPushList();
+//        return ResponseEntity
+//                .status(CREATED)
+//                .body(NoDataResponse.create("푸시 알림 리스트 테스트"));
+//    }
 
 }

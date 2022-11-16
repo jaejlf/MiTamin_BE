@@ -10,13 +10,14 @@ import static great.job.mytamin.global.exception.ErrorMap.INVALID_MYDAY_ALARM_CO
 @RequiredArgsConstructor
 public enum MydayAlarm {
 
-    NONE(0, "없음"),
-    TODAY(1, "당일"),
-    DAY_AGO(2, "하루 전"),
-    WEEK_AGO(3, "일주일 전");
+    NONE(0, "없음", ""),
+    TODAY(1, "당일", "myday_today"),
+    DAY_AGO(2, "하루 전", "myday_dayago"),
+    WEEK_AGO(3, "일주일 전", "myday_weekago");
 
     private final int code;
     private final String msg;
+    private final String topic;
 
     public static String convertCodeToMsg(int code) {
         if (code == 0) return NONE.getMsg();

@@ -2,12 +2,10 @@ package great.job.mytamin.global.service;
 
 import great.job.mytamin.domain.myday.entity.Myday;
 import great.job.mytamin.domain.myday.repository.MydayRepository;
-import great.job.mytamin.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 public class AdminService {
 
     private final MydayRepository mydayRepository;
-    private final NotificationService notificationService;
+    //private final NotificationService notificationService;
 
     /*
     마이데이 초기 데이터 생성
@@ -32,14 +30,14 @@ public class AdminService {
         mydayRepository.save(myday);
     }
 
-    @Transactional(readOnly = true)
-    public void getMytaminPushList() throws IOException {
-        notificationService.notifyMytamin(LocalDateTime.now());
-    }
-
-    @Transactional(readOnly = true)
-    public void getMydayPushList() throws IOException {
-        notificationService.notifyMyday(LocalDateTime.now());
-    }
+//    @Transactional(readOnly = true)
+//    public void getMytaminPushList() throws IOException {
+//        notificationService.notifyMytamin(LocalDateTime.now());
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public void getMydayPushList() throws IOException {
+//        notificationService.notifyMyday(LocalDateTime.now());
+//    }
 
 }

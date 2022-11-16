@@ -30,7 +30,7 @@ public class Alarm {
     /*
     알림 설정
     */
-    private Boolean mytaminAlarmOn;
+    private Boolean mytaminAlarmOn = false;
     private Boolean mydayAlarmOn = false;
 
     @OneToOne(mappedBy = "alarm")

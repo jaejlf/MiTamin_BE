@@ -8,6 +8,7 @@ import great.job.mytamin.domain.user.dto.request.InitRequest;
 import great.job.mytamin.domain.user.dto.request.ProfileUpdateRequest;
 import great.job.mytamin.domain.user.dto.response.ProfileResponse;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.user.repository.FcmOnRepository;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.service.AwsS3Service;
@@ -31,6 +32,7 @@ public class UserService {
     private final ReportService reportService;
     private final CareService careService;
     private final UserRepository userRepository;
+    private final FcmOnRepository fcmOnRepository;
     private final PasswordEncoder passwordEncoder;
 
     /*
@@ -58,7 +60,7 @@ public class UserService {
     @Transactional
     public void logout(User user, Map<String, String> request) {
         user.updateRefreshToken(""); // 리프레쉬 토큰 삭제
-        user.updateFcmToken(""); // FCM 토큰 삭제
+        fcmOnRepository.deleteByFcmToken(request.get("fcmToken")); // FCM 토큰 삭제
         userRepository.save(user);
     }
 
@@ -101,7 +103,6 @@ public class UserService {
 
     private void updateNickname(User user, String nickname) {
         if (Objects.equals(user.getNickname(), nickname)) return; // 변경되지 않았다면
-        // if (userUtil.isNicknameDuplicate(nickname)) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
         user.updateNickname(nickname);
     }
 

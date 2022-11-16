@@ -1,71 +1,53 @@
-package great.job.mytamin.domain.notification.service;
+package great.job.mytamin.domain.alarm.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
-import great.job.mytamin.domain.notification.dto.response.FcmMessage;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
-import okhttp3.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class FcmService {
 
-    @Value("${fcm.url}")
-    private String apiUrl;
+    private FirebaseMessaging instance;
 
-    private final ObjectMapper objectMapper;
-
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
-        String message = makeMessage(targetToken, title, body);
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder()
-                .url(apiUrl)
-                .post(requestBody)
-                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-                .build();
-
-        Response response = client.newCall(request).execute();
-        System.out.println(Objects.requireNonNull(response.body()).string());
+    public void sendTargetMessage(String targetToken, String title, String body) throws FirebaseMessagingException {
+        Notification notification = Notification.builder().setTitle(title).setBody(body).build();
+        Message message = Message.builder().setToken(targetToken).setNotification(notification).build();
+        sendMessage(message);
     }
 
-    private String makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
-        FcmMessage fcmMessage = FcmMessage.builder()
-                .message(
-                        FcmMessage.Message.builder()
-                                .token(targetToken)
-                                .notification(FcmMessage.Notification.builder()
-                                        .title(title)
-                                        .body(body)
-                                        .image(null)
-                                        .build()
-                                ).build())
-                .validateOnly(false)
-                .build();
-
-        return objectMapper.writeValueAsString(fcmMessage);
+    public void sendTopicMessage(String topic, String title, String body) throws FirebaseMessagingException {
+        Notification notification = Notification.builder().setTitle(title).setBody(body).build();
+        Message message = Message.builder().setTopic(topic).setNotification(notification).build();
+        sendMessage(message);
     }
 
-    private String getAccessToken() throws IOException {
+    public void sendMessage(Message message) throws FirebaseMessagingException {
+        this.instance.send(message);
+    }
+
+    public BatchResponse sendMessage(MulticastMessage message) throws FirebaseMessagingException {
+        return this.instance.sendMulticast(message);
+    }
+
+    @PostConstruct
+    public void firebaseSetting() throws IOException {
         String firebaseConfigPath = "firebase/firebase-key.json";
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+                .createScoped(("https://www.googleapis.com/auth/firebase.messaging"));
 
-        GoogleCredentials googleCredentials =
-                GoogleCredentials
-                        .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-                        .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-
-        googleCredentials.refreshIfExpired();
-        return googleCredentials.getAccessToken().getTokenValue();
+        FirebaseOptions secondaryAppConfig = FirebaseOptions.builder()
+                .setCredentials(googleCredentials)
+                .build();
+        FirebaseApp app = FirebaseApp.initializeApp(secondaryAppConfig);
+        this.instance = FirebaseMessaging.getInstance(app);
     }
 
 }

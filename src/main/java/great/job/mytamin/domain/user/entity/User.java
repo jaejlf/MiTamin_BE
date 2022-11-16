@@ -47,7 +47,6 @@ public class User implements UserDetails {
     private String beMyMessage = "마음 면역력이 높아질";
 
     private String refreshToken = "";
-    private String fcmToken = "";
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
@@ -55,23 +54,25 @@ public class User implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "actionId")
-    private Action action;
+    private Action action = new Action();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "alarmId")
-    private Alarm alarm;
+    private Alarm alarm = new Alarm();
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private Set<Mytamin> mytaminSet = new HashSet<>();
 
-    public User(String email, String encodedPw, String nickname, Provider provider, Alarm alarm, Action action) {
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private Set<FcmOn> fcmOnSet = new HashSet<>();
+
+    public User(String email, String encodedPw, String nickname, Provider provider) {
         this.email = email;
         this.password = encodedPw;
         this.nickname = nickname;
         this.provider = provider;
-        this.alarm = alarm;
-        this.action = action;
         this.roles = Collections.singletonList("ROLE_USER");
     }
 
@@ -93,10 +94,6 @@ public class User implements UserDetails {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
-    }
-
-    public void updateFcmToken(String fcmToken) {
-        this.fcmToken = fcmToken;
     }
 
     /*
