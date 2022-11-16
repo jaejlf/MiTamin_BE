@@ -1,9 +1,10 @@
 package great.job.mytamin.domain.user.controller;
 
+import great.job.mytamin.domain.alarm.controller.AlarmController;
 import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingInfoResponse;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
-import great.job.mytamin.domain.user.service.AlarmService;
+import great.job.mytamin.domain.alarm.service.AlarmService;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -84,7 +85,7 @@ class AlarmControllerTest extends CommonControllerTest {
     @DisplayName("마이타민 알림 ON")
     class TurnOnMytaminAlarmTest {
 
-        MytaminAlarmRequest mytaminAlarmRequest = new MytaminAlarmRequest("22", "00");
+        MytaminAlarmRequest mytaminAlarmRequest = new MytaminAlarmRequest("22", "00", "{{FCM_TOKEN}}");
 
         @DisplayName("성공")
         @Test
@@ -108,7 +109,8 @@ class AlarmControllerTest extends CommonControllerTest {
                             ),
                             requestFields(
                                     fieldWithPath("mytaminHour").description("*마이타민 섭취 지정 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("*마이타민 섭취 지정 시간 MM")
+                                    fieldWithPath("mytaminMin").description("*마이타민 섭취 지정 시간 MM"),
+                                    fieldWithPath("fcmToken").description("*FCM 토큰")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),

@@ -59,9 +59,7 @@ class AuthControllerTest extends CommonControllerTest {
         SignUpRequest signUpRequest = new SignUpRequest(
                 "mytamin@naver.com",
                 "password1234",
-                "강철멘탈",
-                "22",
-                "00"
+                "강철멘탈"
         );
 
         @DisplayName("성공")
@@ -84,9 +82,7 @@ class AuthControllerTest extends CommonControllerTest {
                             requestFields(
                                     fieldWithPath("email").description("*이메일"),
                                     fieldWithPath("password").description("*비밀번호 (8 ~ 30자)"),
-                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)"),
-                                    fieldWithPath("mytaminHour").description("마이타민 섭취 지정 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("마이타민 섭취 지정 시간 MM")
+                                    fieldWithPath("nickname").description("*닉네임 (1 ~ 9자)")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -182,33 +178,6 @@ class AuthControllerTest extends CommonControllerTest {
                     );
         }
 
-//        @DisplayName("이미 사용 중인 닉네임")
-//        @Test
-//        void signUp_2003(TestInfo testInfo) throws Exception {
-//            //given
-//            given(authService.signUp(any())).willThrow(new MytaminException(NICKNAME_DUPLICATE_ERROR));
-//
-//            //when
-//            ResultActions actions = mockMvc.perform(post("/auth/signup")
-//                    .content(objectMapper.writeValueAsString(signUpRequest))
-//                    .contentType(APPLICATION_JSON));
-//
-//            //then
-//            actions
-//                    .andDo(print())
-//                    .andExpect(status().isConflict())
-//                    .andExpect(jsonPath("errorCode").value(2003))
-//                    .andExpect(jsonPath("errorName").value("NICKNAME_DUPLICATE_ERROR"))
-//                    .andDo(document(docId + testInfo.getTestMethod().get().getName(),
-//                            responseFields(
-//                                    fieldWithPath("statusCode").description("HTTP 상태 코드"),
-//                                    fieldWithPath("errorCode").description("고유 에러 코드"),
-//                                    fieldWithPath("errorName").description("오류 이름"),
-//                                    fieldWithPath("message").description("오류 메세지")
-//                            ))
-//                    );
-//        }
-
     }
 
     @Nested
@@ -218,7 +187,7 @@ class AuthControllerTest extends CommonControllerTest {
         LoginRequest loginRequest = new LoginRequest(
                 "mytamin@naver.com",
                 "password1234",
-                "{{FCM TOKEN}}"
+                "{{FCM_TOKEN}}"
         );
 
         @DisplayName("성공")
