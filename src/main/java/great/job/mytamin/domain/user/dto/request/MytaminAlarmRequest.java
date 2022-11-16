@@ -12,4 +12,5 @@ import javax.validation.constraints.NotBlank;
 public class MytaminAlarmRequest {
     @NotBlank String mytaminHour;
     @NotBlank String mytaminMin;
+    @NotBlank String fcmToken;
 }

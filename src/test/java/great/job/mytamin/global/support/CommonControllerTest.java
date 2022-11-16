@@ -2,8 +2,6 @@ package great.job.mytamin.global.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
-import great.job.mytamin.domain.user.entity.Action;
-import great.job.mytamin.domain.user.entity.Alarm;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.global.jwt.JwtAuthInterceptor;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,9 +49,7 @@ public class CommonControllerTest {
                 "mytamin@naver.com",
                 "{{ENCODED_PASSWORD}}",
                 "강철멘탈",
-                DEFAULT,
-                new Alarm("22", "00", true),
-                new Action()
+                DEFAULT
         );
 
         // Mock Mytamin

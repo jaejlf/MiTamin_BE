@@ -230,7 +230,7 @@ class UserControllerTest extends CommonControllerTest {
     void logout(TestInfo testInfo) throws Exception {
         //given
         Map<String, String> map = new HashMap<>();
-        map.put("fcmToken", "{{FCM TOKEN}}");
+        map.put("fcmToken", "{{FCM_TOKEN}}");
 
         doNothing().when(userService).logout(any(), any());
 

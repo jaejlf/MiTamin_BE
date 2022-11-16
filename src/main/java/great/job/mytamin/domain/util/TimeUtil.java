@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
-import static great.job.mytamin.domain.user.enumerate.MydayMessage.*;
 import static great.job.mytamin.global.exception.ErrorMap.DATETIME_PARSE_ERROR;
 
 @Component
@@ -22,13 +19,6 @@ public class TimeUtil {
     */
     public LocalDateTime convertToMytaminDate(LocalDateTime target) {
         if (target.getHour() <= 4) target = target.minusDays(1);
-        return LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 10, 0);
-    }
-
-    /*
-    LocalDateTime -> 시간(10:00) 커스텀 세팅
-    */
-    public LocalDateTime convertToCustomHHmm(LocalDateTime target) {
         return LocalDateTime.of(target.getYear(), target.getMonth().getValue(), target.getDayOfMonth(), 10, 0);
     }
 
@@ -136,16 +126,6 @@ public class TimeUtil {
     }
 
     /*
-    target이 이번 달의 날짜에 속하는지
-    */
-    public Boolean isCurrentMonth(LocalDateTime target) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth().getValue(), 1, 0, 0);
-        LocalDateTime end = getLastDayOfMonth(now);
-        return isInRange(target, start, end);
-    }
-
-    /*
     target 월의 마지막 날
     */
     public LocalDateTime getLastDayOfMonth(LocalDateTime target) {
@@ -154,39 +134,6 @@ public class TimeUtil {
         } else {
             return LocalDateTime.of(target.getYear(), target.getMonth().getValue() + 1, 1, 23, 59).minusDays(1);
         }
-    }
-
-    /*
-    마이데이 디데이 & 메세지 계산
-    */
-    public Map<String, String> getMydayInfo(String nickname, LocalDateTime dateOfMyDay) {
-        LocalDateTime now = LocalDateTime.now();
-        int dday = now.getDayOfMonth() - dateOfMyDay.getDayOfMonth();
-
-        Map<String, String> map = new HashMap<>();
-
-        // 마이데이 당일
-        if (dday == 0) {
-            map.put("dday", "D-Day");
-            map.put("comment", nickname + "님, " + THE_DAY_OF_MYDAY.getMsg());
-        }
-        // 마이데이 이전
-        else if (dday < -3) {
-            map.put("dday", "D" + dday + "일");
-            map.put("comment", BEFORE_MYDAY.getMsg());
-        }
-        // 마이데이 3일 전
-        else if (dday < 0) {
-            map.put("dday", "D" + dday + "일");
-            map.put("comment", SOON_MYDAY.getMsg());
-        }
-        // 마이데이 이후
-        else {
-            map.put("dday", "D+" + dday + "일");
-            map.put("comment", AFTER_MYDAY.getMsg());
-        }
-
-        return map;
     }
 
     /*

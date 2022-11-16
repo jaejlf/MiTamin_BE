@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -31,7 +32,7 @@ public class AuthController {
     private final EmailService emailService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signUp(@RequestBody SignUpRequest request) {
+    public ResponseEntity<Object> signUp(@RequestBody @Valid SignUpRequest request) {
         UserResponse result = authService.signUp(request);
         return ResponseEntity
                 .status(CREATED)
@@ -39,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/default/login")
-    public ResponseEntity<Object> defaultLogin(@RequestBody LoginRequest request) {
+    public ResponseEntity<Object> defaultLogin(@RequestBody @Valid LoginRequest request) {
         TokenResponse result = authService.defaultLogin(request);
         return ResponseEntity
                 .status(OK)
@@ -63,7 +64,7 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<Object> reissueToken(@RequestBody ReissueRequest request) {
+    public ResponseEntity<Object> reissueToken(@RequestBody @Valid ReissueRequest request) {
         TokenResponse result = authService.reissueToken(request);
         return ResponseEntity
                 .status(OK)
@@ -87,7 +88,7 @@ public class AuthController {
     }
 
     @PostMapping("/code")
-    public ResponseEntity<Object> confirmAuthCode(@RequestBody EmailCheckRequest request) {
+    public ResponseEntity<Object> confirmAuthCode(@RequestBody @Valid EmailCheckRequest request) {
         boolean result = emailService.confirmAuthCode(request);
         return ResponseEntity
                 .status(OK)

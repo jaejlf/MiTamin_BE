@@ -1,6 +1,8 @@
 package great.job.mytamin.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import great.job.mytamin.domain.alarm.entity.Alarm;
+import great.job.mytamin.domain.alarm.entity.FcmOn;
 import great.job.mytamin.domain.mytamin.entity.Mytamin;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import lombok.AllArgsConstructor;
@@ -49,31 +51,30 @@ public class User implements UserDetails {
     private String refreshToken = "";
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ElementCollection
-    private List<String> fcmTokenList = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "actionId")
-    private Action action;
+    private Action action = new Action();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "alarmId")
-    private Alarm alarm;
+    private Alarm alarm = new Alarm();
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private Set<Mytamin> mytaminSet = new HashSet<>();
 
-    public User(String email, String encodedPw, String nickname, Provider provider, Alarm alarm, Action action) {
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private Set<FcmOn> fcmOnSet = new HashSet<>();
+
+    public User(String email, String encodedPw, String nickname, Provider provider) {
         this.email = email;
         this.password = encodedPw;
         this.nickname = nickname;
         this.provider = provider;
-        this.alarm = alarm;
-        this.action = action;
         this.roles = Collections.singletonList("ROLE_USER");
     }
 
@@ -95,10 +96,6 @@ public class User implements UserDetails {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
-    }
-
-    public void updateFcmTokenList(List<String> fcmTokenList) {
-        this.fcmTokenList = fcmTokenList;
     }
 
     /*

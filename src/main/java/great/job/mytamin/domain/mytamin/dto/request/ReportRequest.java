@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportRequest {
-    @NotBlank int mentalConditionCode;
+    @NotNull int mentalConditionCode;
     @NotBlank String tag1;
     String tag2;
     String tag3;

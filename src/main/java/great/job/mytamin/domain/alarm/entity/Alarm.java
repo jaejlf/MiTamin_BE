@@ -1,14 +1,11 @@
-package great.job.mytamin.domain.user.entity;
+package great.job.mytamin.domain.alarm.entity;
 
+import great.job.mytamin.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -27,11 +24,6 @@ public class Alarm {
     private String mytaminMin;
 
     /*
-    이번 달의 마이 데이
-    */
-    private LocalDateTime dateOfMyday;
-
-    /*
     마이데이 알림 지정 시간
     */
     private String mydayWhen;
@@ -39,8 +31,11 @@ public class Alarm {
     /*
     알림 설정
     */
-    private Boolean mytaminAlarmOn;
+    private Boolean mytaminAlarmOn = false;
     private Boolean mydayAlarmOn = false;
+
+    @OneToOne(mappedBy = "alarm")
+    private User user;
 
     public Alarm(String mytaminHour, String mytaminMin, Boolean mytaminAlarmOn) {
         this.mytaminHour = mytaminHour;
@@ -69,13 +64,6 @@ public class Alarm {
 
     public void updateMydayAlarmOn(Boolean isOn) {
         this.mydayAlarmOn = isOn;
-    }
-
-    /*
-    마이데이 날짜 업데이트
-    */
-    public void updateDateOfMyday(LocalDateTime dateOfMyday) {
-        this.dateOfMyday = dateOfMyday;
     }
 
 }

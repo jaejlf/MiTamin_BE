@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -78,7 +79,7 @@ public class UserController {
 
     @DeleteMapping("/init")
     public ResponseEntity<Object> initData(@AuthenticationPrincipal User user,
-                                           @RequestBody InitRequest request) {
+                                           @RequestBody @Valid InitRequest request) {
         userService.initData(user, request);
         return ResponseEntity
                 .status(OK)

@@ -18,7 +18,7 @@ operation::alarm/turnOnMytaminAlarm[snippets='request-headers,request-fields,res
 === 마이타민 알림 OFF
 
 operation::alarm/turnOffMytaminAlarm[snippets='http-request,http-response']
-operation::alarm/turnOffMytaminAlarm[snippets='request-headers,response-fields']
+operation::alarm/turnOffMytaminAlarm[snippets='request-headers,request-fields,response-fields']
 
 === 마이데이 알림 ON
 * 마이데이 지정 시간은 각 시간에 해당하는 int 타입의 코드를 보낸다.
@@ -27,6 +27,10 @@ operation::alarm/turnOffMytaminAlarm[snippets='request-headers,response-fields']
     ** 1 : "당일"
     ** 2 : "하루 전"
     ** 3 : "일주일 전"
+* 해당 로직을 실행할 때, 클라이언트 측의 'FCM 토픽 구독' 작업이 추가적으로 필요하다. 아래의 토픽 이름에 따라, 사용자가 설정한 조건에 맞는 토픽을 구독한다.
+    ** '당일' 토픽 이름 : "myday_today"
+    ** '하루 전' 토픽 이름 : "myday_dayago"
+    ** '일주일 전' 토픽 이름 : "myday_weekago"
 
 operation::alarm/turnOnMydayAlarm[snippets='http-request,http-response']
 operation::alarm/turnOnMydayAlarm[snippets='request-headers,response-fields']
@@ -35,5 +39,10 @@ operation::alarm/turnOnMydayAlarm[snippets='request-headers,response-fields']
 include::{snippets}/alarm/turnOnMydayAlarm_3002/http-response.adoc[]
 
 === 마이데이 알림 OFF
+* 해당 로직을 실행할 때, 클라이언트 측의 'FCM 토픽 구독 해제' 작업이 추가적으로 필요하다. 아래의 토픽 이름에 따라, 사용자가 해제한 조건에 맞는 토픽을 구독 해제한다.
+    ** '당일' 토픽 이름 : "myday_today"
+    ** '하루 전' 토픽 이름 : "myday_dayago"
+    ** '일주일 전' 토픽 이름 : "myday_weekago"
+
 operation::alarm/turnOffMydayAlarm[snippets='http-request,http-response']
 operation::alarm/turnOffMydayAlarm[snippets='request-headers,response-fields']

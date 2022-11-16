@@ -1,16 +1,21 @@
-package great.job.mytamin.domain.user.service;
+package great.job.mytamin.domain.alarm.service;
 
 import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingInfoResponse;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
+import great.job.mytamin.domain.alarm.entity.FcmOn;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.domain.alarm.repository.FcmOnRepository;
 import great.job.mytamin.domain.user.repository.UserRepository;
 import great.job.mytamin.domain.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static great.job.mytamin.domain.user.enumerate.MydayAlarm.convertCodeToMsg;
+import java.util.Map;
+
+import static great.job.mytamin.domain.alarm.enumerate.MydayAlarm.NONE;
+import static great.job.mytamin.domain.alarm.enumerate.MydayAlarm.convertCodeToMsg;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ public class AlarmService {
 
     private final TimeUtil timeUtil;
     private final UserRepository userRepository;
+    private final FcmOnRepository fcmOnRepository;
 
     /*
     알림 설정 상태 조회
@@ -34,22 +40,18 @@ public class AlarmService {
     */
     @Transactional
     public void turnOnMytaminAlarm(User user, MytaminAlarmRequest request) {
-        timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
-        user.getAlarm().updateMytaminAlarmOn(true);
-        user.getAlarm().updateMytaminWhen(
-                request.getMytaminHour(),
-                request.getMytaminMin()
-        );
-        userRepository.save(user);
+        updateMytaminWhen(user, request);
+        updateFcmOn(user, request);
     }
 
     /*
     마이타민 알림 OFF
     */
     @Transactional
-    public void turnOffMytaminAlarm(User user) {
+    public void turnOffMytaminAlarm(User user, Map<String, String> request) {
         user.getAlarm().updateMytaminAlarmOn(false);
         userRepository.save(user);
+        fcmOnRepository.deleteByFcmToken(request.get("fcmToken")); // FCM 토큰 삭제
     }
 
     /*
@@ -68,6 +70,7 @@ public class AlarmService {
     @Transactional
     public void turnOffMydayAlarm(User user) {
         user.getAlarm().updateMydayAlarmOn(false);
+        user.getAlarm().updateMydayWhen(NONE.getMsg());
         userRepository.save(user);
     }
 
@@ -87,6 +90,26 @@ public class AlarmService {
 
         if (mydayAlarmOn) mydayWhen = user.getAlarm().getMydayWhen(); // 알림이 켜져있는 경우 시간 정보 설정
         return SettingInfoResponse.of(mydayAlarmOn, mydayWhen);
+    }
+
+    private void updateMytaminWhen(User user, MytaminAlarmRequest request) {
+        timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
+        user.getAlarm().updateMytaminAlarmOn(true);
+        user.getAlarm().updateMytaminWhen(
+                request.getMytaminHour(),
+                request.getMytaminMin()
+        );
+        userRepository.save(user);
+    }
+
+    private void updateFcmOn(User user, MytaminAlarmRequest request) {
+        String fcmToken = request.getFcmToken();
+        FcmOn fcmOn = fcmOnRepository.findByFcmToken(fcmToken);
+        if (fcmOn == null) {
+            fcmOnRepository.save(new FcmOn(user, fcmToken));
+        } else {
+            fcmOn.updateMytaminWhen(user);
+        }
     }
 
 }

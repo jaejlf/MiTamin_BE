@@ -13,6 +13,4 @@ public class SignUpRequest {
     @NotBlank String email;
     @NotBlank String password;
     @NotBlank String nickname;
-    String mytaminHour;
-    String mytaminMin;
 }

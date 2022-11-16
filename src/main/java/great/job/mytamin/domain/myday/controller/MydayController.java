@@ -1,9 +1,9 @@
 package great.job.mytamin.domain.myday.controller;
 
-import great.job.mytamin.global.dto.response.ResultResponse;
 import great.job.mytamin.domain.myday.dto.response.MydayResponse;
 import great.job.mytamin.domain.myday.service.MydayService;
 import great.job.mytamin.domain.user.entity.User;
+import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

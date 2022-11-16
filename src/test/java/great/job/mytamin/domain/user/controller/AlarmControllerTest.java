@@ -1,9 +1,10 @@
 package great.job.mytamin.domain.user.controller;
 
+import great.job.mytamin.domain.alarm.controller.AlarmController;
 import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingInfoResponse;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
-import great.job.mytamin.domain.user.service.AlarmService;
+import great.job.mytamin.domain.alarm.service.AlarmService;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.support.CommonControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,9 @@ import org.junit.jupiter.api.TestInfo;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static great.job.mytamin.global.exception.ErrorMap.INVALID_MYDAY_ALARM_CODE_ERROR;
 import static org.mockito.ArgumentMatchers.any;
@@ -84,7 +88,7 @@ class AlarmControllerTest extends CommonControllerTest {
     @DisplayName("마이타민 알림 ON")
     class TurnOnMytaminAlarmTest {
 
-        MytaminAlarmRequest mytaminAlarmRequest = new MytaminAlarmRequest("22", "00");
+        MytaminAlarmRequest mytaminAlarmRequest = new MytaminAlarmRequest("22", "00", "{{FCM_TOKEN}}");
 
         @DisplayName("성공")
         @Test
@@ -108,7 +112,8 @@ class AlarmControllerTest extends CommonControllerTest {
                             ),
                             requestFields(
                                     fieldWithPath("mytaminHour").description("*마이타민 섭취 지정 시간 HH (24시간)"),
-                                    fieldWithPath("mytaminMin").description("*마이타민 섭취 지정 시간 MM")
+                                    fieldWithPath("mytaminMin").description("*마이타민 섭취 지정 시간 MM"),
+                                    fieldWithPath("fcmToken").description("*FCM 토큰")
                             ),
                             responseFields(
                                     fieldWithPath("statusCode").description("HTTP 상태 코드"),
@@ -123,11 +128,15 @@ class AlarmControllerTest extends CommonControllerTest {
     @Test
     void turnOffMytaminAlarm(TestInfo testInfo) throws Exception {
         //given
-        doNothing().when(alarmService).turnOffMytaminAlarm(any());
+        Map<String, String> map = new HashMap<>();
+        map.put("fcmToken", "{{FCM_TOKEN}}");
+
+        doNothing().when(alarmService).turnOffMytaminAlarm(any(), any());
 
         //when
         ResultActions actions = mockMvc.perform(patch("/alarm/mytamin/off")
                 .header("X-AUTH-TOKEN", "{{ACCESS_TOKEN}}")
+                .content(objectMapper.writeValueAsString(map))
                 .contentType(APPLICATION_JSON));
 
         //then
@@ -137,6 +146,9 @@ class AlarmControllerTest extends CommonControllerTest {
                 .andDo(document(docId + testInfo.getTestMethod().get().getName(),
                         requestHeaders(
                                 headerWithName("X-AUTH-TOKEN").description("*액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("fcmToken").description("*FCM 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("statusCode").description("HTTP 상태 코드"),

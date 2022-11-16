@@ -1,15 +1,19 @@
-package great.job.mytamin.domain.user.controller;
+package great.job.mytamin.domain.alarm.controller;
 
+import great.job.mytamin.domain.alarm.service.AlarmService;
 import great.job.mytamin.domain.user.dto.request.MytaminAlarmRequest;
 import great.job.mytamin.domain.user.dto.response.SettingResponse;
 import great.job.mytamin.domain.user.entity.User;
-import great.job.mytamin.domain.user.service.AlarmService;
 import great.job.mytamin.global.dto.response.NoDataResponse;
 import great.job.mytamin.global.dto.response.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -30,7 +34,7 @@ public class AlarmController {
 
     @PatchMapping("/mytamin/on")
     public ResponseEntity<Object> turnOnMytaminAlarm(@AuthenticationPrincipal User user,
-                                                     @RequestBody MytaminAlarmRequest request) {
+                                                     @RequestBody @Valid MytaminAlarmRequest request) {
         alarmService.turnOnMytaminAlarm(user, request);
         return ResponseEntity
                 .status(OK)
@@ -38,8 +42,9 @@ public class AlarmController {
     }
 
     @PatchMapping("/mytamin/off")
-    public ResponseEntity<Object> turnOffMytaminAlarm(@AuthenticationPrincipal User user) {
-        alarmService.turnOffMytaminAlarm(user);
+    public ResponseEntity<Object> turnOffMytaminAlarm(@AuthenticationPrincipal User user,
+                                                      @RequestBody Map<String, String> request) {
+        alarmService.turnOffMytaminAlarm(user, request);
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("마이타민 알림 OFF"));

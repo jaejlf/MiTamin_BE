@@ -5,14 +5,9 @@ import great.job.mytamin.domain.user.dto.request.ReissueRequest;
 import great.job.mytamin.domain.user.dto.request.SignUpRequest;
 import great.job.mytamin.domain.user.dto.response.TokenResponse;
 import great.job.mytamin.domain.user.dto.response.UserResponse;
-import great.job.mytamin.domain.user.entity.Action;
-import great.job.mytamin.domain.user.entity.Alarm;
 import great.job.mytamin.domain.user.entity.User;
 import great.job.mytamin.domain.user.enumerate.Provider;
 import great.job.mytamin.domain.user.repository.UserRepository;
-import great.job.mytamin.domain.util.FcmUtil;
-import great.job.mytamin.domain.util.MydayUtil;
-import great.job.mytamin.domain.util.TimeUtil;
 import great.job.mytamin.domain.util.UserUtil;
 import great.job.mytamin.global.exception.MytaminException;
 import great.job.mytamin.global.jwt.JwtTokenProvider;
@@ -22,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,9 +30,6 @@ public class AuthService {
     private final EmailService emailService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserUtil userUtil;
-    private final MydayUtil mydayUtil;
-    private final TimeUtil timeUtil;
-    private final FcmUtil fcmUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,17 +39,12 @@ public class AuthService {
     @Transactional
     public UserResponse signUp(SignUpRequest request) {
         validateRequest(request);
-
         User user = new User(
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 request.getNickname(),
-                Provider.DEFAULT,
-                new Alarm(request.getMytaminHour(), request.getMytaminMin(), isMytaminAlarmOn(request.getMytaminHour())),
-                new Action()
+                Provider.DEFAULT
         );
-
-        user.getAlarm().updateDateOfMyday(mydayUtil.randomizeDateOfMyday()); // 마이데이 날짜 랜덤 지정
         return UserResponse.of(userRepository.save(user));
     }
 
@@ -73,11 +59,9 @@ public class AuthService {
         // 토큰 업데이트
         String accessToken = jwtTokenProvider.createAccessToken(user.getEmail());
         String refreshToken = jwtTokenProvider.createRefreshToken(user);
-        List<String> fcmTokenList = fcmUtil.addFcmToken(user, request.getFcmToken());
         
         // DB 업데이트
         user.updateRefreshToken(refreshToken);
-        user.updateFcmTokenList(fcmTokenList);
         userRepository.save(user);
 
         return TokenResponse.of(accessToken, refreshToken);
@@ -128,8 +112,6 @@ public class AuthService {
         validatePasswordPattern(request.getPassword());
 
         if (userUtil.isEmailDuplicate(request.getEmail())) throw new MytaminException(USER_ALREADY_EXIST_ERROR);
-        // if (userUtil.isNicknameDuplicate(request.getNickname())) throw new MytaminException(NICKNAME_DUPLICATE_ERROR);
-        if (request.getMytaminHour() != null) timeUtil.isTimeValid(request.getMytaminHour(), request.getMytaminMin());
     }
 
     private void validateRefreshToken(String refreshToken, User user) {
@@ -156,10 +138,6 @@ public class AuthService {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(password);
         if (!m.matches() || password.contains(" ")) throw new MytaminException(PASSWORD_PATTERN_ERROR);
-    }
-
-    private Boolean isMytaminAlarmOn(String mytaminHour) {
-        return mytaminHour != null;
     }
 
     private void checkPasswordMatching(String requestPw, String realPw) {
