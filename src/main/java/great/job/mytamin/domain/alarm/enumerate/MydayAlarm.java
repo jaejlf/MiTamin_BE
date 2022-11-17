@@ -11,9 +11,9 @@ import static great.job.mytamin.global.exception.ErrorMap.INVALID_MYDAY_ALARM_CO
 public enum MydayAlarm {
 
     NONE(0, "없음", "", ""),
-    TODAY(1, "당일", "myday_today", "기분 좋은 마이데이 되세요 !"),
-    DAY_AGO(2, "하루 전", "myday_dayago", "이번 마이데이에는 무엇을 해볼까요 ?"),
-    WEEK_AGO(3, "일주일 전", "myday_weekago", "두근두근 ! 마이데이가 머지 않았어요");
+    TODAY(1, "당일", "myday_today", "마이데이가 벌써 오늘이네요🤩 이번 마이데이에는 어떤 걸 해보실 예정이세요?"),
+    DAY_AGO(2, "하루 전", "myday_dayago", "마이데이가 벌써 하루 전이네요🤩 이번 마이데이에는 어떤 걸 해보실 예정이세요?"),
+    WEEK_AGO(3, "일주일 전", "myday_weekago", "마이데이가 벌써 일주일 전이네요🤩 이번 마이데이에는 어떤 걸 해보실 예정이세요?");
 
     private final int code;
     private final String msg;
