@@ -44,7 +44,7 @@ public class NotificationService {
                 fcmService.sendTargetMessage(
                         target.getFcmToken(),
                         "마이타민 섭취 시간",
-                        target.getUser().getNickname() + "님! 오늘 하루는 어떠셨나요? 오늘의 마이타민을 섭취하시면서 하루를 마무리해보세요 💊");
+                        target.getUser().getNickname() + "님! 오늘 하루는 어떠셨나요? 오늘의 마이타민을 섭취하시면서 하루를 마무리해보세요💊");
             }
             log.info(">>> 마이타민 섭취 시간 알림 발송 완료 <<<");
         }
@@ -60,7 +60,7 @@ public class NotificationService {
         else if (target.equals(myday.getWeekAgo())) mydayAlarm = WEEK_AGO;
 
         if (mydayAlarm != NONE) {
-            fcmService.sendTopicMessage(mydayAlarm.getTopic(), "마이데이 " + mydayAlarm.getMsg(), mydayAlarm.getBody());
+            fcmService.sendTopicMessage(mydayAlarm.getTopic(), "두근두근 마이데이", mydayAlarm.getBody());
             log.info(">>> 마이데이 섭취 시간 알림 발송 완료 <<<");
         }
     }
