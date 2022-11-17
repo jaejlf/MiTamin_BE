@@ -48,10 +48,10 @@ public class AlarmService {
     마이타민 알림 OFF
     */
     @Transactional
-    public void turnOffMytaminAlarm(User user, Map<String, String> request) {
+    public void turnOffMytaminAlarm(User user) {
         user.getAlarm().updateMytaminAlarmOn(false);
         userRepository.save(user);
-        fcmOnRepository.deleteByFcmToken(request.get("fcmToken")); // FCM 토큰 삭제
+        fcmOnRepository.deleteAllByUser(user); // 유저의 모든 FCM 토큰 삭제
     }
 
     /*

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import java.util.Map;
-
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -42,9 +40,8 @@ public class AlarmController {
     }
 
     @PatchMapping("/mytamin/off")
-    public ResponseEntity<Object> turnOffMytaminAlarm(@AuthenticationPrincipal User user,
-                                                      @RequestBody Map<String, String> request) {
-        alarmService.turnOffMytaminAlarm(user, request);
+    public ResponseEntity<Object> turnOffMytaminAlarm(@AuthenticationPrincipal User user) {
+        alarmService.turnOffMytaminAlarm(user);
         return ResponseEntity
                 .status(OK)
                 .body(NoDataResponse.ok("마이타민 알림 OFF"));

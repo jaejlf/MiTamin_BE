@@ -18,7 +18,7 @@ operation::alarm/turnOnMytaminAlarm[snippets='request-headers,request-fields,res
 === 마이타민 알림 OFF
 
 operation::alarm/turnOffMytaminAlarm[snippets='http-request,http-response']
-operation::alarm/turnOffMytaminAlarm[snippets='request-headers,request-fields,response-fields']
+operation::alarm/turnOffMytaminAlarm[snippets='request-headers,response-fields']
 
 === 마이데이 알림 ON
 * 마이데이 지정 시간은 각 시간에 해당하는 int 타입의 코드를 보낸다.
