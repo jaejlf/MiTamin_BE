@@ -1,6 +1,6 @@
 # 마음 면역력을 키우는 멘탈케어 서비스, 마이타민
 
-![image](https://user-images.githubusercontent.com/78673570/201825604-6b8cfee0-6e08-4d38-be59-728529356de1.png)
+![image](https://user-images.githubusercontent.com/78673570/203768892-848cd6b3-1348-4b2c-bb0a-cde5bf897864.png)
 
 ## 💊 프로젝트 소개
 
@@ -47,7 +47,7 @@
 
 ## 📑 문서
 
-- [API Documentation] [mitamin-apis](https://mitamin-app.com/docs/index.html)
+- [API Documentation] [mitamin-apis](https://jaejlf.github.io/MiTamin_BE/)
 
 <br>
 
