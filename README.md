@@ -65,7 +65,7 @@
 - [sprint/1](https://github.com/jaejlf/MyTamin_BE/releases/tag/v1.0.0) - 홈화면, 마이타민 섭취 기능 구현
 - [sprint/2](https://github.com/jaejlf/MyTamin_BE/releases/tag/v1.0.1) - 유저 관련 기능, 데이노트 및 위시 리스트 기능 구현
 - [sprint/3](https://github.com/jaejlf/MyTamin_BE/releases/tag/v1.0.2) - 계정 관리 기능, 히스토리 기능 및 월간/주간 기록 통계 정보 제공 기능 구현
-- [sprint/4](https://github.com/jaejlf/MiTamin_BE/releases/tag/v1.0.3) - 푸시 알림 기능, 성능 개선 및 리팩토링, 기획 변경에 따른 세부 기능 구현
+- [sprint/4](https://github.com/jaejlf/MiTamin_BE/releases/tag/v1.0.4) - 푸시 알림 기능, 성능 개선 및 리팩토링, 기획 변경에 따른 세부 기능 구현
 
 <br>
 
