@@ -14,13 +14,13 @@
 2. 월간/주간 감정 랭킹 및 조건에 따른 통계 기록 조회
 3. 한 달에 한 번 나를 위한 행동을 한 후, 이미지와 함께 기록하는 데이노트
 
-<br>
+<br><br>
 
 ## 🔗 Download
 - Play Store. https://bit.ly/mitamin_aos 
 - App  Store. https://bit.ly/mitamin_ios
 
-<br>
+<br><br>
 
 ## 🛠 기술 스택
 
@@ -30,7 +30,7 @@
 - 협업 및 코드 버전 관리를 위해 `Github` 및 `Jira`, API 문서 관리를 위해 `Spring Rest Docs` 를 사용하였습니다.
 - `Nginx` 를 통해 무중단 배포 환경을 구성하였습니다.
 
-<br>
+<br><br>
 
 ## 👩‍💻 개발 내용
 - 마음 관리 루틴에 따른 기록 (숨 고르기 → 감각 깨우기 → 하루 진단 → 칭찬 처방)
@@ -41,23 +41,23 @@
 - 월간/감정 통계 기록 조회
 - 사용자 설정에 따른 개별/전체 푸시 알림
 
-<br>
+<br><br>
 
 ## 📑 문서
 
 - [API Documentation] [mitamin-apis](https://jaejlf.github.io/MiTamin_BE/)
 
-<br>
+<br><br>
 
 ## 🧩 서비스 아키텍처
 ![image](https://user-images.githubusercontent.com/78673570/201472540-1b60ba08-e610-43b0-b8c2-ca75e15228a2.png)
 
-<br>
+<br><br>
 
 ## 💾 ERD Diagram
 ![image](https://user-images.githubusercontent.com/78673570/202361366-a5c99778-a238-47f5-8b4c-fc0f9b4849b2.png)
 
-<br>
+<br><br>
 
 ## 🏷 Release Version
 - [sprint/1](https://github.com/jaejlf/MyTamin_BE/releases/tag/v1.0.0) - 홈화면, 마이타민 섭취 기능 구현
@@ -65,7 +65,7 @@
 - [sprint/3](https://github.com/jaejlf/MyTamin_BE/releases/tag/v1.0.2) - 계정 관리 기능, 히스토리 기능 및 월간/주간 기록 통계 정보 제공 기능 구현
 - [sprint/4](https://github.com/jaejlf/MiTamin_BE/releases/tag/v1.0.4) - 푸시 알림 기능, 성능 개선 및 리팩토링, 기획 변경에 따른 세부 기능 구현
 
-<br>
+<br><br>
 
 ## 🔍 화면 구성
 ![image](https://user-images.githubusercontent.com/78673570/201472564-75af011f-3123-43d1-ab0f-3a0c470cd412.png)
